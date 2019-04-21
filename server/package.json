@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "tslint src/**/*.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "sudo node dist/index.js"
   },
   "repository": {
     "type": "git",

@@ -19,13 +19,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
-const fs_1 = require("fs");
 const rvl_node_1 = require("rvl-node");
 const express = require("express");
-const handlebars_1 = require("handlebars");
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wifi0';
-const indexTemplate = handlebars_1.compile(fs_1.readFileSync(path_1.join(__dirname, '..', 'templates', 'index.handlebars')).toString());
+const RAVER_LIGHTS_INTERFACE = 'eth1';
 const rvl = new rvl_node_1.RVL({
     networkInterface: RAVER_LIGHTS_INTERFACE,
     port: 4978,
@@ -33,14 +30,11 @@ const rvl = new rvl_node_1.RVL({
     logLevel: 'debug'
 });
 rvl.on('initialized', () => {
+    rvl.start();
     const app = express();
-    app.use(express.static(path_1.join(__dirname, '..', 'public')));
-    app.get('/', (req, res) => {
-        res.send(indexTemplate({}));
-    });
+    app.use(express.static(path_1.join(__dirname, '..', '..', 'public')));
     app.listen(WEB_SERVER_PORT, () => {
-        rvl.start();
-        console.log(`Example app listening on port ${WEB_SERVER_PORT}!`);
+        console.log(`Home Lights server running on port ${WEB_SERVER_PORT}!`);
     });
 });
 //# sourceMappingURL=index.js.map
