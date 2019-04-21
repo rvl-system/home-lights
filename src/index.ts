@@ -1,9 +1,4 @@
-# Home Lights
-
-Control system for my home lighting system.
-
-# License
-
+/*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
 This file is part of Raver Lights Messaging.
@@ -20,3 +15,23 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Raver Lights Messaging.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+import { RVL } from 'rvl-node';
+import * as express from 'express';
+
+const app = express();
+const port = 80;
+
+app.get('/', (req, res) => res.send('Hello World!'));
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+const rvl = new RVL({
+  networkInterface: 'wlan0',
+  port: 4978,
+  mode: "controller",
+  logLevel: "debug"
+});
+
+rvl.start();
