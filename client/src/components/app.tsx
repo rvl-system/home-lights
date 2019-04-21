@@ -16,3 +16,55 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+import * as React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+enum SelectedTab {
+  TV = 0,
+  Lamp = 1,
+  Kitchen = 2
+}
+
+interface IAppComponentState {
+  selectedTab: SelectedTab;
+}
+
+export class AppComponent extends React.Component<{}, IAppComponentState> {
+
+  public state: IAppComponentState = {
+    selectedTab: SelectedTab.TV
+  };
+
+  public render(): JSX.Element {
+    return (
+      <div className="appContainer">
+
+        <div className="appHeader">
+          <h2>Home Lights</h2>
+        </div>
+
+        <div className="appContent">
+          Content
+        </div>
+
+        <div className="appFooter">
+          <AppBar position="relative">
+            <Tabs variant="fullWidth" value={this.state.selectedTab} onChange={this.handleChange}>
+              <Tab label={SelectedTab[SelectedTab.TV]} />
+              <Tab label={SelectedTab[SelectedTab.Lamp]} />
+              <Tab label={SelectedTab[SelectedTab.Kitchen]} />
+            </Tabs>
+          </AppBar>
+        </div>
+
+      </div>
+    );
+  }
+
+  private handleChange = (event: React.ChangeEvent<{}>, selectedTab: SelectedTab) => {
+    this.setState({ selectedTab });
+  }
+}

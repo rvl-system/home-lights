@@ -14,8 +14,6 @@
     // "checkJs": true,                       /* Report errors in .js files. */
     "jsx": "react",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     "sourceMap": true,                        /* Generates corresponding '.map' file. */
-    "declaration": true,
-    "declarationDir": "declarations",
     "rootDir": "src",
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     // "removeComments": true,                /* Do not emit comments to output. */
