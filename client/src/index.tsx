@@ -1,4 +1,4 @@
-<!--
+/*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
 This file is part of Home Lights.
@@ -15,16 +15,14 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
--->
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Home Lights</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-  <h1>Home Lights Configuration</h1>
-  <div id="app"></div>
-  <script src="./bundle.js"></script>
-</body>
-</html>
+*/
+
+import * as React from 'react';
+import { render } from 'react-dom';
+
+render(
+  (
+    <div>Hi from React!</div>
+  ),
+  document.getElementById('app')
+);
