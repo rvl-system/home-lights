@@ -22,7 +22,7 @@ import { RVL } from 'rvl-node';
 import * as express from 'express';
 
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'eth1';
+const RAVER_LIGHTS_INTERFACE = 'wifi0';
 
 const rvl = new RVL({
   networkInterface: RAVER_LIGHTS_INTERFACE,

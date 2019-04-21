@@ -22,7 +22,7 @@ const path_1 = require("path");
 const rvl_node_1 = require("rvl-node");
 const express = require("express");
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'eth1';
+const RAVER_LIGHTS_INTERFACE = 'wifi0';
 const rvl = new rvl_node_1.RVL({
     networkInterface: RAVER_LIGHTS_INTERFACE,
     port: 4978,

@@ -18,11 +18,49 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import FilledInput from '@material-ui/core/FilledInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
-export class TVComponent extends React.Component<{}, {}> {
+enum AnimationType {
+  Solid = 0,
+  DualColor = 1
+}
+
+export interface ITVComponentState {
+  animationType: AnimationType;
+}
+
+export class TVComponent extends React.Component<{}, ITVComponentState> {
+
+  public state: ITVComponentState = {
+    animationType: AnimationType.Solid
+  };
+
+  public handleChange = (event: any) => {
+    console.log(event.target.value);
+    this.setState({ animationType: event.target.value });
+  }
+
   public render() {
     return (
-      <div>TV</div>
+      <div>
+        <div>
+          <FormControl variant="filled" fullWidth={true}>
+            <InputLabel htmlFor="filled-animation-simple">Animation</InputLabel>
+            <Select
+              value={this.state.animationType}
+              onChange={this.handleChange}
+              input={<FilledInput name="Animation" id="filled-animation-simple" />}
+            >
+              <MenuItem value={AnimationType.Solid}>{AnimationType[AnimationType.Solid]}</MenuItem>
+              <MenuItem value={AnimationType.DualColor}>{AnimationType[AnimationType.DualColor]}</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      </div>
     );
   }
 }
