@@ -17,44 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-body {
-  padding: 0;
-  margin: 0;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
-}
+import * as React from 'react';
 
-.app {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-.appContainer {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.appHeader {
-  background-color: black;
-  color: white;
-  text-align: center;
-  margin: 0;
-}
-
-.appContent {
-  flex-grow: 1;
-}
-
-.comingSoon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+export class KitchenComponent extends React.Component<{}, {}> {
+  public render() {
+    return (
+      <div className="comingSoon">Coming Soon!</div>
+    );
+  }
 }

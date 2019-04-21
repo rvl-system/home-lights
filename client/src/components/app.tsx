@@ -21,6 +21,9 @@ import * as React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { TVComponent } from './tv';
+import { KitchenComponent } from './kitchen';
+import { LampComponent } from './lamp';
 
 enum SelectedTab {
   TV = 0,
@@ -39,6 +42,18 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
   };
 
   public render(): JSX.Element {
+    let content: JSX.Element | undefined;
+    switch (this.state.selectedTab) {
+      case SelectedTab.TV:
+        content = <TVComponent />;
+        break;
+      case SelectedTab.Kitchen:
+        content = <KitchenComponent />;
+        break;
+      case SelectedTab.Lamp:
+        content = <LampComponent />;
+        break;
+    }
     return (
       <div className="appContainer">
 
@@ -47,7 +62,7 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
         </div>
 
         <div className="appContent">
-          Content
+          {content}
         </div>
 
         <div className="appFooter">
