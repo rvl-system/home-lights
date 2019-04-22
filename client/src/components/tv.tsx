@@ -18,6 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import { IWaveParameters } from 'rvl-node';
+import { hex } from 'color-convert';
+import { updateAnimation } from '../message';
+import { Source } from '../message';
+
 import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,12 +30,62 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 enum AnimationType {
-  Solid = 0,
-  DualColor = 1
+  Solid = 0
 }
 
 export interface ITVComponentState {
   animationType: AnimationType;
+}
+
+class TVSolidColorComponent extends React.Component<{}, {}> {
+
+  public onColorChanged = (event: React.ChangeEvent) => {
+    const hsv = hex.hsv((event.target as HTMLInputElement).value);
+    const animationParameters: IWaveParameters = {
+      waves: [{
+        h: {
+          b: Math.round(hsv[0] * 255 / 360),
+          a: 0,
+          w_t: 0,
+          w_x: 0,
+          phi: 0
+        },
+        s: {
+          b: Math.round(hsv[1] * 255 / 100),
+          a: 0,
+          w_t: 0,
+          w_x: 0,
+          phi: 0
+        },
+        v: {
+          b: Math.round(hsv[2] * 255 / 100),
+          a: 0,
+          w_t: 0,
+          w_x: 0,
+          phi: 0
+        },
+        a: {
+          b: 255,
+          a: 0,
+          w_t: 0,
+          w_x: 0,
+          phi: 0
+        }
+      }]
+    };
+    updateAnimation(Source.TV, animationParameters);
+  }
+
+  public render() {
+    return (
+      <div>
+        <div className="colorPickerContainer">
+          <label>Color: </label>
+          <input type="color" className="colorPicker" onChange={this.onColorChanged}></input>
+        </div>
+      </div>
+    );
+  }
 }
 
 export class TVComponent extends React.Component<{}, ITVComponentState> {
@@ -40,11 +95,16 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
   };
 
   public handleChange = (event: any) => {
-    console.log(event.target.value);
     this.setState({ animationType: event.target.value });
   }
 
   public render() {
+    let configurationComponent: JSX.Element | undefined;
+    switch (this.state.animationType) {
+      case AnimationType.Solid:
+        configurationComponent = <TVSolidColorComponent />;
+        break;
+    }
     return (
       <div>
         <div>
@@ -56,9 +116,11 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
               input={<FilledInput name="Animation" id="filled-animation-simple" />}
             >
               <MenuItem value={AnimationType.Solid}>{AnimationType[AnimationType.Solid]}</MenuItem>
-              <MenuItem value={AnimationType.DualColor}>{AnimationType[AnimationType.DualColor]}</MenuItem>
             </Select>
           </FormControl>
+        </div>
+        <div>
+          {configurationComponent}
         </div>
       </div>
     );

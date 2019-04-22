@@ -24,33 +24,28 @@ import Tab from '@material-ui/core/Tab';
 import { TVComponent } from './tv';
 import { KitchenComponent } from './kitchen';
 import { LampComponent } from './lamp';
-
-enum SelectedTab {
-  TV = 0,
-  Lamp = 1,
-  Kitchen = 2
-}
+import { Source } from '../message';
 
 interface IAppComponentState {
-  selectedTab: SelectedTab;
+  selectedTab: Source;
 }
 
 export class AppComponent extends React.Component<{}, IAppComponentState> {
 
   public state: IAppComponentState = {
-    selectedTab: SelectedTab.TV
+    selectedTab: Source.TV
   };
 
   public render(): JSX.Element {
     let content: JSX.Element | undefined;
     switch (this.state.selectedTab) {
-      case SelectedTab.TV:
+      case Source.TV:
         content = <TVComponent />;
         break;
-      case SelectedTab.Kitchen:
+      case Source.Kitchen:
         content = <KitchenComponent />;
         break;
-      case SelectedTab.Lamp:
+      case Source.Lamp:
         content = <LampComponent />;
         break;
     }
@@ -68,9 +63,9 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
         <div className="appFooter">
           <AppBar position="relative">
             <Tabs variant="fullWidth" value={this.state.selectedTab} onChange={this.handleChange}>
-              <Tab label={SelectedTab[SelectedTab.TV]} />
-              <Tab label={SelectedTab[SelectedTab.Lamp]} />
-              <Tab label={SelectedTab[SelectedTab.Kitchen]} />
+              <Tab label={Source[Source.TV]} />
+              <Tab label={Source[Source.Lamp]} />
+              <Tab label={Source[Source.Kitchen]} />
             </Tabs>
           </AppBar>
         </div>
@@ -79,7 +74,7 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
     );
   }
 
-  private handleChange = (event: React.ChangeEvent<{}>, selectedTab: SelectedTab) => {
+  private handleChange = (event: React.ChangeEvent<{}>, selectedTab: Source) => {
     this.setState({ selectedTab });
   }
 }

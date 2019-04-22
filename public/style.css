@@ -58,3 +58,18 @@ body {
   align-items: center;
   height: 100%;
 }
+
+.colorPickerContainer {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.colorPickerContainer > label {
+  padding-right: 10px;
+}
+
+.colorPicker {
+  width: 50%;
+  height: 50px;
+}

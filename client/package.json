@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/nebrius/home-lights#readme",
   "devDependencies": {
+    "@types/color-convert": "^1.9.0",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
     "ts-loader": "^5.3.3",
@@ -28,7 +29,9 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.9.3",
+    "color-convert": "^2.0.0",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "rvl-node": "^1.0.0"
   }
 }
