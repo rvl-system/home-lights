@@ -25,6 +25,18 @@ export enum Source {
   Kitchen = 2
 }
 
-export function updateAnimation(source: Source, animation: IWaveParameters): void {
-  console.log(source, animation);
+interface IMessage {
+  source: Source,
+  waves: IWaveParameters
+}
+
+export async function updateAnimation(source: Source, waves: IWaveParameters) {
+  const data: IMessage = { source, waves };
+  fetch('/api/animation', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
 }

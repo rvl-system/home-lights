@@ -21,8 +21,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const rvl_node_1 = require("rvl-node");
 const express = require("express");
+const body_parser_1 = require("body-parser");
 const WEB_SERVER_PORT = 80;
 const RAVER_LIGHTS_INTERFACE = 'wifi0';
+var Source;
+(function (Source) {
+    Source[Source["TV"] = 0] = "TV";
+    Source[Source["Lamp"] = 1] = "Lamp";
+    Source[Source["Kitchen"] = 2] = "Kitchen";
+})(Source || (Source = {}));
 const rvl = new rvl_node_1.RVL({
     networkInterface: RAVER_LIGHTS_INTERFACE,
     port: 4978,
@@ -33,6 +40,12 @@ rvl.on('initialized', () => {
     rvl.start();
     const app = express();
     app.use(express.static(path_1.join(__dirname, '..', '..', 'public')));
+    app.use(body_parser_1.json());
+    app.post('/api/animation', (req, res) => {
+        const message = req.body;
+        rvl.setWaveParameters(message.waves);
+        res.send('ok');
+    });
     app.listen(WEB_SERVER_PORT, () => {
         console.log(`Home Lights server running on port ${WEB_SERVER_PORT}!`);
     });
