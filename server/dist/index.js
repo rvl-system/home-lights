@@ -23,7 +23,7 @@ const rvl_node_1 = require("rvl-node");
 const express = require("express");
 const body_parser_1 = require("body-parser");
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wifi0';
+const RAVER_LIGHTS_INTERFACE = 'wlan0';
 var Source;
 (function (Source) {
     Source[Source["TV"] = 0] = "TV";

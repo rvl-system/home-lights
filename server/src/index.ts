@@ -24,7 +24,7 @@ import { json } from 'body-parser';
 import { IWaveParameters } from 'rvl-node';
 
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wifi0';
+const RAVER_LIGHTS_INTERFACE = 'wlan0';
 
 enum Source {
   TV = 0,
