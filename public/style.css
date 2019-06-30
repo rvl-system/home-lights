@@ -59,17 +59,24 @@ body {
   height: 100%;
 }
 
+.regionControl {
+  padding: 10px;
+}
+
+.cyclePickerContainer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  padding: 10px;
+}
+
 .colorPickerContainer {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
   padding: 10px;
 }
 
 .colorPickerContainer > label {
   padding-right: 10px;
-}
-
-.colorPicker {
-  width: 50%;
-  height: 50px;
 }

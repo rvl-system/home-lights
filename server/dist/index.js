@@ -23,18 +23,19 @@ const rvl_node_1 = require("rvl-node");
 const express = require("express");
 const body_parser_1 = require("body-parser");
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wlan0';
+const RAVER_LIGHTS_INTERFACE = 'wifi0';
+const RAVER_LIGHTS_CHANNEL = 5;
 var Source;
 (function (Source) {
     Source[Source["TV"] = 0] = "TV";
-    Source[Source["Lamp"] = 1] = "Lamp";
-    Source[Source["Kitchen"] = 2] = "Kitchen";
+    Source[Source["Kitchen"] = 1] = "Kitchen";
 })(Source || (Source = {}));
 const rvl = new rvl_node_1.RVL({
     networkInterface: RAVER_LIGHTS_INTERFACE,
     port: 4978,
     mode: 'controller',
-    logLevel: 'debug'
+    logLevel: 'debug',
+    channel: RAVER_LIGHTS_CHANNEL
 });
 rvl.on('initialized', () => {
     rvl.start();

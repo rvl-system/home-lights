@@ -18,16 +18,17 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import { TVComponent } from './tv';
 import { KitchenComponent } from './kitchen';
-import { LampComponent } from './lamp';
-import { Source } from '../message';
 
 interface IAppComponentState {
   selectedTab: Source;
+}
+
+export enum Source {
+  TV = 0,
+  Lamp = 1,
+  Kitchen = 2
 }
 
 export class AppComponent extends React.Component<{}, IAppComponentState> {
@@ -45,22 +46,19 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
       case Source.Kitchen:
         content = <KitchenComponent />;
         break;
-      case Source.Lamp:
-        content = <LampComponent />;
-        break;
     }
     return (
       <div className="appContainer">
 
         <div className="appHeader">
-          <h2>Home Lights</h2>
+          <h2>Belden Public Library Lighting</h2>
         </div>
 
         <div className="appContent">
           {content}
         </div>
 
-        <div className="appFooter">
+        {/* <div className="appFooter">
           <AppBar position="relative">
             <Tabs variant="fullWidth" value={this.state.selectedTab} onChange={this.handleChange}>
               <Tab label={Source[Source.TV]} />
@@ -68,13 +66,13 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
               <Tab label={Source[Source.Kitchen]} />
             </Tabs>
           </AppBar>
-        </div>
+        </div> */}
 
       </div>
     );
   }
 
-  private handleChange = (event: React.ChangeEvent<{}>, selectedTab: Source) => {
-    this.setState({ selectedTab });
-  }
+  // private handleChange = (event: React.ChangeEvent<{}>, selectedTab: Source) => {
+  //   this.setState({ selectedTab });
+  // }
 }

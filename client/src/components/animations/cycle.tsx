@@ -18,11 +18,32 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import { Range } from '../controls/range';
 
-export class LampComponent extends React.Component<{}, {}> {
+export class CycleAnimationComponent extends React.Component<{}, {}> {
+
   public render() {
     return (
-      <div className="comingSoon">Coming Soon!</div>
+      <div>
+        <div className="cyclePickerContainer">
+          <Range
+            label="Rate"
+            min={1}
+            max={32}
+            initialValue={4}
+            onChange={this.updateRate}
+            />
+        </div>
+      </div>
     );
+  }
+
+  private updateColor() {
+    console.log('updating color');
+    // TODO
+  }
+
+  private updateRate = (rate: number) => {
+    this.updateColor();
   }
 }

@@ -13,8 +13,20 @@
         "${workspaceFolder}/**/*.js"
       ],
       "console": "internalConsole",
-      "outputCapture": "std",
-      "useWSL": true
+      "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug RPi",
+      "address": "192.168.1.134",
+      "port": 9229,
+      "sourceMaps": true,
+      "localRoot": "${workspaceRoot}/server",
+      "remoteRoot": "/home/pi/home-lights/server",
+      "outFiles": [
+        "${workspaceRoot}/server/dist/**/*.js"
+      ]
     }
   ]
 }

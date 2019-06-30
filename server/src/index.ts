@@ -24,12 +24,12 @@ import { json } from 'body-parser';
 import { IWaveParameters } from 'rvl-node';
 
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wlan0';
+const RAVER_LIGHTS_INTERFACE = 'wifi0';
+const RAVER_LIGHTS_CHANNEL = 5;
 
 enum Source {
   TV = 0,
-  Lamp = 1,
-  Kitchen = 2
+  Kitchen = 1
 }
 
 interface IMessage {
@@ -41,7 +41,8 @@ const rvl = new RVL({
   networkInterface: RAVER_LIGHTS_INTERFACE,
   port: 4978,
   mode: 'controller',
-  logLevel: 'debug'
+  logLevel: 'debug',
+  channel: RAVER_LIGHTS_CHANNEL
 });
 
 rvl.on('initialized', () => {
