@@ -21,6 +21,7 @@ import * as React from 'react';
 import { SolidAnimationComponent } from './animations/solid';
 import { CycleAnimationComponent } from './animations/cycle';
 import { RegionControl } from './regionControls';
+import { Select } from './controls/select';
 
 enum AnimationType {
   Solid = 0,
@@ -37,8 +38,15 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
     animationType: AnimationType.Solid
   };
 
-  public handleChange = (event: any) => {
-    this.setState({ animationType: event.target.value });
+  public handleChange = (newValue: string) => {
+    switch (newValue) {
+      case AnimationType[AnimationType.Solid]:
+        this.setState({ animationType: AnimationType.Solid });
+        break;
+      case AnimationType[AnimationType.Cycle]:
+        this.setState({ animationType: AnimationType.Cycle });
+        break;
+    }
   }
 
   public render() {
@@ -55,15 +63,15 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
       <div>
         <div>
           <RegionControl />
-          <label>Animation:</label>
-          {/* <Select
-            value={this.state.animationType}
+          <Select
+            label="Animation"
+            initialValue={AnimationType[AnimationType.Solid]}
+            options={[
+              { value: AnimationType[AnimationType.Solid], label: AnimationType[AnimationType.Solid] },
+              { value: AnimationType[AnimationType.Cycle], label: AnimationType[AnimationType.Cycle] }
+            ]}
             onChange={this.handleChange}
-            input={<FilledInput name="Animation" id="filled-animation-simple" />}
-          >
-            <MenuItem value={AnimationType.Solid}>{AnimationType[AnimationType.Solid]}</MenuItem>
-            <MenuItem value={AnimationType.Cycle}>{AnimationType[AnimationType.Cycle]}</MenuItem>
-          </Select> */}
+            />
         </div>
         <div>
           {configurationComponent}
