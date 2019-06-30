@@ -21,28 +21,21 @@ import * as React from 'react';
 import { Range } from './controls/range';
 import { Toggle } from './controls/toggle';
 import { request } from '../message';
+import { store } from '../store';
 
-interface IRegionControlState {
-  power: boolean;
-}
-
-export class RegionControl extends React.Component<{}, IRegionControlState> {
-
-  public state = {
-    power: false
-  };
+export class RegionControl extends React.Component<{}, {}> {
 
   public render() {
     return (
       <div className="regionControl">
         <Toggle
           label="Power"
-          initialValue={false}
+          initialValue={store.power}
           onChange={this.onPowerChanged}
           />
         <Range
           label="Brightness"
-          initialValue={0}
+          initialValue={store.brightness}
           min={0}
           max={16}
           onChange={this.onBrightnessChanged}
@@ -52,6 +45,7 @@ export class RegionControl extends React.Component<{}, IRegionControlState> {
   }
 
   private onPowerChanged = (power: boolean) => {
+    store.power = power;
     request({
       endpoint: 'power',
       method: 'POST',
@@ -60,6 +54,7 @@ export class RegionControl extends React.Component<{}, IRegionControlState> {
   }
 
   private onBrightnessChanged = (brightness: number) => {
+    store.brightness = brightness;
     request({
       endpoint: 'brightness',
       method: 'POST',

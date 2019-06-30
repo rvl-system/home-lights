@@ -24,12 +24,12 @@ const express = require("express");
 const body_parser_1 = require("body-parser");
 const WEB_SERVER_PORT = 80;
 const RAVER_LIGHTS_INTERFACE = 'Loopback Pseudo-Interface 1';
-const RAVER_LIGHTS_CHANNEL = 5;
-var Source;
-(function (Source) {
-    Source[Source["TV"] = 0] = "TV";
-    Source[Source["Kitchen"] = 1] = "Kitchen";
-})(Source || (Source = {}));
+const RAVER_LIGHTS_CHANNEL = 0;
+var AnimationType;
+(function (AnimationType) {
+    AnimationType[AnimationType["Solid"] = 0] = "Solid";
+    AnimationType[AnimationType["Cycle"] = 1] = "Cycle";
+})(AnimationType || (AnimationType = {}));
 const rvl = new rvl_node_1.RVL({
     networkInterface: RAVER_LIGHTS_INTERFACE,
     port: 4978,
@@ -43,21 +43,47 @@ rvl.on('initialized', () => {
     app.use(express.static(path_1.join(__dirname, '..', '..', 'public')));
     app.use(body_parser_1.json());
     let power = true;
+    let brightness = 8;
+    let type = AnimationType.Solid;
+    let hue = 0;
+    let saturation = 255;
+    let rate = 1;
+    function updateAnimation() {
+        switch (type) {
+            case AnimationType.Solid:
+                console.log(`Updating solid animation with hue=${hue} and saturation=${saturation}`);
+                break;
+            case AnimationType.Cycle:
+                console.log(`Updating cycle animation with rate=${rate}`);
+                break;
+        }
+    }
     app.post('/api/power', (req, res) => {
         power = req.body.power;
         console.log(`Setting power to ${power ? 'on' : 'off'}`);
+        updateAnimation();
         res.send({ status: 'ok' });
     });
-    let brightness = 8;
     app.post('/api/brightness', (req, res) => {
         brightness = req.body.brightness;
         console.log(`Setting brightness to ${brightness}`);
+        updateAnimation();
         res.send({ status: 'ok' });
     });
-    app.post('/api/animation', (req, res) => {
-        const message = req.body;
-        rvl.setWaveParameters(message.waves);
-        res.send('ok');
+    app.post('/api/solid-animation', (req, res) => {
+        type = AnimationType.Solid;
+        hue = req.body.hue;
+        saturation = req.body.saturation;
+        console.log(`Setting solid animation to ${brightness}`);
+        updateAnimation();
+        res.send({ status: 'ok' });
+    });
+    app.post('/api/cycle-animation', (req, res) => {
+        type = AnimationType.Cycle;
+        rate = req.body.rate;
+        console.log(`Setting cycle animation to ${brightness}`);
+        updateAnimation();
+        res.send({ status: 'ok' });
     });
     app.listen(WEB_SERVER_PORT, () => {
         console.log(`Home Lights server running on port ${WEB_SERVER_PORT}!`);

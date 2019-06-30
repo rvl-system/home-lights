@@ -19,8 +19,15 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { Range } from '../controls/range';
+import { request } from '../../message';
+import { store } from '../../store';
 
-export class SolidAnimationComponent extends React.Component<{}, {}> {
+interface ISolidAnimationComponentState {
+  hue: number;
+  saturation: number;
+}
+
+export class SolidAnimationComponent extends React.Component<{}, ISolidAnimationComponentState> {
 
   public render() {
     return (
@@ -30,14 +37,14 @@ export class SolidAnimationComponent extends React.Component<{}, {}> {
             label="Hue"
             min={1}
             max={255}
-            initialValue={0}
+            initialValue={store.hue}
             onChange={this.updateHue}
             />
           <Range
             label="Saturation"
             min={1}
             max={255}
-            initialValue={0}
+            initialValue={store.saturation}
             onChange={this.updateSaturation}
             />
         </div>
@@ -46,15 +53,37 @@ export class SolidAnimationComponent extends React.Component<{}, {}> {
   }
 
   private updateColor() {
-    console.log('updating color');
-    // TODO
+    request({
+      endpoint: 'solid-animation',
+      method: 'POST',
+      body: {
+        hue: this.state.hue,
+        saturation: this.state.saturation
+      }
+    });
   }
 
   private updateHue = (hue: number) => {
-    this.updateColor();
+    store.hue = hue;
+    this.setState((previousState) => {
+      const newState: ISolidAnimationComponentState = {
+        ...previousState,
+        hue
+      };
+      setTimeout(() => this.updateColor());
+      return newState;
+    });
   }
 
   private updateSaturation = (saturation: number) => {
-    this.updateColor();
+    store.hue = saturation;
+    this.setState((previousState) => {
+      const newState: ISolidAnimationComponentState = {
+        ...previousState,
+        saturation
+      };
+      setTimeout(() => this.updateColor());
+      return newState;
+    });
   }
 }

@@ -19,6 +19,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { Range } from '../controls/range';
+import { request } from '../../message';
+import { store } from '../../store';
 
 export class CycleAnimationComponent extends React.Component<{}, {}> {
 
@@ -30,7 +32,7 @@ export class CycleAnimationComponent extends React.Component<{}, {}> {
             label="Rate"
             min={1}
             max={32}
-            initialValue={4}
+            initialValue={store.rate}
             onChange={this.updateRate}
             />
         </div>
@@ -38,12 +40,12 @@ export class CycleAnimationComponent extends React.Component<{}, {}> {
     );
   }
 
-  private updateColor() {
-    console.log('updating color');
-    // TODO
-  }
-
   private updateRate = (rate: number) => {
-    this.updateColor();
+    store.rate = rate;
+    request({
+      endpoint: 'cycle-animation',
+      method: 'POST',
+      body: { rate }
+    });
   }
 }

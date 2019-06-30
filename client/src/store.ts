@@ -1,4 +1,4 @@
-<!--
+/*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
 This file is part of Home Lights.
@@ -15,31 +15,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
--->
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Home Lights</title>
-  <meta
-    name="viewport"
-    content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
-  >
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-  <link rel="shortcut icon" href="favicon.png" type="image/png">
-  <script>
-window.state = {
-  animationType: 'Cycle',
-  hue: 0,
-  saturation: 255,
-  rate: 4,
-  power: true,
-  brightness: 8
-};
-  </script>
-</head>
-<body>
-  <div id="app"></div>
-  <script src="./bundle.js"></script>
-</body>
-</html>
+*/
+
+interface IStore {
+  animationType: 'Solid' | 'Cycle';
+  hue: number;
+  saturation: number;
+  rate: number;
+  power: boolean;
+  brightness: number;
+}
+
+export const store: IStore = (window as any).state;

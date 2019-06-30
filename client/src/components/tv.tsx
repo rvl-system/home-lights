@@ -22,40 +22,34 @@ import { SolidAnimationComponent } from './animations/solid';
 import { CycleAnimationComponent } from './animations/cycle';
 import { RegionControl } from './regionControls';
 import { Select } from './controls/select';
-
-enum AnimationType {
-  Solid = 0,
-  Cycle = 1
-}
+import { store } from '../store';
 
 export interface ITVComponentState {
-  animationType: AnimationType;
+  animationType: 'Solid' | 'Cycle';
 }
 
 export class TVComponent extends React.Component<{}, ITVComponentState> {
 
   public state: ITVComponentState = {
-    animationType: AnimationType.Solid
+    animationType: store.animationType
   };
 
-  public handleChange = (newValue: string) => {
-    switch (newValue) {
-      case AnimationType[AnimationType.Solid]:
-        this.setState({ animationType: AnimationType.Solid });
-        break;
-      case AnimationType[AnimationType.Cycle]:
-        this.setState({ animationType: AnimationType.Cycle });
-        break;
+  public handleChange = (animationType: string) => {
+    if (animationType !== 'Solid' && animationType !== 'Cycle') {
+      console.warn(`Invalid animation type ${animationType}`);
+      return;
     }
+    store.animationType = animationType;
+    this.setState({ animationType });
   }
 
   public render() {
     let configurationComponent: JSX.Element | undefined;
     switch (this.state.animationType) {
-      case AnimationType.Solid:
+      case 'Solid':
         configurationComponent = <SolidAnimationComponent />;
         break;
-      case AnimationType.Cycle:
+      case 'Cycle':
         configurationComponent = <CycleAnimationComponent />;
         break;
     }
@@ -65,10 +59,10 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
           <RegionControl />
           <Select
             label="Animation"
-            initialValue={AnimationType[AnimationType.Solid]}
+            initialValue={this.state.animationType}
             options={[
-              { value: AnimationType[AnimationType.Solid], label: AnimationType[AnimationType.Solid] },
-              { value: AnimationType[AnimationType.Cycle], label: AnimationType[AnimationType.Cycle] }
+              { value: 'Solid', label: 'Solid' },
+              { value: 'Cycle', label: 'Cycle' }
             ]}
             onChange={this.handleChange}
             />
