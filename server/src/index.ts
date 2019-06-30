@@ -24,7 +24,7 @@ import { json } from 'body-parser';
 import { IWaveParameters } from 'rvl-node';
 
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wifi0';
+const RAVER_LIGHTS_INTERFACE = 'Loopback Pseudo-Interface 1';
 const RAVER_LIGHTS_CHANNEL = 5;
 
 enum Source {
@@ -53,10 +53,38 @@ rvl.on('initialized', () => {
   app.use(express.static(join(__dirname, '..', '..', 'public')));
   app.use(json());
 
-  app.post('/api/animation', (req, res) => {
-    const message: IMessage = req.body;
-    rvl.setWaveParameters(message.waves);
-    res.send('ok');
+  let power = true;
+  let brightness = 8;
+  function updateAnimation() {
+
+  }
+
+  app.post('/api/power', (req, res) => {
+    power = req.body.power;
+    console.log(`Setting power to ${power ? 'on' : 'off'}`);
+    updateAnimation();
+    res.send({ status: 'ok' });
+  });
+
+  app.post('/api/brightness', (req, res) => {
+    brightness = req.body.brightness;
+    console.log(`Setting brightness to ${brightness}`);
+    updateAnimation();
+    res.send({ status: 'ok' });
+  });
+
+  app.post('/api/solid-animation', (req, res) => {
+    brightness = req.body.brightness;
+    console.log(`Setting solid animation to ${brightness}`);
+    updateAnimation();
+    res.send({ status: 'ok' });
+  });
+
+  app.post('/api/cycle-animation', (req, res) => {
+    brightness = req.body.brightness;
+    console.log(`Setting cycle animation to ${brightness}`);
+    updateAnimation();
+    res.send({ status: 'ok' });
   });
 
   app.listen(WEB_SERVER_PORT, () => {

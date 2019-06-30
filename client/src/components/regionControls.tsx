@@ -20,6 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import * as React from 'react';
 import { Range } from './controls/range';
 import { Toggle } from './controls/toggle';
+import { request } from '../message';
 
 interface IRegionControlState {
   power: boolean;
@@ -30,21 +31,6 @@ export class RegionControl extends React.Component<{}, IRegionControlState> {
   public state = {
     power: false
   };
-
-  // private updateRate = (event: React.FormEvent<HTMLInputElement>) => {
-  //   const rate = parseInt(event.currentTarget.value, 10);
-  //   if (isNaN(rate)) {
-  //     return;
-  //   }
-  //   this.updateColor();
-  //   this.setState((previousState) => {
-  //     const newState: IRegionControlState = {
-  //       ...previousState,
-  //       rate
-  //     };
-  //     return newState;
-  //   });
-  // }
 
   public render() {
     return (
@@ -58,35 +44,26 @@ export class RegionControl extends React.Component<{}, IRegionControlState> {
           label="Brightness"
           initialValue={0}
           min={0}
-          max={32}
+          max={16}
           onChange={this.onBrightnessChanged}
           />
       </div>
     );
   }
 
-  private updateColor() {
-    console.log('updating color');
-    // TODO
+  private onPowerChanged = (power: boolean) => {
+    request({
+      endpoint: 'power',
+      method: 'POST',
+      body: { power }
+    });
   }
 
-  private onPowerChanged = (value: boolean) => {
-    this.updateColor();
+  private onBrightnessChanged = (brightness: number) => {
+    request({
+      endpoint: 'brightness',
+      method: 'POST',
+      body: { brightness }
+    });
   }
-
-  private onBrightnessChanged = (value: number) => {
-    this.updateColor();
-  }
-
-  // private onPowerToggled = (event: React.FormEvent<HTMLInputElement>) => {
-  //   const power = event.currentTarget.checked;
-  //   this.updateColor();
-  //   this.setState((previousState) => {
-  //     const newState: IRegionControlState = {
-  //       ...previousState,
-  //       power
-  //     };
-  //     return newState;
-  //   });
-  // }
 }

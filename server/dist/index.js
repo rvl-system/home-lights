@@ -23,7 +23,7 @@ const rvl_node_1 = require("rvl-node");
 const express = require("express");
 const body_parser_1 = require("body-parser");
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'wifi0';
+const RAVER_LIGHTS_INTERFACE = 'Loopback Pseudo-Interface 1';
 const RAVER_LIGHTS_CHANNEL = 5;
 var Source;
 (function (Source) {
@@ -42,6 +42,18 @@ rvl.on('initialized', () => {
     const app = express();
     app.use(express.static(path_1.join(__dirname, '..', '..', 'public')));
     app.use(body_parser_1.json());
+    let power = true;
+    app.post('/api/power', (req, res) => {
+        power = req.body.power;
+        console.log(`Setting power to ${power ? 'on' : 'off'}`);
+        res.send({ status: 'ok' });
+    });
+    let brightness = 8;
+    app.post('/api/brightness', (req, res) => {
+        brightness = req.body.brightness;
+        console.log(`Setting brightness to ${brightness}`);
+        res.send({ status: 'ok' });
+    });
     app.post('/api/animation', (req, res) => {
         const message = req.body;
         rvl.setWaveParameters(message.waves);
