@@ -25,8 +25,12 @@ import { json } from 'body-parser';
 import { compile } from 'handlebars';
 
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = 'Loopback Pseudo-Interface 1';
+const RAVER_LIGHTS_INTERFACE = process.argv[2];
 const RAVER_LIGHTS_CHANNEL = 0;
+
+if (!RAVER_LIGHTS_INTERFACE) {
+  throw new Error('A network interface must be passed as the one and only argument');
+}
 
 const indexViewTemplate = compile(readFileSync(join(__dirname, '..', '..', 'views', 'index.handlebars'), 'utf-8'));
 
@@ -56,12 +60,77 @@ rvl.on('initialized', () => {
     switch (animationType) {
       case 'Solid':
         console.log(`Updating solid animation with hue=${hue} and saturation=${saturation}`);
+        rvl.setWaveParameters({
+          waves: [{
+            h: {
+              b: hue,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            },
+            s: {
+              b: saturation,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            },
+            v: {
+              b: brightness,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            },
+            a: {
+              b: 255,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            }
+          }]
+        });
         break;
       case 'Cycle':
         console.log(`Updating cycle animation with rate=${rate}`);
+        rvl.setWaveParameters({
+          waves: [{
+            h: {
+              b: 0,
+              a: 255,
+              w_t: rate,
+              w_x: 0,
+              phi: 0
+            },
+            s: {
+              b: 255,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            },
+            v: {
+              b: brightness,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            },
+            a: {
+              b: 255,
+              a: 0,
+              w_t: 0,
+              w_x: 0,
+              phi: 0
+            }
+          }]
+        });
         break;
     }
   }
+  updateAnimation();
 
   app.get('/', (req, res) => {
     res.send(indexViewTemplate({
