@@ -70,7 +70,7 @@ rvl.on('initialized', () => {
                                 phi: 0
                             },
                             v: {
-                                b: brightness,
+                                b: power ? brightness : 0,
                                 a: 0,
                                 w_t: 0,
                                 w_x: 0,
@@ -105,7 +105,7 @@ rvl.on('initialized', () => {
                                 phi: 0
                             },
                             v: {
-                                b: brightness,
+                                b: power ? brightness : 0,
                                 a: 0,
                                 w_t: 0,
                                 w_x: 0,
