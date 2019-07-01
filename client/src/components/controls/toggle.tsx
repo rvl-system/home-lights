@@ -37,9 +37,11 @@ export class Toggle extends React.Component<IToggleProps, IToggleState> {
 
   public render() {
     return (
-      <div onClick={this.onClick}>
+      <div className="control">
         <label>{this.props.label}:</label>
         <input
+          className={`toggle ${this.state.value ? 'toggle-on' : 'toggle-off'}`}
+          onClick={this.onClick}
           type="range"
           min="0"
           max="1"

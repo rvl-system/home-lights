@@ -27,15 +27,13 @@ export class CycleAnimationComponent extends React.Component<{}, {}> {
   public render() {
     return (
       <div>
-        <div className="cyclePickerContainer">
-          <Range
-            label="Rate"
-            min={1}
-            max={32}
-            initialValue={store.rate}
-            onChange={this.updateRate}
-            />
-        </div>
+        <Range
+          label="Rate"
+          min={1}
+          max={32}
+          initialValue={store.rate}
+          onChange={this.updateRate}
+          />
       </div>
     );
   }

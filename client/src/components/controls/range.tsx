@@ -39,9 +39,10 @@ export class Range extends React.Component<IRangeProps, IRangeState> {
 
   public render() {
     return (
-      <div>
+      <div className="control">
         <label>{this.props.label}:</label>
         <input
+          className="range"
           type="range"
           min={this.props.min}
           max={this.props.max}

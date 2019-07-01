@@ -32,22 +32,20 @@ export class SolidAnimationComponent extends React.Component<{}, ISolidAnimation
   public render() {
     return (
       <div>
-        <div className="colorPickerContainer">
-          <Range
-            label="Hue"
-            min={1}
-            max={255}
-            initialValue={store.hue}
-            onChange={this.updateHue}
-            />
-          <Range
-            label="Saturation"
-            min={1}
-            max={255}
-            initialValue={store.saturation}
-            onChange={this.updateSaturation}
-            />
-        </div>
+        <Range
+          label="Hue"
+          min={1}
+          max={255}
+          initialValue={store.hue}
+          onChange={this.updateHue}
+          />
+        <Range
+          label="Saturation"
+          min={1}
+          max={255}
+          initialValue={store.saturation}
+          onChange={this.updateSaturation}
+          />
       </div>
     );
   }

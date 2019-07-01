@@ -27,7 +27,7 @@ export class RegionControl extends React.Component<{}, {}> {
 
   public render() {
     return (
-      <div className="regionControl">
+      <div>
         <Toggle
           label="Power"
           initialValue={store.power}

@@ -38,9 +38,9 @@ export class Select extends React.Component<ISelectProps, ISelectState> {
 
   public render() {
     return (
-      <div>
+      <div className="control">
         <label>{this.props.label}:</label>
-        <select onChange={this.onValueChanged} defaultValue={this.props.initialValue}>
+        <select className="select" onChange={this.onValueChanged} defaultValue={this.props.initialValue}>
           {this.props.options.map((option, key) =>
             <option key={key} value={option.value}>
               {option.label}

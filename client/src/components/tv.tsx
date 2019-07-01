@@ -76,22 +76,19 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
         break;
     }
     return (
-      <div>
-        <div>
-          <RegionControl />
-          <Select
-            label="Animation"
-            initialValue={this.state.animationType}
-            options={[
-              { value: 'Solid', label: 'Solid' },
-              { value: 'Cycle', label: 'Cycle' }
-            ]}
-            onChange={this.handleChange}
-            />
-        </div>
-        <div>
-          {configurationComponent}
-        </div>
+      <div className="content">
+        <RegionControl />
+        <hr />
+        <Select
+          label="Animation"
+          initialValue={this.state.animationType}
+          options={[
+            { value: 'Solid', label: 'Solid' },
+            { value: 'Cycle', label: 'Cycle' }
+          ]}
+          onChange={this.handleChange}
+          />
+        {configurationComponent}
       </div>
     );
   }
