@@ -18,18 +18,16 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
 const path_1 = require("path");
 const rvl_node_1 = require("rvl-node");
 const express = require("express");
 const body_parser_1 = require("body-parser");
+const handlebars_1 = require("handlebars");
 const WEB_SERVER_PORT = 80;
 const RAVER_LIGHTS_INTERFACE = 'Loopback Pseudo-Interface 1';
 const RAVER_LIGHTS_CHANNEL = 0;
-var AnimationType;
-(function (AnimationType) {
-    AnimationType[AnimationType["Solid"] = 0] = "Solid";
-    AnimationType[AnimationType["Cycle"] = 1] = "Cycle";
-})(AnimationType || (AnimationType = {}));
+const indexViewTemplate = handlebars_1.compile(fs_1.readFileSync(path_1.join(__dirname, '..', '..', 'views', 'index.handlebars'), 'utf-8'));
 const rvl = new rvl_node_1.RVL({
     networkInterface: RAVER_LIGHTS_INTERFACE,
     port: 4978,
@@ -44,20 +42,30 @@ rvl.on('initialized', () => {
     app.use(body_parser_1.json());
     let power = true;
     let brightness = 8;
-    let type = AnimationType.Solid;
+    let animationType = 'Solid';
     let hue = 0;
     let saturation = 255;
     let rate = 1;
     function updateAnimation() {
-        switch (type) {
-            case AnimationType.Solid:
+        switch (animationType) {
+            case 'Solid':
                 console.log(`Updating solid animation with hue=${hue} and saturation=${saturation}`);
                 break;
-            case AnimationType.Cycle:
+            case 'Cycle':
                 console.log(`Updating cycle animation with rate=${rate}`);
                 break;
         }
     }
+    app.get('/', (req, res) => {
+        res.send(indexViewTemplate({
+            animationType: `'${animationType}'`,
+            hue,
+            saturation,
+            rate,
+            power,
+            brightness
+        }));
+    });
     app.post('/api/power', (req, res) => {
         power = req.body.power;
         console.log(`Setting power to ${power ? 'on' : 'off'}`);
@@ -71,7 +79,7 @@ rvl.on('initialized', () => {
         res.send({ status: 'ok' });
     });
     app.post('/api/solid-animation', (req, res) => {
-        type = AnimationType.Solid;
+        animationType = 'Solid';
         hue = req.body.hue;
         saturation = req.body.saturation;
         console.log(`Setting solid animation to ${brightness}`);
@@ -79,7 +87,7 @@ rvl.on('initialized', () => {
         res.send({ status: 'ok' });
     });
     app.post('/api/cycle-animation', (req, res) => {
-        type = AnimationType.Cycle;
+        animationType = 'Cycle';
         rate = req.body.rate;
         console.log(`Setting cycle animation to ${brightness}`);
         updateAnimation();

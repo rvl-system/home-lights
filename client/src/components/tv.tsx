@@ -23,6 +23,7 @@ import { CycleAnimationComponent } from './animations/cycle';
 import { RegionControl } from './regionControls';
 import { Select } from './controls/select';
 import { store } from '../store';
+import { request } from '../message';
 
 export interface ITVComponentState {
   animationType: 'Solid' | 'Cycle';
@@ -41,6 +42,27 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
     }
     store.animationType = animationType;
     this.setState({ animationType });
+    switch (animationType) {
+      case 'Solid':
+        request({
+          endpoint: 'solid-animation',
+          method: 'POST',
+          body: {
+            hue: store.hue,
+            saturation: store.saturation
+          }
+        });
+        break;
+      case 'Cycle':
+        request({
+          endpoint: 'cycle-animation',
+          method: 'POST',
+          body: {
+            rate: store.rate
+          }
+        });
+        break;
+    }
   }
 
   public render() {

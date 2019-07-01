@@ -40,9 +40,9 @@ export class Select extends React.Component<ISelectProps, ISelectState> {
     return (
       <div>
         <label>{this.props.label}:</label>
-        <select onChange={this.onValueChanged}>
+        <select onChange={this.onValueChanged} defaultValue={this.props.initialValue}>
           {this.props.options.map((option, key) =>
-            <option key={key} value={option.value} selected={option.value === this.props.initialValue}>
+            <option key={key} value={option.value}>
               {option.label}
             </option>
           )}
