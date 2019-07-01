@@ -51,7 +51,7 @@ rvl.on('initialized', () => {
   app.use(json());
 
   let power = true;
-  let brightness = 8;
+  let brightness = 128;
   let animationType: 'Solid' | 'Cycle' = 'Solid';
   let hue = 0;
   let saturation = 255;

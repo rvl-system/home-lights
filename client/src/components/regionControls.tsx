@@ -37,7 +37,7 @@ export class RegionControl extends React.Component<{}, {}> {
           label="Brightness"
           initialValue={store.brightness}
           min={0}
-          max={16}
+          max={255}
           onChange={this.onBrightnessChanged}
           />
       </div>
