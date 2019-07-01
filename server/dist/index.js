@@ -44,7 +44,7 @@ rvl.on('initialized', () => {
     app.use(express.static(path_1.join(__dirname, '..', '..', 'public')));
     app.use(body_parser_1.json());
     let power = true;
-    let brightness = 8;
+    let brightness = 128;
     let animationType = 'Solid';
     let hue = 0;
     let saturation = 255;
