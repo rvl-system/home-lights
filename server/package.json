@@ -20,13 +20,13 @@
   },
   "homepage": "https://github.com/nebrius/home-lights#readme",
   "devDependencies": {
-    "@types/express": "^4.16.1",
-    "tslint": "^5.16.0",
-    "typescript": "^3.4.4"
+    "@types/express": "^4.17.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
     "handlebars": "^4.1.2",
     "rvl-node": "^2.0.0",
     "rvl-node-animations": "^2.0.0",
