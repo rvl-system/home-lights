@@ -46,7 +46,7 @@ rvl.on('initialized', () => {
     let store = {
         power: true,
         brightness: 128,
-        animationType: 'Solid',
+        animationType: 'Wave',
         animationParameters: {
             rainbow: {
                 rate: 4
@@ -72,79 +72,64 @@ rvl.on('initialized', () => {
         }
     };
     function updateAnimation() {
+        const wave = {
+            b: 0,
+            a: 0,
+            w_t: 0,
+            w_x: 0,
+            phi: 0
+        };
+        const parameters = {
+            waves: [{
+                    h: { ...wave },
+                    s: { ...wave },
+                    v: { ...wave },
+                    a: { ...wave }
+                }, {
+                    h: { ...wave },
+                    s: { ...wave },
+                    v: { ...wave },
+                    a: { ...wave }
+                }, {
+                    h: { ...wave },
+                    s: { ...wave },
+                    v: { ...wave },
+                    a: { ...wave }
+                }]
+        };
         switch (store.animationType) {
-            case 'Solid':
-                console.log(`Updating solid animation with hue=${store.animationParameters.solid.hue} ` +
-                    `and saturation=${store.animationParameters.solid.saturation}`);
-                rvl.setWaveParameters({
-                    waves: [{
-                            h: {
-                                b: store.animationParameters.solid.hue,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            },
-                            s: {
-                                b: store.animationParameters.solid.saturation,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            },
-                            v: {
-                                b: store.power ? store.brightness : 0,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            },
-                            a: {
-                                b: 255,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            }
-                        }]
-                });
+            case 'Rainbow':
+                console.log(`Updating rainbow animation with rate=${store.animationParameters.colorCycle.rate}`);
+                break;
+            case 'Pulse':
+                console.log(`Updating pulse animation with rate=${store.animationParameters.colorCycle.rate} ` +
+                    `hue=${store.animationParameters.pulse.hue} ` +
+                    `saturation=${store.animationParameters.pulse.saturation}`);
+                break;
+            case 'Wave':
+                console.log(`Updating wave animation with rate=${store.animationParameters.colorCycle.rate} ` +
+                    `waveHue=${store.animationParameters.wave.waveHue} ` +
+                    `foregroundHue=${store.animationParameters.wave.foregroundHue} ` +
+                    `backgroundHue=${store.animationParameters.wave.backgroundHue} `);
                 break;
             case 'Color Cycle':
                 console.log(`Updating cycle animation with rate=${store.animationParameters.colorCycle.rate}`);
-                rvl.setWaveParameters({
-                    waves: [{
-                            h: {
-                                b: 0,
-                                a: 255,
-                                w_t: store.animationParameters.colorCycle.rate,
-                                w_x: 0,
-                                phi: 0
-                            },
-                            s: {
-                                b: 255,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            },
-                            v: {
-                                b: store.power ? store.brightness : 0,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            },
-                            a: {
-                                b: 255,
-                                a: 0,
-                                w_t: 0,
-                                w_x: 0,
-                                phi: 0
-                            }
-                        }]
-                });
+                parameters.waves[0].h.a = 255;
+                parameters.waves[0].h.w_t = store.animationParameters.colorCycle.rate;
+                parameters.waves[0].s.b = 255;
+                parameters.waves[0].v.b = store.power ? store.brightness : 0;
+                parameters.waves[0].a.b = 255;
+                break;
+            case 'Solid':
+                console.log(`Updating solid animation with hue=${store.animationParameters.solid.hue} ` +
+                    `saturation=${store.animationParameters.solid.saturation}`);
+                parameters.waves[0].h.b = store.animationParameters.solid.hue;
+                parameters.waves[0].s.b = store.animationParameters.solid.saturation;
+                parameters.waves[0].v.b = store.power ? store.brightness : 0;
+                parameters.waves[0].a.b = 255;
                 break;
         }
+        rvl.setWaveParameters(parameters);
     }
     updateAnimation();
     app.get('/', (req, res) => {
