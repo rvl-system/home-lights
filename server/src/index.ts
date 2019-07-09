@@ -87,7 +87,7 @@ rvl.on('initialized', () => {
   app.use(express.static(join(__dirname, '..', '..', 'public')));
   app.use(json());
 
-  let store: IStore = {
+  const store: IStore = {
     power: true,
     brightness: 128,
     animationType: 'Wave',
@@ -198,8 +198,23 @@ rvl.on('initialized', () => {
     res.send(indexViewTemplate(store));
   });
 
+  app.post('/api/power', (req, res) => {
+    store.power = req.body.power;
+    console.log(`Setting power to ${store.power ? 'on' : 'off'}`);
+    updateAnimation();
+    res.send({ status: 'ok' });
+  });
+
+  app.post('/api/brightness', (req, res) => {
+    store.brightness = req.body.brightness;
+    console.log(`Setting brightness to ${store.brightness}`);
+    updateAnimation();
+    res.send({ status: 'ok' });
+  });
+
   app.post('/api/animation', (req, res) => {
-    store = req.body;
+    store.animationType = req.body.animationType;
+    store.animationParameters = req.body.animationParameters;
     updateAnimation();
     res.send({ status: 'ok' });
   });
