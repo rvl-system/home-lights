@@ -18,8 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { TVComponent } from './tv';
-import { KitchenComponent } from './kitchen';
+import { RegionComponent } from './region';
 
 interface IAppComponentState {
   selectedTab: Source;
@@ -27,7 +26,6 @@ interface IAppComponentState {
 
 export enum Source {
   TV = 0,
-  Lamp = 1,
   Kitchen = 2
 }
 
@@ -41,10 +39,7 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
     let content: JSX.Element | undefined;
     switch (this.state.selectedTab) {
       case Source.TV:
-        content = <TVComponent />;
-        break;
-      case Source.Kitchen:
-        content = <KitchenComponent />;
+        content = <RegionComponent />;
         break;
     }
     return (

@@ -31,7 +31,7 @@ export class CycleAnimationComponent extends React.Component<{}, {}> {
           label="Rate"
           min={1}
           max={32}
-          initialValue={store.rate}
+          initialValue={store.animationParameters.colorCycle.rate}
           onChange={this.updateRate}
           />
       </div>
@@ -39,11 +39,11 @@ export class CycleAnimationComponent extends React.Component<{}, {}> {
   }
 
   private updateRate = (rate: number) => {
-    store.rate = rate;
+    store.animationParameters.colorCycle.rate = rate;
     request({
-      endpoint: 'cycle-animation',
+      endpoint: 'animation',
       method: 'POST',
-      body: { rate }
+      body: store
     });
   }
 }

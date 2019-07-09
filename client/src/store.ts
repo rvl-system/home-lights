@@ -17,13 +17,35 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+export type Animation = 'Rainbow' | 'Pulse' | 'Wave' | 'Color Cycle' | 'Solid';
+
 interface IStore {
-  animationType: 'Solid' | 'Cycle';
-  hue: number;
-  saturation: number;
-  rate: number;
   power: boolean;
   brightness: number;
+  animationType: Animation;
+  animationParameters: {
+    rainbow: {
+      rate: number;
+    };
+    pulse: {
+      rate: number;
+      hue: number;
+      saturation: number;
+    };
+    wave: {
+      rate: number;
+      waveHue: number;
+      foregroundHue: number;
+      backgroundHue: number;
+    };
+    colorCycle: {
+      rate: number;
+    };
+    solid: {
+      hue: number;
+      saturation: number;
+    };
+  };
 }
 
 export const store: IStore = (window as any).state;

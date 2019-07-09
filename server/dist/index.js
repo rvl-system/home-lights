@@ -43,34 +43,57 @@ rvl.on('initialized', () => {
     const app = express();
     app.use(express.static(path_1.join(__dirname, '..', '..', 'public')));
     app.use(body_parser_1.json());
-    let power = true;
-    let brightness = 128;
-    let animationType = 'Solid';
-    let hue = 0;
-    let saturation = 255;
-    let rate = 1;
+    let store = {
+        power: true,
+        brightness: 128,
+        animationType: 'Solid',
+        animationParameters: {
+            rainbow: {
+                rate: 4
+            },
+            pulse: {
+                rate: 16,
+                hue: 120,
+                saturation: 255
+            },
+            wave: {
+                rate: 8,
+                waveHue: 0,
+                foregroundHue: 170,
+                backgroundHue: 85
+            },
+            colorCycle: {
+                rate: 4
+            },
+            solid: {
+                hue: 170,
+                saturation: 255
+            }
+        }
+    };
     function updateAnimation() {
-        switch (animationType) {
+        switch (store.animationType) {
             case 'Solid':
-                console.log(`Updating solid animation with hue=${hue} and saturation=${saturation}`);
+                console.log(`Updating solid animation with hue=${store.animationParameters.solid.hue} ` +
+                    `and saturation=${store.animationParameters.solid.saturation}`);
                 rvl.setWaveParameters({
                     waves: [{
                             h: {
-                                b: hue,
+                                b: store.animationParameters.solid.hue,
                                 a: 0,
                                 w_t: 0,
                                 w_x: 0,
                                 phi: 0
                             },
                             s: {
-                                b: saturation,
+                                b: store.animationParameters.solid.saturation,
                                 a: 0,
                                 w_t: 0,
                                 w_x: 0,
                                 phi: 0
                             },
                             v: {
-                                b: power ? brightness : 0,
+                                b: store.power ? store.brightness : 0,
                                 a: 0,
                                 w_t: 0,
                                 w_x: 0,
@@ -86,14 +109,14 @@ rvl.on('initialized', () => {
                         }]
                 });
                 break;
-            case 'Cycle':
-                console.log(`Updating cycle animation with rate=${rate}`);
+            case 'Color Cycle':
+                console.log(`Updating cycle animation with rate=${store.animationParameters.colorCycle.rate}`);
                 rvl.setWaveParameters({
                     waves: [{
                             h: {
                                 b: 0,
                                 a: 255,
-                                w_t: rate,
+                                w_t: store.animationParameters.colorCycle.rate,
                                 w_x: 0,
                                 phi: 0
                             },
@@ -105,7 +128,7 @@ rvl.on('initialized', () => {
                                 phi: 0
                             },
                             v: {
-                                b: power ? brightness : 0,
+                                b: store.power ? store.brightness : 0,
                                 a: 0,
                                 w_t: 0,
                                 w_x: 0,
@@ -125,39 +148,10 @@ rvl.on('initialized', () => {
     }
     updateAnimation();
     app.get('/', (req, res) => {
-        res.send(indexViewTemplate({
-            animationType: `'${animationType}'`,
-            hue,
-            saturation,
-            rate,
-            power,
-            brightness
-        }));
+        res.send(indexViewTemplate(store));
     });
-    app.post('/api/power', (req, res) => {
-        power = req.body.power;
-        console.log(`Setting power to ${power ? 'on' : 'off'}`);
-        updateAnimation();
-        res.send({ status: 'ok' });
-    });
-    app.post('/api/brightness', (req, res) => {
-        brightness = req.body.brightness;
-        console.log(`Setting brightness to ${brightness}`);
-        updateAnimation();
-        res.send({ status: 'ok' });
-    });
-    app.post('/api/solid-animation', (req, res) => {
-        animationType = 'Solid';
-        hue = req.body.hue;
-        saturation = req.body.saturation;
-        console.log(`Setting solid animation to ${brightness}`);
-        updateAnimation();
-        res.send({ status: 'ok' });
-    });
-    app.post('/api/cycle-animation', (req, res) => {
-        animationType = 'Cycle';
-        rate = req.body.rate;
-        console.log(`Setting cycle animation to ${brightness}`);
+    app.post('/api/animation', (req, res) => {
+        store = req.body;
         updateAnimation();
         res.send({ status: 'ok' });
     });

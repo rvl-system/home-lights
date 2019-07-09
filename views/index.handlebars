@@ -26,12 +26,32 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
   <link rel="shortcut icon" href="favicon.png" type="image/png">
   <script>
 window.state = {
-  animationType: {{{animationType}}},
-  hue: {{hue}},
-  saturation: {{saturation}},
-  rate: {{rate}},
   power: {{power}},
-  brightness: {{brightness}}
+  brightness: {{brightness}},
+  animationType: "{{{animationType}}}",
+  animationParameters: {
+    rainbow: {
+      rate: {{animationParameters.rainbow.rate}}
+    },
+    pulse: {
+      rate: {{animationParameters.pulse.rate}},
+      hue: {{animationParameters.pulse.hue}},
+      saturation: {{animationParameters.pulse.saturation}}
+    },
+    wave: {
+      rate: {{animationParameters.wave.rate}},
+      waveHue: {{animationParameters.wave.waveHue}},
+      foregroundHue: {{animationParameters.wave.foregroundHue}},
+      backgroundHue: {{animationParameters.wave.backgroundHue}}
+    },
+    colorCycle: {
+      rate: {{animationParameters.colorCycle.rate}}
+    },
+    solid: {
+      hue: {{animationParameters.solid.hue}},
+      saturation: {{animationParameters.solid.saturation}}
+    }
+  }
 };
   </script>
 </head>

@@ -18,51 +18,36 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { SolidAnimationComponent } from './animations/solid';
-import { CycleAnimationComponent } from './animations/cycle';
-import { RegionControl } from './regionControls';
+import { CommonParametersControl } from './commonParameters';
 import { Select } from './controls/select';
-import { store } from '../store';
+import { store, Animation } from '../store';
 import { request } from '../message';
 
-export interface ITVComponentState {
-  animationType: 'Solid' | 'Cycle';
+import { SolidAnimationComponent } from './animations/solid';
+import { CycleAnimationComponent } from './animations/cycle';
+
+export interface IRegionComponentState {
+  animationType: Animation;
 }
 
-export class TVComponent extends React.Component<{}, ITVComponentState> {
+export class RegionComponent extends React.Component<{}, IRegionComponentState> {
 
-  public state: ITVComponentState = {
+  public state: IRegionComponentState = {
     animationType: store.animationType
   };
 
   public handleChange = (animationType: string) => {
-    if (animationType !== 'Solid' && animationType !== 'Cycle') {
+    if (animationType !== 'Solid' && animationType !== 'Color Cycle') {
       console.warn(`Invalid animation type ${animationType}`);
       return;
     }
     store.animationType = animationType;
     this.setState({ animationType });
-    switch (animationType) {
-      case 'Solid':
-        request({
-          endpoint: 'solid-animation',
-          method: 'POST',
-          body: {
-            hue: store.hue,
-            saturation: store.saturation
-          }
-        });
-        break;
-      case 'Cycle':
-        request({
-          endpoint: 'cycle-animation',
-          method: 'POST',
-          body: {
-            rate: store.rate
-          }
-        });
-        break;
-    }
+    request({
+      endpoint: 'animation',
+      method: 'POST',
+      body: store
+    });
   }
 
   public render() {
@@ -71,20 +56,20 @@ export class TVComponent extends React.Component<{}, ITVComponentState> {
       case 'Solid':
         configurationComponent = <SolidAnimationComponent />;
         break;
-      case 'Cycle':
+      case 'Color Cycle':
         configurationComponent = <CycleAnimationComponent />;
         break;
     }
     return (
       <div className="content">
-        <RegionControl />
+        <CommonParametersControl />
         <hr />
         <Select
           label="Animation"
           initialValue={this.state.animationType}
           options={[
             { value: 'Solid', label: 'Solid' },
-            { value: 'Cycle', label: 'Cycle' }
+            { value: 'Color Cycle', label: 'Color Cycle' }
           ]}
           onChange={this.handleChange}
           />

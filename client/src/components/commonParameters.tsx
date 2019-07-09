@@ -23,7 +23,7 @@ import { Toggle } from './controls/toggle';
 import { request } from '../message';
 import { store } from '../store';
 
-export class RegionControl extends React.Component<{}, {}> {
+export class CommonParametersControl extends React.Component<{}, {}> {
 
   public render() {
     return (

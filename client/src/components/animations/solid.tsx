@@ -22,12 +22,7 @@ import { Range } from '../controls/range';
 import { request } from '../../message';
 import { store } from '../../store';
 
-interface ISolidAnimationComponentState {
-  hue: number;
-  saturation: number;
-}
-
-export class SolidAnimationComponent extends React.Component<{}, ISolidAnimationComponentState> {
+export class SolidAnimationComponent extends React.Component<{}, {}> {
 
   public render() {
     return (
@@ -36,14 +31,14 @@ export class SolidAnimationComponent extends React.Component<{}, ISolidAnimation
           label="Hue"
           min={1}
           max={255}
-          initialValue={store.hue}
+          initialValue={store.animationParameters.solid.hue}
           onChange={this.updateHue}
           />
         <Range
           label="Saturation"
           min={1}
           max={255}
-          initialValue={store.saturation}
+          initialValue={store.animationParameters.solid.saturation}
           onChange={this.updateSaturation}
           />
       </div>
@@ -52,36 +47,19 @@ export class SolidAnimationComponent extends React.Component<{}, ISolidAnimation
 
   private updateColor() {
     request({
-      endpoint: 'solid-animation',
+      endpoint: 'animation',
       method: 'POST',
-      body: {
-        hue: this.state.hue,
-        saturation: this.state.saturation
-      }
+      body: store
     });
   }
 
   private updateHue = (hue: number) => {
-    store.hue = hue;
-    this.setState((previousState) => {
-      const newState: ISolidAnimationComponentState = {
-        ...previousState,
-        hue
-      };
-      setTimeout(() => this.updateColor());
-      return newState;
-    });
+    store.animationParameters.solid.hue = hue;
+    this.updateColor();
   }
 
   private updateSaturation = (saturation: number) => {
-    store.hue = saturation;
-    this.setState((previousState) => {
-      const newState: ISolidAnimationComponentState = {
-        ...previousState,
-        saturation
-      };
-      setTimeout(() => this.updateColor());
-      return newState;
-    });
+    store.animationParameters.solid.saturation = saturation;
+    this.updateColor();
   }
 }
