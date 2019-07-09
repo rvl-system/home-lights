@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { RegionComponent } from './region';
+import { Region } from './region';
 
 interface IAppComponentState {
   selectedTab: Source;
@@ -29,7 +29,7 @@ export enum Source {
   Kitchen = 2
 }
 
-export class AppComponent extends React.Component<{}, IAppComponentState> {
+export class App extends React.Component<{}, IAppComponentState> {
 
   public state: IAppComponentState = {
     selectedTab: Source.TV
@@ -39,14 +39,14 @@ export class AppComponent extends React.Component<{}, IAppComponentState> {
     let content: JSX.Element | undefined;
     switch (this.state.selectedTab) {
       case Source.TV:
-        content = <RegionComponent />;
+        content = <Region />;
         break;
     }
     return (
       <div className="appContainer">
 
         <div className="appHeader">
-          <h2>Belden Public Library Lighting</h2>
+          <h2>Purpleville Lighting</h2>
         </div>
 
         <div className="appContent">

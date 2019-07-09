@@ -19,11 +19,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { render } from 'react-dom';
-import { AppComponent } from './components/app';
+import { App } from './components/app';
 
 render(
   (
-    <AppComponent />
+    <App />
   ),
   document.getElementById('app')
 );

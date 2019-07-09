@@ -21,11 +21,11 @@ import * as React from 'react';
 import { Range } from '../controls/range';
 import { store, Animation } from '../../store';
 
-export interface ICycleAnimationProps {
+export interface IRainbowAnimationProps {
   onAnimationChanged: (animationType: Animation) => void;
 }
 
-export class CycleAnimation extends React.Component<ICycleAnimationProps, {}> {
+export class RainbowAnimation extends React.Component<IRainbowAnimationProps, {}> {
 
   public render() {
     return (
@@ -34,7 +34,7 @@ export class CycleAnimation extends React.Component<ICycleAnimationProps, {}> {
           label="Rate"
           min={1}
           max={32}
-          initialValue={store.animationParameters.colorCycle.rate}
+          initialValue={store.animationParameters.rainbow.rate}
           onChange={this.updateRate}
           />
       </div>
@@ -42,7 +42,7 @@ export class CycleAnimation extends React.Component<ICycleAnimationProps, {}> {
   }
 
   private updateRate = (rate: number) => {
-    store.animationParameters.colorCycle.rate = rate;
-    this.props.onAnimationChanged('Color Cycle');
+    store.animationParameters.rainbow.rate = rate;
+    this.props.onAnimationChanged('Rainbow');
   }
 }

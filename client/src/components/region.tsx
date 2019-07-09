@@ -18,31 +18,32 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { CommonParametersControl } from './commonParameters';
+import { CommonParameters } from './commonParameters';
 import { Select } from './controls/select';
 import { store, Animation } from '../store';
 import { request } from '../message';
 
-import { SolidAnimationComponent } from './animations/solid';
-import { CycleAnimationComponent } from './animations/cycle';
+import { RainbowAnimation } from './animations/rainbow';
+import { PulseAnimation } from './animations/pulse';
+import { WaveAnimation } from './animations/wave';
+import { CycleAnimation } from './animations/cycle';
+import { SolidAnimation } from './animations/solid';
 
-export interface IRegionComponentState {
+export interface IRegionState {
   animationType: Animation;
 }
 
-export class RegionComponent extends React.Component<{}, IRegionComponentState> {
+export class Region extends React.Component<{}, IRegionState> {
 
-  public state: IRegionComponentState = {
+  public state: IRegionState = {
     animationType: store.animationType
   };
 
-  public handleChange = (animationType: string) => {
-    if (animationType !== 'Solid' && animationType !== 'Color Cycle') {
-      console.warn(`Invalid animation type ${animationType}`);
-      return;
+  public handleChange = (animationType: Animation) => {
+    if (animationType !== store.animationType) {
+      store.animationType = animationType;
+      this.setState({ animationType });
     }
-    store.animationType = animationType;
-    this.setState({ animationType });
     request({
       endpoint: 'animation',
       method: 'POST',
@@ -53,25 +54,37 @@ export class RegionComponent extends React.Component<{}, IRegionComponentState> 
   public render() {
     let configurationComponent: JSX.Element | undefined;
     switch (this.state.animationType) {
-      case 'Solid':
-        configurationComponent = <SolidAnimationComponent />;
+      case 'Rainbow':
+        configurationComponent = <RainbowAnimation onAnimationChanged={this.handleChange} />;
+        break;
+      case 'Pulse':
+        configurationComponent = <PulseAnimation onAnimationChanged={this.handleChange} />;
+        break;
+      case 'Wave':
+        configurationComponent = <WaveAnimation onAnimationChanged={this.handleChange} />;
         break;
       case 'Color Cycle':
-        configurationComponent = <CycleAnimationComponent />;
+        configurationComponent = <CycleAnimation onAnimationChanged={this.handleChange} />;
+        break;
+      case 'Solid':
+        configurationComponent = <SolidAnimation onAnimationChanged={this.handleChange} />;
         break;
     }
     return (
       <div className="content">
-        <CommonParametersControl />
+        <CommonParameters />
         <hr />
         <Select
           label="Animation"
           initialValue={this.state.animationType}
           options={[
-            { value: 'Solid', label: 'Solid' },
-            { value: 'Color Cycle', label: 'Color Cycle' }
+            { value: 'Rainbow', label: 'Rainbow' },
+            { value: 'Pulse', label: 'Pulse' },
+            { value: 'Wave', label: 'Wave' },
+            { value: 'Color Cycle', label: 'Color Cycle' },
+            { value: 'Solid', label: 'Solid' }
           ]}
-          onChange={this.handleChange}
+          onChange={this.handleChange as (newValue: string) => void}
           />
         {configurationComponent}
       </div>

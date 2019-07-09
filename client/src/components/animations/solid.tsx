@@ -19,10 +19,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { Range } from '../controls/range';
-import { request } from '../../message';
-import { store } from '../../store';
+import { store, Animation } from '../../store';
 
-export class SolidAnimationComponent extends React.Component<{}, {}> {
+export interface ISolidAnimationProps {
+  onAnimationChanged: (animationType: Animation) => void;
+}
+
+export class SolidAnimation extends React.Component<ISolidAnimationProps, {}> {
 
   public render() {
     return (
@@ -45,21 +48,13 @@ export class SolidAnimationComponent extends React.Component<{}, {}> {
     );
   }
 
-  private updateColor() {
-    request({
-      endpoint: 'animation',
-      method: 'POST',
-      body: store
-    });
-  }
-
   private updateHue = (hue: number) => {
     store.animationParameters.solid.hue = hue;
-    this.updateColor();
+    this.props.onAnimationChanged('Solid');
   }
 
   private updateSaturation = (saturation: number) => {
     store.animationParameters.solid.saturation = saturation;
-    this.updateColor();
+    this.props.onAnimationChanged('Solid');
   }
 }

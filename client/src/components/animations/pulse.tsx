@@ -21,11 +21,11 @@ import * as React from 'react';
 import { Range } from '../controls/range';
 import { store, Animation } from '../../store';
 
-export interface ICycleAnimationProps {
+export interface IPulseAnimationProps {
   onAnimationChanged: (animationType: Animation) => void;
 }
 
-export class CycleAnimation extends React.Component<ICycleAnimationProps, {}> {
+export class PulseAnimation extends React.Component<IPulseAnimationProps, {}> {
 
   public render() {
     return (
@@ -34,15 +34,39 @@ export class CycleAnimation extends React.Component<ICycleAnimationProps, {}> {
           label="Rate"
           min={1}
           max={32}
-          initialValue={store.animationParameters.colorCycle.rate}
+          initialValue={store.animationParameters.pulse.rate}
           onChange={this.updateRate}
+          />
+        <Range
+          label="Hue"
+          min={1}
+          max={255}
+          initialValue={store.animationParameters.pulse.hue}
+          onChange={this.updateHue}
+          />
+        <Range
+          label="Saturation"
+          min={1}
+          max={255}
+          initialValue={store.animationParameters.pulse.saturation}
+          onChange={this.updateSaturation}
           />
       </div>
     );
   }
 
   private updateRate = (rate: number) => {
-    store.animationParameters.colorCycle.rate = rate;
-    this.props.onAnimationChanged('Color Cycle');
+    store.animationParameters.pulse.rate = rate;
+    this.props.onAnimationChanged('Pulse');
+  }
+
+  private updateHue = (hue: number) => {
+    store.animationParameters.pulse.hue = hue;
+    this.props.onAnimationChanged('Pulse');
+  }
+
+  private updateSaturation = (saturation: number) => {
+    store.animationParameters.pulse.saturation = saturation;
+    this.props.onAnimationChanged('Pulse');
   }
 }
