@@ -75,35 +75,35 @@ rvl.on('initialized', () => {
     function updateAnimation() {
         // If power is turned off, send a black color
         if (!store.power) {
-            rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createSolidColorWave(0, 0, 0, 0)));
+            rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createSolidColorWave(0, 0, 0)));
             return;
         }
         switch (store.animationType) {
             case 'Rainbow':
                 console.log(`Updating rainbow animation with rate=${store.animationParameters.colorCycle.rate}`);
-                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createRainbowWave(store.brightness, 255, store.animationParameters.rainbow.rate)));
+                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createRainbowWave(255, store.animationParameters.rainbow.rate)));
                 break;
             case 'Pulse':
                 console.log(`Updating pulse animation with rate=${store.animationParameters.colorCycle.rate} ` +
                     `hue=${store.animationParameters.pulse.hue} ` +
                     `saturation=${store.animationParameters.pulse.saturation}`);
-                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createPulsingWave(store.brightness, store.animationParameters.pulse.hue, store.animationParameters.pulse.saturation, store.animationParameters.pulse.rate)));
+                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createPulsingWave(store.animationParameters.pulse.hue, store.animationParameters.pulse.saturation, store.animationParameters.pulse.rate)));
                 break;
             case 'Wave':
                 console.log(`Updating wave animation with rate=${store.animationParameters.colorCycle.rate} ` +
                     `waveHue=${store.animationParameters.wave.waveHue} ` +
                     `foregroundHue=${store.animationParameters.wave.foregroundHue} ` +
                     `backgroundHue=${store.animationParameters.wave.backgroundHue} `);
-                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createMovingWave(store.brightness, store.animationParameters.wave.waveHue, 255, store.animationParameters.wave.rate, 2), rvl_node_animations_1.createPulsingWave(store.brightness, store.animationParameters.wave.foregroundHue, 255, store.animationParameters.wave.rate), rvl_node_animations_1.createSolidColorWave(store.brightness, store.animationParameters.wave.backgroundHue, 255, 255)));
+                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createMovingWave(store.animationParameters.wave.waveHue, 255, store.animationParameters.wave.rate, 2), rvl_node_animations_1.createPulsingWave(store.animationParameters.wave.foregroundHue, 255, store.animationParameters.wave.rate), rvl_node_animations_1.createSolidColorWave(store.animationParameters.wave.backgroundHue, 255, 255)));
                 break;
             case 'Color Cycle':
                 console.log(`Updating color cycle animation with rate=${store.animationParameters.colorCycle.rate}`);
-                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createColorCycleWave(store.brightness, store.animationParameters.colorCycle.rate, 255)));
+                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createColorCycleWave(store.animationParameters.colorCycle.rate, 255)));
                 break;
             case 'Solid': {
                 console.log(`Updating solid animation with hue=${store.animationParameters.solid.hue} ` +
                     `saturation=${store.animationParameters.solid.saturation}`);
-                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createSolidColorWave(store.brightness, store.animationParameters.solid.hue, store.animationParameters.solid.saturation, 255)));
+                rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createSolidColorWave(store.animationParameters.solid.hue, store.animationParameters.solid.saturation, 255)));
                 break;
             }
         }

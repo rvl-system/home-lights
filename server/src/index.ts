@@ -120,7 +120,7 @@ rvl.on('initialized', () => {
     // If power is turned off, send a black color
     if (!store.power) {
       rvl.setWaveParameters(createWaveParameters(
-        createSolidColorWave(0, 0, 0, 0)
+        createSolidColorWave(0, 0, 0)
       ));
       return;
     }
@@ -128,7 +128,7 @@ rvl.on('initialized', () => {
       case 'Rainbow':
         console.log(`Updating rainbow animation with rate=${store.animationParameters.colorCycle.rate}`);
         rvl.setWaveParameters(createWaveParameters(
-          createRainbowWave(store.brightness, 255, store.animationParameters.rainbow.rate)
+          createRainbowWave(255, store.animationParameters.rainbow.rate)
         ));
         break;
       case 'Pulse':
@@ -137,7 +137,6 @@ rvl.on('initialized', () => {
           `saturation=${store.animationParameters.pulse.saturation}`);
         rvl.setWaveParameters(createWaveParameters(
           createPulsingWave(
-            store.brightness,
             store.animationParameters.pulse.hue,
             store.animationParameters.pulse.saturation,
             store.animationParameters.pulse.rate
@@ -151,20 +150,17 @@ rvl.on('initialized', () => {
           `backgroundHue=${store.animationParameters.wave.backgroundHue} `);
         rvl.setWaveParameters(createWaveParameters(
           createMovingWave(
-            store.brightness,
             store.animationParameters.wave.waveHue,
             255,
             store.animationParameters.wave.rate,
             2
           ),
           createPulsingWave(
-            store.brightness,
             store.animationParameters.wave.foregroundHue,
             255,
             store.animationParameters.wave.rate
           ),
           createSolidColorWave(
-            store.brightness,
             store.animationParameters.wave.backgroundHue,
             255,
             255
@@ -174,7 +170,7 @@ rvl.on('initialized', () => {
       case 'Color Cycle':
         console.log(`Updating color cycle animation with rate=${store.animationParameters.colorCycle.rate}`);
         rvl.setWaveParameters(createWaveParameters(
-          createColorCycleWave(store.brightness, store.animationParameters.colorCycle.rate, 255)
+          createColorCycleWave(store.animationParameters.colorCycle.rate, 255)
         ));
         break;
       case 'Solid': {
@@ -182,7 +178,6 @@ rvl.on('initialized', () => {
           `saturation=${store.animationParameters.solid.saturation}`);
         rvl.setWaveParameters(createWaveParameters(
           createSolidColorWave(
-            store.brightness,
             store.animationParameters.solid.hue,
             store.animationParameters.solid.saturation,
             255
