@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Server",
       "program": "${workspaceFolder}\\server\\src\\index.ts",
-      "args": [ "Loopback Pseudo-Interface 1" ],
+      "args": [ "Ethernet 3" ],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ],

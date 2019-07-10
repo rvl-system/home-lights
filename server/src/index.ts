@@ -47,7 +47,8 @@ const rvl = new RVL({
   port: 4978,
   mode: 'controller',
   logLevel: 'debug',
-  channel: RAVER_LIGHTS_CHANNEL
+  channel: RAVER_LIGHTS_CHANNEL,
+  enableClockSync: true
 });
 
 interface IStore {

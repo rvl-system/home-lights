@@ -37,7 +37,8 @@ const rvl = new rvl_node_1.RVL({
     port: 4978,
     mode: 'controller',
     logLevel: 'debug',
-    channel: RAVER_LIGHTS_CHANNEL
+    channel: RAVER_LIGHTS_CHANNEL,
+    enableClockSync: true
 });
 rvl.on('initialized', () => {
     rvl.start();
@@ -121,7 +122,7 @@ rvl.on('initialized', () => {
     app.post('/api/brightness', (req, res) => {
         store.brightness = req.body.brightness;
         console.log(`Setting brightness to ${store.brightness}`);
-        updateAnimation();
+        updateAnimation(); // TODO
         res.send({ status: 'ok' });
     });
     app.post('/api/animation', (req, res) => {
