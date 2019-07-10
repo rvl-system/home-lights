@@ -35,6 +35,7 @@ export class RainbowAnimation extends React.Component<IRainbowAnimationProps, {}
           min={1}
           max={32}
           initialValue={store.animationParameters.rainbow.rate}
+          sliderStyle="normal"
           onChange={this.updateRate}
           />
       </div>

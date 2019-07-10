@@ -35,6 +35,7 @@ export class CycleAnimation extends React.Component<ICycleAnimationProps, {}> {
           min={1}
           max={32}
           initialValue={store.animationParameters.colorCycle.rate}
+          sliderStyle="normal"
           onChange={this.updateRate}
           />
       </div>

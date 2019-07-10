@@ -35,6 +35,7 @@ export class PulseAnimation extends React.Component<IPulseAnimationProps, {}> {
           min={1}
           max={32}
           initialValue={store.animationParameters.pulse.rate}
+          sliderStyle="normal"
           onChange={this.updateRate}
           />
         <Range
@@ -42,6 +43,7 @@ export class PulseAnimation extends React.Component<IPulseAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.pulse.hue}
+          sliderStyle="hue"
           onChange={this.updateHue}
           />
         <Range
@@ -49,6 +51,7 @@ export class PulseAnimation extends React.Component<IPulseAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.pulse.saturation}
+          sliderStyle="saturation"
           onChange={this.updateSaturation}
           />
       </div>

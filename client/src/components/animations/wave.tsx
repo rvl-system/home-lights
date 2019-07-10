@@ -35,6 +35,7 @@ export class WaveAnimation extends React.Component<IWaveAnimationProps, {}> {
           min={1}
           max={32}
           initialValue={store.animationParameters.wave.rate}
+          sliderStyle="normal"
           onChange={this.updateRate}
           />
         <Range
@@ -42,6 +43,7 @@ export class WaveAnimation extends React.Component<IWaveAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.wave.waveHue}
+          sliderStyle="hue"
           onChange={this.updateWaveHue}
           />
         <Range
@@ -49,6 +51,7 @@ export class WaveAnimation extends React.Component<IWaveAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.wave.foregroundHue}
+          sliderStyle="hue"
           onChange={this.updateForegroundHue}
           />
         <Range
@@ -56,6 +59,7 @@ export class WaveAnimation extends React.Component<IWaveAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.wave.backgroundHue}
+          sliderStyle="hue"
           onChange={this.updateBackgroundHue}
           />
       </div>

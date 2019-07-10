@@ -203,7 +203,7 @@ rvl.on('initialized', () => {
   app.post('/api/brightness', (req, res) => {
     store.brightness = req.body.brightness;
     console.log(`Setting brightness to ${store.brightness}`);
-    updateAnimation();
+    updateAnimation(); // TODO
     res.send({ status: 'ok' });
   });
 

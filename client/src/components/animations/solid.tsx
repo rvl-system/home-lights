@@ -35,6 +35,7 @@ export class SolidAnimation extends React.Component<ISolidAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.solid.hue}
+          sliderStyle="hue"
           onChange={this.updateHue}
           />
         <Range
@@ -42,6 +43,7 @@ export class SolidAnimation extends React.Component<ISolidAnimationProps, {}> {
           min={1}
           max={255}
           initialValue={store.animationParameters.solid.saturation}
+          sliderStyle="saturation"
           onChange={this.updateSaturation}
           />
       </div>

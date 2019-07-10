@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "color-convert": "^2.0.0",
+    "conditional-reduce": "^1.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rvl-node": "^1.0.3"

@@ -38,6 +38,7 @@ export class CommonParameters extends React.Component<{}, {}> {
           initialValue={store.brightness}
           min={0}
           max={255}
+          sliderStyle="normal"
           onChange={this.onBrightnessChanged}
           />
       </div>

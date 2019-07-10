@@ -18,12 +18,14 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import { reduce } from 'conditional-reduce';
 
 export interface IRangeProps {
   label: string;
   initialValue: number;
   min: number;
   max: number;
+  sliderStyle: 'hue' | 'saturation' | 'normal';
   onChange: (newValue: number) => void;
 }
 
@@ -42,7 +44,11 @@ export class Range extends React.Component<IRangeProps, IRangeState> {
       <div className="control">
         <label>{this.props.label}:</label>
         <input
-          className="range"
+          className={reduce(this.props.sliderStyle, {
+            hue: () => 'range range-hue',
+            saturation: () => 'range range-saturation',
+            normal: () => 'range'
+          })}
           type="range"
           min={this.props.min}
           max={this.props.max}
