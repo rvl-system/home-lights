@@ -33,7 +33,11 @@ interface IRangeState {
   value: number;
 }
 
+const UPDATE_GATING_PERIOD = 250;
+
 export class Range extends React.Component<IRangeProps, IRangeState> {
+
+  private updatePending = false;
 
   public state = {
     value: this.props.initialValue
@@ -58,6 +62,17 @@ export class Range extends React.Component<IRangeProps, IRangeState> {
     );
   }
 
+  private updateValue = () => {
+    if (this.updatePending) {
+      return;
+    }
+    this.updatePending = true;
+    setTimeout(() => {
+      this.props.onChange(this.state.value);
+      this.updatePending = false;
+    }, UPDATE_GATING_PERIOD);
+  }
+
   private onValueChanged = (event: React.FormEvent<HTMLInputElement>) => {
     const value = parseInt(event.currentTarget.value, 10);
     if (isNaN(value)) {
@@ -68,7 +83,7 @@ export class Range extends React.Component<IRangeProps, IRangeState> {
         ...previousState,
         value
       };
-      setTimeout(() => this.props.onChange(value));
+      this.updateValue();
       return newState;
     });
   }
