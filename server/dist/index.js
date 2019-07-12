@@ -74,11 +74,6 @@ rvl.on('initialized', () => {
         }
     };
     function updateAnimation() {
-        // If power is turned off, send a black color
-        if (!store.power) {
-            rvl.setWaveParameters(rvl_node_animations_1.createWaveParameters(rvl_node_animations_1.createSolidColorWave(0, 0, 0)));
-            return;
-        }
         switch (store.animationType) {
             case 'Rainbow':
                 console.log(`Updating rainbow animation with rate=${store.animationParameters.colorCycle.rate}`);
@@ -114,15 +109,15 @@ rvl.on('initialized', () => {
         res.send(indexViewTemplate(store));
     });
     app.post('/api/power', (req, res) => {
-        store.power = req.body.power;
+        store.power = !!req.body.power;
         console.log(`Setting power to ${store.power ? 'on' : 'off'}`);
-        updateAnimation();
+        rvl.setPowerState(store.power);
         res.send({ status: 'ok' });
     });
     app.post('/api/brightness', (req, res) => {
         store.brightness = req.body.brightness;
         console.log(`Setting brightness to ${store.brightness}`);
-        updateAnimation(); // TODO
+        rvl.setBrightness(store.brightness);
         res.send({ status: 'ok' });
     });
     app.post('/api/animation', (req, res) => {
