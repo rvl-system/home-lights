@@ -47,7 +47,7 @@ rvl.on('initialized', () => {
     app.use(body_parser_1.json());
     const store = {
         power: true,
-        brightness: 128,
+        brightness: 64,
         animationType: 'Wave',
         animationParameters: {
             rainbow: {
@@ -105,6 +105,8 @@ rvl.on('initialized', () => {
         }
     }
     updateAnimation();
+    rvl.setPowerState(store.power);
+    rvl.setBrightness(store.brightness);
     app.get('/', (req, res) => {
         res.send(indexViewTemplate(store));
     });
