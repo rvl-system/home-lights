@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Server",
       "program": "${workspaceFolder}\\server\\src\\index.ts",
-      "args": [ "Ethernet 3" ],
+      "args": [ "Wi-Fi" ],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ],
