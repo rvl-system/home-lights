@@ -25,7 +25,7 @@ After=systemd-networkd.socket
 
 [Service]
 ExecStartPre=/lib/systemd/systemd-networkd-wait-online --interface=wlan0
-ExecStart=/usr/bin/node /path/to/project/main.js
+ExecStart=/usr/bin/node /home/pi/home-lights/server/dist/index.js
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
