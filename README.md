@@ -42,7 +42,7 @@ Then, run these commands:
 
 ```
 sudo systemctl enable systemd-networkd-wait-online.service
-sudo systemctl enable my-node-service
+sudo systemctl enable home-lights
 ```
 
 Next time your reboot your application, it should be running! You can check the status of your service by running `systemctl status home-lights`, check the console output of your service by running `journalctl -u home-lights`, and restart your service by running `sudo systemctl restart home-lights`.
