@@ -19,69 +19,59 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { RVL } from 'rvl-node';
 import {
+  createManager,
   createWaveParameters,
   createSolidColorWave,
   createMovingWave,
   createPulsingWave,
   createColorCycleWave,
   createRainbowWave
-} from 'rvl-node-animations';
+} from 'rvl-node';
 import * as express from 'express';
 import { json } from 'body-parser';
 import { compile } from 'handlebars';
 
 const WEB_SERVER_PORT = 80;
-const RAVER_LIGHTS_INTERFACE = process.argv[2];
-const RAVER_LIGHTS_CHANNEL = 0;
+const CHANNEL = 0;
 
-if (!RAVER_LIGHTS_INTERFACE) {
-  throw new Error('A network interface must be passed as the one and only argument');
-}
+(async () => {
 
-const indexViewTemplate = compile(readFileSync(join(__dirname, '..', '..', 'views', 'index.handlebars'), 'utf-8'));
+  const indexViewTemplate = compile(readFileSync(join(__dirname, '..', '..', 'views', 'index.handlebars'), 'utf-8'));
 
-const rvl = new RVL({
-  networkInterface: RAVER_LIGHTS_INTERFACE,
-  port: 4978,
-  mode: 'controller',
-  logLevel: 'debug',
-  channel: RAVER_LIGHTS_CHANNEL,
-  enableClockSync: true
-});
+  const manager = await createManager();
+  const controller = await manager.createController({
+    channel: CHANNEL
+  });
 
-interface IStore {
-  power: boolean;
-  brightness: number;
-  animationType: 'Rainbow' | 'Pulse' | 'Wave' | 'Color Cycle' | 'Solid';
-  animationParameters: {
-    rainbow: {
-      rate: number;
+  interface IStore {
+    power: boolean;
+    brightness: number;
+    animationType: 'Rainbow' | 'Pulse' | 'Wave' | 'Color Cycle' | 'Solid';
+    animationParameters: {
+      rainbow: {
+        rate: number;
+      };
+      pulse: {
+        rate: number;
+        hue: number;
+        saturation: number;
+      };
+      wave: {
+        rate: number;
+        waveHue: number;
+        foregroundHue: number;
+        backgroundHue: number;
+      };
+      colorCycle: {
+        rate: number;
+      };
+      solid: {
+        hue: number;
+        saturation: number;
+      };
     };
-    pulse: {
-      rate: number;
-      hue: number;
-      saturation: number;
-    };
-    wave: {
-      rate: number;
-      waveHue: number;
-      foregroundHue: number;
-      backgroundHue: number;
-    };
-    colorCycle: {
-      rate: number;
-    };
-    solid: {
-      hue: number;
-      saturation: number;
-    };
-  };
-}
-
-rvl.on('initialized', () => {
-  rvl.start();
+  }
 
   const app = express();
 
@@ -121,15 +111,16 @@ rvl.on('initialized', () => {
     switch (store.animationType) {
       case 'Rainbow':
         console.log(`Updating rainbow animation with rate=${store.animationParameters.colorCycle.rate}`);
-        rvl.setWaveParameters(createWaveParameters(
+        controller.setWaveParameters(createWaveParameters(
           createRainbowWave(255, store.animationParameters.rainbow.rate)
         ));
         break;
       case 'Pulse':
         console.log(`Updating pulse animation with rate=${store.animationParameters.colorCycle.rate} ` +
           `hue=${store.animationParameters.pulse.hue} ` +
-          `saturation=${store.animationParameters.pulse.saturation}`);
-        rvl.setWaveParameters(createWaveParameters(
+          `saturation=${store.animationParameters.pulse.saturation}`
+        );
+        controller.setWaveParameters(createWaveParameters(
           createPulsingWave(
             store.animationParameters.pulse.hue,
             store.animationParameters.pulse.saturation,
@@ -141,8 +132,9 @@ rvl.on('initialized', () => {
         console.log(`Updating wave animation with rate=${store.animationParameters.colorCycle.rate} ` +
           `waveHue=${store.animationParameters.wave.waveHue} ` +
           `foregroundHue=${store.animationParameters.wave.foregroundHue} ` +
-          `backgroundHue=${store.animationParameters.wave.backgroundHue} `);
-        rvl.setWaveParameters(createWaveParameters(
+          `backgroundHue=${store.animationParameters.wave.backgroundHue} `
+        );
+        controller.setWaveParameters(createWaveParameters(
           createMovingWave(
             store.animationParameters.wave.waveHue,
             255,
@@ -163,14 +155,15 @@ rvl.on('initialized', () => {
         break;
       case 'Color Cycle':
         console.log(`Updating color cycle animation with rate=${store.animationParameters.colorCycle.rate}`);
-        rvl.setWaveParameters(createWaveParameters(
+        controller.setWaveParameters(createWaveParameters(
           createColorCycleWave(store.animationParameters.colorCycle.rate, 255)
         ));
         break;
       case 'Solid': {
         console.log(`Updating solid animation with hue=${store.animationParameters.solid.hue} ` +
-          `saturation=${store.animationParameters.solid.saturation}`);
-        rvl.setWaveParameters(createWaveParameters(
+          `saturation=${store.animationParameters.solid.saturation}`
+        );
+        controller.setWaveParameters(createWaveParameters(
           createSolidColorWave(
             store.animationParameters.solid.hue,
             store.animationParameters.solid.saturation,
@@ -182,8 +175,8 @@ rvl.on('initialized', () => {
     }
   }
   updateAnimation();
-  rvl.setPowerState(store.power);
-  rvl.setBrightness(store.brightness);
+  controller.setPowerState(store.power);
+  controller.setBrightness(store.brightness);
 
   app.get('/', (req, res) => {
     res.send(indexViewTemplate(store));
@@ -192,14 +185,14 @@ rvl.on('initialized', () => {
   app.post('/api/power', (req, res) => {
     store.power = !!req.body.power;
     console.log(`Setting power to ${store.power ? 'on' : 'off'}`);
-    rvl.setPowerState(store.power);
+    controller.setPowerState(store.power);
     res.send({ status: 'ok' });
   });
 
   app.post('/api/brightness', (req, res) => {
     store.brightness = req.body.brightness;
     console.log(`Setting brightness to ${store.brightness}`);
-    rvl.setBrightness(store.brightness);
+    controller.setBrightness(store.brightness);
     res.send({ status: 'ok' });
   });
 
@@ -213,4 +206,5 @@ rvl.on('initialized', () => {
   app.listen(WEB_SERVER_PORT, () => {
     console.log(`Home Lights server running on port ${WEB_SERVER_PORT}!`);
   });
-});
+
+})();
