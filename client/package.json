@@ -19,13 +19,13 @@
   "homepage": "https://github.com/nebrius/home-lights#readme",
   "devDependencies": {
     "@types/color-convert": "^1.9.0",
-    "@types/react": "^16.9.1",
-    "@types/react-dom": "^16.8.5",
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.8",
     "ts-loader": "^5.4.5",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.6"
+    "tslint": "^5.20.1",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "color-convert": "^2.0.0",
