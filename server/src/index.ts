@@ -17,14 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {join} from 'path';
+import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import {getEnvironmentVariable} from './util';
+import { getEnvironmentVariable } from './util';
 
 export function run(): void {
-
-  const port = parseInt(getEnvironmentVariable('PORT', "3000"));
+  const port = parseInt(getEnvironmentVariable('PORT', '3000'));
 
   const app = fastify({
     logger: true
