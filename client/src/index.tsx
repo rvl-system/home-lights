@@ -17,28 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {join} from 'path';
-import fastify from 'fastify';
-import fastifyStatic from 'fastify-static';
-import {getEnvironmentVariable} from './util';
+import * as React from 'react';
+import { render } from 'react-dom';
 
-export function run(): void {
-
-  const port = parseInt(getEnvironmentVariable('PORT', "3000"));
-
-  const app = fastify({
-    logger: true
-  });
-
-  app.register(fastifyStatic, {
-    root: join(__dirname, '..', '..', 'public')
-  });
-
-  app.listen(port, (err, address) => {
-    if (err) {
-      app.log.error(err);
-      process.exit(1);
-    }
-    app.log.info(`Server listening on ${address}`);
-  });
-}
+render(
+  (
+    <div>Hi</div>
+  ),
+  document.getElementById('app')
+);
