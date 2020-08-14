@@ -4,6 +4,7 @@
   "description": "Client for Home Lights",
   "main": "index.js",
   "scripts": {
+    "prebuild": "eslint src/",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +18,7 @@
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
     "prettier": "^2.0.5",
     "ts-loader": "^8.0.2",
     "typescript": "^3.9.7",

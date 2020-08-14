@@ -20,9 +20,4 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import * as React from 'react';
 import { render } from 'react-dom';
 
-render(
-  (
-    <div>Hi</div>
-  ),
-  document.getElementById('app')
-);
+render(<div>Hi</div>, document.getElementById('app'));
