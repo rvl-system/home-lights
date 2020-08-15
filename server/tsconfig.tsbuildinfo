@@ -241,6 +241,11 @@
         "signature": "3d288e523d517ef9f67bc0e5b8b7beb59b8f9161838b237c19c13a8dbb023421",
         "affectsGlobalScope": false
       },
+      "./src/util.ts": {
+        "version": "7b3948132c2c3740bc39954ed098e163fd3b0e1353c62f25203259396fd259b4",
+        "signature": "9811ea0bec43a971d749dfba71c776ebc3f503b42c0e385a04b0ad5bcfba0e3f",
+        "affectsGlobalScope": false
+      },
       "./node_modules/@types/node/globals.d.ts": {
         "version": "6fc83519155969f2457d2454908d68830a6f6480974914c024eaf4e3248a2fd1",
         "signature": "6fc83519155969f2457d2454908d68830a6f6480974914c024eaf4e3248a2fd1",
@@ -501,19 +506,29 @@
         "signature": "d522314e80ed71b57e3c2939d3c9594eaae63a4adf028559e6574f6b270b0fee",
         "affectsGlobalScope": false
       },
+      "./node_modules/@types/sqlite3/index.d.ts": {
+        "version": "1b39da5859d5d359d154da1c48c537563127263330cef26df0fb048629af1bb0",
+        "signature": "1b39da5859d5d359d154da1c48c537563127263330cef26df0fb048629af1bb0",
+        "affectsGlobalScope": false
+      },
+      "./src/sqlite.ts": {
+        "version": "c5c9a6f0f8e3157f654910be774e088d9d660e150441dbbadd52a81e22f5719d",
+        "signature": "083d88221b4b2f09d206c0ce5c0bc0380271a83f83bc5a2bc8b6061b8a0df5f4",
+        "affectsGlobalScope": false
+      },
+      "./src/db.ts": {
+        "version": "30ce8fca49e14c4222e4c289d9b1071986eb0d55980213a436943ca53e7187b7",
+        "signature": "1f3dda0fb29e1bcae36e9f98fba3edd359fc86684df04fb70acc9f770f628748",
+        "affectsGlobalScope": false
+      },
       "./node_modules/fastify-static/index.d.ts": {
         "version": "5c69bf9b433e61d27a45916c58f553c565b7dfd5e62de27c0c018407ed8b9bb4",
         "signature": "5c69bf9b433e61d27a45916c58f553c565b7dfd5e62de27c0c018407ed8b9bb4",
         "affectsGlobalScope": false
       },
-      "./src/util.ts": {
-        "version": "db93a42a094b93641912aea19f8cf40e3155c05dbd17a85c0a3ec889d4f864a1",
-        "signature": "fa79716ad9bf18a5d514de140874ddc29603283395e544794d3b70e666a3d6a6",
-        "affectsGlobalScope": false
-      },
       "./src/index.ts": {
-        "version": "042e6c6f8b16d4d4f8ebb3e3a3bec40800bbab02011d2e848c6fe90d4233cd6c",
-        "signature": "068e72a805b78e96ea7ec63080eea75ef7f1c8f833aedec812bc505911e44678",
+        "version": "f47fc1e6429b3474e8539f19f0ed7634ce03079e14104f99a05b9eb7c3494dad",
+        "signature": "93724a4d09985089f3d4574166efcb4130436b95612811592bcdc7f56ff35348",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/color-name/index.d.ts": {
@@ -1089,6 +1104,16 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./node_modules/@types/sqlite3/index.d.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/process.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/process.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/ts3.7/index.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
       "./node_modules/ajv/lib/ajv.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/process.d.ts",
@@ -1558,6 +1583,17 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./src/db.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/path.d.ts",
+        "./node_modules/@types/node/process.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/process.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./src/sqlite.ts",
+        "./src/util.ts"
+      ],
       "./src/index.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/path.d.ts",
@@ -1568,6 +1604,17 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/fastify-static/index.d.ts",
         "./node_modules/fastify/fastify.d.ts",
+        "./src/db.ts",
+        "./src/util.ts"
+      ],
+      "./src/sqlite.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/process.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/process.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/sqlite3/index.d.ts",
         "./src/util.ts"
       ],
       "./src/util.ts": [
@@ -1576,7 +1623,8 @@
         "./node_modules/@types/node/ts3.2/fs.d.ts",
         "./node_modules/@types/node/ts3.2/process.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts",
-        "./node_modules/@types/node/util.d.ts"
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/fastify/fastify.d.ts"
       ]
     },
     "exportedModulesMap": {
@@ -2114,6 +2162,16 @@
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
       ],
+      "./node_modules/@types/sqlite3/index.d.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/process.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/process.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/ts3.7/index.d.ts",
+        "./node_modules/@types/node/util.d.ts"
+      ],
       "./node_modules/ajv/lib/ajv.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/process.d.ts",
@@ -2582,6 +2640,9 @@
         "./node_modules/@types/node/ts3.2/process.d.ts",
         "./node_modules/@types/node/ts3.2/util.d.ts",
         "./node_modules/@types/node/util.d.ts"
+      ],
+      "./src/util.ts": [
+        "./node_modules/fastify/fastify.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -2640,6 +2701,7 @@
       "./node_modules/@types/node/vm.d.ts",
       "./node_modules/@types/node/worker_threads.d.ts",
       "./node_modules/@types/node/zlib.d.ts",
+      "./node_modules/@types/sqlite3/index.d.ts",
       "./node_modules/ajv/lib/ajv.d.ts",
       "./node_modules/fastify-error/index.d.ts",
       "./node_modules/fastify-static/index.d.ts",
@@ -2689,7 +2751,9 @@
       "./node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "./node_modules/typescript/lib/lib.scripthost.d.ts",
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
+      "./src/db.ts",
       "./src/index.ts",
+      "./src/sqlite.ts",
       "./src/util.ts"
     ]
   },

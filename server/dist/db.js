@@ -53,50 +53,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.run = void 0;
+exports.getRooms = exports.init = void 0;
+var fs_1 = require("fs");
 var path_1 = require("path");
-var fastify_1 = __importDefault(require("fastify"));
-var fastify_static_1 = __importDefault(require("fastify-static"));
 var util_1 = require("./util");
-var db_1 = require("./db");
-function run() {
+var sqlite_1 = require("./sqlite");
+var DB_FILE = path_1.join(util_1.getEnvironmentVariable('HOME'), '.homelights', 'db.sqlite3');
+var ROOM_SCHEMA = "\nCREATE TABLE \"rooms\" (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  name text\n)";
+var ROOM_DATA = "insert into rooms (name) values (\"Bedroom\"), (\"Bathroom\"), (\"Living Room\");";
+function init() {
     return __awaiter(this, void 0, void 0, function () {
-        var port, app;
-        var _this = this;
+        var isNewDB;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    port = parseInt(util_1.getEnvironmentVariable('PORT', '3000'));
-                    app = fastify_1.default({
-                        logger: true
-                    });
-                    util_1.setLogger(app.log);
-                    return [4 /*yield*/, db_1.init()];
+                    isNewDB = !fs_1.existsSync(DB_FILE);
+                    if (isNewDB) {
+                        fs_1.mkdirSync(path_1.dirname(DB_FILE), {
+                            recursive: true
+                        });
+                        console.log("Creating database at " + DB_FILE);
+                    }
+                    else {
+                        console.log("Loading database from " + DB_FILE);
+                    }
+                    return [4 /*yield*/, sqlite_1.init(DB_FILE)];
                 case 1:
                     _a.sent();
-                    app.register(fastify_static_1.default, {
-                        root: path_1.join(__dirname, '..', '..', 'public')
-                    });
-                    app.get('/api/rooms', function () { return __awaiter(_this, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            return [2 /*return*/, { msg: 'ok' }];
-                        });
-                    }); });
-                    app.listen(port, function (err, address) {
-                        if (err) {
-                            app.log.error(err);
-                            process.exit(1);
-                        }
-                        util_1.getLogger().info("Server listening on " + address);
-                    });
-                    return [2 /*return*/];
+                    if (!isNewDB) return [3 /*break*/, 4];
+                    util_1.getLogger().info("Initializing new database");
+                    return [4 /*yield*/, sqlite_1.dbRun(ROOM_SCHEMA)];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, sqlite_1.dbRun(ROOM_DATA)];
+                case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-exports.run = run;
-//# sourceMappingURL=index.js.map
+exports.init = init;
+function getRooms() {
+    return [];
+}
+exports.getRooms = getRooms;
+//# sourceMappingURL=db.js.map

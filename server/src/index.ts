@@ -20,17 +20,26 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { getEnvironmentVariable } from './util';
+import { getEnvironmentVariable, setLogger, getLogger } from './util';
+import { init } from './db';
 
-export function run(): void {
+export async function run(): Promise<void> {
   const port = parseInt(getEnvironmentVariable('PORT', '3000'));
 
   const app = fastify({
     logger: true
   });
 
+  setLogger(app.log);
+
+  await init();
+
   app.register(fastifyStatic, {
     root: join(__dirname, '..', '..', 'public')
+  });
+
+  app.get('/api/rooms', async () => {
+    return { msg: 'ok' };
   });
 
   app.listen(port, (err, address) => {
@@ -38,6 +47,6 @@ export function run(): void {
       app.log.error(err);
       process.exit(1);
     }
-    app.log.info(`Server listening on ${address}`);
+    getLogger().info(`Server listening on ${address}`);
   });
 }

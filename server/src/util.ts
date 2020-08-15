@@ -17,6 +17,22 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { FastifyLoggerInstance } from 'fastify';
+
+let logger: FastifyLoggerInstance;
+
+export function setLogger(newLogger: FastifyLoggerInstance): void {
+  logger = newLogger;
+}
+
+export function getLogger(): FastifyLoggerInstance {
+  return logger;
+}
+
+export function createInternalError(message: string): Error {
+  return new Error(`Internal Error: ${message}`);
+}
+
 export function getEnvironmentVariable(
   varName: string,
   defaultValue?: string

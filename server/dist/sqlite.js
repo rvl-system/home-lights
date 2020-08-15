@@ -53,50 +53,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.run = void 0;
-var path_1 = require("path");
-var fastify_1 = __importDefault(require("fastify"));
-var fastify_static_1 = __importDefault(require("fastify-static"));
+exports.dbGet = exports.dbAll = exports.dbRun = exports.init = void 0;
+var sqlite3_1 = require("sqlite3");
 var util_1 = require("./util");
-var db_1 = require("./db");
-function run() {
-    return __awaiter(this, void 0, void 0, function () {
-        var port, app;
-        var _this = this;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    port = parseInt(util_1.getEnvironmentVariable('PORT', '3000'));
-                    app = fastify_1.default({
-                        logger: true
-                    });
-                    util_1.setLogger(app.log);
-                    return [4 /*yield*/, db_1.init()];
-                case 1:
-                    _a.sent();
-                    app.register(fastify_static_1.default, {
-                        root: path_1.join(__dirname, '..', '..', 'public')
-                    });
-                    app.get('/api/rooms', function () { return __awaiter(_this, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            return [2 /*return*/, { msg: 'ok' }];
-                        });
-                    }); });
-                    app.listen(port, function (err, address) {
-                        if (err) {
-                            app.log.error(err);
-                            process.exit(1);
-                        }
-                        util_1.getLogger().info("Server listening on " + address);
-                    });
-                    return [2 /*return*/];
+var db;
+function init(dbPath) {
+    var sqlite3 = sqlite3_1.verbose();
+    return new Promise(function (resolve, reject) {
+        db = new sqlite3.Database(dbPath, function (err) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
             }
         });
     });
 }
-exports.run = run;
-//# sourceMappingURL=index.js.map
+exports.init = init;
+function dbRun(query, parameters) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!db) {
+                throw util_1.createInternalError("dbRun called before database initialized");
+            }
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    db.run(query, parameters || [], function (err) {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve();
+                        }
+                    });
+                })];
+        });
+    });
+}
+exports.dbRun = dbRun;
+function dbAll(query, parameters) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!db) {
+                throw util_1.createInternalError("dbRun called before database initialized");
+            }
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    db.all(query, parameters, function (err, results) {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve(results);
+                        }
+                    });
+                })];
+        });
+    });
+}
+exports.dbAll = dbAll;
+function dbGet(query, parameters) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!db) {
+                throw util_1.createInternalError("dbRun called before database initialized");
+            }
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    db.get(query, parameters, function (err, result) {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve(result);
+                        }
+                    });
+                })];
+        });
+    });
+}
+exports.dbGet = dbGet;
+//# sourceMappingURL=sqlite.js.map
