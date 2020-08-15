@@ -27,7 +27,7 @@ var fastify_1 = __importDefault(require("fastify"));
 var fastify_static_1 = __importDefault(require("fastify-static"));
 var util_1 = require("./util");
 function run() {
-    var port = parseInt(util_1.getEnvironmentVariable('PORT', "3000"));
+    var port = parseInt(util_1.getEnvironmentVariable('PORT', '3000'));
     var app = fastify_1.default({
         logger: true
     });

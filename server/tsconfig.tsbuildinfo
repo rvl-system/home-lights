@@ -507,12 +507,12 @@
         "affectsGlobalScope": false
       },
       "./src/util.ts": {
-        "version": "75db17b0c9bd359256bc74a1b84b618c82a6e4e65819c5967447e60f60b35fd8",
+        "version": "db93a42a094b93641912aea19f8cf40e3155c05dbd17a85c0a3ec889d4f864a1",
         "signature": "fa79716ad9bf18a5d514de140874ddc29603283395e544794d3b70e666a3d6a6",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "2f1dfc1a4e3752c2aa1117030b58bb5b9f367313579bb2be1afa41a1c29bfd87",
+        "version": "042e6c6f8b16d4d4f8ebb3e3a3bec40800bbab02011d2e848c6fe90d4233cd6c",
         "signature": "068e72a805b78e96ea7ec63080eea75ef7f1c8f833aedec812bc505911e44678",
         "affectsGlobalScope": false
       },
