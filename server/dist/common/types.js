@@ -1,3 +1,4 @@
+"use strict";
 /*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
@@ -16,22 +17,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-export function createInternalError(message: string): Error {
-  return new Error(`Internal Error: ${message}`);
-}
-
-export function getEnvironmentVariable(
-  varName: string,
-  defaultValue?: string
-): string {
-  const value = process.env[varName];
-  if (value) {
-    return value;
-  }
-  if (defaultValue) {
-    return defaultValue;
-  } else {
-    throw new Error(`Environment variable ${varName} not found`);
-  }
-}
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=types.js.map

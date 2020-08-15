@@ -18,16 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEnvironmentVariable = exports.createInternalError = exports.getLogger = exports.setLogger = void 0;
-var logger;
-function setLogger(newLogger) {
-    logger = newLogger;
-}
-exports.setLogger = setLogger;
-function getLogger() {
-    return logger;
-}
-exports.getLogger = getLogger;
+exports.getEnvironmentVariable = exports.createInternalError = void 0;
 function createInternalError(message) {
     return new Error("Internal Error: " + message);
 }

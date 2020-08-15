@@ -93,10 +93,11 @@ function dbRun(query, parameters) {
 }
 exports.dbRun = dbRun;
 function dbAll(query, parameters) {
+    if (parameters === void 0) { parameters = []; }
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             if (!db) {
-                throw util_1.createInternalError("dbRun called before database initialized");
+                throw util_1.createInternalError("dbAll called before database initialized");
             }
             return [2 /*return*/, new Promise(function (resolve, reject) {
                     db.all(query, parameters, function (err, results) {
@@ -113,10 +114,11 @@ function dbAll(query, parameters) {
 }
 exports.dbAll = dbAll;
 function dbGet(query, parameters) {
+    if (parameters === void 0) { parameters = []; }
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             if (!db) {
-                throw util_1.createInternalError("dbRun called before database initialized");
+                throw util_1.createInternalError("dbGet called before database initialized");
             }
             return [2 /*return*/, new Promise(function (resolve, reject) {
                     db.get(query, parameters, function (err, result) {

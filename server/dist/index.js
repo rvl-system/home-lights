@@ -74,7 +74,6 @@ function run() {
                     app = fastify_1.default({
                         logger: true
                     });
-                    util_1.setLogger(app.log);
                     return [4 /*yield*/, db_1.init()];
                 case 1:
                     _a.sent();
@@ -83,7 +82,10 @@ function run() {
                     });
                     app.get('/api/rooms', function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            return [2 /*return*/, { msg: 'ok' }];
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, db_1.getRooms()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
                         });
                     }); });
                     app.listen(port, function (err, address) {
@@ -91,7 +93,7 @@ function run() {
                             app.log.error(err);
                             process.exit(1);
                         }
-                        util_1.getLogger().info("Server listening on " + address);
+                        console.log("Server listening on " + address);
                     });
                     return [2 /*return*/];
             }

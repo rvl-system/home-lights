@@ -19,8 +19,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
-import { getEnvironmentVariable, getLogger } from './util';
-import { init as initDB, dbRun } from './sqlite';
+import { getEnvironmentVariable } from './util';
+import { init as initDB, dbRun, dbAll } from './sqlite';
+import { Room } from './common/types';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -49,12 +50,12 @@ export async function init(): Promise<void> {
   await initDB(DB_FILE);
 
   if (isNewDB) {
-    getLogger().info(`Initializing new database`);
+    console.log(`Initializing new database`);
     await dbRun(ROOM_SCHEMA);
     await dbRun(ROOM_DATA);
   }
 }
 
-export function getRooms(): string[] {
-  return [];
+export async function getRooms(): Promise<Room[]> {
+  return dbAll(`SELECT * FROM rooms`) as Promise<Room[]>;
 }

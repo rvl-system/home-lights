@@ -82,7 +82,7 @@ function init() {
                 case 1:
                     _a.sent();
                     if (!isNewDB) return [3 /*break*/, 4];
-                    util_1.getLogger().info("Initializing new database");
+                    console.log("Initializing new database");
                     return [4 /*yield*/, sqlite_1.dbRun(ROOM_SCHEMA)];
                 case 2:
                     _a.sent();
@@ -97,7 +97,11 @@ function init() {
 }
 exports.init = init;
 function getRooms() {
-    return [];
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, sqlite_1.dbAll("SELECT * FROM rooms")];
+        });
+    });
 }
 exports.getRooms = getRooms;
 //# sourceMappingURL=db.js.map
