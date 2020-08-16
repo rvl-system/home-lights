@@ -19,5 +19,16 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { render } from 'react-dom';
+import { get } from './util/api';
 
-render(<div>Hi</div>, document.getElementById('app'));
+async function run() {
+  const rooms = await get('/api/rooms');
+  render(
+    <div>
+      <h2>Rooms</h2>
+      <pre>{JSON.stringify(rooms, null, '  ')}</pre>
+    </div>,
+    document.getElementById('app')
+  );
+}
+run();
