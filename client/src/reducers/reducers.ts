@@ -17,13 +17,4 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { render } from 'react-dom';
-import { createRoot } from 'reduxology';
-import { AppContainer } from './containers/app';
-
-import './reducers/reducers';
-
-async function run() {
-  render(createRoot(AppContainer), document.getElementById('app'));
-}
-run();
+import './rooms';

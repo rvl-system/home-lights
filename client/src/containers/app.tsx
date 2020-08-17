@@ -17,7 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-export interface Room {
-  id: number;
-  name: number;
-}
+import { createContainer } from 'reduxology';
+import { StatePaths } from '../types';
+import { App, AppComponentProps } from '../components/app';
+
+export const AppContainer = createContainer(
+  (getState): AppComponentProps => {
+    return {
+      rooms: getState(StatePaths.Rooms)
+    };
+  },
+  () => ({}),
+  App
+);
