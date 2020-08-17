@@ -18,12 +18,18 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { render } from 'react-dom';
-import { createRoot } from 'reduxology';
+import { createRoot, dispatch } from 'reduxology';
 import { AppContainer } from './containers/app';
+import { get } from './util/api';
+import { Actions } from './types';
 
 import './reducers/reducers';
 
 async function run() {
   render(createRoot(AppContainer), document.getElementById('app'));
+
+  // TODO: move somewhere else, possibly create an API structure inside of reduxology?
+  const rooms = await get('/api/rooms');
+  dispatch(Actions.RoomsUpdated, rooms);
 }
 run();

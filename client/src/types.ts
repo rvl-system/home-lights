@@ -20,3 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 export enum StatePaths {
   Rooms = 'Rooms'
 }
+
+export enum Actions {
+  RoomsUpdated = 'RoomsUpdated'
+}

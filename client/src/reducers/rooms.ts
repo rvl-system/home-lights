@@ -18,6 +18,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createReducer } from 'reduxology';
-import { StatePaths } from '../types';
+import { StatePaths, Actions } from '../types';
+import { Room } from '../common/types';
 
-createReducer(StatePaths.Rooms, []);
+createReducer(StatePaths.Rooms, []).handle(
+  Actions.RoomsUpdated,
+  (state: Room[], updateRooms: Room[]): Room[] => {
+    return updateRooms;
+  }
+);
