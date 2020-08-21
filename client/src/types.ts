@@ -18,9 +18,17 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 export enum StatePaths {
-  Rooms = 'Rooms'
+  Rooms = 'Rooms',
+  SelectedTab = 'SelectedTab'
 }
 
 export enum Actions {
-  RoomsUpdated = 'RoomsUpdated'
+  RoomsUpdated = 'RoomsUpdated',
+  CreateRoom = 'CreateRoom',
+  SelectTab = 'SelectTab'
+}
+export enum SelectedTab {
+  Rooms = 'Rooms',
+  Patterns = 'Patterns',
+  Lights = 'Lights'
 }

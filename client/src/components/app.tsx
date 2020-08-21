@@ -18,17 +18,34 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { Room } from '../common/types';
+import { reduce } from 'conditional-reduce';
+import { FooterContainer } from '../containers/footer';
+import { SelectedTab } from '../types';
 
-export interface AppComponentProps {
-  rooms: Room[];
+import { RoomsContainer } from '../containers/rooms';
+import { PatternsContainer } from '../containers/patterns';
+import { LightsContainer } from '../containers/lights';
+
+export interface AppProps {
+  activeTab: SelectedTab;
 }
 
-export function App(props: AppComponentProps): JSX.Element {
+export function App(props: AppProps): JSX.Element {
   return (
-    <div>
-      <h2>Rooms</h2>
-      <pre>{JSON.stringify(props.rooms, null, '  ')}</pre>
+    <div className="app">
+      <div className="content">
+        {reduce(props.activeTab, {
+          // eslint-disable-next-line react/display-name
+          [SelectedTab.Rooms]: () => <RoomsContainer />,
+
+          // eslint-disable-next-line react/display-name
+          [SelectedTab.Patterns]: () => <PatternsContainer />,
+
+          // eslint-disable-next-line react/display-name
+          [SelectedTab.Lights]: () => <LightsContainer />
+        })}
+      </div>
+      <FooterContainer />
     </div>
   );
 }
