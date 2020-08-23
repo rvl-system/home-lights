@@ -19,9 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
-import HomeIcon from '@material-ui/icons/Home';
-import BlurLinearIcon from '@material-ui/icons/BlurLinear';
-import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
+import { Home, BlurLinear, EmojiObjects } from '@material-ui/icons';
 import { SelectedTab } from '../types';
 
 export interface FooterComponentProps {
@@ -44,17 +42,17 @@ export function Footer(
       <BottomNavigationAction
         label={SelectedTab.Rooms}
         value={SelectedTab.Rooms}
-        icon={<HomeIcon />}
+        icon={<Home />}
       />
       <BottomNavigationAction
         label={SelectedTab.Patterns}
         value={SelectedTab.Patterns}
-        icon={<BlurLinearIcon />}
+        icon={<BlurLinear />}
       />
       <BottomNavigationAction
         label={SelectedTab.Lights}
         value={SelectedTab.Lights}
-        icon={<EmojiObjectsIcon />}
+        icon={<EmojiObjects />}
       />
     </BottomNavigation>
   );

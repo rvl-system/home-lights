@@ -18,18 +18,48 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Room } from '../common/types';
 
 export interface RoomsProps {
   rooms: Room[];
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%'
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular
+  }
+}));
+
 export function Rooms(props: RoomsProps): JSX.Element {
+  const classes = useStyles();
   return (
-    <div>
-      Rooms:
-      <br />
-      <pre>{JSON.stringify(props.rooms, null, '  ')}</pre>
-    </div>
+    <React.Fragment>
+      {props.rooms.map((room) => (
+        <Accordion key={room.id}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>{room.name}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>TODO: scenes for {room.name}</Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </React.Fragment>
   );
 }

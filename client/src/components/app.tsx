@@ -19,9 +19,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { reduce } from 'conditional-reduce';
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider
+} from '@material-ui/core/styles';
 import { FooterContainer } from '../containers/footer';
 import { SelectedTab } from '../types';
 
