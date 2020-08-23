@@ -18,7 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import { Typography } from '@material-ui/core';
 
 export function Lights(): JSX.Element {
-  return <div>Lights</div>;
+  return <Typography>Lights</Typography>;
 }

@@ -19,6 +19,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { reduce } from 'conditional-reduce';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { FooterContainer } from '../containers/footer';
 import { SelectedTab } from '../types';
 
@@ -30,22 +33,49 @@ export interface AppProps {
   activeTab: SelectedTab;
 }
 
+const useStyles = makeStyles({
+  root: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    display: 'flex',
+    'flex-direction': 'column'
+  },
+  content: {
+    'flex-grow': 1
+  }
+});
+
 export function App(props: AppProps): JSX.Element {
+  const styles = useStyles();
+  const isDarkMode =
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = createMuiTheme({
+    palette: {
+      // TODO: figure out why dark mode isn't propagating to everything
+      type: isDarkMode && false ? 'dark' : 'light'
+    }
+  });
   return (
-    <div className="app">
-      <div className="content">
-        {reduce(props.activeTab, {
-          // eslint-disable-next-line react/display-name
-          [SelectedTab.Rooms]: () => <RoomsContainer />,
+    <ThemeProvider theme={theme}>
+      <div className={styles.root}>
+        <div className={styles.content}>
+          {reduce(props.activeTab, {
+            // eslint-disable-next-line react/display-name
+            [SelectedTab.Rooms]: () => <RoomsContainer />,
 
-          // eslint-disable-next-line react/display-name
-          [SelectedTab.Patterns]: () => <PatternsContainer />,
+            // eslint-disable-next-line react/display-name
+            [SelectedTab.Patterns]: () => <PatternsContainer />,
 
-          // eslint-disable-next-line react/display-name
-          [SelectedTab.Lights]: () => <LightsContainer />
-        })}
+            // eslint-disable-next-line react/display-name
+            [SelectedTab.Lights]: () => <LightsContainer />
+          })}
+        </div>
+        <FooterContainer />
       </div>
-      <FooterContainer />
-    </div>
+    </ThemeProvider>
   );
 }
