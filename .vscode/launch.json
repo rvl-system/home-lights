@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Server",
-      "program": "${workspaceFolder}\\server\\src\\index.ts",
+      "program": "${workspaceFolder}/server/src/index.ts",
       "args": [ "Wi-Fi" ],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
