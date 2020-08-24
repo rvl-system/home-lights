@@ -88,7 +88,7 @@ function run() {
                             }
                         });
                     }); });
-                    app.post('/api/room', function (req) { return __awaiter(_this, void 0, void 0, function () {
+                    app.post('/api/rooms', function (req) { return __awaiter(_this, void 0, void 0, function () {
                         var roomRequest;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -97,7 +97,28 @@ function run() {
                                     return [4 /*yield*/, db_1.createRoom(roomRequest)];
                                 case 1:
                                     _a.sent();
-                                    return [2 /*return*/];
+                                    return [2 /*return*/, 'OK'];
+                            }
+                        });
+                    }); });
+                    app.put('/api/room/:id', function (req) { return __awaiter(_this, void 0, void 0, function () {
+                        var room;
+                        return __generator(this, function (_a) {
+                            room = req.body;
+                            console.log('room', room);
+                            return [2 /*return*/, 'placeholder'];
+                        });
+                    }); });
+                    app.delete('/api/room/:id', function (req) { return __awaiter(_this, void 0, void 0, function () {
+                        var id;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    id = req.params.id;
+                                    return [4 /*yield*/, db_1.deleteRoom(parseInt(id))];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/, 'OK'];
                             }
                         });
                     }); });

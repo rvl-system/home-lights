@@ -54,14 +54,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createRoom = exports.getRooms = exports.init = void 0;
+exports.deleteRoom = exports.createRoom = exports.getRooms = exports.init = void 0;
 var fs_1 = require("fs");
 var path_1 = require("path");
 var util_1 = require("./util");
 var sqlite_1 = require("./sqlite");
 var DB_FILE = path_1.join(util_1.getEnvironmentVariable('HOME'), '.homelights', 'db.sqlite3');
 var ROOM_SCHEMA = "\nCREATE TABLE \"rooms\" (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  name text\n)";
-var ROOM_DATA = "insert into rooms (name) values (\"Bedroom\"), (\"Bathroom\"), (\"Living Room\");";
 function init() {
     return __awaiter(this, void 0, void 0, function () {
         var isNewDB;
@@ -81,16 +80,13 @@ function init() {
                     return [4 /*yield*/, sqlite_1.init(DB_FILE)];
                 case 1:
                     _a.sent();
-                    if (!isNewDB) return [3 /*break*/, 4];
+                    if (!isNewDB) return [3 /*break*/, 3];
                     console.log("Initializing new database");
                     return [4 /*yield*/, sqlite_1.dbRun(ROOM_SCHEMA)];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, sqlite_1.dbRun(ROOM_DATA)];
-                case 3:
-                    _a.sent();
-                    _a.label = 4;
-                case 4: return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -108,7 +104,7 @@ function createRoom(roomRequest) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, sqlite_1.dbRun("INSERT into rooms (name) values ($1)", [roomRequest.name])];
+                case 0: return [4 /*yield*/, sqlite_1.dbRun("INSERT INTO rooms (name) values ($1)", [roomRequest.name])];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -117,4 +113,17 @@ function createRoom(roomRequest) {
     });
 }
 exports.createRoom = createRoom;
+function deleteRoom(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, sqlite_1.dbRun('DELETE FROM rooms WHERE id = $1', [id])];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.deleteRoom = deleteRoom;
 //# sourceMappingURL=db.js.map
