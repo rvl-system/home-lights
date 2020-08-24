@@ -44,7 +44,7 @@ export async function run(): Promise<void> {
   app.post('/api/rooms', async (req) => {
     const roomRequest = req.body as CreateRoomRequest;
     await createRoom(roomRequest);
-    return 'OK';
+    return {};
   });
 
   app.put('/api/room/:id', async (req) => {
@@ -56,7 +56,7 @@ export async function run(): Promise<void> {
   app.delete('/api/room/:id', async (req) => {
     const { id } = req.params as { id: string };
     await deleteRoom(parseInt(id));
-    return 'OK';
+    return {};
   });
 
   app.listen(port, (err, address) => {

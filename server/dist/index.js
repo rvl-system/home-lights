@@ -97,7 +97,7 @@ function run() {
                                     return [4 /*yield*/, db_1.createRoom(roomRequest)];
                                 case 1:
                                     _a.sent();
-                                    return [2 /*return*/, 'OK'];
+                                    return [2 /*return*/, {}];
                             }
                         });
                     }); });
@@ -118,7 +118,7 @@ function run() {
                                     return [4 /*yield*/, db_1.deleteRoom(parseInt(id))];
                                 case 1:
                                     _a.sent();
-                                    return [2 /*return*/, 'OK'];
+                                    return [2 /*return*/, {}];
                             }
                         });
                     }); });
