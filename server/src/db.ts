@@ -21,7 +21,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { getEnvironmentVariable } from './util';
 import { init as initDB, dbRun, dbAll } from './sqlite';
-import { Room } from './common/types';
+import { Room, CreateRoomRequest } from './common/types';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -34,8 +34,6 @@ CREATE TABLE "rooms" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name text
 )`;
-
-const ROOM_DATA = `insert into rooms (name) values ("Bedroom"), ("Bathroom"), ("Living Room");`;
 
 export async function init(): Promise<void> {
   const isNewDB = !existsSync(DB_FILE);
@@ -52,10 +50,15 @@ export async function init(): Promise<void> {
   if (isNewDB) {
     console.log(`Initializing new database`);
     await dbRun(ROOM_SCHEMA);
-    await dbRun(ROOM_DATA);
   }
 }
 
 export async function getRooms(): Promise<Room[]> {
   return dbAll(`SELECT * FROM rooms`) as Promise<Room[]>;
+}
+
+export async function createRoom(
+  roomRequest: CreateRoomRequest
+): Promise<void> {
+  await dbRun(`INSERT INTO rooms (name) values ($1)`, [roomRequest.name]);
 }

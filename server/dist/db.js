@@ -54,7 +54,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRooms = exports.init = void 0;
+exports.createRoom = exports.getRooms = exports.init = void 0;
 var fs_1 = require("fs");
 var path_1 = require("path");
 var util_1 = require("./util");
@@ -104,4 +104,17 @@ function getRooms() {
     });
 }
 exports.getRooms = getRooms;
+function createRoom(roomRequest) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, sqlite_1.dbRun("INSERT into rooms (name) values ($1)", [roomRequest.name])];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.createRoom = createRoom;
 //# sourceMappingURL=db.js.map
