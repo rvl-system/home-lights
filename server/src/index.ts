@@ -21,7 +21,8 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { getEnvironmentVariable } from './util';
-import { init, getRooms } from './db';
+import { init, getRooms, createRoom } from './db';
+import { CreateRoomRequest } from './common/types';
 
 export async function run(): Promise<void> {
   const port = parseInt(getEnvironmentVariable('PORT', '3000'));
@@ -38,6 +39,11 @@ export async function run(): Promise<void> {
 
   app.get('/api/rooms', async () => {
     return await getRooms();
+  });
+
+  app.post('/api/room', async (req) => {
+    const roomRequest = req.body as CreateRoomRequest;
+    await createRoom(roomRequest);
   });
 
   app.listen(port, (err, address) => {

@@ -72,6 +72,9 @@ function init(dbPath) {
     });
 }
 exports.init = init;
+/**
+ * Runs all sqlite queries queries other than SELECT
+ */
 function dbRun(query, parameters) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -84,7 +87,7 @@ function dbRun(query, parameters) {
                             reject(err);
                         }
                         else {
-                            resolve();
+                            resolve(this.lastID);
                         }
                     });
                 })];
@@ -92,6 +95,9 @@ function dbRun(query, parameters) {
     });
 }
 exports.dbRun = dbRun;
+/**
+ * SELECT all rows from the database
+ */
 function dbAll(query, parameters) {
     if (parameters === void 0) { parameters = []; }
     return __awaiter(this, void 0, void 0, function () {
@@ -113,6 +119,9 @@ function dbAll(query, parameters) {
     });
 }
 exports.dbAll = dbAll;
+/**
+ * Used to SELECT the first row out of the database
+ */
 function dbGet(query, parameters) {
     if (parameters === void 0) { parameters = []; }
     return __awaiter(this, void 0, void 0, function () {

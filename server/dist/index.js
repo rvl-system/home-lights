@@ -88,6 +88,19 @@ function run() {
                             }
                         });
                     }); });
+                    app.post('/api/room', function (req) { return __awaiter(_this, void 0, void 0, function () {
+                        var roomRequest;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    roomRequest = req.body;
+                                    return [4 /*yield*/, db_1.createRoom(roomRequest)];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); });
                     app.listen(port, function (err, address) {
                         if (err) {
                             app.log.error(err);

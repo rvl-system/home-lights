@@ -21,7 +21,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { getEnvironmentVariable } from './util';
 import { init as initDB, dbRun, dbAll } from './sqlite';
-import { Room } from './common/types';
+import { Room, CreateRoomRequest } from './common/types';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -58,4 +58,10 @@ export async function init(): Promise<void> {
 
 export async function getRooms(): Promise<Room[]> {
   return dbAll(`SELECT * FROM rooms`) as Promise<Room[]>;
+}
+
+export async function createRoom(
+  roomRequest: CreateRoomRequest
+): Promise<void> {
+  await dbRun(`INSERT into rooms (name) values ($1)`, [roomRequest.name]);
 }

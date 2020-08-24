@@ -35,24 +35,30 @@ export function init(dbPath: string): Promise<void> {
   });
 }
 
+/**
+ * Runs all sqlite queries queries other than SELECT
+ */
 export async function dbRun(
   query: string,
   parameters?: Array<string | number | undefined>
-): Promise<void> {
+): Promise<number> {
   if (!db) {
     throw createInternalError(`dbRun called before database initialized`);
   }
   return new Promise((resolve, reject) => {
-    db.run(query, parameters || [], (err) => {
+    db.run(query, parameters || [], function (err) {
       if (err) {
         reject(err);
       } else {
-        resolve();
+        resolve(this.lastID);
       }
     });
   });
 }
 
+/**
+ * SELECT all rows from the database
+ */
 export async function dbAll(
   query: string,
   parameters: string[] = []
@@ -71,6 +77,9 @@ export async function dbAll(
   });
 }
 
+/**
+ * Used to SELECT the first row out of the database
+ */
 export async function dbGet(
   query: string,
   parameters: string[] = []
