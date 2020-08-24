@@ -22,6 +22,6 @@ export interface Room {
   name: string;
 }
 
-export interface CreateRoomRequest {
+export interface c {
   name: string;
 }
