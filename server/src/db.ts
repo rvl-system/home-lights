@@ -62,3 +62,7 @@ export async function createRoom(
 ): Promise<void> {
   await dbRun(`INSERT INTO rooms (name) values ($1)`, [roomRequest.name]);
 }
+
+export async function deleteRoom(id: number): Promise<void> {
+  await dbRun('DELETE FROM rooms WHERE id = $1', [id]);
+}
