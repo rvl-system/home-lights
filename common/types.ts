@@ -19,5 +19,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 export interface Room {
   id: number;
-  name: number;
+  name: string;
+}
+
+export interface CreateRoomRequest {
+  name: string;
 }
