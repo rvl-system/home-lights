@@ -35,8 +35,6 @@ CREATE TABLE "rooms" (
   name text
 )`;
 
-const ROOM_DATA = `insert into rooms (name) values ("Bedroom"), ("Bathroom"), ("Living Room");`;
-
 export async function init(): Promise<void> {
   const isNewDB = !existsSync(DB_FILE);
   if (isNewDB) {
@@ -52,7 +50,6 @@ export async function init(): Promise<void> {
   if (isNewDB) {
     console.log(`Initializing new database`);
     await dbRun(ROOM_SCHEMA);
-    await dbRun(ROOM_DATA);
   }
 }
 
@@ -63,5 +60,5 @@ export async function getRooms(): Promise<Room[]> {
 export async function createRoom(
   roomRequest: CreateRoomRequest
 ): Promise<void> {
-  await dbRun(`INSERT into rooms (name) values ($1)`, [roomRequest.name]);
+  await dbRun(`INSERT INTO rooms (name) values ($1)`, [roomRequest.name]);
 }
