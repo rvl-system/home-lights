@@ -43,3 +43,12 @@ export async function post(
   }
   return await res.json();
 }
+
+export async function del(route: string): Promise<Record<string, any>> {
+  const options: RequestInit = { method: 'DELETE', credentials: 'same-origin' };
+  const res = await fetch(route, options);
+  if (!res.ok) {
+    throw new Error(`Server returned ${res.statusText || res.status}`);
+  }
+  return await res.json();
+}

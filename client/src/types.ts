@@ -25,6 +25,7 @@ export enum StatePaths {
 export enum Actions {
   RoomsUpdated = 'RoomsUpdated',
   CreateRoom = 'CreateRoom',
+  DeleteRoom = 'DeleteRoom',
   SelectTab = 'SelectTab'
 }
 export enum SelectedTab {

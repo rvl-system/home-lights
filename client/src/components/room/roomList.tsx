@@ -23,14 +23,16 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
   Typography
 } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { ExpandMore, Delete } from '@material-ui/icons';
 import { Room } from '../../common/types';
-
-export interface RoomListProps {
-  rooms: Room[];
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,28 +41,91 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
+  },
+  detailContainer: {
+    display: 'flex',
+    'flex-direction': 'column'
   }
 }));
 
-export function RoomList(props: RoomListProps): JSX.Element {
+export enum EditMode {
+  view = 'view',
+  edit = 'edit'
+}
+
+export interface RoomListProps {
+  rooms: Room[];
+  editMode: EditMode;
+}
+
+export interface RoomListDispatch {
+  deleteRoom: (id: number) => void;
+}
+
+export function RoomList(props: RoomListProps & RoomListDispatch): JSX.Element {
+  const [roomToDelete, setRoomToDelete] = React.useState<Room | null>(null);
   const classes = useStyles();
+
+  function handleClose() {
+    setRoomToDelete(null);
+  }
 
   return (
     <React.Fragment>
       {props.rooms.map((room) => (
         <Accordion key={room.id}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMore />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
             <Typography className={classes.heading}>{room.name}</Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails className={classes.detailContainer}>
+            {props.editMode === EditMode.edit && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setRoomToDelete(room)}
+              >
+                <Delete />
+              </Button>
+            )}
             <Typography>TODO: scenes for {room.name}</Typography>
           </AccordionDetails>
         </Accordion>
       ))}
+
+      <Dialog
+        open={!!roomToDelete}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete room{' '}
+            {roomToDelete && roomToDelete.name}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                handleClose();
+                if (roomToDelete) {
+                  props.deleteRoom(roomToDelete.id);
+                }
+              }}
+              color="secondary"
+              autoFocus
+            >
+              Delete Room
+            </Button>
+          </DialogActions>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }

@@ -27,20 +27,20 @@ import {
   DialogActions,
   TextField
 } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-
-export interface CreateRoomDispatch {
-  createRoom: (name: string) => void;
-}
 
 const useStyles = makeStyles({
   container: {
-    padding: '1em',
     display: 'flex',
     'justify-content': 'center',
     'align-items': 'center'
   }
 });
+
+export interface CreateRoomDispatch {
+  createRoom: (name: string) => void;
+}
 
 export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -54,11 +54,11 @@ export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
   return (
     <div className={classes.container}>
       <Button
-        variant="contained"
+        variant="outlined"
         color="primary"
         onClick={() => setOpenDialog(true)}
       >
-        Create Room
+        <Add />
       </Button>
       <Dialog
         open={openDialog}

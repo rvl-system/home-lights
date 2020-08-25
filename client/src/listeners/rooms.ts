@@ -20,11 +20,18 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { listen, dispatch } from 'reduxology';
 import { Actions } from '../types';
 import { CreateRoomRequest } from '../common/types';
-import { get, post } from '../util/api';
+import { get, post, del } from '../util/api';
 
 listen(Actions.CreateRoom, async (name: string) => {
   const createBody: CreateRoomRequest = { name };
   await post('/api/rooms', createBody);
+
+  const updatedRooms = await get('/api/rooms');
+  dispatch(Actions.RoomsUpdated, updatedRooms);
+});
+
+listen(Actions.DeleteRoom, async (id: number) => {
+  await del(`/api/room/${id}`);
 
   const updatedRooms = await get('/api/rooms');
   dispatch(Actions.RoomsUpdated, updatedRooms);

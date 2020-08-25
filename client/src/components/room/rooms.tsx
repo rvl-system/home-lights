@@ -18,9 +18,51 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
+import { reduce } from 'conditional-reduce';
+import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Edit, Close } from '@material-ui/icons';
 import { Room } from '../../common/types';
 import { CreateRoom } from './createRoom';
-import { RoomList } from './roomList';
+import { RoomList, EditMode } from './roomList';
+
+const useStyles = makeStyles({
+  container: {
+    height: '100%',
+    'max-height': '100%',
+    display: 'grid',
+    'grid-template-rows':
+      '[header-start] auto [content-start] minmax(0, 1fr) [end]',
+    'grid-template-columns':
+      '[left-start] auto [center-start] 1fr [right-start] auto [end]'
+  },
+  header: {
+    'grid-column-start': 'right-start',
+    'grid-column-end': 'end',
+    'grid-row-start': 'header-start',
+    'grid-row-end': 'header-start',
+    padding: '1em'
+  },
+  altHeader: {
+    'grid-column-start': 'left-start',
+    'grid-column-end': 'center-start',
+    'grid-row-start': 'header-start',
+    'grid-row-end': 'header-start',
+    padding: '1em'
+  },
+  content: {
+    'grid-column-start': 'left-start',
+    'grid-column-end': 'end',
+    'grid-row-start': 'content-start',
+    'grid-row-end': 'end',
+    position: 'relative',
+    'overflow-y': 'scroll'
+  },
+  innerContent: {
+    position: 'absolute',
+    width: '100%'
+  }
+});
 
 export interface RoomsProps {
   rooms: Room[];
@@ -28,13 +70,49 @@ export interface RoomsProps {
 
 export interface RoomsDispatch {
   createRoom: (name: string) => void;
+  deleteRoom: (id: number) => void;
 }
 
 export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
+  const [editMode, setEditMode] = React.useState(EditMode.view);
+  const classes = useStyles();
   return (
-    <React.Fragment>
-      <CreateRoom createRoom={props.createRoom} />
-      <RoomList rooms={props.rooms} />
-    </React.Fragment>
+    <div className={classes.container}>
+      <div className={classes.header}>
+        {reduce(editMode, {
+          [EditMode.view]: () => (
+            <Button
+              variant="outlined"
+              onClick={() => setEditMode(EditMode.edit)}
+            >
+              <Edit />
+            </Button>
+          ),
+          [EditMode.edit]: () => (
+            <Button
+              variant="outlined"
+              onClick={() => setEditMode(EditMode.view)}
+            >
+              <Close />
+            </Button>
+          )
+        })}
+      </div>
+
+      <div className={classes.content}>
+        <div className={classes.innerContent}>
+          <RoomList
+            rooms={props.rooms}
+            editMode={editMode}
+            deleteRoom={props.deleteRoom}
+          />
+        </div>
+      </div>
+      {editMode === EditMode.edit && (
+        <div className={classes.altHeader}>
+          <CreateRoom createRoom={props.createRoom} />
+        </div>
+      )}
+    </div>
   );
 }
