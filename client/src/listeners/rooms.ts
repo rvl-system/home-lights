@@ -23,7 +23,6 @@ import { CreateRoomRequest } from '../common/types';
 import { get, post } from '../util/api';
 
 listen(Actions.CreateRoom, async (name: string) => {
-  console.log(`Creating room ${name}`);
   const createBody: CreateRoomRequest = { name };
   await post('/api/rooms', createBody);
 

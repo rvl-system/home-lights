@@ -43,29 +43,35 @@ const useStyles = makeStyles({
 });
 
 export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
-  const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [name, setName] = React.useState('');
 
   function handleClose() {
-    setOpen(false);
+    setOpenDialog(false);
   }
 
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setOpenDialog(true)}
+      >
         Create Room
       </Button>
       <Dialog
-        open={open}
+        open={openDialog}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Enter a descriptive name for the room. The room name must not
-            already be in use.
+            Enter a descriptive name for the room you wish to add. A room in
+            Home Lights represents a physical room in your home, e.g.
+            &quot;kitchen,&quot; &quot;guest bedroom&quot;, etc. The room name
+            must not already be in use.
           </DialogContentText>
           <TextField
             autoFocus
@@ -73,6 +79,7 @@ export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
             id="name"
             label="Room Name"
             type="text"
+            placeholder="e.g. Kitchen"
             fullWidth
             onChange={(e) => setName(e.currentTarget.value)}
           >
