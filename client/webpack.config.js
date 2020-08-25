@@ -7,17 +7,26 @@ module.exports = {
   module: {
     rules: [
       {
+        enforce: 'pre',
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        loader: 'eslint-loader',
         exclude: /node_modules/,
+        options: {
+          emitError: true
+        }
       },
-    ],
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '..', 'public'),
-  },
+    path: path.resolve(__dirname, '..', 'public')
+  }
 };

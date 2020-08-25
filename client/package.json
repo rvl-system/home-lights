@@ -4,8 +4,8 @@
   "description": "Client for Home Lights",
   "main": "index.js",
   "scripts": {
-    "prebuild": "eslint src/",
     "build": "webpack",
+    "watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
@@ -17,6 +17,7 @@
     "@typescript-eslint/parser": "^3.10.0",
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-loader": "^4.0.2",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "prettier": "^2.1.0",

@@ -19,10 +19,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { reduce } from 'conditional-reduce';
+import { useMediaQuery, CssBaseline } from '@material-ui/core';
 import {
   makeStyles,
   createMuiTheme,
-  ThemeProvider
+  MuiThemeProvider
 } from '@material-ui/core/styles';
 import { FooterContainer } from '../containers/footer';
 import { SelectedTab } from '../types';
@@ -51,18 +52,20 @@ const useStyles = makeStyles({
 });
 
 export function App(props: AppProps): JSX.Element {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light'
+        }
+      }),
+    [prefersDarkMode]
+  );
   const styles = useStyles();
-  const isDarkMode =
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = createMuiTheme({
-    palette: {
-      // TODO: figure out why dark mode isn't propagating to everything
-      type: isDarkMode && false ? 'dark' : 'light'
-    }
-  });
   return (
-    <ThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
       <div className={styles.root}>
         <div className={styles.content}>
           {reduce(props.activeTab, {
@@ -78,6 +81,6 @@ export function App(props: AppProps): JSX.Element {
         </div>
         <FooterContainer />
       </div>
-    </ThemeProvider>
+    </MuiThemeProvider>
   );
 }
