@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createContainer } from 'reduxology';
-import { Lights } from '../components/lights';
+import { Lights } from '../components/light/lights';
 
 export const LightsContainer = createContainer(
   () => ({}),

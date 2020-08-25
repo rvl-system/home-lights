@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createContainer } from 'reduxology';
-import { Patterns } from '../components/patterns';
+import { Patterns } from '../components/pattern/patterns';
 
 export const PatternsContainer = createContainer(
   () => ({}),

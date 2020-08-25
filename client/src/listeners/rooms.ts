@@ -17,9 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { listen } from 'reduxology';
+import { listen, dispatch } from 'reduxology';
 import { Actions } from '../types';
+import { CreateRoomRequest } from '../common/types';
+import { get, post } from '../util/api';
 
-listen(Actions.CreateRoom, () => {
-  // TODO: make API request to create a new room
+listen(Actions.CreateRoom, async (name: string) => {
+  const createBody: CreateRoomRequest = { name };
+  await post('/api/rooms', createBody);
+
+  const updatedRooms = await get('/api/rooms');
+  dispatch(Actions.RoomsUpdated, updatedRooms);
 });

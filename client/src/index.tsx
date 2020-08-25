@@ -24,6 +24,7 @@ import { get } from './util/api';
 import { Actions } from './types';
 
 import './reducers/reducers';
+import './listeners/listeners';
 
 async function run() {
   render(createRoot(AppContainer), document.getElementById('app'));
