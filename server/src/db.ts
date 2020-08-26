@@ -63,6 +63,10 @@ export async function createRoom(
   await dbRun(`INSERT INTO rooms (name) values ($1)`, [roomRequest.name]);
 }
 
+export async function editRoom(room: Room): Promise<void> {
+  await dbRun('UPDATE rooms SET name = $2 WHERE id = $1', [room.id, room.name]);
+}
+
 export async function deleteRoom(id: number): Promise<void> {
   await dbRun('DELETE FROM rooms WHERE id = $1', [id]);
 }
