@@ -18,34 +18,39 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 export async function get(route: string): Promise<Record<string, any>> {
-  const options: RequestInit = { method: 'GET', credentials: 'same-origin' };
-  const res = await fetch(route, options);
-  if (!res.ok) {
-    throw new Error(`Server returned ${res.statusText || res.status}`);
-  }
-  return await res.json();
+  return send(route, 'GET');
 }
 
 export async function post(
   route: string,
   body: Record<string, any>
 ): Promise<Record<string, any>> {
-  const options: RequestInit = { method: 'POST', credentials: 'same-origin' };
+  return send(route, 'POST', body);
+}
+
+export async function put(
+  route: string,
+  body: Record<string, any>
+): Promise<Record<string, any>> {
+  return send(route, 'PUT', body);
+}
+
+export async function del(route: string): Promise<Record<string, any>> {
+  return send(route, 'DELETE');
+}
+
+async function send(
+  route: string,
+  method: string,
+  body?: Record<string, any>
+): Promise<Record<string, any>> {
+  const options: RequestInit = { method, credentials: 'same-origin' };
   if (body) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     options.headers = headers;
     options.body = JSON.stringify(body);
   }
-  const res = await fetch(route, options);
-  if (!res.ok) {
-    throw new Error(`Server returned ${res.statusText || res.status}`);
-  }
-  return await res.json();
-}
-
-export async function del(route: string): Promise<Record<string, any>> {
-  const options: RequestInit = { method: 'DELETE', credentials: 'same-origin' };
   const res = await fetch(route, options);
   if (!res.ok) {
     throw new Error(`Server returned ${res.statusText || res.status}`);

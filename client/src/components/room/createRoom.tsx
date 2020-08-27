@@ -18,17 +18,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  TextField
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { InputDialog } from '../lib/InputDialog';
 
 const useStyles = makeStyles({
   container: {
@@ -44,7 +37,6 @@ export interface CreateRoomDispatch {
 
 export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [name, setName] = React.useState('');
 
   function handleClose() {
     setOpenDialog(false);
@@ -60,47 +52,22 @@ export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
       >
         <Add />
       </Button>
-      <Dialog
+      <InputDialog
+        onConfirm={(name) => {
+          handleClose();
+          props.createRoom(name);
+        }}
+        onCancel={handleClose}
         open={openDialog}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Enter a descriptive name for the room you wish to add. A room in
-            Home Lights represents a physical room in your home, e.g.
-            &quot;kitchen,&quot; &quot;guest bedroom&quot;, etc. The room name
-            must not already be in use.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Room Name"
-            type="text"
-            placeholder="e.g. Kitchen"
-            fullWidth
-            onChange={(e) => setName(e.currentTarget.value)}
-          >
-            {name}
-          </TextField>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              handleClose();
-              props.createRoom(name);
-            }}
-            color="primary"
-          >
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
+        title="Create Room"
+        description='Enter a descriptive name for the room you wish to add. A room in
+          Home Lights represents a physical room in your home, e.g.
+          "kitchen," "guest bedroom", etc. The room name
+          must not already be in use.'
+        inputTitle="Room Name"
+        inputPlaceholder="e.g. Kitchen"
+        confirmLabel="Create"
+      />
     </div>
   );
 }

@@ -18,13 +18,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { reduce } from 'conditional-reduce';
-import { Button } from '@material-ui/core';
+import { Button, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Edit, Close } from '@material-ui/icons';
 import { Room } from '../../common/types';
+import { EditMode } from '../../types';
 import { CreateRoom } from './createRoom';
-import { RoomList, EditMode } from './roomList';
+import { RoomEntry } from './roomEntry';
 
 const useStyles = makeStyles({
   container: {
@@ -40,14 +40,14 @@ const useStyles = makeStyles({
     'grid-column-start': 'right-start',
     'grid-column-end': 'end',
     'grid-row-start': 'header-start',
-    'grid-row-end': 'header-start',
-    padding: '1em'
+    'grid-row-end': 'content-start',
+    margin: '1em'
   },
   altHeader: {
     'grid-column-start': 'left-start',
     'grid-column-end': 'center-start',
     'grid-row-start': 'header-start',
-    'grid-row-end': 'header-start',
+    'grid-row-end': 'content-start',
     padding: '1em'
   },
   content: {
@@ -70,6 +70,7 @@ export interface RoomsProps {
 
 export interface RoomsDispatch {
   createRoom: (name: string) => void;
+  editRoom: (room: Room) => void;
   deleteRoom: (id: number) => void;
 }
 
@@ -78,41 +79,43 @@ export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <div className={classes.header}>
-        {reduce(editMode, {
-          [EditMode.view]: () => (
-            <Button
-              variant="outlined"
-              onClick={() => setEditMode(EditMode.edit)}
-            >
-              <Edit />
-            </Button>
-          ),
-          [EditMode.edit]: () => (
-            <Button
-              variant="outlined"
-              onClick={() => setEditMode(EditMode.view)}
-            >
-              <Close />
-            </Button>
-          )
-        })}
-      </div>
-
-      <div className={classes.content}>
-        <div className={classes.innerContent}>
-          <RoomList
-            rooms={props.rooms}
-            editMode={editMode}
-            deleteRoom={props.deleteRoom}
-          />
-        </div>
-      </div>
-      {editMode === EditMode.edit && (
+      <Fade in={editMode === EditMode.edit}>
         <div className={classes.altHeader}>
           <CreateRoom createRoom={props.createRoom} />
         </div>
-      )}
+      </Fade>
+      <Fade in={editMode === EditMode.view} mountOnEnter unmountOnExit>
+        <Button
+          className={classes.header}
+          variant="outlined"
+          onClick={() => setEditMode(EditMode.edit)}
+        >
+          <Edit />
+        </Button>
+      </Fade>
+      <Fade in={editMode === EditMode.edit} mountOnEnter unmountOnExit>
+        <Button
+          className={classes.header}
+          variant="outlined"
+          onClick={() => setEditMode(EditMode.view)}
+        >
+          <Close />
+        </Button>
+      </Fade>
+
+      <div className={classes.content}>
+        <div className={classes.innerContent}>
+          {props.rooms.map((room) => (
+            <RoomEntry
+              key={room.id}
+              room={room}
+              editMode={editMode}
+              editRoom={props.editRoom}
+              deleteRoom={props.deleteRoom}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

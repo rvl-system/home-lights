@@ -104,9 +104,14 @@ function run() {
                     app.put('/api/room/:id', function (req) { return __awaiter(_this, void 0, void 0, function () {
                         var room;
                         return __generator(this, function (_a) {
-                            room = req.body;
-                            console.log('room', room);
-                            return [2 /*return*/, 'placeholder'];
+                            switch (_a.label) {
+                                case 0:
+                                    room = req.body;
+                                    return [4 /*yield*/, db_1.editRoom(room)];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/, {}];
+                            }
                         });
                     }); });
                     app.delete('/api/room/:id', function (req) { return __awaiter(_this, void 0, void 0, function () {

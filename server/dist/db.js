@@ -54,7 +54,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRoom = exports.createRoom = exports.getRooms = exports.init = void 0;
+exports.deleteRoom = exports.editRoom = exports.createRoom = exports.getRooms = exports.init = void 0;
 var fs_1 = require("fs");
 var path_1 = require("path");
 var util_1 = require("./util");
@@ -113,6 +113,19 @@ function createRoom(roomRequest) {
     });
 }
 exports.createRoom = createRoom;
+function editRoom(room) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, sqlite_1.dbRun('UPDATE rooms SET name = $2 WHERE id = $1', [room.id, room.name])];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.editRoom = editRoom;
 function deleteRoom(id) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

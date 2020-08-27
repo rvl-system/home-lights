@@ -20,6 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { createContainer } from 'reduxology';
 import { Rooms, RoomsProps, RoomsDispatch } from '../components/room/rooms';
 import { StatePaths, Actions } from '../types';
+import { Room } from '../common/types';
 
 export const RoomsContainer = createContainer(
   (getState): RoomsProps => {
@@ -30,6 +31,9 @@ export const RoomsContainer = createContainer(
   (dispatch): RoomsDispatch => ({
     createRoom(name: string) {
       dispatch(Actions.CreateRoom, name);
+    },
+    editRoom(room: Room) {
+      dispatch(Actions.EditRoom, room);
     },
     deleteRoom(id: number) {
       dispatch(Actions.DeleteRoom, id);
