@@ -37,6 +37,10 @@ export const RoomsContainer = createContainer(
     },
     deleteRoom(id: number) {
       dispatch(Actions.DeleteRoom, id);
+    },
+    toggleRoomPower(id: number, powerState: boolean) {
+      console.log(`Toggling room ${id} power to ${powerState}`);
+      // TODO
     }
   }),
   Rooms

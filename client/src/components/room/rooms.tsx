@@ -23,7 +23,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Edit, Close } from '@material-ui/icons';
 import { Room as RoomType } from '../../common/types';
 import { EditMode } from '../../types';
-import { CreateRoom } from './createRoom';
+import { CreateRoomButton } from './createRoomButton';
 import { Room } from './room';
 
 const useStyles = makeStyles({
@@ -72,6 +72,7 @@ export interface RoomsDispatch {
   createRoom: (name: string) => void;
   editRoom: (room: RoomType) => void;
   deleteRoom: (id: number) => void;
+  toggleRoomPower: (id: number, powerState: boolean) => void;
 }
 
 export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
@@ -81,7 +82,7 @@ export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
     <div className={classes.container}>
       <Fade in={editMode === EditMode.edit}>
         <div className={classes.altHeader}>
-          <CreateRoom createRoom={props.createRoom} />
+          <CreateRoomButton createRoom={props.createRoom} />
         </div>
       </Fade>
       <Fade in={editMode === EditMode.view} mountOnEnter unmountOnExit>
@@ -112,6 +113,7 @@ export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
               editMode={editMode}
               editRoom={props.editRoom}
               deleteRoom={props.deleteRoom}
+              toggleRoomPower={props.toggleRoomPower}
             />
           ))}
         </div>

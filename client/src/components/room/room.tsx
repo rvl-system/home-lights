@@ -23,16 +23,14 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Button,
-  Switch,
-  Typography,
-  Fade
+  Typography
 } from '@material-ui/core';
-import { ConfirmDialog } from '../lib/ConfirmDialog';
-import { ExpandMore, Delete } from '@material-ui/icons';
+import { ExpandMore } from '@material-ui/icons';
 import { Room } from '../../common/types';
 import { EditMode } from '../../types';
-import { EditRoom } from './editRoom';
+import { EditRoomButton } from './editRoomButton';
+import { DeleteRoomButton } from './deleteRoomButton';
+import { RoomPowerSwitch } from './roomPowerSwitch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,16 +84,11 @@ export interface RoomProps {
 export interface RoomDispatch {
   editRoom: (room: Room) => void;
   deleteRoom: (id: number) => void;
+  toggleRoomPower: (id: number, powerState: boolean) => void;
 }
 
 export function Room(props: RoomProps & RoomDispatch): JSX.Element {
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const classes = useStyles();
-
-  function handleDeleteClose() {
-    setDeleteDialogOpen(false);
-  }
-
   return (
     <React.Fragment>
       <Accordion>
@@ -105,38 +98,22 @@ export function Room(props: RoomProps & RoomDispatch): JSX.Element {
           id="panel1a-header"
         >
           <div className={classes.roomHeading}>
-            <Fade
-              in={props.editMode === EditMode.edit}
-              mountOnEnter
-              unmountOnExit
-            >
-              <Button
-                className={classes.leftButton}
-                color="secondary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteDialogOpen(true);
-                }}
-              >
-                <Delete />
-              </Button>
-            </Fade>
-            {props.editMode === EditMode.view && (
-              <Switch
-                className={classes.leftButton}
-                color="default"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                onChange={() => {
-                  // TODO
-                }}
-              />
-            )}
+            <DeleteRoomButton
+              room={props.room}
+              editMode={props.editMode}
+              className={classes.leftButton}
+              deleteRoom={props.deleteRoom}
+            />
+            <RoomPowerSwitch
+              className={classes.leftButton}
+              room={props.room}
+              editMode={props.editMode}
+              toggleRoomPower={props.toggleRoomPower}
+            />
             <Typography className={classes.roomTitle}>
               {props.room.name}
             </Typography>
-            <EditRoom
+            <EditRoomButton
               className={classes.rightButton}
               room={props.room}
               editMode={props.editMode}
@@ -148,19 +125,6 @@ export function Room(props: RoomProps & RoomDispatch): JSX.Element {
           <Typography>TODO: scenes for {props.room.name}</Typography>
         </AccordionDetails>
       </Accordion>
-
-      <ConfirmDialog
-        onConfirm={() => {
-          handleDeleteClose();
-          props.deleteRoom(props.room.id);
-        }}
-        onCancel={handleDeleteClose}
-        open={deleteDialogOpen}
-        title="Delete Room"
-        description={`Are you sure you want to delete room ${props.room.name}?`}
-        confirmLabel="Delete Room"
-        confirmColor="secondary"
-      />
     </React.Fragment>
   );
 }

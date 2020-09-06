@@ -35,6 +35,7 @@ export interface ConfirmDialogProps {
   open: boolean;
   title: string;
   description: string;
+  defaultValue?: string;
   inputPlaceholder?: string;
   confirmLabel?: string;
   confirmColor?: Color;
@@ -49,13 +50,14 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
     open,
     title,
     description,
+    defaultValue = '',
     inputPlaceholder = '',
     confirmLabel = 'Confirm',
     confirmColor = 'primary',
     cancelLabel = 'Cancel',
     cancelColor = 'default'
   } = props;
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(defaultValue);
   return (
     <React.Fragment>
       <Dialog
@@ -73,6 +75,7 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
             type="text"
             placeholder={inputPlaceholder}
             fullWidth
+            defaultValue={defaultValue}
             onChange={(e) => setValue(e.currentTarget.value)}
           >
             {value}
