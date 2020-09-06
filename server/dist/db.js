@@ -27,7 +27,7 @@ const DB_FILE = path_1.join(util_1.getEnvironmentVariable('HOME'), '.homelights'
 const ROOM_SCHEMA = `
 CREATE TABLE "rooms" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name text
+  name text NOT NULL UNIQUE
 )`;
 async function init() {
     const isNewDB = !fs_1.existsSync(DB_FILE);
@@ -52,7 +52,12 @@ async function getRooms() {
 }
 exports.getRooms = getRooms;
 async function createRoom(roomRequest) {
-    await sqlite_1.dbRun(`INSERT INTO rooms (name) values (?)`, [roomRequest.name]);
+    try {
+        await sqlite_1.dbRun(`INSERT INTO rooms (name) values (?)`, [roomRequest.name]);
+    }
+    catch (err) {
+        console.log('ERROR IN db.ts ', typeof err);
+    }
 }
 exports.createRoom = createRoom;
 async function editRoom(room) {
