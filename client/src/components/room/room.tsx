@@ -78,19 +78,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export interface RoomEntryProps {
+export interface RoomProps {
   room: Room;
   editMode: EditMode;
 }
 
-export interface RoomEntryDispatch {
+export interface RoomDispatch {
   editRoom: (room: Room) => void;
   deleteRoom: (id: number) => void;
 }
 
-export function RoomEntry(
-  props: RoomEntryProps & RoomEntryDispatch
-): JSX.Element {
+export function Room(props: RoomProps & RoomDispatch): JSX.Element {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const classes = useStyles();
@@ -180,7 +178,6 @@ export function RoomEntry(
           Home Lights represents a physical room in your home, e.g.
           "kitchen," "guest bedroom", etc. The room name
           must not already be in use.'
-        inputTitle="Room Name"
         inputPlaceholder="e.g. Kitchen"
       />
 

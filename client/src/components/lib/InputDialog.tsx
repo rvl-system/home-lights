@@ -34,7 +34,6 @@ export interface ConfirmDialogProps {
   open: boolean;
   title: string;
   description: string;
-  inputTitle: string;
   inputPlaceholder?: string;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -47,7 +46,6 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
     open,
     title,
     description,
-    inputTitle,
     inputPlaceholder = '',
     confirmLabel = 'Confirm',
     cancelLabel = 'Cancel'
@@ -67,7 +65,6 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
             autoFocus
             margin="dense"
             id="name"
-            label={inputTitle}
             type="text"
             placeholder={inputPlaceholder}
             fullWidth

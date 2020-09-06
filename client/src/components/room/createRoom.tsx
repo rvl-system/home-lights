@@ -64,7 +64,6 @@ export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
           Home Lights represents a physical room in your home, e.g.
           "kitchen," "guest bedroom", etc. The room name
           must not already be in use.'
-        inputTitle="Room Name"
         inputPlaceholder="e.g. Kitchen"
         confirmLabel="Create"
       />
