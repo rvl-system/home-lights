@@ -27,6 +27,7 @@ import {
   DialogActions,
   TextField
 } from '@material-ui/core';
+import { Color } from '../../types';
 
 export interface ConfirmDialogProps {
   onConfirm: (newValue: string) => void;
@@ -34,10 +35,11 @@ export interface ConfirmDialogProps {
   open: boolean;
   title: string;
   description: string;
-  inputTitle: string;
   inputPlaceholder?: string;
   confirmLabel?: string;
+  confirmColor?: Color;
   cancelLabel?: string;
+  cancelColor?: Color;
 }
 
 export function InputDialog(props: ConfirmDialogProps): JSX.Element {
@@ -47,10 +49,11 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
     open,
     title,
     description,
-    inputTitle,
     inputPlaceholder = '',
     confirmLabel = 'Confirm',
-    cancelLabel = 'Cancel'
+    confirmColor = 'primary',
+    cancelLabel = 'Cancel',
+    cancelColor = 'default'
   } = props;
   const [value, setValue] = React.useState('');
   return (
@@ -67,7 +70,6 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
             autoFocus
             margin="dense"
             id="name"
-            label={inputTitle}
             type="text"
             placeholder={inputPlaceholder}
             fullWidth
@@ -77,10 +79,10 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
           </TextField>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} color="primary">
+          <Button onClick={onCancel} color={cancelColor}>
             {cancelLabel}
           </Button>
-          <Button onClick={() => onConfirm(value)} color="primary">
+          <Button onClick={() => onConfirm(value)} color={confirmColor}>
             {confirmLabel}
           </Button>
         </DialogActions>

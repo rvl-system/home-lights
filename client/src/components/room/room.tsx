@@ -29,10 +29,10 @@ import {
   Fade
 } from '@material-ui/core';
 import { ConfirmDialog } from '../lib/ConfirmDialog';
-import { InputDialog } from '../lib/InputDialog';
-import { ExpandMore, Delete, Edit } from '@material-ui/icons';
+import { ExpandMore, Delete } from '@material-ui/icons';
 import { Room } from '../../common/types';
 import { EditMode } from '../../types';
+import { EditRoom } from './editRoom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,29 +78,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export interface RoomEntryProps {
+export interface RoomProps {
   room: Room;
   editMode: EditMode;
 }
 
-export interface RoomEntryDispatch {
+export interface RoomDispatch {
   editRoom: (room: Room) => void;
   deleteRoom: (id: number) => void;
 }
 
-export function RoomEntry(
-  props: RoomEntryProps & RoomEntryDispatch
-): JSX.Element {
+export function Room(props: RoomProps & RoomDispatch): JSX.Element {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
-  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const classes = useStyles();
 
   function handleDeleteClose() {
     setDeleteDialogOpen(false);
-  }
-
-  function handleEditClose() {
-    setEditDialogOpen(false);
   }
 
   return (
@@ -143,46 +136,18 @@ export function RoomEntry(
             <Typography className={classes.roomTitle}>
               {props.room.name}
             </Typography>
-            <Fade
-              in={props.editMode === EditMode.edit}
-              mountOnEnter
-              unmountOnExit
-            >
-              <Button
-                className={classes.rightButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setEditDialogOpen(true);
-                }}
-              >
-                <Edit />
-              </Button>
-            </Fade>
+            <EditRoom
+              className={classes.rightButton}
+              room={props.room}
+              editMode={props.editMode}
+              editRoom={props.editRoom}
+            />
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.detailContainer}>
           <Typography>TODO: scenes for {props.room.name}</Typography>
         </AccordionDetails>
       </Accordion>
-
-      <InputDialog
-        onConfirm={(name) => {
-          handleEditClose();
-          props.editRoom({
-            ...props.room,
-            name
-          });
-        }}
-        onCancel={handleEditClose}
-        open={editDialogOpen}
-        title="Edit Room"
-        description='Enter a descriptive name for the room you wish to add. A room in
-          Home Lights represents a physical room in your home, e.g.
-          "kitchen," "guest bedroom", etc. The room name
-          must not already be in use.'
-        inputTitle="Room Name"
-        inputPlaceholder="e.g. Kitchen"
-      />
 
       <ConfirmDialog
         onConfirm={() => {
@@ -194,6 +159,7 @@ export function RoomEntry(
         title="Delete Room"
         description={`Are you sure you want to delete room ${props.room.name}?`}
         confirmLabel="Delete Room"
+        confirmColor="secondary"
       />
     </React.Fragment>
   );

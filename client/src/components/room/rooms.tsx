@@ -21,10 +21,10 @@ import * as React from 'react';
 import { Button, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Edit, Close } from '@material-ui/icons';
-import { Room } from '../../common/types';
+import { Room as RoomType } from '../../common/types';
 import { EditMode } from '../../types';
 import { CreateRoom } from './createRoom';
-import { RoomEntry } from './roomEntry';
+import { Room } from './room';
 
 const useStyles = makeStyles({
   container: {
@@ -65,12 +65,12 @@ const useStyles = makeStyles({
 });
 
 export interface RoomsProps {
-  rooms: Room[];
+  rooms: RoomType[];
 }
 
 export interface RoomsDispatch {
   createRoom: (name: string) => void;
-  editRoom: (room: Room) => void;
+  editRoom: (room: RoomType) => void;
   deleteRoom: (id: number) => void;
 }
 
@@ -106,7 +106,7 @@ export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
       <div className={classes.content}>
         <div className={classes.innerContent}>
           {props.rooms.map((room) => (
-            <RoomEntry
+            <Room
               key={room.id}
               room={room}
               editMode={editMode}

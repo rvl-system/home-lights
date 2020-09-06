@@ -18,55 +18,60 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Fade } from '@material-ui/core';
 import { InputDialog } from '../lib/InputDialog';
+import { Edit } from '@material-ui/icons';
+import { Room } from '../../common/types';
+import { EditMode } from '../../types';
 
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    'justify-content': 'center',
-    'align-items': 'center'
-  }
-});
-
-export interface CreateRoomDispatch {
-  createRoom: (name: string) => void;
+export interface EditRoomProps {
+  room: Room;
+  editMode: EditMode;
+  className: string;
 }
 
-export function CreateRoom(props: CreateRoomDispatch): JSX.Element {
-  const [openDialog, setOpenDialog] = React.useState(false);
+export interface EditRoomDispatch {
+  editRoom: (room: Room) => void;
+}
 
-  function handleClose() {
-    setOpenDialog(false);
+export function EditRoom(props: EditRoomProps & EditRoomDispatch): JSX.Element {
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+
+  function handleEditClose() {
+    setEditDialogOpen(false);
   }
 
-  const classes = useStyles();
   return (
-    <div className={classes.container}>
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={() => setOpenDialog(true)}
-      >
-        <Add />
-      </Button>
+    <React.Fragment>
+      <Fade in={props.editMode === EditMode.edit} mountOnEnter unmountOnExit>
+        <Button
+          className={props.className}
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditDialogOpen(true);
+          }}
+        >
+          <Edit />
+        </Button>
+      </Fade>
+
       <InputDialog
         onConfirm={(name) => {
-          handleClose();
-          props.createRoom(name);
+          handleEditClose();
+          props.editRoom({
+            ...props.room,
+            name
+          });
         }}
-        onCancel={handleClose}
-        open={openDialog}
-        title="Create Room"
+        onCancel={handleEditClose}
+        open={editDialogOpen}
+        title="Edit Room"
         description='Enter a descriptive name for the room you wish to add. A room in
           Home Lights represents a physical room in your home, e.g.
           "kitchen," "guest bedroom", etc. The room name
           must not already be in use.'
         inputPlaceholder="e.g. Kitchen"
-        confirmLabel="Create"
       />
-    </div>
+    </React.Fragment>
   );
 }

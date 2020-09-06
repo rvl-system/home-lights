@@ -39,3 +39,5 @@ export enum EditMode {
   view = 'view',
   edit = 'edit'
 }
+
+export type Color = 'inherit' | 'primary' | 'secondary' | 'default' | undefined;
