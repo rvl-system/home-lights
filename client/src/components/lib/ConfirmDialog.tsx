@@ -26,6 +26,7 @@ import {
   DialogContentText,
   DialogActions
 } from '@material-ui/core';
+import { Color } from '../../types';
 
 export interface ConfirmDialogProps {
   onConfirm: () => void;
@@ -34,7 +35,9 @@ export interface ConfirmDialogProps {
   title: string;
   description: string;
   confirmLabel?: string;
+  confirmColor?: Color;
   cancelLabel?: string;
+  cancelColor?: Color;
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
@@ -45,7 +48,9 @@ export function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
     title,
     description,
     confirmLabel = 'Confirm',
-    cancelLabel = 'Cancel'
+    confirmColor = 'primary',
+    cancelLabel = 'Cancel',
+    cancelColor = 'default'
   } = props;
   return (
     <React.Fragment>
@@ -60,8 +65,10 @@ export function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
         </DialogContent>
         <DialogActions>
           <DialogActions>
-            <Button onClick={onCancel}>{cancelLabel}</Button>
-            <Button onClick={onConfirm} color="secondary" autoFocus>
+            <Button onClick={onCancel} color={cancelColor}>
+              {cancelLabel}
+            </Button>
+            <Button onClick={onConfirm} color={confirmColor} autoFocus>
               {confirmLabel}
             </Button>
           </DialogActions>

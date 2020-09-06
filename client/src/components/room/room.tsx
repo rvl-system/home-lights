@@ -191,6 +191,7 @@ export function Room(props: RoomProps & RoomDispatch): JSX.Element {
         title="Delete Room"
         description={`Are you sure you want to delete room ${props.room.name}?`}
         confirmLabel="Delete Room"
+        confirmColor="secondary"
       />
     </React.Fragment>
   );
