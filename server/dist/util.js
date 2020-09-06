@@ -20,11 +20,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getEnvironmentVariable = exports.createInternalError = void 0;
 function createInternalError(message) {
-    return new Error("Internal Error: " + message);
+    return new Error(`Internal Error: ${message}`);
 }
 exports.createInternalError = createInternalError;
 function getEnvironmentVariable(varName, defaultValue) {
-    var value = process.env[varName];
+    const value = process.env[varName];
     if (value) {
         return value;
     }
@@ -32,7 +32,7 @@ function getEnvironmentVariable(varName, defaultValue) {
         return defaultValue;
     }
     else {
-        throw new Error("Environment variable " + varName + " not found");
+        throw new Error(`Environment variable ${varName} not found`);
     }
 }
 exports.getEnvironmentVariable = getEnvironmentVariable;

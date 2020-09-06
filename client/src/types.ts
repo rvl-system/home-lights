@@ -23,12 +23,21 @@ export enum StatePaths {
 }
 
 export enum Actions {
+  SelectTab = 'SelectTab',
   RoomsUpdated = 'RoomsUpdated',
   CreateRoom = 'CreateRoom',
-  SelectTab = 'SelectTab'
+  DeleteRoom = 'DeleteRoom',
+  EditRoom = 'EditRoom'
 }
 export enum SelectedTab {
   Rooms = 'Rooms',
   Patterns = 'Patterns',
   Lights = 'Lights'
 }
+
+export enum EditMode {
+  view = 'view',
+  edit = 'edit'
+}
+
+export type Color = 'inherit' | 'primary' | 'secondary' | 'default' | undefined;

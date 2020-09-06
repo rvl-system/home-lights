@@ -21,7 +21,7 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { getEnvironmentVariable } from './util';
-import { init, getRooms, createRoom, deleteRoom } from './db';
+import { init, getRooms, createRoom, editRoom, deleteRoom } from './db';
 import { CreateRoomRequest, Room } from './common/types';
 
 export async function run(): Promise<void> {
@@ -49,8 +49,8 @@ export async function run(): Promise<void> {
 
   app.put('/api/room/:id', async (req) => {
     const room = req.body as Room;
-    console.log('room', room);
-    return 'placeholder';
+    await editRoom(room);
+    return {};
   });
 
   app.delete('/api/room/:id', async (req) => {

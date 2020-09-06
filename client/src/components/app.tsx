@@ -47,7 +47,13 @@ const useStyles = makeStyles({
     'flex-direction': 'column'
   },
   content: {
-    'flex-grow': 1
+    'flex-grow': 1,
+    'flex-shrink': 0,
+    'flex-basis': 0,
+    'padding-bottom': '2px'
+  },
+  footer: {
+    'flex-shrink': 0
   }
 });
 
@@ -62,24 +68,21 @@ export function App(props: AppProps): JSX.Element {
       }),
     [prefersDarkMode]
   );
-  const styles = useStyles();
+  const classes = useStyles();
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <div className={styles.root}>
-        <div className={styles.content}>
+      <div className={classes.root}>
+        <div className={classes.content}>
           {reduce(props.activeTab, {
-            // eslint-disable-next-line react/display-name
             [SelectedTab.Rooms]: () => <RoomsContainer />,
-
-            // eslint-disable-next-line react/display-name
             [SelectedTab.Patterns]: () => <PatternsContainer />,
-
-            // eslint-disable-next-line react/display-name
             [SelectedTab.Lights]: () => <LightsContainer />
           })}
         </div>
-        <FooterContainer />
+        <div className={classes.footer}>
+          <FooterContainer />
+        </div>
       </div>
     </MuiThemeProvider>
   );

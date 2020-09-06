@@ -60,9 +60,13 @@ export async function getRooms(): Promise<Room[]> {
 export async function createRoom(
   roomRequest: CreateRoomRequest
 ): Promise<void> {
-  await dbRun(`INSERT INTO rooms (name) values ($1)`, [roomRequest.name]);
+  await dbRun(`INSERT INTO rooms (name) values (?)`, [roomRequest.name]);
+}
+
+export async function editRoom(room: Room): Promise<void> {
+  await dbRun('UPDATE rooms SET name = ? WHERE id = ?', [room.name, room.id]);
 }
 
 export async function deleteRoom(id: number): Promise<void> {
-  await dbRun('DELETE FROM rooms WHERE id = $1', [id]);
+  await dbRun('DELETE FROM rooms WHERE id = ?', [id]);
 }
