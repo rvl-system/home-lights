@@ -46,6 +46,7 @@ async function dbRun(query, parameters) {
     return new Promise((resolve, reject) => {
         db.run(query, parameters || [], function (err) {
             if (err) {
+                console.log('err in dbRun', err);
                 reject(err);
             }
             else {

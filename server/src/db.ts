@@ -32,7 +32,7 @@ const DB_FILE = join(
 const ROOM_SCHEMA = `
 CREATE TABLE "rooms" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name text
+  name text NOT NULL UNIQUE
 )`;
 
 export async function init(): Promise<void> {
