@@ -28,9 +28,9 @@ import {
 import { ExpandMore } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
-import { EditZoneButton } from './editZoneButton';
-import { DeleteZoneButton } from './deleteZoneButton';
-import { ZonePowerSwitch } from './zonePowerSwitch';
+import { EditZoneButton, EditZoneButtonDispatch } from './editZoneButton';
+import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
+import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,11 +81,9 @@ export interface ZoneProps {
   editMode: EditMode;
 }
 
-export interface ZoneDispatch {
-  editZone: (zone: Zone) => void;
-  deleteZone: (id: number) => void;
-  toggleZonePower: (id: number, powerState: boolean) => void;
-}
+export type ZoneDispatch = EditZoneButtonDispatch &
+  DeleteZoneButtonDispatch &
+  ZonePowerSwitchDispatch;
 
 export function Zone(props: ZoneProps & ZoneDispatch): JSX.Element {
   const classes = useStyles();

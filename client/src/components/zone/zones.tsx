@@ -19,50 +19,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { Edit, Close } from '@material-ui/icons';
 import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
 import { CreateZoneButton } from './createZoneButton';
 import { Zone } from './zone';
-
-const useStyles = makeStyles({
-  container: {
-    height: '100%',
-    'max-height': '100%',
-    display: 'grid',
-    'grid-template-rows':
-      '[header-start] auto [content-start] minmax(0, 1fr) [end]',
-    'grid-template-columns':
-      '[left-start] auto [center-start] 1fr [right-start] auto [end]'
-  },
-  header: {
-    'grid-column-start': 'right-start',
-    'grid-column-end': 'end',
-    'grid-row-start': 'header-start',
-    'grid-row-end': 'content-start',
-    margin: '1em'
-  },
-  altHeader: {
-    'grid-column-start': 'left-start',
-    'grid-column-end': 'center-start',
-    'grid-row-start': 'header-start',
-    'grid-row-end': 'content-start',
-    padding: '1em'
-  },
-  content: {
-    'grid-column-start': 'left-start',
-    'grid-column-end': 'end',
-    'grid-row-start': 'content-start',
-    'grid-row-end': 'end',
-    position: 'relative',
-    'overflow-y': 'scroll'
-  },
-  innerContent: {
-    position: 'absolute',
-    width: '100%'
-  }
-});
+import { useStyles } from '../lib/pageStyles';
 
 export interface ZonesProps {
   zones: ZoneType[];

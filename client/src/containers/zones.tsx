@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createContainer } from 'reduxology';
-import { Zones, ZonesProps, ZonesDispatch } from '../components/zones/zones';
+import { Zones, ZonesProps, ZonesDispatch } from '../components/zone/zones';
 import { StatePaths, Actions } from '../types';
 import { Zone } from '../common/types';
 
