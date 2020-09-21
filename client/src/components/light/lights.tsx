@@ -18,8 +18,24 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as React from 'react';
-import { Typography } from '@material-ui/core';
+import {
+  CreateLightButton,
+  CreateLightButtonDispatch
+} from './createLightButton';
+import { useStyles } from '../lib/pageStyles';
 
-export function Lights(): JSX.Element {
-  return <Typography>Lights</Typography>;
+export type LightsDispatch = CreateLightButtonDispatch;
+
+export function Lights(props: LightsDispatch): JSX.Element {
+  const classes = useStyles();
+  return (
+    <div className={classes.container}>
+      <div className={classes.altHeader}>
+        <CreateLightButton
+          createRVLLight={props.createRVLLight}
+          createHueLight={props.createHueLight}
+        />
+      </div>
+    </div>
+  );
 }

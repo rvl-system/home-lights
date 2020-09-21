@@ -18,10 +18,18 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createContainer } from 'reduxology';
-import { Lights } from '../components/light/lights';
+import { Lights, LightsDispatch } from '../components/light/lights';
+import { Actions } from '../types';
 
 export const LightsContainer = createContainer(
   () => ({}),
-  () => ({}),
+  (dispatch): LightsDispatch => ({
+    createRVLLight(name: string, channel: number) {
+      dispatch(Actions.CreateRVLLight, name, channel);
+    },
+    createHueLight(name: string) {
+      dispatch(Actions.CreateHueLight, name);
+    }
+  }),
   Lights
 );
