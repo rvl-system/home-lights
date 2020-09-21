@@ -19,28 +19,28 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { ConfirmDialog } from '../lib/ConfirmDialog';
-import { Delete } from '@material-ui/icons';
-import { Room } from '../../common/types';
+import { InputDialog } from '../lib/InputDialog';
+import { Edit } from '@material-ui/icons';
+import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
 
-export interface DeleteRoomButtonProps {
-  room: Room;
+export interface EditZoneButtonProps {
+  zone: Zone;
   editMode: EditMode;
   className: string;
 }
 
-export interface DeleteRoomButtonDispatch {
-  deleteRoom: (id: number) => void;
+export interface EditZoneButtonDispatch {
+  editZone: (zone: Zone) => void;
 }
 
-export function DeleteRoomButton(
-  props: DeleteRoomButtonProps & DeleteRoomButtonDispatch
+export function EditZoneButton(
+  props: EditZoneButtonProps & EditZoneButtonDispatch
 ): JSX.Element {
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
 
-  function handleDeleteClose() {
-    setDeleteDialogOpen(false);
+  function handleEditClose() {
+    setEditDialogOpen(false);
   }
 
   return (
@@ -48,27 +48,32 @@ export function DeleteRoomButton(
       <Fade in={props.editMode === EditMode.edit} mountOnEnter unmountOnExit>
         <Button
           className={props.className}
-          color="secondary"
           onClick={(e) => {
             e.stopPropagation();
-            setDeleteDialogOpen(true);
+            setEditDialogOpen(true);
           }}
         >
-          <Delete />
+          <Edit />
         </Button>
       </Fade>
 
-      <ConfirmDialog
-        onConfirm={() => {
-          handleDeleteClose();
-          props.deleteRoom(props.room.id);
+      <InputDialog
+        onConfirm={(name) => {
+          handleEditClose();
+          props.editZone({
+            ...props.zone,
+            name
+          });
         }}
-        onCancel={handleDeleteClose}
-        open={deleteDialogOpen}
-        title="Delete Room"
-        description={`Are you sure you want to delete room ${props.room.name}?`}
-        confirmLabel="Delete Room"
-        confirmColor="secondary"
+        onCancel={handleEditClose}
+        open={editDialogOpen}
+        title="Edit Zone"
+        description='Enter a descriptive name for the zone you wish to change. A zone in
+        Home Lights represents a physical area in your home, e.g.
+        "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
+        must not already be in use.'
+        inputPlaceholder="e.g. Kitchen"
+        defaultValue={props.zone.name}
       />
     </React.Fragment>
   );

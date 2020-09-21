@@ -21,10 +21,10 @@ import * as React from 'react';
 import { Button, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Edit, Close } from '@material-ui/icons';
-import { Room as RoomType } from '../../common/types';
+import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
-import { CreateRoomButton } from './createRoomButton';
-import { Room } from './room';
+import { CreateZoneButton } from './createZoneButton';
+import { Zone } from './zone';
 
 const useStyles = makeStyles({
   container: {
@@ -64,25 +64,25 @@ const useStyles = makeStyles({
   }
 });
 
-export interface RoomsProps {
-  rooms: RoomType[];
+export interface ZonesProps {
+  zones: ZoneType[];
 }
 
-export interface RoomsDispatch {
-  createRoom: (name: string) => void;
-  editRoom: (room: RoomType) => void;
-  deleteRoom: (id: number) => void;
-  toggleRoomPower: (id: number, powerState: boolean) => void;
+export interface ZonesDispatch {
+  createZone: (name: string) => void;
+  editZone: (zone: ZoneType) => void;
+  deleteZone: (id: number) => void;
+  toggleZonePower: (id: number, powerState: boolean) => void;
 }
 
-export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
+export function Zones(props: ZonesProps & ZonesDispatch): JSX.Element {
   const [editMode, setEditMode] = React.useState(EditMode.view);
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <Fade in={editMode === EditMode.edit}>
         <div className={classes.altHeader}>
-          <CreateRoomButton createRoom={props.createRoom} />
+          <CreateZoneButton createZone={props.createZone} />
         </div>
       </Fade>
       <Fade in={editMode === EditMode.view} mountOnEnter unmountOnExit>
@@ -106,14 +106,14 @@ export function Rooms(props: RoomsProps & RoomsDispatch): JSX.Element {
 
       <div className={classes.content}>
         <div className={classes.innerContent}>
-          {props.rooms.map((room) => (
-            <Room
-              key={room.id}
-              room={room}
+          {props.zones.map((zone) => (
+            <Zone
+              key={zone.id}
+              zone={zone}
               editMode={editMode}
-              editRoom={props.editRoom}
-              deleteRoom={props.deleteRoom}
-              toggleRoomPower={props.toggleRoomPower}
+              editZone={props.editZone}
+              deleteZone={props.deleteZone}
+              toggleZonePower={props.toggleZonePower}
             />
           ))}
         </div>

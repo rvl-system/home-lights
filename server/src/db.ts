@@ -21,7 +21,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { getEnvironmentVariable } from './util';
 import { init as initDB, dbRun, dbAll } from './sqlite';
-import { Room, CreateRoomRequest } from './common/types';
+import { Zone, CreateZoneRequest } from './common/types';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -30,7 +30,7 @@ const DB_FILE = join(
 );
 
 const ROOM_SCHEMA = `
-CREATE TABLE "rooms" (
+CREATE TABLE "zones" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name text NOT NULL UNIQUE
 )`;
@@ -53,20 +53,20 @@ export async function init(): Promise<void> {
   }
 }
 
-export async function getRooms(): Promise<Room[]> {
-  return dbAll(`SELECT * FROM rooms`) as Promise<Room[]>;
+export async function getZones(): Promise<Zone[]> {
+  return dbAll(`SELECT * FROM zones`) as Promise<Zone[]>;
 }
 
-export async function createRoom(
-  roomRequest: CreateRoomRequest
+export async function createZone(
+  zoneRequest: CreateZoneRequest
 ): Promise<void> {
-  await dbRun(`INSERT INTO rooms (name) values (?)`, [roomRequest.name]);
+  await dbRun(`INSERT INTO zones (name) values (?)`, [zoneRequest.name]);
 }
 
-export async function editRoom(room: Room): Promise<void> {
-  await dbRun('UPDATE rooms SET name = ? WHERE id = ?', [room.name, room.id]);
+export async function editZone(zone: Zone): Promise<void> {
+  await dbRun('UPDATE zones SET name = ? WHERE id = ?', [zone.name, zone.id]);
 }
 
-export async function deleteRoom(id: number): Promise<void> {
-  await dbRun('DELETE FROM rooms WHERE id = ?', [id]);
+export async function deleteZone(id: number): Promise<void> {
+  await dbRun('DELETE FROM zones WHERE id = ?', [id]);
 }

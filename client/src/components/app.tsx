@@ -28,7 +28,7 @@ import {
 import { FooterContainer } from '../containers/footer';
 import { SelectedTab } from '../types';
 
-import { RoomsContainer } from '../containers/rooms';
+import { ZonesContainer } from '../containers/zones';
 import { PatternsContainer } from '../containers/patterns';
 import { LightsContainer } from '../containers/lights';
 
@@ -75,7 +75,7 @@ export function App(props: AppProps): JSX.Element {
       <div className={classes.root}>
         <div className={classes.content}>
           {reduce(props.activeTab, {
-            [SelectedTab.Rooms]: () => <RoomsContainer />,
+            [SelectedTab.Zones]: () => <ZonesContainer />,
             [SelectedTab.Patterns]: () => <PatternsContainer />,
             [SelectedTab.Lights]: () => <LightsContainer />
           })}

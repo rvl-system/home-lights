@@ -21,8 +21,8 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { getEnvironmentVariable } from './util';
-import { init, getRooms, createRoom, editRoom, deleteRoom } from './db';
-import { CreateRoomRequest, Room } from './common/types';
+import { init, getZones, createZone, editZone, deleteZone } from './db';
+import { CreateZoneRequest, Zone } from './common/types';
 
 export async function run(): Promise<void> {
   const port = parseInt(getEnvironmentVariable('PORT', '3000'));
@@ -37,25 +37,25 @@ export async function run(): Promise<void> {
     root: join(__dirname, '..', '..', 'public')
   });
 
-  app.get('/api/rooms', async () => {
-    return await getRooms();
+  app.get('/api/zones', async () => {
+    return await getZones();
   });
 
-  app.post('/api/rooms', async (req) => {
-    const roomRequest = req.body as CreateRoomRequest;
-    await createRoom(roomRequest);
+  app.post('/api/zones', async (req) => {
+    const zoneRequest = req.body as CreateZoneRequest;
+    await createZone(zoneRequest);
     return {};
   });
 
-  app.put('/api/room/:id', async (req) => {
-    const room = req.body as Room;
-    await editRoom(room);
+  app.put('/api/zone/:id', async (req) => {
+    const zone = req.body as Zone;
+    await editZone(zone);
     return {};
   });
 
-  app.delete('/api/room/:id', async (req) => {
+  app.delete('/api/zone/:id', async (req) => {
     const { id } = req.params as { id: string };
-    await deleteRoom(parseInt(id));
+    await deleteZone(parseInt(id));
     return {};
   });
 

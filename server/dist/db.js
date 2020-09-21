@@ -18,14 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRoom = exports.editRoom = exports.createRoom = exports.getRooms = exports.init = void 0;
+exports.deleteZone = exports.editZone = exports.createZone = exports.getZones = exports.init = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const util_1 = require("./util");
 const sqlite_1 = require("./sqlite");
 const DB_FILE = path_1.join(util_1.getEnvironmentVariable('HOME'), '.homelights', 'db.sqlite3');
 const ROOM_SCHEMA = `
-CREATE TABLE "rooms" (
+CREATE TABLE "zones" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name text NOT NULL UNIQUE
 )`;
@@ -47,25 +47,25 @@ async function init() {
     }
 }
 exports.init = init;
-async function getRooms() {
-    return sqlite_1.dbAll(`SELECT * FROM rooms`);
+async function getZones() {
+    return sqlite_1.dbAll(`SELECT * FROM zones`);
 }
-exports.getRooms = getRooms;
-async function createRoom(roomRequest) {
+exports.getZones = getZones;
+async function createZone(zoneRequest) {
     try {
-        await sqlite_1.dbRun(`INSERT INTO rooms (name) values (?)`, [roomRequest.name]);
+        await sqlite_1.dbRun(`INSERT INTO zones (name) values (?)`, [zoneRequest.name]);
     }
     catch (err) {
         console.log('ERROR IN db.ts ', typeof err);
     }
 }
-exports.createRoom = createRoom;
-async function editRoom(room) {
-    await sqlite_1.dbRun('UPDATE rooms SET name = ? WHERE id = ?', [room.name, room.id]);
+exports.createZone = createZone;
+async function editZone(zone) {
+    await sqlite_1.dbRun('UPDATE zones SET name = ? WHERE id = ?', [zone.name, zone.id]);
 }
-exports.editRoom = editRoom;
-async function deleteRoom(id) {
-    await sqlite_1.dbRun('DELETE FROM rooms WHERE id = ?', [id]);
+exports.editZone = editZone;
+async function deleteZone(id) {
+    await sqlite_1.dbRun('DELETE FROM zones WHERE id = ?', [id]);
 }
-exports.deleteRoom = deleteRoom;
+exports.deleteZone = deleteZone;
 //# sourceMappingURL=db.js.map

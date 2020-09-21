@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-export interface Room {
+export interface Zone {
   id: number;
   name: string;
 }
 
-export interface CreateRoomRequest{
+export interface CreateZoneRequest{
   name: string;
 }

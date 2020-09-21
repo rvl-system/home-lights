@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { createReducer } from 'reduxology';
 import { StatePaths, Actions, SelectedTab } from '../types';
 
-createReducer(StatePaths.SelectedTab, SelectedTab.Rooms).handle(
+createReducer(StatePaths.SelectedTab, SelectedTab.Zones).handle(
   Actions.SelectTab,
   (state: SelectedTab, updatedTab: SelectedTab): SelectedTab => {
     return updatedTab;

@@ -31,11 +31,11 @@ const useStyles = makeStyles({
   }
 });
 
-export interface CreateRoomButtonDispatch {
-  createRoom: (name: string) => void;
+export interface CreateZoneButtonDispatch {
+  createZone: (name: string) => void;
 }
 
-export function CreateRoomButton(props: CreateRoomButtonDispatch): JSX.Element {
+export function CreateZoneButton(props: CreateZoneButtonDispatch): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
 
   function handleClose() {
@@ -55,14 +55,14 @@ export function CreateRoomButton(props: CreateRoomButtonDispatch): JSX.Element {
       <InputDialog
         onConfirm={(name) => {
           handleClose();
-          props.createRoom(name);
+          props.createZone(name);
         }}
         onCancel={handleClose}
         open={openDialog}
-        title="Create Room"
-        description='Enter a descriptive name for the room you wish to add. A room in
-          Home Lights represents a physical room in your home, e.g.
-          "kitchen," "guest bedroom", etc. The room name
+        title="Create Zone"
+        description='Enter a descriptive name for the zone you wish to add. A zone in
+          Home Lights represents a physical area in your home, e.g.
+          "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
           must not already be in use.'
         inputPlaceholder="e.g. Kitchen"
         confirmLabel="Create"

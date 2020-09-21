@@ -36,22 +36,22 @@ async function run() {
     app.register(fastify_static_1.default, {
         root: path_1.join(__dirname, '..', '..', 'public')
     });
-    app.get('/api/rooms', async () => {
-        return await db_1.getRooms();
+    app.get('/api/zones', async () => {
+        return await db_1.getZones();
     });
-    app.post('/api/rooms', async (req) => {
-        const roomRequest = req.body;
-        await db_1.createRoom(roomRequest);
+    app.post('/api/zones', async (req) => {
+        const zoneRequest = req.body;
+        await db_1.createZone(zoneRequest);
         return {};
     });
-    app.put('/api/room/:id', async (req) => {
-        const room = req.body;
-        await db_1.editRoom(room);
+    app.put('/api/zone/:id', async (req) => {
+        const zone = req.body;
+        await db_1.editZone(zone);
         return {};
     });
-    app.delete('/api/room/:id', async (req) => {
+    app.delete('/api/zone/:id', async (req) => {
         const { id } = req.params;
-        await db_1.deleteRoom(parseInt(id));
+        await db_1.deleteZone(parseInt(id));
         return {};
     });
     app.listen(port, (err, address) => {

@@ -19,27 +19,27 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { listen, dispatch } from 'reduxology';
 import { Actions } from '../types';
-import { CreateRoomRequest, Room } from '../common/types';
+import { CreateZoneRequest, Zone } from '../common/types';
 import { get, post, put, del } from '../util/api';
 
-listen(Actions.CreateRoom, async (name: string) => {
-  const createBody: CreateRoomRequest = { name };
-  await post('/api/rooms', createBody);
+listen(Actions.CreateZone, async (name: string) => {
+  const createBody: CreateZoneRequest = { name };
+  await post('/api/zones', createBody);
 
-  const updatedRooms = await get('/api/rooms');
-  dispatch(Actions.RoomsUpdated, updatedRooms);
+  const updatedZones = await get('/api/zones');
+  dispatch(Actions.ZonesUpdated, updatedZones);
 });
 
-listen(Actions.EditRoom, async (room: Room) => {
-  await put(`/api/room/${room.id}`, room);
+listen(Actions.EditZone, async (zone: Zone) => {
+  await put(`/api/zone/${zone.id}`, zone);
 
-  const updatedRooms = await get('/api/rooms');
-  dispatch(Actions.RoomsUpdated, updatedRooms);
+  const updatedZones = await get('/api/zones');
+  dispatch(Actions.ZonesUpdated, updatedZones);
 });
 
-listen(Actions.DeleteRoom, async (id: number) => {
-  await del(`/api/room/${id}`);
+listen(Actions.DeleteZone, async (id: number) => {
+  await del(`/api/zone/${id}`);
 
-  const updatedRooms = await get('/api/rooms');
-  dispatch(Actions.RoomsUpdated, updatedRooms);
+  const updatedZones = await get('/api/zones');
+  dispatch(Actions.ZonesUpdated, updatedZones);
 });

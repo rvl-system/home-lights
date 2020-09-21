@@ -40,8 +40,8 @@ export function Footer(
       showLabels
     >
       <BottomNavigationAction
-        label={SelectedTab.Rooms}
-        value={SelectedTab.Rooms}
+        label={SelectedTab.Zones}
+        value={SelectedTab.Zones}
         icon={<Home />}
       />
       <BottomNavigationAction

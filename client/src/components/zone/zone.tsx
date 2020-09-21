@@ -26,11 +26,11 @@ import {
   Typography
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
-import { Room } from '../../common/types';
+import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
-import { EditRoomButton } from './editRoomButton';
-import { DeleteRoomButton } from './deleteRoomButton';
-import { RoomPowerSwitch } from './roomPowerSwitch';
+import { EditZoneButton } from './editZoneButton';
+import { DeleteZoneButton } from './deleteZoneButton';
+import { ZonePowerSwitch } from './zonePowerSwitch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     'flex-direction': 'column'
   },
-  roomHeading: {
+  zoneHeading: {
     display: 'grid',
     'grid-template-columns':
       '[left-icon-start] auto [title-start] 1fr [right-icon-start] auto [end]',
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     'grid-row-start': 1,
     'grid-row-end': 1
   },
-  roomTitle: {
+  zoneTitle: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
     'padding-left': '1em',
@@ -76,18 +76,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export interface RoomProps {
-  room: Room;
+export interface ZoneProps {
+  zone: Zone;
   editMode: EditMode;
 }
 
-export interface RoomDispatch {
-  editRoom: (room: Room) => void;
-  deleteRoom: (id: number) => void;
-  toggleRoomPower: (id: number, powerState: boolean) => void;
+export interface ZoneDispatch {
+  editZone: (zone: Zone) => void;
+  deleteZone: (id: number) => void;
+  toggleZonePower: (id: number, powerState: boolean) => void;
 }
 
-export function Room(props: RoomProps & RoomDispatch): JSX.Element {
+export function Zone(props: ZoneProps & ZoneDispatch): JSX.Element {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -97,32 +97,32 @@ export function Room(props: RoomProps & RoomDispatch): JSX.Element {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <div className={classes.roomHeading}>
-            <DeleteRoomButton
-              room={props.room}
+          <div className={classes.zoneHeading}>
+            <DeleteZoneButton
+              zone={props.zone}
               editMode={props.editMode}
               className={classes.leftButton}
-              deleteRoom={props.deleteRoom}
+              deleteZone={props.deleteZone}
             />
-            <RoomPowerSwitch
+            <ZonePowerSwitch
               className={classes.leftButton}
-              room={props.room}
+              zone={props.zone}
               editMode={props.editMode}
-              toggleRoomPower={props.toggleRoomPower}
+              toggleZonePower={props.toggleZonePower}
             />
-            <Typography className={classes.roomTitle}>
-              {props.room.name}
+            <Typography className={classes.zoneTitle}>
+              {props.zone.name}
             </Typography>
-            <EditRoomButton
+            <EditZoneButton
               className={classes.rightButton}
-              room={props.room}
+              zone={props.zone}
               editMode={props.editMode}
-              editRoom={props.editRoom}
+              editZone={props.editZone}
             />
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.detailContainer}>
-          <Typography>TODO: scenes for {props.room.name}</Typography>
+          <Typography>TODO: scenes for {props.zone.name}</Typography>
         </AccordionDetails>
       </Accordion>
     </React.Fragment>

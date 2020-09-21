@@ -19,21 +19,21 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as React from 'react';
 import { Switch } from '@material-ui/core';
-import { Room } from '../../common/types';
+import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
 
-export interface RoomPowerSwitchProps {
-  room: Room;
+export interface ZonePowerSwitchProps {
+  zone: Zone;
   editMode: EditMode;
   className: string;
 }
 
-export interface RoomPowerSwitchDispatch {
-  toggleRoomPower: (id: number, powerState: boolean) => void;
+export interface ZonePowerSwitchDispatch {
+  toggleZonePower: (id: number, powerState: boolean) => void;
 }
 
-export function RoomPowerSwitch(
-  props: RoomPowerSwitchProps & RoomPowerSwitchDispatch
+export function ZonePowerSwitch(
+  props: ZonePowerSwitchProps & ZonePowerSwitchDispatch
 ): JSX.Element {
   return (
     <React.Fragment>
@@ -45,7 +45,7 @@ export function RoomPowerSwitch(
             e.stopPropagation();
           }}
           onChange={(e) =>
-            props.toggleRoomPower(props.room.id, e.currentTarget.checked)
+            props.toggleZonePower(props.zone.id, e.currentTarget.checked)
           }
         />
       )}
