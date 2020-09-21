@@ -17,9 +17,34 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+<<<<<<< HEAD
 import React, { FunctionComponent } from 'react';
 import { Typography } from '@material-ui/core';
 
 export const Lights: FunctionComponent<null> = () => {
   return <Typography>Lights</Typography>;
 };
+=======
+import * as React from 'react';
+import {
+  CreateLightButton,
+  CreateLightButtonDispatch
+} from './createLightButton';
+import { useStyles } from '../lib/pageStyles';
+
+export type LightsDispatch = CreateLightButtonDispatch;
+
+export function Lights(props: LightsDispatch): JSX.Element {
+  const classes = useStyles();
+  return (
+    <div className={classes.container}>
+      <div className={classes.altHeader}>
+        <CreateLightButton
+          createRVLLight={props.createRVLLight}
+          createHueLight={props.createHueLight}
+        />
+      </div>
+    </div>
+  );
+}
+>>>>>>> Started wiring up lights

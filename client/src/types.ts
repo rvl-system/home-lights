@@ -24,10 +24,16 @@ export enum StatePaths {
 
 export enum Actions {
   SelectTab = 'SelectTab',
+
   ZonesUpdated = 'ZonesUpdated',
   CreateZone = 'CreateZone',
   DeleteZone = 'DeleteZone',
-  EditZone = 'EditZone'
+  EditZone = 'EditZone',
+
+  CreateRVLLight = 'CreateRVLLight',
+  CreateHueLight = 'CreateHueLight',
+  EditLight = 'EditLight',
+  DeleteLight = 'DeleteLight'
 }
 export enum SelectedTab {
   Zones = 'Zones',
