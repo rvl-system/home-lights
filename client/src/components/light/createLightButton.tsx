@@ -22,7 +22,7 @@ import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { Dialog } from '../lib/dialog';
-import { TextDialogInput } from '../lib/textDialogInput';
+import { SelectDialogInput } from '../lib/selectDialogInput';
 
 const useStyles = makeStyles({
   container: {
@@ -47,6 +47,15 @@ export function CreateLightButton(
   }
 
   function handleConfirm(values: Record<string, string>) {
+    console.log(values);
+    switch (values.type) {
+      case 'rvl':
+        props.createRVLLight(values.name, parseInt(values.channel));
+        break;
+      case 'hue':
+        props.createHueLight(values.name);
+        break;
+    }
     handleClose();
   }
 
@@ -71,15 +80,20 @@ export function CreateLightButton(
           must not already be in use.'
         confirmLabel="Create"
       >
-        <TextDialogInput
-          name="default"
-          defaultValue="Default Value"
-          inputPlaceholder="Default Placeholder"
-        />
-        <TextDialogInput
-          name="default2"
-          defaultValue="Default Value"
-          inputPlaceholder="Default Placeholder"
+        <SelectDialogInput
+          name="type"
+          description="The type of light to connect to"
+          selectValues={[
+            {
+              value: 'rvl',
+              label: 'RVL'
+            },
+            {
+              value: 'hue',
+              label: 'Phillips Hue'
+            }
+          ]}
+          defaultValue="rvl"
         />
       </Dialog>
     </div>
