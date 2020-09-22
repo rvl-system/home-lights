@@ -21,7 +21,8 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputDialog } from '../lib/inputDialog';
+import { Dialog } from '../lib/dialog';
+import { TextDialogInput } from '../lib/textDialogInput';
 
 const useStyles = makeStyles({
   container: {
@@ -45,6 +46,10 @@ export function CreateLightButton(
     setOpenDialog(false);
   }
 
+  function handleConfirm(values: Record<string, string>) {
+    handleClose();
+  }
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -55,11 +60,8 @@ export function CreateLightButton(
       >
         <Add />
       </Button>
-      <InputDialog
-        onConfirm={(name) => {
-          handleClose();
-          // props.createZone(name);
-        }}
+      <Dialog
+        onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
         title="Create Zone"
@@ -67,9 +69,19 @@ export function CreateLightButton(
           Home Lights represents a physical area in your home, e.g.
           "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
           must not already be in use.'
-        inputPlaceholder="e.g. Kitchen"
         confirmLabel="Create"
-      />
+      >
+        <TextDialogInput
+          name="default"
+          defaultValue="Default Value"
+          inputPlaceholder="Default Placeholder"
+        />
+        <TextDialogInput
+          name="default2"
+          defaultValue="Default Value"
+          inputPlaceholder="Default Placeholder"
+        />
+      </Dialog>
     </div>
   );
 }

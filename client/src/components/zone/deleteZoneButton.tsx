@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { ConfirmDialog } from '../lib/confirmDialog';
+import { Dialog } from '../lib/dialog';
 import { Delete } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
@@ -58,7 +58,7 @@ export const DeleteZoneButton: FunctionComponent<
         </Button>
       </Fade>
 
-      <ConfirmDialog
+      <Dialog
         onConfirm={() => {
           handleDeleteClose();
           props.deleteZone(props.zone.id);

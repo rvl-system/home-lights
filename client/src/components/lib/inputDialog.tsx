@@ -18,16 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  TextField
-} from '@material-ui/core';
 import { Color } from '../../types';
+import { Dialog } from './dialog';
+import { TextDialogInput } from './textDialogInput';
 
 export interface InputDialogProps {
   onConfirm: (newValue: string) => void;
@@ -56,38 +49,24 @@ export const InputDialog: FunctionComponent<InputDialogProps> = ({
   cancelLabel = 'Cancel',
   cancelColor = 'default'
 }) => {
-  const [value, setValue] = React.useState(defaultValue);
   return (
     <React.Fragment>
       <Dialog
+        onConfirm={(newValue) => onConfirm(newValue.text)}
+        onCancel={onCancel}
         open={open}
-        onClose={onCancel}
-        aria-labelledby="form-dialog-title"
+        title={title}
+        description={description}
+        confirmLabel={confirmLabel}
+        confirmColor={confirmColor}
+        cancelLabel={cancelLabel}
+        cancelColor={cancelColor}
       >
-        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{description}</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            type="text"
-            placeholder={inputPlaceholder}
-            fullWidth
-            defaultValue={defaultValue}
-            onChange={(e) => setValue(e.currentTarget.value)}
-          >
-            {value}
-          </TextField>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onCancel} color={cancelColor}>
-            {cancelLabel}
-          </Button>
-          <Button onClick={() => onConfirm(value)} color={confirmColor}>
-            {confirmLabel}
-          </Button>
-        </DialogActions>
+        <TextDialogInput
+          name="text"
+          defaultValue={defaultValue}
+          inputPlaceholder={inputPlaceholder}
+        />
       </Dialog>
     </React.Fragment>
   );
