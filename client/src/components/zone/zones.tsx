@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
 import { Edit, Close } from '@material-ui/icons';
 import { Zone as ZoneType } from '../../common/types';
@@ -37,7 +37,7 @@ export interface ZonesDispatch {
   toggleZonePower: (id: number, powerState: boolean) => void;
 }
 
-export function Zones(props: ZonesProps & ZonesDispatch): JSX.Element {
+export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
   const [editMode, setEditMode] = React.useState(EditMode.view);
   const classes = useStyles();
   return (
@@ -82,4 +82,4 @@ export function Zones(props: ZonesProps & ZonesDispatch): JSX.Element {
       </div>
     </div>
   );
-}
+};

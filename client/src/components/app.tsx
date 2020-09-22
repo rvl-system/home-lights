@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { reduce } from 'conditional-reduce';
 import { useMediaQuery, CssBaseline } from '@material-ui/core';
 import {
@@ -57,7 +57,7 @@ const useStyles = makeStyles({
   }
 });
 
-export function App(props: AppProps): JSX.Element {
+export const App: FunctionComponent<AppProps> = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(
     () =>
@@ -86,4 +86,4 @@ export function App(props: AppProps): JSX.Element {
       </div>
     </MuiThemeProvider>
   );
-}
+};

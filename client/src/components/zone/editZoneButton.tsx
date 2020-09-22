@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { InputDialog } from '../lib/InputDialog';
+import { InputDialog } from '../lib/inputDialog';
 import { Edit } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
@@ -34,9 +34,9 @@ export interface EditZoneButtonDispatch {
   editZone: (zone: Zone) => void;
 }
 
-export function EditZoneButton(
-  props: EditZoneButtonProps & EditZoneButtonDispatch
-): JSX.Element {
+export const EditZoneButton: FunctionComponent<
+  EditZoneButtonProps & EditZoneButtonDispatch
+> = (props) => {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
 
   function handleEditClose() {
@@ -77,4 +77,4 @@ export function EditZoneButton(
       />
     </React.Fragment>
   );
-}
+};

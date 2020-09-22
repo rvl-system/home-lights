@@ -17,47 +17,40 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import {
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  TextField
+  DialogActions
 } from '@material-ui/core';
 import { Color } from '../../types';
 
 export interface ConfirmDialogProps {
-  onConfirm: (newValue: string) => void;
+  onConfirm: () => void;
   onCancel: () => void;
   open: boolean;
   title: string;
   description: string;
-  defaultValue?: string;
-  inputPlaceholder?: string;
   confirmLabel?: string;
   confirmColor?: Color;
   cancelLabel?: string;
   cancelColor?: Color;
 }
 
-export function InputDialog(props: ConfirmDialogProps): JSX.Element {
-  const {
-    onConfirm,
-    onCancel,
-    open,
-    title,
-    description,
-    defaultValue = '',
-    inputPlaceholder = '',
-    confirmLabel = 'Confirm',
-    confirmColor = 'primary',
-    cancelLabel = 'Cancel',
-    cancelColor = 'default'
-  } = props;
-  const [value, setValue] = React.useState(defaultValue);
+export const ConfirmDialog: FunctionComponent<ConfirmDialogProps> = ({
+  onConfirm,
+  onCancel,
+  open,
+  title,
+  description,
+  confirmLabel = 'Confirm',
+  confirmColor = 'primary',
+  cancelLabel = 'Cancel',
+  cancelColor = 'default'
+}) => {
   return (
     <React.Fragment>
       <Dialog
@@ -68,28 +61,18 @@ export function InputDialog(props: ConfirmDialogProps): JSX.Element {
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText>{description}</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            type="text"
-            placeholder={inputPlaceholder}
-            fullWidth
-            defaultValue={defaultValue}
-            onChange={(e) => setValue(e.currentTarget.value)}
-          >
-            {value}
-          </TextField>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} color={cancelColor}>
-            {cancelLabel}
-          </Button>
-          <Button onClick={() => onConfirm(value)} color={confirmColor}>
-            {confirmLabel}
-          </Button>
+          <DialogActions>
+            <Button onClick={onCancel} color={cancelColor}>
+              {cancelLabel}
+            </Button>
+            <Button onClick={onConfirm} color={confirmColor} autoFocus>
+              {confirmLabel}
+            </Button>
+          </DialogActions>
         </DialogActions>
       </Dialog>
     </React.Fragment>
   );
-}
+};

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { Home, BlurLinear, EmojiObjects } from '@material-ui/icons';
 import { SelectedTab } from '../types';
@@ -30,9 +30,9 @@ export interface FooterComponentDispatch {
   selectTab(newTab: SelectedTab): void;
 }
 
-export function Footer(
-  props: FooterComponentProps & FooterComponentDispatch
-): JSX.Element {
+export const Footer: FunctionComponent<
+  FooterComponentProps & FooterComponentDispatch
+> = (props) => {
   return (
     <BottomNavigation
       value={props.activeTab}
@@ -56,4 +56,4 @@ export function Footer(
       />
     </BottomNavigation>
   );
-}
+};

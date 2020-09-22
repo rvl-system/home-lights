@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Accordion,
@@ -26,7 +26,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
-import { Zone } from '../../common/types';
+import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
 import { EditZoneButton, EditZoneButtonDispatch } from './editZoneButton';
 import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface ZoneProps {
-  zone: Zone;
+  zone: ZoneType;
   editMode: EditMode;
 }
 
@@ -85,7 +85,7 @@ export type ZoneDispatch = EditZoneButtonDispatch &
   DeleteZoneButtonDispatch &
   ZonePowerSwitchDispatch;
 
-export function Zone(props: ZoneProps & ZoneDispatch): JSX.Element {
+export const Zone: FunctionComponent<ZoneProps & ZoneDispatch> = (props) => {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -125,4 +125,4 @@ export function Zone(props: ZoneProps & ZoneDispatch): JSX.Element {
       </Accordion>
     </React.Fragment>
   );
-}
+};

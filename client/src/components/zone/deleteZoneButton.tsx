@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { ConfirmDialog } from '../lib/ConfirmDialog';
+import { ConfirmDialog } from '../lib/confirmDialog';
 import { Delete } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
@@ -34,9 +34,9 @@ export interface DeleteZoneButtonDispatch {
   deleteZone: (id: number) => void;
 }
 
-export function DeleteZoneButton(
-  props: DeleteZoneButtonProps & DeleteZoneButtonDispatch
-): JSX.Element {
+export const DeleteZoneButton: FunctionComponent<
+  DeleteZoneButtonDispatch & DeleteZoneButtonProps
+> = (props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
   function handleDeleteClose() {
@@ -72,4 +72,4 @@ export function DeleteZoneButton(
       />
     </React.Fragment>
   );
-}
+};
