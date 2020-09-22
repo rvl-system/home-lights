@@ -21,7 +21,7 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputDialog } from '../lib/InputDialog';
+import { InputDialog } from '../lib/inputDialog';
 
 const useStyles = makeStyles({
   container: {
