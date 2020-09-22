@@ -29,7 +29,7 @@ import {
 } from '@material-ui/core';
 import { Color } from '../../types';
 
-export interface ConfirmDialogProps {
+export interface InputDialogProps {
   onConfirm: (newValue: string) => void;
   onCancel: () => void;
   open: boolean;
@@ -43,7 +43,7 @@ export interface ConfirmDialogProps {
   cancelColor?: Color;
 }
 
-export const InputDialog: FunctionComponent<ConfirmDialogProps> = ({
+export const InputDialog: FunctionComponent<InputDialogProps> = ({
   onConfirm,
   onCancel,
   open,
