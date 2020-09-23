@@ -24,6 +24,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { reduce } from 'conditional-reduce';
 import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
+import { TextDialogInput } from '../lib/textDialogInput';
 import { LightType } from '../../common/types';
 
 const useStyles = makeStyles({
@@ -103,8 +104,12 @@ export function CreateLightButton(
           defaultValue={LightType.rvl}
         />
         {reduce(lightType, {
-          [LightType.rvl]: () => <div>RVL</div>,
-          [LightType.hue]: () => <div>Phillips Hue</div>
+          [LightType.rvl]: () => (
+            <TextDialogInput name="RVL" inputPlaceholder="RVL" />
+          ),
+          [LightType.hue]: () => (
+            <TextDialogInput name="HUE" inputPlaceholder="HUE" />
+          )
         })}
       </Dialog>
     </div>
