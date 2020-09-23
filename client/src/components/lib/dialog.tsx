@@ -65,14 +65,8 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   cancelLabel = 'Cancel',
   cancelColor = 'default'
 }) => {
-  const initialValue: DialogValue = {};
   children = Children.map(children, (child) => {
-    const name = (child as ReactElement).props.name;
-    if (typeof name !== 'string') {
-      throw new Error('The name field is required and must be a string');
-    }
-    const defaultValue: string =
-      (child as ReactElement).props.defaultValue || '';
+    const { name, defaultValue } = getDefaultValue(child as ReactElement);
     const newChildProps: DialogInputBaseProps = {
       onValueChange: (name, newValue) => {
         const newState = {
@@ -89,22 +83,45 @@ export const Dialog: FunctionComponent<DialogProps> = ({
         `Internal Error: "onValueChange" is unexpectedly undefined`
       );
     }
-    if (!initialValue[name]) {
-      initialValue[name] = defaultValue;
-    }
     return cloneElement(child as any, newChildProps);
   });
 
-  const [value, setValue] = React.useState<DialogValue>(initialValue);
+  function getDefaultValue(
+    child: ReactElement
+  ): { name: string; defaultValue: string } {
+    const name = child.props.name;
+    if (typeof name !== 'string') {
+      throw new Error('The name field is required and must be a string');
+    }
+    const defaultValue: string = child.props.defaultValue || '';
+    return { name, defaultValue };
+  }
+
+  const [value, setValue] = React.useState<DialogValue>(getDefaultValues());
+
+  function getDefaultValues(): DialogValue {
+    const initialValue: DialogValue = {};
+    Children.map(children, (child) => {
+      const { name, defaultValue } = getDefaultValue(child as ReactElement);
+      initialValue[name] = defaultValue;
+    });
+    return initialValue;
+  }
+
+  function finalize() {
+    setValue(getDefaultValues());
+  }
 
   function handleOnCancel(e: React.MouseEvent) {
     e.stopPropagation();
     onCancel();
+    finalize();
   }
 
   function handleOnConfirm(e: React.MouseEvent) {
     e.stopPropagation();
     onConfirm(value);
+    finalize();
   }
 
   return (
