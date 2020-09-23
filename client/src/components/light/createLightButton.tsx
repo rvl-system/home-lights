@@ -21,8 +21,10 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { Dialog } from '../lib/dialog';
+import { reduce } from 'conditional-reduce';
+import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
+import { LightType } from '../../common/types';
 
 const useStyles = makeStyles({
   container: {
@@ -41,22 +43,26 @@ export function CreateLightButton(
   props: CreateLightButtonDispatch
 ): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [lightType, setLightType] = React.useState(LightType.rvl);
 
   function handleClose() {
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: Record<string, string>) {
-    console.log(values);
+  function handleConfirm(values: DialogValue) {
     switch (values.type) {
-      case 'rvl':
+      case LightType.rvl:
         props.createRVLLight(values.name, parseInt(values.channel));
         break;
-      case 'hue':
+      case LightType.hue:
         props.createHueLight(values.name);
         break;
     }
     handleClose();
+  }
+
+  function handleChange(newState: DialogValue) {
+    setLightType(newState.type as LightType);
   }
 
   const classes = useStyles();
@@ -72,6 +78,7 @@ export function CreateLightButton(
       <Dialog
         onConfirm={handleConfirm}
         onCancel={handleClose}
+        onChange={handleChange}
         open={openDialog}
         title="Create Zone"
         description='Enter a descriptive name for the zone you wish to add. A zone in
@@ -85,16 +92,20 @@ export function CreateLightButton(
           description="The type of light to connect to"
           selectValues={[
             {
-              value: 'rvl',
+              value: LightType.rvl,
               label: 'RVL'
             },
             {
-              value: 'hue',
+              value: LightType.hue,
               label: 'Phillips Hue'
             }
           ]}
-          defaultValue="rvl"
+          defaultValue={LightType.rvl}
         />
+        {reduce(lightType, {
+          [LightType.rvl]: () => <div>RVL</div>,
+          [LightType.hue]: () => <div>Phillips Hue</div>
+        })}
       </Dialog>
     </div>
   );

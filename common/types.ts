@@ -25,3 +25,8 @@ export interface Zone {
 export interface CreateZoneRequest{
   name: string;
 }
+
+export enum LightType {
+  rvl = 'rvl',
+  hue = 'hue'
+}

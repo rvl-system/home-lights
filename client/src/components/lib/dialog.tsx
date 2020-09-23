@@ -42,8 +42,9 @@ export interface DialogInputBaseProps {
 export type DialogValue = Record<string, string>;
 
 export interface DialogProps {
-  onConfirm: (newValue: DialogValue) => void;
-  onCancel: () => void;
+  onConfirm?: (newValue: DialogValue) => void;
+  onCancel?: () => void;
+  onChange?: (newValue: DialogValue) => void;
   open: boolean;
   title: string;
   description: string;
@@ -57,6 +58,7 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   children,
   onConfirm,
   onCancel,
+  onChange,
   open,
   title,
   description,
@@ -74,6 +76,9 @@ export const Dialog: FunctionComponent<DialogProps> = ({
           [name]: newValue
         };
         setValue(newState);
+        if (onChange) {
+          onChange(newState);
+        }
       },
       name,
       defaultValue
@@ -114,13 +119,17 @@ export const Dialog: FunctionComponent<DialogProps> = ({
 
   function handleOnCancel(e: React.MouseEvent) {
     e.stopPropagation();
-    onCancel();
+    if (onCancel) {
+      onCancel();
+    }
     finalize();
   }
 
   function handleOnConfirm(e: React.MouseEvent) {
     e.stopPropagation();
-    onConfirm(value);
+    if (onConfirm) {
+      onConfirm(value);
+    }
     finalize();
   }
 
