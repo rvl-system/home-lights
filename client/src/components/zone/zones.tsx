@@ -24,7 +24,7 @@ import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
 import { CreateZoneButton } from './createZoneButton';
 import { Zone } from './zone';
-import { useStyles } from '../lib/pageStyles';
+import { useContainerStyles } from '../lib/pageStyles';
 
 export interface ZonesProps {
   zones: ZoneType[];
@@ -39,7 +39,7 @@ export interface ZonesDispatch {
 
 export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
   const [editMode, setEditMode] = React.useState(EditMode.view);
-  const classes = useStyles();
+  const classes = useContainerStyles();
   return (
     <div className={classes.container}>
       <Fade in={editMode === EditMode.edit}>

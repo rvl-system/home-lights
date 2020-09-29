@@ -24,6 +24,7 @@ import {
   LightsProps
 } from '../components/light/lights';
 import { StatePaths, Actions } from '../types';
+import { Light } from '../common/types';
 
 export const LightsContainer = createContainer(
   (getState): LightsProps => ({
@@ -35,6 +36,12 @@ export const LightsContainer = createContainer(
     },
     createHueLight(name: string) {
       dispatch(Actions.CreateHueLight, name);
+    },
+    editLight(light: Light) {
+      dispatch(Actions.EditLight, light);
+    },
+    deleteLight(id: number) {
+      dispatch(Actions.DeleteLight, id);
     }
   }),
   Lights
