@@ -36,6 +36,7 @@ async function run() {
     app.register(fastify_static_1.default, {
         root: path_1.join(__dirname, '..', '..', 'public')
     });
+    // ---- Zones Endpoints ----
     app.get('/api/zones', async () => {
         return await db_1.getZones();
     });
@@ -52,6 +53,25 @@ async function run() {
     app.delete('/api/zone/:id', async (req) => {
         const { id } = req.params;
         await db_1.deleteZone(parseInt(id));
+        return {};
+    });
+    // ---- Lights Endpoints ----
+    app.get('/api/lights', async () => {
+        return await db_1.getLights();
+    });
+    app.post('/api/lights', async (req) => {
+        const zoneRequest = req.body;
+        await db_1.createLight(zoneRequest);
+        return {};
+    });
+    app.put('/api/light/:id', async (req) => {
+        const zone = req.body;
+        await db_1.editLight(zone);
+        return {};
+    });
+    app.delete('/api/light/:id', async (req) => {
+        const { id } = req.params;
+        await db_1.deleteLight(parseInt(id));
         return {};
     });
     app.listen(port, (err, address) => {

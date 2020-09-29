@@ -23,10 +23,17 @@ import {
   CreateLightButtonDispatch
 } from './createLightButton';
 import { useStyles } from '../lib/pageStyles';
+import { Light as LightType } from '../../common/types';
+
+export interface LightsProps {
+  lights: LightType[];
+}
 
 export type LightsDispatch = CreateLightButtonDispatch;
 
-export const Lights: FunctionComponent<LightsDispatch> = (props) => {
+export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
+  props
+) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -35,6 +42,13 @@ export const Lights: FunctionComponent<LightsDispatch> = (props) => {
           createRVLLight={props.createRVLLight}
           createHueLight={props.createHueLight}
         />
+      </div>
+      <div className={classes.content}>
+        <div className={classes.innerContent}>
+          {props.lights.map((light, i) => (
+            <div key={i}>Light</div>
+          ))}
+        </div>
       </div>
     </div>
   );

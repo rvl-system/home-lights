@@ -45,7 +45,7 @@ export function CreateLightButton(
   props: CreateLightButtonDispatch
 ): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [lightType, setLightType] = React.useState(LightType.rvl);
+  const [lightType, setLightType] = React.useState(LightType.RVL);
 
   function handleClose() {
     setOpenDialog(false);
@@ -53,10 +53,10 @@ export function CreateLightButton(
 
   function handleConfirm(values: DialogValue) {
     switch (values.type) {
-      case LightType.rvl:
+      case LightType.RVL:
         props.createRVLLight(values.name, parseInt(values.channel));
         break;
-      case LightType.hue:
+      case LightType.Hue:
         props.createHueLight(values.name);
         break;
     }
@@ -94,15 +94,15 @@ export function CreateLightButton(
           description="The type of light to connect to"
           selectValues={[
             {
-              value: LightType.rvl,
+              value: LightType.RVL,
               label: 'RVL'
             },
             {
-              value: LightType.hue,
+              value: LightType.Hue,
               label: 'Phillips Hue'
             }
           ]}
-          defaultValue={LightType.rvl}
+          defaultValue={LightType.RVL}
         />
         <TextDialogInput
           name="name"
@@ -110,7 +110,7 @@ export function CreateLightButton(
           inputPlaceholder="name"
         />
         {reduce(lightType, {
-          [LightType.rvl]: () => (
+          [LightType.RVL]: () => (
             <SelectDialogInput
               name="channel"
               description="The RVL light channel"
@@ -123,7 +123,7 @@ export function CreateLightButton(
               defaultValue={'0'}
             />
           ),
-          [LightType.hue]: () => (
+          [LightType.Hue]: () => (
             <TextDialogInput
               name="HUE"
               description="HUE"

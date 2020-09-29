@@ -19,6 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 export enum StatePaths {
   Zones = 'Zones',
+  Lights = 'Lights',
   SelectedTab = 'SelectedTab'
 }
 
@@ -30,6 +31,7 @@ export enum Actions {
   DeleteZone = 'DeleteZone',
   EditZone = 'EditZone',
 
+  LightsUpdated = 'LightsUpdated',
   CreateRVLLight = 'CreateRVLLight',
   CreateHueLight = 'CreateHueLight',
   EditLight = 'EditLight',

@@ -17,16 +17,49 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// ---- Zone Types ----
+
 export interface Zone {
   id: number;
   name: string;
 }
 
-export interface CreateZoneRequest{
+export interface CreateZoneRequest {
   name: string;
 }
 
+// ---- Light Types ----
+
 export enum LightType {
-  rvl = 'rvl',
-  hue = 'hue'
+  RVL = 'rvl',
+  Hue = 'hue'
+}
+
+export interface Light {
+  id: number;
+  type: LightType;
+  name: string;
+}
+
+export interface RVLLight extends Light {
+  type: LightType.RVL;
+  channel: number;
+}
+
+export interface HueLight extends Light {
+  type: LightType.Hue;
+}
+
+export interface CreateLightRequest {
+  name: string;
+  type: LightType;
+}
+
+export interface CreateRVLLightRequest extends CreateLightRequest {
+  type: LightType.RVL;
+  channel: number;
+}
+
+export interface CreateHueLightRequest extends CreateLightRequest {
+  type: LightType.Hue;
 }

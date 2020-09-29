@@ -17,13 +17,49 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { listen } from 'reduxology';
+import { listen, dispatch } from 'reduxology';
 import { Actions } from '../types';
+import {
+  CreateRVLLightRequest,
+  CreateHueLightRequest,
+  Light,
+  LightType
+} from '../common/types';
+import { get, post, put, del } from '../util/api';
 
-listen(Actions.CreateRVLLight, async (name: string, channel: string) => {
-  console.log(`Creating new RVL light: name=${name} channel=${channel}`);
+listen(Actions.CreateRVLLight, async (name: string, channel: number) => {
+  const createBody: CreateRVLLightRequest = {
+    type: LightType.RVL,
+    name,
+    channel
+  };
+  await post('/api/lights', createBody);
+
+  const updatedLights = await get('/api/lights');
+  dispatch(Actions.LightsUpdated, updatedLights);
 });
 
 listen(Actions.CreateHueLight, async (name: string) => {
-  console.log(`Creating new Hue light: name=${name}`);
+  const createBody: CreateHueLightRequest = {
+    type: LightType.Hue,
+    name
+  };
+  await post('/api/lights', createBody);
+
+  const updatedLights = await get('/api/lights');
+  dispatch(Actions.LightsUpdated, updatedLights);
+});
+
+listen(Actions.EditLight, async (light: Light) => {
+  await put(`/api/light/${light.id}`, light);
+
+  const updatedLights = await get('/api/lights');
+  dispatch(Actions.LightsUpdated, updatedLights);
+});
+
+listen(Actions.DeleteLight, async (id: number) => {
+  await del(`/api/light/${id}`);
+
+  const updatedLights = await get('/api/lights');
+  dispatch(Actions.LightsUpdated, updatedLights);
 });

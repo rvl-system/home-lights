@@ -18,4 +18,5 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import './zones';
+import './lights';
 import './selectedTab';
