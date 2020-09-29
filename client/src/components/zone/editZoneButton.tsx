@@ -39,6 +39,14 @@ export const EditZoneButton: FunctionComponent<
 > = (props) => {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
 
+  function handleEditConfirm(name: string) {
+    handleEditClose();
+    props.editZone({
+      ...props.zone,
+      name
+    });
+  }
+
   function handleEditClose() {
     setEditDialogOpen(false);
   }
@@ -58,13 +66,7 @@ export const EditZoneButton: FunctionComponent<
       </Fade>
 
       <InputDialog
-        onConfirm={(name) => {
-          handleEditClose();
-          props.editZone({
-            ...props.zone,
-            name
-          });
-        }}
+        onConfirm={handleEditConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
         title="Edit Zone"

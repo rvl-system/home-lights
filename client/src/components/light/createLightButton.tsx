@@ -83,10 +83,11 @@ export function CreateLightButton(
         onChange={handleChange}
         open={openDialog}
         title="Create Zone"
-        description='Enter a descriptive name for the zone you wish to add. A zone in
-          Home Lights represents a physical area in your home, e.g.
-          "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
-          must not already be in use.'
+        description='Enter a descriptive name for the light you wish to add. A
+          light in Home Lights represents a physical light in your home, e.g.
+          "Left beside lamp," "Kitchen cabinet accent," etc. The light name
+          must not already be in use. Each type of light may contain extra
+          parameters. Please see the documentation for details.'
         confirmLabel="Create"
       >
         <SelectDialogInput

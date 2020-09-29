@@ -1,1 +1,1 @@
-export const NUM_RVL_CHANNELS = 15;
+export const NUM_RVL_CHANNELS = 8;

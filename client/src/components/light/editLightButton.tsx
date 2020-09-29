@@ -19,9 +19,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
-import { InputDialog } from '../lib/inputDialog';
+import { reduce } from 'conditional-reduce';
+import { Dialog, DialogValue } from '../lib/dialog';
+import { SelectDialogInput } from '../lib/selectDialogInput';
+import { TextDialogInput } from '../lib/textDialogInput';
 import { Edit } from '@material-ui/icons';
-import { Light } from '../../common/types';
+import { Light, RVLLight, LightType } from '../../common/types';
+import { NUM_RVL_CHANNELS } from '../../common/config';
 
 export interface EditLightButtonProps {
   light: Light;
@@ -36,6 +40,14 @@ export const EditLightButton: FunctionComponent<
   EditLightButtonProps & EditLightButtonDispatch
 > = (props) => {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+
+  function handleConfirm(values: DialogValue) {
+    handleEditClose();
+    props.editLight({
+      ...props.light,
+      ...values
+    });
+  }
 
   function handleEditClose() {
     setEditDialogOpen(false);
@@ -53,24 +65,46 @@ export const EditLightButton: FunctionComponent<
         <Edit />
       </Button>
 
-      <InputDialog
-        onConfirm={(name) => {
-          handleEditClose();
-          props.editLight({
-            ...props.light,
-            name
-          });
-        }}
+      <Dialog
+        onConfirm={handleConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
-        title="Edit Light"
-        description='Enter a descriptive name for the light you wish to change. A light in
-        Home Lights represents a physical area in your home, e.g.
-        "kitchen," "guest bedlight", "left side bed nightstand" etc. The light name
-        must not already be in use.'
-        inputPlaceholder="e.g. Kitchen"
-        defaultValue={props.light.name}
-      />
+        title="Create Zone"
+        description='Enter a descriptive name for the light you wish to change. A
+        light in Home Lights represents a physical light in your home, e.g.
+        "Left beside lamp," "Kitchen cabinet accent," etc. The light name
+        must not already be in use. Each type of light may contain extra
+        parameters. Please see the documentation for details.'
+      >
+        <TextDialogInput
+          name="name"
+          description="Friendly name of the light"
+          inputPlaceholder="name"
+          defaultValue={props.light.name}
+        />
+        {reduce(props.light.type, {
+          [LightType.RVL]: () => (
+            <SelectDialogInput
+              name="channel"
+              description="The RVL light channel"
+              selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
+                (_, i) => ({
+                  value: i.toString(),
+                  label: i.toString()
+                })
+              )}
+              defaultValue={(props.light as RVLLight).channel.toString()}
+            />
+          ),
+          [LightType.Hue]: () => (
+            <TextDialogInput
+              name="HUE"
+              description="HUE"
+              inputPlaceholder="HUE"
+            />
+          )
+        })}
+      </Dialog>
     </React.Fragment>
   );
 };
