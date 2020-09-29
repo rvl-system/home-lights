@@ -26,6 +26,7 @@ import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
 import { LightType } from '../../common/types';
+import { NUM_RVL_CHANNELS } from '../../common/config';
 
 const useStyles = makeStyles({
   container: {
@@ -103,12 +104,31 @@ export function CreateLightButton(
           ]}
           defaultValue={LightType.rvl}
         />
+        <TextDialogInput
+          name="name"
+          description="Friendly name of the light"
+          inputPlaceholder="name"
+        />
         {reduce(lightType, {
           [LightType.rvl]: () => (
-            <TextDialogInput name="RVL" inputPlaceholder="RVL" />
+            <SelectDialogInput
+              name="channel"
+              description="The RVL light channel"
+              selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
+                (_, i) => ({
+                  value: i.toString(),
+                  label: i.toString()
+                })
+              )}
+              defaultValue={'0'}
+            />
           ),
           [LightType.hue]: () => (
-            <TextDialogInput name="HUE" inputPlaceholder="HUE" />
+            <TextDialogInput
+              name="HUE"
+              description="HUE"
+              inputPlaceholder="HUE"
+            />
           )
         })}
       </Dialog>

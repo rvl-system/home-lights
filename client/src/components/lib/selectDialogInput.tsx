@@ -1,10 +1,9 @@
-import React, { FunctionComponent, Fragment } from 'react';
+import React, { FunctionComponent } from 'react';
 import { InputLabel, Select, MenuItem } from '@material-ui/core';
-import { DialogInputBaseProps } from './dialog';
+import { DialogInputBaseProps, useDefaultStyles } from './dialog';
 
 export interface SelectDialogInputProps extends DialogInputBaseProps {
   selectValues: Array<{ value: string; label: string }>;
-  description?: string;
 }
 
 export const SelectDialogInput: FunctionComponent<SelectDialogInputProps> = ({
@@ -17,16 +16,12 @@ export const SelectDialogInput: FunctionComponent<SelectDialogInputProps> = ({
   if (!onValueChange) {
     throw new Error('Internal Error, `onValueChange` is missing');
   }
+  const classes = useDefaultStyles();
   const [value, setValue] = React.useState(defaultValue);
   return (
-    <Fragment>
-      {description && (
-        <InputLabel id="demo-simple-select-helper-label">
-          {description}
-        </InputLabel>
-      )}
+    <div className={classes.container}>
+      {description && <InputLabel>{description}</InputLabel>}
       <Select
-        labelId="demo-simple-select-helper-label"
         value={value}
         onChange={(e) => {
           const newValue = e.target.value as string;
@@ -40,6 +35,6 @@ export const SelectDialogInput: FunctionComponent<SelectDialogInputProps> = ({
           </MenuItem>
         ))}
       </Select>
-    </Fragment>
+    </div>
   );
 };

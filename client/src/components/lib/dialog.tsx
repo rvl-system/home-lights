@@ -31,10 +31,19 @@ import {
   DialogActions,
   DialogContentText
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Color } from '../../types';
+
+export const useDefaultStyles = makeStyles({
+  container: {
+    'margin-top': '2em',
+    'margin-bottom': '2em'
+  }
+});
 
 export interface DialogInputBaseProps {
   name: string;
+  description?: string;
   defaultValue?: string;
   onValueChange?: (name: string, newValue: string) => void;
 }
@@ -69,6 +78,9 @@ export const Dialog: FunctionComponent<DialogProps> = ({
 }) => {
   children = Children.map(children, (child) => {
     const { name, defaultValue } = getDefaultValue(child as ReactElement);
+    if (!name) {
+      return;
+    }
     const newChildProps: DialogInputBaseProps = {
       onValueChange: (name, newValue) => {
         const newState = {
@@ -94,9 +106,12 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   function getDefaultValue(
     child: ReactElement
   ): { name: string; defaultValue: string } {
+    if (!child.props) {
+      return { name: '', defaultValue: '' };
+    }
     const name = child.props.name;
     if (typeof name !== 'string') {
-      throw new Error('The name field is required and must be a string');
+      return { name: '', defaultValue: '' };
     }
     const defaultValue: string = child.props.defaultValue || '';
     return { name, defaultValue };
@@ -108,6 +123,9 @@ export const Dialog: FunctionComponent<DialogProps> = ({
     const initialValue: DialogValue = {};
     Children.map(children, (child) => {
       const { name, defaultValue } = getDefaultValue(child as ReactElement);
+      if (!name) {
+        return;
+      }
       initialValue[name] = defaultValue;
     });
     return initialValue;
@@ -135,12 +153,8 @@ export const Dialog: FunctionComponent<DialogProps> = ({
 
   return (
     <React.Fragment>
-      <MaterialDialog
-        open={open}
-        onClose={onCancel}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+      <MaterialDialog open={open} onClose={onCancel}>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <DialogContentText>{description}</DialogContentText>
           {children}
