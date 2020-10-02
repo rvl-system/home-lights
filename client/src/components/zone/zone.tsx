@@ -24,7 +24,7 @@ import {
   AccordionDetails,
   Typography
 } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
+import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
 import { EditZoneButton, EditZoneButtonDispatch } from './editZoneButton';
@@ -46,7 +46,7 @@ export const Zone: FunctionComponent<ZoneProps & ZoneDispatch> = (props) => {
   return (
     <React.Fragment>
       <Accordion>
-        <AccordionSummary expandIcon={<ExpandMore />} id="panel1a-header">
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel1a-header">
           <div className={classes.itemHeading}>
             <DeleteZoneButton
               zone={props.zone}

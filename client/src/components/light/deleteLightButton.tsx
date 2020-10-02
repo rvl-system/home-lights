@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
 import { Dialog } from '../lib/dialog';
-import { Delete } from '@material-ui/icons';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import { Light } from '../../common/types';
 
 export interface DeleteLightButtonProps {
@@ -51,7 +51,7 @@ export const DeleteLightButton: FunctionComponent<
           setDeleteDialogOpen(true);
         }}
       >
-        <Delete />
+        <DeleteIcon />
       </Button>
 
       <Dialog
