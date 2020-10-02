@@ -71,6 +71,7 @@ export async function init(): Promise<void> {
     await dbRun(ZONE_SCHEMA);
     await dbRun(LIGHT_SCHEMA);
   }
+  console.log('Database initialized');
 }
 
 // ---- Zone Operations ----

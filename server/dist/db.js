@@ -55,6 +55,7 @@ async function init() {
         await sqlite_1.dbRun(ZONE_SCHEMA);
         await sqlite_1.dbRun(LIGHT_SCHEMA);
     }
+    console.log('Database initialized');
 }
 exports.init = init;
 // ---- Zone Operations ----

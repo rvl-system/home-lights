@@ -20,6 +20,8 @@
     "eslint": "^7.10.0",
     "fastify": "^3.2.0",
     "fastify-static": "^3.2.0",
+    "node-hue-api": "^4.0.9",
+    "rvl-node": "^6.0.1",
     "sqlite3": "^5.0.0"
   }
 }
