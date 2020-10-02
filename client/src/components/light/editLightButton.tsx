@@ -23,7 +23,7 @@ import { reduce } from 'conditional-reduce';
 import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
-import { Edit } from '@material-ui/icons';
+import { Edit as EditIcon } from '@material-ui/icons';
 import { Light, RVLLight, LightType } from '../../common/types';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 
@@ -62,7 +62,7 @@ export const EditLightButton: FunctionComponent<
           setEditDialogOpen(true);
         }}
       >
-        <Edit />
+        <EditIcon />
       </Button>
 
       <Dialog

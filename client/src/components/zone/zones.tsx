@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { Edit, Close } from '@material-ui/icons';
+import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons';
 import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
 import { CreateZoneButton } from './createZoneButton';
@@ -53,7 +53,7 @@ export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
           variant="outlined"
           onClick={() => setEditMode(EditMode.edit)}
         >
-          <Edit />
+          <EditIcon />
         </Button>
       </Fade>
       <Fade in={editMode === EditMode.edit} mountOnEnter unmountOnExit>
@@ -62,7 +62,7 @@ export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
           variant="outlined"
           onClick={() => setEditMode(EditMode.view)}
         >
-          <Close />
+          <CloseIcon />
         </Button>
       </Fade>
 

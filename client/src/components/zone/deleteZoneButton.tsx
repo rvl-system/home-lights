@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
 import { Dialog } from '../lib/dialog';
-import { Delete } from '@material-ui/icons';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
 
@@ -54,7 +54,7 @@ export const DeleteZoneButton: FunctionComponent<
             setDeleteDialogOpen(true);
           }}
         >
-          <Delete />
+          <DeleteIcon />
         </Button>
       </Fade>
 

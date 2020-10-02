@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
 import { InputDialog } from '../lib/inputDialog';
-import { Edit } from '@material-ui/icons';
+import { Edit as EditIcon } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
 
@@ -61,7 +61,7 @@ export const EditZoneButton: FunctionComponent<
             setEditDialogOpen(true);
           }}
         >
-          <Edit />
+          <EditIcon />
         </Button>
       </Fade>
 
