@@ -18,5 +18,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 export async function init(): Promise<void> {
+  // Devices are initialized on a per-channel basis, so we do nothing here
   console.log('RVL devices initialized');
 }
