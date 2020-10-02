@@ -24,6 +24,7 @@ const path_1 = require("path");
 const util_1 = require("./util");
 const sqlite_1 = require("./sqlite");
 const types_1 = require("./common/types");
+const config_1 = require("./common/config");
 const DB_FILE = path_1.join(util_1.getEnvironmentVariable('HOME'), '.homelights', 'db.sqlite3');
 const ZONE_SCHEMA = `
 CREATE TABLE "zones" (
@@ -82,6 +83,11 @@ async function createLight(lightRequest) {
     switch (lightRequest.type) {
         case types_1.LightType.RVL: {
             const rvlLightRequest = lightRequest;
+            if (!Number.isInteger(rvlLightRequest.channel) ||
+                rvlLightRequest.channel < 0 ||
+                rvlLightRequest.channel >= config_1.NUM_RVL_CHANNELS) {
+                throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
+            }
             await sqlite_1.dbRun(`INSERT INTO lights (name, type, channel) values (?, ?, ?)`, [
                 rvlLightRequest.name,
                 types_1.LightType.RVL,
@@ -89,10 +95,10 @@ async function createLight(lightRequest) {
             ]);
             break;
         }
-        case types_1.LightType.Hue: {
-            const hueLightRequest = lightRequest;
+        case types_1.LightType.PhilipsHue: {
+            const philipsHueLightRequest = lightRequest;
             await sqlite_1.dbRun(`INSERT INTO lights (name, type) values (?, ?)`, [
-                hueLightRequest.name,
+                philipsHueLightRequest.name,
                 types_1.LightType.RVL
             ]);
             break;
@@ -110,7 +116,7 @@ async function editLight(light) {
                 rvlLight.id
             ]);
             break;
-        case types_1.LightType.Hue:
+        case types_1.LightType.PhilipsHue:
             const hueLight = light;
             await sqlite_1.dbRun('UPDATE lights SET name = ?, WHERE id = ?', [
                 hueLight.name,

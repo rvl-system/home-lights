@@ -62,10 +62,8 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
         onCancel={handleClose}
         open={openDialog}
         title="Create Zone"
-        description='Enter a descriptive name for the zone you wish to add. A zone in
-          Home Lights represents a physical area in your home, e.g.
-          "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
-          must not already be in use.'
+        description='Enter a descriptive name for the zone you wish to add, e.g.
+          "kitchen," "guest bedzone", "left side bed nightstand" etc.'
         inputPlaceholder="e.g. Kitchen"
         confirmLabel="Create"
       />

@@ -23,6 +23,6 @@ exports.LightType = void 0;
 var LightType;
 (function (LightType) {
     LightType["RVL"] = "rvl";
-    LightType["Hue"] = "hue";
+    LightType["PhilipsHue"] = "philips-hue";
 })(LightType = exports.LightType || (exports.LightType = {}));
 //# sourceMappingURL=types.js.map

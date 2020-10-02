@@ -21,7 +21,7 @@ import { listen, dispatch } from 'reduxology';
 import { Actions } from '../types';
 import {
   CreateRVLLightRequest,
-  CreateHueLightRequest,
+  CreatePhilipsHueLightRequest,
   Light,
   LightType
 } from '../common/types';
@@ -40,8 +40,8 @@ listen(Actions.CreateRVLLight, async (name: string, channel: number) => {
 });
 
 listen(Actions.CreateHueLight, async (name: string) => {
-  const createBody: CreateHueLightRequest = {
-    type: LightType.Hue,
+  const createBody: CreatePhilipsHueLightRequest = {
+    type: LightType.PhilipsHue,
     name
   };
   await post('/api/lights', createBody);

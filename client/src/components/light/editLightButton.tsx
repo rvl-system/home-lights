@@ -70,11 +70,9 @@ export const EditLightButton: FunctionComponent<
         onCancel={handleEditClose}
         open={editDialogOpen}
         title="Create Zone"
-        description='Enter a descriptive name for the light you wish to change. A
-        light in Home Lights represents a physical light in your home, e.g.
-        "Left beside lamp," "Kitchen cabinet accent," etc. The light name
-        must not already be in use. Each type of light may contain extra
-        parameters. Please see the documentation for details.'
+        description='Edit a light. A light in Home Lights represents a
+        physical light in your home, e.g. "Left bedside lamp," "Kitchen
+        accent," etc.'
       >
         <TextDialogInput
           name="name"
@@ -96,13 +94,7 @@ export const EditLightButton: FunctionComponent<
               defaultValue={(props.light as RVLLight).channel.toString()}
             />
           ),
-          [LightType.Hue]: () => (
-            <TextDialogInput
-              name="HUE"
-              description="HUE"
-              inputPlaceholder="HUE"
-            />
-          )
+          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
         })}
       </Dialog>
     </React.Fragment>

@@ -30,8 +30,9 @@ import {
   RVLLight,
   CreateRVLLightRequest,
   HueLight,
-  CreateHueLightRequest
+  CreatePhilipsHueLightRequest
 } from './common/types';
+import { NUM_RVL_CHANNELS } from './common/config';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -104,6 +105,13 @@ export async function createLight(
   switch (lightRequest.type) {
     case LightType.RVL: {
       const rvlLightRequest: CreateRVLLightRequest = lightRequest as CreateRVLLightRequest;
+      if (
+        !Number.isInteger(rvlLightRequest.channel) ||
+        rvlLightRequest.channel < 0 ||
+        rvlLightRequest.channel >= NUM_RVL_CHANNELS
+      ) {
+        throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
+      }
       await dbRun(`INSERT INTO lights (name, type, channel) values (?, ?, ?)`, [
         rvlLightRequest.name,
         LightType.RVL,
@@ -111,10 +119,10 @@ export async function createLight(
       ]);
       break;
     }
-    case LightType.Hue: {
-      const hueLightRequest: CreateHueLightRequest = lightRequest as CreateHueLightRequest;
+    case LightType.PhilipsHue: {
+      const philipsHueLightRequest: CreatePhilipsHueLightRequest = lightRequest as CreatePhilipsHueLightRequest;
       await dbRun(`INSERT INTO lights (name, type) values (?, ?)`, [
-        hueLightRequest.name,
+        philipsHueLightRequest.name,
         LightType.RVL
       ]);
       break;
@@ -132,7 +140,7 @@ export async function editLight(light: Light): Promise<void> {
         rvlLight.id
       ]);
       break;
-    case LightType.Hue:
+    case LightType.PhilipsHue:
       const hueLight: HueLight = light as HueLight;
       await dbRun('UPDATE lights SET name = ?, WHERE id = ?', [
         hueLight.name,

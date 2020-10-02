@@ -46,11 +46,7 @@ export const Zone: FunctionComponent<ZoneProps & ZoneDispatch> = (props) => {
   return (
     <React.Fragment>
       <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMore />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
+        <AccordionSummary expandIcon={<ExpandMore />} id="panel1a-header">
           <div className={classes.itemHeading}>
             <DeleteZoneButton
               zone={props.zone}

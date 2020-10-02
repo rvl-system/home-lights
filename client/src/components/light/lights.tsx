@@ -51,7 +51,7 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
       </div>
       <div className={classes.content}>
         <div className={classes.innerContent}>
-          <List component="nav" aria-label="main mailbox folders">
+          <List component="nav">
             {props.lights.map((light) => (
               <ListItem key={light.id}>
                 <Light

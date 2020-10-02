@@ -56,7 +56,7 @@ export function CreateLightButton(
       case LightType.RVL:
         props.createRVLLight(values.name, parseInt(values.channel));
         break;
-      case LightType.Hue:
+      case LightType.PhilipsHue:
         props.createHueLight(values.name);
         break;
     }
@@ -82,12 +82,10 @@ export function CreateLightButton(
         onCancel={handleClose}
         onChange={handleChange}
         open={openDialog}
-        title="Create Zone"
-        description='Enter a descriptive name for the light you wish to add. A
-          light in Home Lights represents a physical light in your home, e.g.
-          "Left beside lamp," "Kitchen cabinet accent," etc. The light name
-          must not already be in use. Each type of light may contain extra
-          parameters. Please see the documentation for details.'
+        title="Create light"
+        description='Create a light. A light in Home Lights represents a
+          physical light in your home, e.g. "Left bedside lamp," "Kitchen
+          accent," etc.'
         confirmLabel="Create"
       >
         <SelectDialogInput
@@ -99,8 +97,8 @@ export function CreateLightButton(
               label: 'RVL'
             },
             {
-              value: LightType.Hue,
-              label: 'Phillips Hue'
+              value: LightType.PhilipsHue,
+              label: 'Philips Hue'
             }
           ]}
           defaultValue={LightType.RVL}
@@ -124,13 +122,7 @@ export function CreateLightButton(
               defaultValue={'0'}
             />
           ),
-          [LightType.Hue]: () => (
-            <TextDialogInput
-              name="HUE"
-              description="HUE"
-              inputPlaceholder="HUE"
-            />
-          )
+          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
         })}
       </Dialog>
     </div>

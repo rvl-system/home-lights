@@ -32,7 +32,7 @@ export interface CreateZoneRequest {
 
 export enum LightType {
   RVL = 'rvl',
-  Hue = 'hue'
+  PhilipsHue = 'philips-hue'
 }
 
 export interface Light {
@@ -47,7 +47,7 @@ export interface RVLLight extends Light {
 }
 
 export interface HueLight extends Light {
-  type: LightType.Hue;
+  type: LightType.PhilipsHue;
 }
 
 export interface CreateLightRequest {
@@ -60,6 +60,6 @@ export interface CreateRVLLightRequest extends CreateLightRequest {
   channel: number;
 }
 
-export interface CreateHueLightRequest extends CreateLightRequest {
-  type: LightType.Hue;
+export interface CreatePhilipsHueLightRequest extends CreateLightRequest {
+  type: LightType.PhilipsHue;
 }
