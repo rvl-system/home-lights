@@ -17,7 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { SetLightStateRequest } from '../common/types';
+
 export async function init(): Promise<void> {
   // Devices are initialized on a per-channel basis, so we do nothing here
   console.log('RVL devices initialized');
+}
+
+export async function setLightState(
+  lightState: SetLightStateRequest
+): Promise<void> {
+  console.log(lightState);
 }

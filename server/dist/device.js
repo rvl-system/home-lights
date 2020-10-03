@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
+exports.setLightState = exports.init = void 0;
 const phillipsHue_1 = require("./device/phillipsHue");
 const rvl_1 = require("./device/rvl");
 async function init() {
@@ -26,4 +26,9 @@ async function init() {
     await phillipsHue_1.init();
 }
 exports.init = init;
+async function setLightState(lightState) {
+    phillipsHue_1.setLightState(lightState);
+    rvl_1.setLightState(lightState);
+}
+exports.setLightState = setLightState;
 //# sourceMappingURL=device.js.map

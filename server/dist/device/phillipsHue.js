@@ -18,26 +18,33 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
+exports.setLightState = exports.init = void 0;
 const node_hue_api_1 = require("node-hue-api");
 const config_1 = require("../common/config");
 let authenticatedApi;
 async function init() {
     const bridgeIP = await discoverBridge();
-    if (bridgeIP) {
-        const username = await discoverOrCreateUser(bridgeIP);
-        authenticatedApi = await node_hue_api_1.v3.api.createLocal(bridgeIP).connect(username);
-        console.log(authenticatedApi);
-        console.log('Phillips Hue devices initialized');
+    if (!bridgeIP) {
+        return;
     }
-    else {
-        console.log('No Philips Hue bridges found, calls to set state on Philips Hue lights will be ignored');
-    }
+    const username = await discoverOrCreateUser(bridgeIP);
+    authenticatedApi = await node_hue_api_1.v3.api.createLocal(bridgeIP).connect(username);
+    console.log(authenticatedApi);
+    console.log('Phillips Hue devices initialized');
 }
 exports.init = init;
+async function setLightState(lightState) {
+    console.log(lightState);
+}
+exports.setLightState = setLightState;
 async function discoverBridge() {
     const bridges = await node_hue_api_1.v3.discovery.nupnpSearch();
     if (bridges.length === 0) {
+        console.log('No Philips Hue bridges found, calls to set state on Philips Hue lights will be ignored');
+        return null;
+    }
+    else if (bridges.length > 1) {
+        console.log('More than one Philips Hue bridge found. Multiple bridges are not supported by Home Lights');
         return null;
     }
     else {

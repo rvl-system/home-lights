@@ -18,9 +18,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
+exports.setLightState = exports.init = void 0;
 async function init() {
+    // Devices are initialized on a per-channel basis, so we do nothing here
     console.log('RVL devices initialized');
 }
 exports.init = init;
+async function setLightState(lightState) {
+    console.log(lightState);
+}
+exports.setLightState = setLightState;
 //# sourceMappingURL=rvl.js.map

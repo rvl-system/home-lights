@@ -63,3 +63,21 @@ export interface CreateRVLLightRequest extends CreateLightRequest {
 export interface CreatePhilipsHueLightRequest extends CreateLightRequest {
   type: LightType.PhilipsHue;
 }
+
+// ---- Scene Types ----
+
+export interface Scene {
+  id: number;
+  // TODO
+}
+
+// ---- Light State ----
+
+export interface RoomLightState {
+  power: boolean;
+  scene: Scene;
+}
+
+export interface SetLightStateRequest {
+  rooms: RoomLightState[];
+}

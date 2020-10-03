@@ -22,6 +22,7 @@ import {
   PHILIPS_HUE_APP_NAME,
   PHILIPS_HUE_DEVICE_NAME
 } from '../common/config';
+import { SetLightStateRequest } from '../common/types';
 
 let authenticatedApi;
 
@@ -34,6 +35,12 @@ export async function init(): Promise<void> {
   authenticatedApi = await v3.api.createLocal(bridgeIP).connect(username);
   console.log(authenticatedApi);
   console.log('Phillips Hue devices initialized');
+}
+
+export async function setLightState(
+  lightState: SetLightStateRequest
+): Promise<void> {
+  console.log(lightState);
 }
 
 async function discoverBridge(): Promise<string | null> {

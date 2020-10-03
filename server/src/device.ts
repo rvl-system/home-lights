@@ -17,10 +17,24 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { init as initPhilipsHue } from './device/phillipsHue';
-import { init as initRVL } from './device/rvl';
+import {
+  init as initPhilipsHue,
+  setLightState as setRVLLightState
+} from './device/phillipsHue';
+import {
+  init as initRVL,
+  setLightState as setPhilipsHueLightState
+} from './device/rvl';
+import { SetLightStateRequest } from './common/types';
 
 export async function init(): Promise<void> {
   await initRVL();
   await initPhilipsHue();
+}
+
+export async function setLightState(
+  lightState: SetLightStateRequest
+): Promise<void> {
+  setRVLLightState(lightState);
+  setPhilipsHueLightState(lightState);
 }
