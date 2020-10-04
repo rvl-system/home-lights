@@ -51,7 +51,9 @@ CREATE TABLE "lights" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL,
-  channel INTEGER
+  channel INTEGER UNIQUE,
+  zone_id INTEGER,
+  FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
 
 const PHILIPS_HUE_INFO_SCHEMA = `

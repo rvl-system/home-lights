@@ -28,11 +28,11 @@ async function init() {
     if (!bridgeIP) {
         return;
     }
+    console.log('Connecting to Philips Hue bridge...');
     const username = await getOrCreateUser(bridgeIP);
     authenticatedApi = await node_hue_api_1.v3.api.createLocal(bridgeIP).connect(username);
-    const lights = await authenticatedApi.lights.getAll();
-    console.log(lights);
-    console.log('Phillips Hue devices initialized');
+    await updateLights();
+    console.log('Phillips Hue bridge initialized');
 }
 exports.init = init;
 async function setLightState(lightState) {
@@ -59,6 +59,7 @@ async function getOrCreateUser(bridgeIP) {
     if (philipsHueInfo) {
         return philipsHueInfo.username;
     }
+    console.log('Initializing Philips Hue for use with Home Lights for the first time...');
     // Create an unauthenticated instance of the Hue API so that we can create a new user
     const unauthenticatedApi = await node_hue_api_1.v3.api.createLocal(bridgeIP).connect();
     // Create the user and store it to the database for future user
@@ -79,5 +80,11 @@ async function getOrCreateUser(bridgeIP) {
             throw e;
         }
     }
+}
+async function updateLights() {
+    const lights = await authenticatedApi.lights.getAll();
+    // Get lights from database
+    // Reconcile list of lights from DB and from Bridge
+    console.log(lights);
 }
 //# sourceMappingURL=phillipsHue.js.map

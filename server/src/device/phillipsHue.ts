@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { v3 } from 'node-hue-api';
+import Api = require('node-hue-api/lib/api/Api');
 import {
   PHILIPS_HUE_APP_NAME,
   PHILIPS_HUE_DEVICE_NAME
@@ -25,18 +26,18 @@ import {
 import { SetLightStateRequest } from '../common/types';
 import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db';
 
-let authenticatedApi;
+let authenticatedApi: Api;
 
 export async function init(): Promise<void> {
   const bridgeIP = await discoverBridge();
   if (!bridgeIP) {
     return;
   }
+  console.log('Connecting to Philips Hue bridge...');
   const username = await getOrCreateUser(bridgeIP);
   authenticatedApi = await v3.api.createLocal(bridgeIP).connect(username);
-  const lights = await authenticatedApi.lights.getAll();
-  console.log(lights);
-  console.log('Phillips Hue devices initialized');
+  await updateLights();
+  console.log('Phillips Hue bridge initialized');
 }
 
 export async function setLightState(
@@ -69,6 +70,9 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
   if (philipsHueInfo) {
     return philipsHueInfo.username;
   }
+  console.log(
+    'Initializing Philips Hue for use with Home Lights for the first time...'
+  );
 
   // Create an unauthenticated instance of the Hue API so that we can create a new user
   const unauthenticatedApi = await v3.api.createLocal(bridgeIP).connect();
@@ -94,4 +98,11 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
       throw e;
     }
   }
+}
+
+async function updateLights(): Promise<void> {
+  const lights = await authenticatedApi.lights.getAll();
+  // Get lights from database
+  // Reconcile list of lights from DB and from Bridge
+  console.log(lights);
 }
