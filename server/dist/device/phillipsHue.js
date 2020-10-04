@@ -21,15 +21,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLightState = exports.init = void 0;
 const node_hue_api_1 = require("node-hue-api");
 const config_1 = require("../common/config");
+const db_1 = require("../db");
 let authenticatedApi;
 async function init() {
     const bridgeIP = await discoverBridge();
     if (!bridgeIP) {
         return;
     }
-    const username = await discoverOrCreateUser(bridgeIP);
+    const username = await getOrCreateUser(bridgeIP);
     authenticatedApi = await node_hue_api_1.v3.api.createLocal(bridgeIP).connect(username);
-    console.log(authenticatedApi);
+    const lights = await authenticatedApi.lights.getAll();
+    console.log(lights);
     console.log('Phillips Hue devices initialized');
 }
 exports.init = init;
@@ -51,28 +53,31 @@ async function discoverBridge() {
         return bridges[0].ipaddress;
     }
 }
-async function discoverOrCreateUser(bridgeIP) {
+async function getOrCreateUser(bridgeIP) {
+    // Check if we've already created a user, and if so return it
+    const philipsHueInfo = await db_1.getPhilipsHueInfo();
+    if (philipsHueInfo) {
+        return philipsHueInfo.username;
+    }
     // Create an unauthenticated instance of the Hue API so that we can create a new user
     const unauthenticatedApi = await node_hue_api_1.v3.api.createLocal(bridgeIP).connect();
-    // Check if the user has been created already, and if so return it
-    const users = await unauthenticatedApi.users.getUserByName(config_1.PHILIPS_HUE_APP_NAME, config_1.PHILIPS_HUE_DEVICE_NAME);
-    if (users.length) {
-        return users[0].username;
-    }
-    // Otherwise we need to create the user
-    console.log(`Philips Hue user "${config_1.PHILIPS_HUE_DEVICE_NAME}" not found, creating...`);
-    let createdUser;
+    // Create the user and store it to the database for future user
     try {
-        createdUser = await unauthenticatedApi.users.createUser(config_1.PHILIPS_HUE_APP_NAME, config_1.PHILIPS_HUE_DEVICE_NAME);
+        const createdUser = await unauthenticatedApi.users.createUser(config_1.PHILIPS_HUE_APP_NAME, config_1.PHILIPS_HUE_DEVICE_NAME);
+        console.log(createdUser);
+        db_1.setPhilipsHueInfo({
+            username: createdUser.username,
+            key: createdUser.clientkey
+        });
+        return createdUser.username;
     }
     catch (e) {
         if (e.getHueErrorType() === 101) {
-            console.error('The Link button on the bridge was not pressed. Please press the Link button and try again.');
+            throw new Error('The Link button on the bridge was not pressed. Please press the Link button and try again.');
         }
         else {
             throw e;
         }
     }
-    return createdUser.username;
 }
 //# sourceMappingURL=phillipsHue.js.map

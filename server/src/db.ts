@@ -54,6 +54,12 @@ CREATE TABLE "lights" (
   channel INTEGER
 )`;
 
+const PHILIPS_HUE_INFO_SCHEMA = `
+CREATE TABLE "philips_hue_info" (
+  username TEXT NOT NULL UNIQUE,
+  key TEXT NOT NULL
+)`;
+
 export async function init(): Promise<void> {
   const isNewDB = !existsSync(DB_FILE);
   if (isNewDB) {
@@ -70,6 +76,7 @@ export async function init(): Promise<void> {
     console.log(`Initializing new database`);
     await dbRun(ZONE_SCHEMA);
     await dbRun(LIGHT_SCHEMA);
+    await dbRun(PHILIPS_HUE_INFO_SCHEMA);
   }
   console.log('Database initialized');
 }
@@ -153,4 +160,32 @@ export async function editLight(light: Light): Promise<void> {
 
 export async function deleteLight(id: number): Promise<void> {
   await dbRun('DELETE FROM lights WHERE id = ?', [id]);
+}
+
+// ---- Philips Hue Operations ----
+
+export interface PhilipsHueInfo {
+  username: string;
+  key: string;
+}
+
+export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | null> {
+  const rows = await dbAll(`SELECT * FROM "philips_hue_info"`);
+  switch (rows.length) {
+    case 0:
+      return null;
+    case 1:
+      return rows[0] as PhilipsHueInfo;
+    default:
+      throw new Error(
+        `Internal Error: philips_hue_info unexpectedly has more than one row`
+      );
+  }
+}
+
+export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
+  await dbRun(`INSERT INTO philips_hue_info (username, key) VALUES(?, ?)`, [
+    info.username,
+    info.key
+  ]);
 }

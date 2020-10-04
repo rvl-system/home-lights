@@ -23,6 +23,7 @@ import {
   PHILIPS_HUE_DEVICE_NAME
 } from '../common/config';
 import { SetLightStateRequest } from '../common/types';
+import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db';
 
 let authenticatedApi;
 
@@ -31,9 +32,10 @@ export async function init(): Promise<void> {
   if (!bridgeIP) {
     return;
   }
-  const username = await discoverOrCreateUser(bridgeIP);
+  const username = await getOrCreateUser(bridgeIP);
   authenticatedApi = await v3.api.createLocal(bridgeIP).connect(username);
-  console.log(authenticatedApi);
+  const lights = await authenticatedApi.lights.getAll();
+  console.log(lights);
   console.log('Phillips Hue devices initialized');
 }
 
@@ -61,37 +63,35 @@ async function discoverBridge(): Promise<string | null> {
   }
 }
 
-async function discoverOrCreateUser(bridgeIP: string): Promise<string> {
+async function getOrCreateUser(bridgeIP: string): Promise<string> {
+  // Check if we've already created a user, and if so return it
+  const philipsHueInfo = await getPhilipsHueInfo();
+  if (philipsHueInfo) {
+    return philipsHueInfo.username;
+  }
+
   // Create an unauthenticated instance of the Hue API so that we can create a new user
   const unauthenticatedApi = await v3.api.createLocal(bridgeIP).connect();
 
-  // Check if the user has been created already, and if so return it
-  const users = await unauthenticatedApi.users.getUserByName(
-    PHILIPS_HUE_APP_NAME,
-    PHILIPS_HUE_DEVICE_NAME
-  );
-  if (users.length) {
-    return users[0].username;
-  }
-
-  // Otherwise we need to create the user
-  console.log(
-    `Philips Hue user "${PHILIPS_HUE_DEVICE_NAME}" not found, creating...`
-  );
-  let createdUser;
+  // Create the user and store it to the database for future user
   try {
-    createdUser = await unauthenticatedApi.users.createUser(
+    const createdUser = await unauthenticatedApi.users.createUser(
       PHILIPS_HUE_APP_NAME,
       PHILIPS_HUE_DEVICE_NAME
     );
+    console.log(createdUser);
+    setPhilipsHueInfo({
+      username: createdUser.username,
+      key: createdUser.clientkey
+    });
+    return createdUser.username;
   } catch (e) {
     if (e.getHueErrorType() === 101) {
-      console.error(
+      throw new Error(
         'The Link button on the bridge was not pressed. Please press the Link button and try again.'
       );
     } else {
       throw e;
     }
   }
-  return createdUser.username;
 }

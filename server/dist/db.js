@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLight = exports.editLight = exports.createLight = exports.getLights = exports.deleteZone = exports.editZone = exports.createZone = exports.getZones = exports.init = void 0;
+exports.setPhilipsHueInfo = exports.getPhilipsHueInfo = exports.deleteLight = exports.editLight = exports.createLight = exports.getLights = exports.deleteZone = exports.editZone = exports.createZone = exports.getZones = exports.init = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const util_1 = require("./util");
@@ -38,6 +38,11 @@ CREATE TABLE "lights" (
   type TEXT NOT NULL,
   channel INTEGER
 )`;
+const PHILIPS_HUE_INFO_SCHEMA = `
+CREATE TABLE "philips_hue_info" (
+  username TEXT NOT NULL UNIQUE,
+  key TEXT NOT NULL
+)`;
 async function init() {
     const isNewDB = !fs_1.existsSync(DB_FILE);
     if (isNewDB) {
@@ -54,6 +59,7 @@ async function init() {
         console.log(`Initializing new database`);
         await sqlite_1.dbRun(ZONE_SCHEMA);
         await sqlite_1.dbRun(LIGHT_SCHEMA);
+        await sqlite_1.dbRun(PHILIPS_HUE_INFO_SCHEMA);
     }
     console.log('Database initialized');
 }
@@ -131,4 +137,23 @@ async function deleteLight(id) {
     await sqlite_1.dbRun('DELETE FROM lights WHERE id = ?', [id]);
 }
 exports.deleteLight = deleteLight;
+async function getPhilipsHueInfo() {
+    const rows = await sqlite_1.dbAll(`SELECT * FROM "philips_hue_info"`);
+    switch (rows.length) {
+        case 0:
+            return null;
+        case 1:
+            return rows[0];
+        default:
+            throw new Error(`Internal Error: philips_hue_info unexpectedly has more than one row`);
+    }
+}
+exports.getPhilipsHueInfo = getPhilipsHueInfo;
+async function setPhilipsHueInfo(info) {
+    await sqlite_1.dbRun(`INSERT INTO philips_hue_info (username, key) VALUES(?, ?)`, [
+        info.username,
+        info.key
+    ]);
+}
+exports.setPhilipsHueInfo = setPhilipsHueInfo;
 //# sourceMappingURL=db.js.map
