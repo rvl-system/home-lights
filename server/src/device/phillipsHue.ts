@@ -24,7 +24,7 @@ import {
   PHILIPS_HUE_DEVICE_NAME
 } from '../common/config';
 import { SetLightStateRequest } from '../common/types';
-import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db';
+import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 
 let authenticatedApi: Api;
 

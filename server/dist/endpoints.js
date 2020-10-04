@@ -26,7 +26,8 @@ const path_1 = require("path");
 const fastify_1 = __importDefault(require("fastify"));
 const fastify_static_1 = __importDefault(require("fastify-static"));
 const util_1 = require("./util");
-const db_1 = require("./db");
+const zones_1 = require("./endpoints/zones");
+const lights_1 = require("./endpoints/lights");
 function init() {
     return new Promise((resolve) => {
         const port = parseInt(util_1.getEnvironmentVariable('PORT', '3000'));
@@ -34,44 +35,8 @@ function init() {
         app.register(fastify_static_1.default, {
             root: path_1.join(__dirname, '..', '..', 'public')
         });
-        // ---- Zones Endpoints ----
-        app.get('/api/zones', async () => {
-            return await db_1.getZones();
-        });
-        app.post('/api/zones', async (req) => {
-            const zoneRequest = req.body;
-            await db_1.createZone(zoneRequest);
-            return {};
-        });
-        app.put('/api/zone/:id', async (req) => {
-            const zone = req.body;
-            await db_1.editZone(zone);
-            return {};
-        });
-        app.delete('/api/zone/:id', async (req) => {
-            const { id } = req.params;
-            await db_1.deleteZone(parseInt(id));
-            return {};
-        });
-        // ---- Lights Endpoints ----
-        app.get('/api/lights', async () => {
-            return await db_1.getLights();
-        });
-        app.post('/api/lights', async (req) => {
-            const zoneRequest = req.body;
-            await db_1.createLight(zoneRequest);
-            return {};
-        });
-        app.put('/api/light/:id', async (req) => {
-            const zone = req.body;
-            await db_1.editLight(zone);
-            return {};
-        });
-        app.delete('/api/light/:id', async (req) => {
-            const { id } = req.params;
-            await db_1.deleteLight(parseInt(id));
-            return {};
-        });
+        zones_1.init(app);
+        lights_1.init(app);
         app.listen(port, (err, address) => {
             if (err) {
                 app.log.error(err);

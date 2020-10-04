@@ -21,7 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLightState = exports.init = void 0;
 const node_hue_api_1 = require("node-hue-api");
 const config_1 = require("../common/config");
-const db_1 = require("../db");
+const philipsHue_1 = require("../db/philipsHue");
 let authenticatedApi;
 async function init() {
     const bridgeIP = await discoverBridge();
@@ -55,7 +55,7 @@ async function discoverBridge() {
 }
 async function getOrCreateUser(bridgeIP) {
     // Check if we've already created a user, and if so return it
-    const philipsHueInfo = await db_1.getPhilipsHueInfo();
+    const philipsHueInfo = await philipsHue_1.getPhilipsHueInfo();
     if (philipsHueInfo) {
         return philipsHueInfo.username;
     }
@@ -66,7 +66,7 @@ async function getOrCreateUser(bridgeIP) {
     try {
         const createdUser = await unauthenticatedApi.users.createUser(config_1.PHILIPS_HUE_APP_NAME, config_1.PHILIPS_HUE_DEVICE_NAME);
         console.log(createdUser);
-        db_1.setPhilipsHueInfo({
+        philipsHue_1.setPhilipsHueInfo({
             username: createdUser.username,
             key: createdUser.clientkey
         });

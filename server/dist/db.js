@@ -18,13 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setPhilipsHueInfo = exports.getPhilipsHueInfo = exports.deleteLight = exports.editLight = exports.createLight = exports.getLights = exports.deleteZone = exports.editZone = exports.createZone = exports.getZones = exports.init = void 0;
+exports.init = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const util_1 = require("./util");
 const sqlite_1 = require("./sqlite");
-const types_1 = require("./common/types");
-const config_1 = require("./common/config");
 const DB_FILE = path_1.join(util_1.getEnvironmentVariable('HOME'), '.homelights', 'db.sqlite3');
 const ZONE_SCHEMA = `
 CREATE TABLE "zones" (
@@ -66,96 +64,4 @@ async function init() {
     console.log('Database initialized');
 }
 exports.init = init;
-// ---- Zone Operations ----
-async function getZones() {
-    return sqlite_1.dbAll(`SELECT * FROM zones`);
-}
-exports.getZones = getZones;
-async function createZone(zoneRequest) {
-    await sqlite_1.dbRun(`INSERT INTO zones (name) values (?)`, [zoneRequest.name]);
-}
-exports.createZone = createZone;
-async function editZone(zone) {
-    await sqlite_1.dbRun('UPDATE zones SET name = ? WHERE id = ?', [zone.name, zone.id]);
-}
-exports.editZone = editZone;
-async function deleteZone(id) {
-    await sqlite_1.dbRun('DELETE FROM zones WHERE id = ?', [id]);
-}
-exports.deleteZone = deleteZone;
-// ---- Light Operations ----
-async function getLights() {
-    return sqlite_1.dbAll(`SELECT * FROM lights`);
-}
-exports.getLights = getLights;
-async function createLight(lightRequest) {
-    switch (lightRequest.type) {
-        case types_1.LightType.RVL: {
-            const rvlLightRequest = lightRequest;
-            if (!Number.isInteger(rvlLightRequest.channel) ||
-                rvlLightRequest.channel < 0 ||
-                rvlLightRequest.channel >= config_1.NUM_RVL_CHANNELS) {
-                throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
-            }
-            await sqlite_1.dbRun(`INSERT INTO lights (name, type, channel) values (?, ?, ?)`, [
-                rvlLightRequest.name,
-                types_1.LightType.RVL,
-                rvlLightRequest.channel
-            ]);
-            break;
-        }
-        case types_1.LightType.PhilipsHue: {
-            const philipsHueLightRequest = lightRequest;
-            await sqlite_1.dbRun(`INSERT INTO lights (name, type) values (?, ?)`, [
-                philipsHueLightRequest.name,
-                types_1.LightType.RVL
-            ]);
-            break;
-        }
-    }
-}
-exports.createLight = createLight;
-async function editLight(light) {
-    switch (light.type) {
-        case types_1.LightType.RVL:
-            const rvlLight = light;
-            await sqlite_1.dbRun('UPDATE lights SET name = ?, channel = ? WHERE id = ?', [
-                rvlLight.name,
-                rvlLight.channel,
-                rvlLight.id
-            ]);
-            break;
-        case types_1.LightType.PhilipsHue:
-            const hueLight = light;
-            await sqlite_1.dbRun('UPDATE lights SET name = ?, WHERE id = ?', [
-                hueLight.name,
-                hueLight.id
-            ]);
-            break;
-    }
-}
-exports.editLight = editLight;
-async function deleteLight(id) {
-    await sqlite_1.dbRun('DELETE FROM lights WHERE id = ?', [id]);
-}
-exports.deleteLight = deleteLight;
-async function getPhilipsHueInfo() {
-    const rows = await sqlite_1.dbAll(`SELECT * FROM "philips_hue_info"`);
-    switch (rows.length) {
-        case 0:
-            return null;
-        case 1:
-            return rows[0];
-        default:
-            throw new Error(`Internal Error: philips_hue_info unexpectedly has more than one row`);
-    }
-}
-exports.getPhilipsHueInfo = getPhilipsHueInfo;
-async function setPhilipsHueInfo(info) {
-    await sqlite_1.dbRun(`INSERT INTO philips_hue_info (username, key) VALUES(?, ?)`, [
-        info.username,
-        info.key
-    ]);
-}
-exports.setPhilipsHueInfo = setPhilipsHueInfo;
 //# sourceMappingURL=db.js.map

@@ -21,22 +21,8 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { getEnvironmentVariable } from './util';
-import {
-  getZones,
-  createZone,
-  editZone,
-  deleteZone,
-  getLights,
-  createLight,
-  editLight,
-  deleteLight
-} from './db';
-import {
-  CreateZoneRequest,
-  Zone,
-  CreateLightRequest,
-  Light
-} from './common/types';
+import { init as initZones } from './endpoints/zones';
+import { init as initLights } from './endpoints/lights';
 
 export function init(): Promise<void> {
   return new Promise((resolve) => {
@@ -47,53 +33,8 @@ export function init(): Promise<void> {
       root: join(__dirname, '..', '..', 'public')
     });
 
-    // ---- Zones Endpoints ----
-
-    app.get('/api/zones', async () => {
-      return await getZones();
-    });
-
-    app.post('/api/zones', async (req) => {
-      const zoneRequest = req.body as CreateZoneRequest;
-      await createZone(zoneRequest);
-      return {};
-    });
-
-    app.put('/api/zone/:id', async (req) => {
-      const zone = req.body as Zone;
-      await editZone(zone);
-      return {};
-    });
-
-    app.delete('/api/zone/:id', async (req) => {
-      const { id } = req.params as { id: string };
-      await deleteZone(parseInt(id));
-      return {};
-    });
-
-    // ---- Lights Endpoints ----
-
-    app.get('/api/lights', async () => {
-      return await getLights();
-    });
-
-    app.post('/api/lights', async (req) => {
-      const zoneRequest = req.body as CreateLightRequest;
-      await createLight(zoneRequest);
-      return {};
-    });
-
-    app.put('/api/light/:id', async (req) => {
-      const zone = req.body as Light;
-      await editLight(zone);
-      return {};
-    });
-
-    app.delete('/api/light/:id', async (req) => {
-      const { id } = req.params as { id: string };
-      await deleteLight(parseInt(id));
-      return {};
-    });
+    initZones(app);
+    initLights(app);
 
     app.listen(port, (err, address) => {
       if (err) {
