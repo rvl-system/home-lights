@@ -7,6 +7,7 @@
     "prebuild": "eslint -c ../.eslintrc.js src/",
     "build": "tsc",
     "start": "node ./bin/server.js",
+    "reset-db": "node ./bin/resetdb.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",

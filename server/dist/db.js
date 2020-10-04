@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
+exports.init = exports.reset = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const util_1 = require("./util");
@@ -35,6 +35,7 @@ CREATE TABLE "lights" (
   name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL,
   channel INTEGER UNIQUE,
+  philips_hue_id TEXT,
   zone_id INTEGER,
   FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
@@ -43,6 +44,22 @@ CREATE TABLE "philips_hue_info" (
   username TEXT NOT NULL UNIQUE,
   key TEXT NOT NULL
 )`;
+async function reset() {
+    console.log('Resetting database...');
+    await init();
+    await sqlite_1.dbAll(`DROP TABLE zones`);
+    await sqlite_1.dbAll(`DROP TABLE lights`);
+    await sqlite_1.dbAll(`DROP TABLE philips_hue_info`);
+    await create();
+    console.log('done');
+}
+exports.reset = reset;
+async function create() {
+    console.log(`Creating database tables...`);
+    await sqlite_1.dbRun(ZONE_SCHEMA);
+    await sqlite_1.dbRun(LIGHT_SCHEMA);
+    await sqlite_1.dbRun(PHILIPS_HUE_INFO_SCHEMA);
+}
 async function init() {
     const isNewDB = !fs_1.existsSync(DB_FILE);
     if (isNewDB) {
@@ -56,10 +73,7 @@ async function init() {
     }
     await sqlite_1.init(DB_FILE);
     if (isNewDB) {
-        console.log(`Initializing new database`);
-        await sqlite_1.dbRun(ZONE_SCHEMA);
-        await sqlite_1.dbRun(LIGHT_SCHEMA);
-        await sqlite_1.dbRun(PHILIPS_HUE_INFO_SCHEMA);
+        await create();
     }
     console.log('Database initialized');
 }

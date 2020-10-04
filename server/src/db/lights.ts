@@ -24,7 +24,7 @@ import {
   CreateLightRequest,
   RVLLight,
   CreateRVLLightRequest,
-  HueLight,
+  PhilipsHueLight,
   CreatePhilipsHueLightRequest
 } from '../common/types';
 import { NUM_RVL_CHANNELS } from '../common/config';
@@ -55,10 +55,14 @@ export async function createLight(
     }
     case LightType.PhilipsHue: {
       const philipsHueLightRequest: CreatePhilipsHueLightRequest = lightRequest as CreatePhilipsHueLightRequest;
-      await dbRun(`INSERT INTO lights (name, type) values (?, ?)`, [
-        philipsHueLightRequest.name,
-        LightType.RVL
-      ]);
+      await dbRun(
+        `INSERT INTO lights (name, type, philips_hue_id) values (?, ?, ?)`,
+        [
+          philipsHueLightRequest.name,
+          LightType.PhilipsHue,
+          philipsHueLightRequest.philipsHueID
+        ]
+      );
       break;
     }
   }
@@ -75,7 +79,7 @@ export async function editLight(light: Light): Promise<void> {
       ]);
       break;
     case LightType.PhilipsHue:
-      const hueLight: HueLight = light as HueLight;
+      const hueLight: PhilipsHueLight = light as PhilipsHueLight;
       await dbRun('UPDATE lights SET name = ?, WHERE id = ?', [
         hueLight.name,
         hueLight.id

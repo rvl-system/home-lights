@@ -44,9 +44,10 @@ async function createLight(lightRequest) {
         }
         case types_1.LightType.PhilipsHue: {
             const philipsHueLightRequest = lightRequest;
-            await sqlite_1.dbRun(`INSERT INTO lights (name, type) values (?, ?)`, [
+            await sqlite_1.dbRun(`INSERT INTO lights (name, type, philips_hue_id) values (?, ?, ?)`, [
                 philipsHueLightRequest.name,
-                types_1.LightType.RVL
+                types_1.LightType.PhilipsHue,
+                philipsHueLightRequest.philipsHueID
             ]);
             break;
         }

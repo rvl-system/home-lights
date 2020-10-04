@@ -46,8 +46,9 @@ export interface RVLLight extends Light {
   channel: number;
 }
 
-export interface HueLight extends Light {
+export interface PhilipsHueLight extends Light {
   type: LightType.PhilipsHue;
+  philipsHueID: string;
 }
 
 export interface CreateLightRequest {
@@ -62,6 +63,7 @@ export interface CreateRVLLightRequest extends CreateLightRequest {
 
 export interface CreatePhilipsHueLightRequest extends CreateLightRequest {
   type: LightType.PhilipsHue;
+  philipsHueID: string;
 }
 
 // ---- Scene Types ----

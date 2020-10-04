@@ -21,7 +21,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLightState = exports.init = void 0;
 const node_hue_api_1 = require("node-hue-api");
 const config_1 = require("../common/config");
+const types_1 = require("../common/types");
 const philipsHue_1 = require("../db/philipsHue");
+const lights_1 = require("../db/lights");
 let authenticatedApi;
 async function init() {
     const bridgeIP = await discoverBridge();
@@ -82,9 +84,30 @@ async function getOrCreateUser(bridgeIP) {
     }
 }
 async function updateLights() {
-    const lights = await authenticatedApi.lights.getAll();
-    // Get lights from database
-    // Reconcile list of lights from DB and from Bridge
-    console.log(lights);
+    const bridgeLights = await authenticatedApi.lights.getAll();
+    const dbLights = await lights_1.getLights();
+    // Add lights from the bridge that are not in the DB
+    for (const bridgeLight of bridgeLights) {
+        if (!dbLights.find((dbLight) => dbLight.type === types_1.LightType.PhilipsHue &&
+            dbLight.philipsHueID === bridgeLight.id)) {
+            console.log(`Found Philips Hue light "${bridgeLight.name}" not in database, adding...`);
+            const newLight = {
+                philipsHueID: bridgeLight.uniqueid,
+                type: types_1.LightType.PhilipsHue,
+                name: bridgeLight.name
+            };
+            await lights_1.createLight(newLight);
+        }
+    }
+    // Delete lights from DB that are no longer on the bridge
+    for (const dbLight of dbLights) {
+        if (dbLight.type !== types_1.LightType.PhilipsHue) {
+            continue;
+        }
+        if (!bridgeLights.find((bridgeLights) => bridgeLights.uniqueid === dbLight.philipsHueID)) {
+            console.log(`Philips Hue light "${dbLight.name}" is no longer registered with the bridge, deleting...`);
+            await lights_1.deleteLight(dbLight.id);
+        }
+    }
 }
 //# sourceMappingURL=phillipsHue.js.map

@@ -36,6 +36,8 @@ function init(app) {
     });
     app.delete('/api/light/:id', async (req) => {
         const { id } = req.params;
+        // TODO: make sure this isn't a Philips Hue light, since they're synced with
+        // the bridge and will reappear on server restart
         await lights_1.deleteLight(parseInt(id));
         return {};
     });

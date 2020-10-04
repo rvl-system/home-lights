@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { getEnvironmentVariable } from './util';
-import { init as initDB, dbRun } from './sqlite';
+import { init as initDB, dbRun, dbAll } from './sqlite';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -40,6 +40,7 @@ CREATE TABLE "lights" (
   name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL,
   channel INTEGER UNIQUE,
+  philips_hue_id TEXT,
   zone_id INTEGER,
   FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
@@ -49,6 +50,23 @@ CREATE TABLE "philips_hue_info" (
   username TEXT NOT NULL UNIQUE,
   key TEXT NOT NULL
 )`;
+
+export async function reset(): Promise<void> {
+  console.log('Resetting database...');
+  await init();
+  await dbAll(`DROP TABLE zones`);
+  await dbAll(`DROP TABLE lights`);
+  await dbAll(`DROP TABLE philips_hue_info`);
+  await create();
+  console.log('done');
+}
+
+async function create(): Promise<void> {
+  console.log(`Creating database tables...`);
+  await dbRun(ZONE_SCHEMA);
+  await dbRun(LIGHT_SCHEMA);
+  await dbRun(PHILIPS_HUE_INFO_SCHEMA);
+}
 
 export async function init(): Promise<void> {
   const isNewDB = !existsSync(DB_FILE);
@@ -63,10 +81,7 @@ export async function init(): Promise<void> {
   await initDB(DB_FILE);
 
   if (isNewDB) {
-    console.log(`Initializing new database`);
-    await dbRun(ZONE_SCHEMA);
-    await dbRun(LIGHT_SCHEMA);
-    await dbRun(PHILIPS_HUE_INFO_SCHEMA);
+    await create();
   }
   console.log('Database initialized');
 }
