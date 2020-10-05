@@ -38,7 +38,6 @@ const useStyles = makeStyles({
 
 export interface CreateLightButtonDispatch {
   createRVLLight: (name: string, channel: number) => void;
-  createHueLight: (name: string) => void;
 }
 
 export function CreateLightButton(
@@ -55,9 +54,6 @@ export function CreateLightButton(
     switch (values.type) {
       case LightType.RVL:
         props.createRVLLight(values.name, parseInt(values.channel));
-        break;
-      case LightType.PhilipsHue:
-        props.createHueLight(values.name);
         break;
     }
     handleClose();
@@ -95,10 +91,6 @@ export function CreateLightButton(
             {
               value: LightType.RVL,
               label: 'RVL'
-            },
-            {
-              value: LightType.PhilipsHue,
-              label: 'Philips Hue'
             }
           ]}
           defaultValue={LightType.RVL}
@@ -121,8 +113,7 @@ export function CreateLightButton(
               )}
               defaultValue={'0'}
             />
-          ),
-          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
+          )
         })}
       </Dialog>
     </div>

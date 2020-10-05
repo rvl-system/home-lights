@@ -19,12 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { listen, dispatch } from 'reduxology';
 import { Actions } from '../types';
-import {
-  CreateRVLLightRequest,
-  CreatePhilipsHueLightRequest,
-  Light,
-  LightType
-} from '../common/types';
+import { CreateRVLLightRequest, Light, LightType } from '../common/types';
 import { get, post, put, del } from '../util/api';
 
 listen(Actions.CreateRVLLight, async (name: string, channel: number) => {
@@ -32,17 +27,6 @@ listen(Actions.CreateRVLLight, async (name: string, channel: number) => {
     type: LightType.RVL,
     name,
     channel
-  };
-  await post('/api/lights', createBody);
-
-  const updatedLights = await get('/api/lights');
-  dispatch(Actions.LightsUpdated, updatedLights);
-});
-
-listen(Actions.CreateHueLight, async (name: string) => {
-  const createBody: CreatePhilipsHueLightRequest = {
-    type: LightType.PhilipsHue,
-    name
   };
   await post('/api/lights', createBody);
 

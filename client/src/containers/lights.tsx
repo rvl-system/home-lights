@@ -34,9 +34,6 @@ export const LightsContainer = createContainer(
     createRVLLight(name: string, channel: number) {
       dispatch(Actions.CreateRVLLight, name, channel);
     },
-    createHueLight(name: string) {
-      dispatch(Actions.CreateHueLight, name);
-    },
     editLight(light: Light) {
       dispatch(Actions.EditLight, light);
     },

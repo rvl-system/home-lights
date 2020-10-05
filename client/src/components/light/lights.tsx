@@ -44,10 +44,7 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
   return (
     <div className={classes.container}>
       <div className={classes.altHeader}>
-        <CreateLightButton
-          createRVLLight={props.createRVLLight}
-          createHueLight={props.createHueLight}
-        />
+        <CreateLightButton createRVLLight={props.createRVLLight} />
       </div>
       <div className={classes.content}>
         <div className={classes.innerContent}>
