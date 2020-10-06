@@ -116,7 +116,7 @@ async function updateLights(): Promise<void> {
       !dbLights.find(
         (dbLight) =>
           dbLight.type === LightType.PhilipsHue &&
-          (dbLight as PhilipsHueLight).philipsHueID === bridgeLight.id
+          (dbLight as PhilipsHueLight).philipsHueID === bridgeLight.uniqueid
       )
     ) {
       console.log(

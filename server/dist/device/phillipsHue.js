@@ -89,7 +89,7 @@ async function updateLights() {
     // Add lights from the bridge that are not in the DB
     for (const bridgeLight of bridgeLights) {
         if (!dbLights.find((dbLight) => dbLight.type === types_1.LightType.PhilipsHue &&
-            dbLight.philipsHueID === bridgeLight.id)) {
+            dbLight.philipsHueID === bridgeLight.uniqueid)) {
             console.log(`Found Philips Hue light "${bridgeLight.name}" not in database, adding...`);
             const newLight = {
                 philipsHueID: bridgeLight.uniqueid,
