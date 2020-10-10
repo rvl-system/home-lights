@@ -69,11 +69,7 @@ export const EditZoneButton: FunctionComponent<
         onConfirm={handleEditConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
-        title="Edit Zone"
-        description='Enter a descriptive name for the zone you wish to change. A zone in
-        Home Lights represents a physical area in your home, e.g.
-        "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
-        must not already be in use.'
+        title={`Edit ${props.zone.name}`}
         inputPlaceholder="e.g. Kitchen"
         defaultValue={props.zone.name}
       />

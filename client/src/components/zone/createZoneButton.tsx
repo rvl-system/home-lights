@@ -61,11 +61,10 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
         }}
         onCancel={handleClose}
         open={openDialog}
-        title="Create Zone"
-        description='Enter a descriptive name for the zone you wish to add, e.g.
-          "kitchen," "guest bedzone", "left side bed nightstand" etc.'
+        title="Create zone"
+        description="Enter a descriptive name for the room or area you wish to add"
         inputPlaceholder="e.g. Kitchen"
-        confirmLabel="Create"
+        confirmLabel="Create zone"
       />
     </div>
   );

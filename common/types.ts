@@ -46,7 +46,7 @@ export interface RVLLight extends Light {
   channel: number;
 }
 
-export interface HueLight extends Light {
+export interface PhilipsHueLight extends Light {
   type: LightType.PhilipsHue;
 }
 

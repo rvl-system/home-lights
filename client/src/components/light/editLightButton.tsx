@@ -69,10 +69,7 @@ export const EditLightButton: FunctionComponent<
         onConfirm={handleConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
-        title="Create Zone"
-        description='Edit a light. A light in Home Lights represents a
-        physical light in your home, e.g. "Left bedside lamp," "Kitchen
-        accent," etc.'
+        title={`Edit "${props.light.name}"`}
       >
         <TextDialogInput
           name="name"

@@ -27,7 +27,7 @@ export interface InputDialogProps {
   onCancel: () => void;
   open: boolean;
   title: string;
-  description: string;
+  description?: string;
   defaultValue?: string;
   inputPlaceholder?: string;
   confirmLabel?: string;

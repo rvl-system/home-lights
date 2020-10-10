@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 
 export interface CreateLightButtonDispatch {
   createRVLLight: (name: string, channel: number) => void;
-  createHueLight: (name: string) => void;
+  createPhilipsHueLight: (name: string) => void;
 }
 
 export function CreateLightButton(
@@ -57,7 +57,7 @@ export function CreateLightButton(
         props.createRVLLight(values.name, parseInt(values.channel));
         break;
       case LightType.PhilipsHue:
-        props.createHueLight(values.name);
+        props.createPhilipsHueLight(values.name);
         break;
     }
     handleClose();
@@ -86,7 +86,7 @@ export function CreateLightButton(
         description='Create a light. A light in Home Lights represents a
           physical light in your home, e.g. "Left bedside lamp," "Kitchen
           accent," etc.'
-        confirmLabel="Create"
+        confirmLabel="Create light"
       >
         <SelectDialogInput
           name="type"
