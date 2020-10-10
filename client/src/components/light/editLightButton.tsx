@@ -75,7 +75,7 @@ export const EditLightButton: FunctionComponent<
         <TextDialogInput
           name="name"
           description="Name"
-          inputPlaceholder="e.g. Left bedside tamp"
+          inputPlaceholder="e.g. Left bedside lamp"
           defaultValue={props.light.name}
         />
         {reduce(props.light.type, {

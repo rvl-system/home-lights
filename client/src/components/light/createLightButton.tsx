@@ -87,7 +87,7 @@ export function CreateLightButton(
       >
         <SelectDialogInput
           name="type"
-          description="Type of light to connect to"
+          description="Type of light"
           selectValues={[
             {
               value: LightType.RVL,
@@ -103,7 +103,7 @@ export function CreateLightButton(
         <TextDialogInput
           name="name"
           description="Descriptive name for the light"
-          inputPlaceholder="e.g. Left bedside tamp"
+          inputPlaceholder="e.g. Left bedside lamp"
         />
         {reduce(lightType, {
           [LightType.RVL]: () => (
