@@ -70,6 +70,7 @@ export const EditLightButton: FunctionComponent<
         onCancel={handleEditClose}
         open={editDialogOpen}
         title={`Edit "${props.light.name}"`}
+        confirmLabel="Save light"
       >
         <TextDialogInput
           name="name"

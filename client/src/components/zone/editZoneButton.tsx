@@ -71,6 +71,7 @@ export const EditZoneButton: FunctionComponent<
         onCancel={handleEditClose}
         open={editDialogOpen}
         title={`Edit ${props.zone.name}`}
+        confirmLabel="Save zone"
       >
         <TextDialogInput
           name="name"
