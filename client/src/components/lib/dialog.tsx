@@ -56,7 +56,7 @@ export interface DialogProps {
   onChange?: (newValue: DialogValue) => void;
   open: boolean;
   title: string;
-  description: string;
+  description?: string;
   confirmLabel?: string;
   confirmColor?: Color;
   cancelLabel?: string;

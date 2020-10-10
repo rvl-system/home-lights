@@ -46,7 +46,7 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
       <div className={classes.altHeader}>
         <CreateLightButton
           createRVLLight={props.createRVLLight}
-          createHueLight={props.createHueLight}
+          createPhilipsHueLight={props.createPhilipsHueLight}
         />
       </div>
       <div className={classes.content}>
