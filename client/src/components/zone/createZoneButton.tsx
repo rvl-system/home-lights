@@ -19,9 +19,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputDialog } from '../lib/inputDialog';
+import { Dialog } from '../lib/dialog';
+import { TextDialogInput } from '../lib/textDialogInput';
 
 const useStyles = makeStyles({
   container: {
@@ -52,23 +53,24 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
         color="primary"
         onClick={() => setOpenDialog(true)}
       >
-        <Add />
+        <AddIcon />
       </Button>
-      <InputDialog
-        onConfirm={(name) => {
+      <Dialog
+        onConfirm={(options) => {
           handleClose();
-          props.createZone(name);
+          props.createZone(options.name);
         }}
         onCancel={handleClose}
         open={openDialog}
-        title="Create Zone"
-        description='Enter a descriptive name for the zone you wish to add. A zone in
-          Home Lights represents a physical area in your home, e.g.
-          "kitchen," "guest bedzone", "left side bed nightstand" etc. The zone name
-          must not already be in use.'
-        inputPlaceholder="e.g. Kitchen"
-        confirmLabel="Create"
-      />
+        title="Create zone"
+        confirmLabel="Create zone"
+      >
+        <TextDialogInput
+          name="name"
+          description="Descriptive name for the room or area"
+          inputPlaceholder="e.g. Kitchen"
+        />
+      </Dialog>
     </div>
   );
 };

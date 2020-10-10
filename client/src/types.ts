@@ -19,15 +19,23 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 export enum StatePaths {
   Zones = 'Zones',
+  Lights = 'Lights',
   SelectedTab = 'SelectedTab'
 }
 
 export enum Actions {
   SelectTab = 'SelectTab',
+
   ZonesUpdated = 'ZonesUpdated',
   CreateZone = 'CreateZone',
   DeleteZone = 'DeleteZone',
-  EditZone = 'EditZone'
+  EditZone = 'EditZone',
+
+  LightsUpdated = 'LightsUpdated',
+  CreateRVLLight = 'CreateRVLLight',
+  CreateHueLight = 'CreateHueLight',
+  EditLight = 'EditLight',
+  DeleteLight = 'DeleteLight'
 }
 export enum SelectedTab {
   Zones = 'Zones',

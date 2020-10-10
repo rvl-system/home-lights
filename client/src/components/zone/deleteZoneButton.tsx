@@ -19,8 +19,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { ConfirmDialog } from '../lib/confirmDialog';
-import { Delete } from '@material-ui/icons';
+import { Dialog } from '../lib/dialog';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
 
@@ -54,20 +54,20 @@ export const DeleteZoneButton: FunctionComponent<
             setDeleteDialogOpen(true);
           }}
         >
-          <Delete />
+          <DeleteIcon />
         </Button>
       </Fade>
 
-      <ConfirmDialog
+      <Dialog
         onConfirm={() => {
           handleDeleteClose();
           props.deleteZone(props.zone.id);
         }}
         onCancel={handleDeleteClose}
         open={deleteDialogOpen}
-        title="Delete Zone"
-        description={`Are you sure you want to delete zone ${props.zone.name}?`}
-        confirmLabel="Delete Zone"
+        title={`Delete "${props.zone.name}"?`}
+        description="This operation cannot be undone"
+        confirmLabel="Delete zone"
         confirmColor="secondary"
       />
     </React.Fragment>

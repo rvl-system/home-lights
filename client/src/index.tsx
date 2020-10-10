@@ -29,7 +29,7 @@ import './listeners/listeners';
 async function run() {
   render(createRoot(AppContainer), document.getElementById('app'));
 
-  const zones = await get('/api/zones');
-  dispatch(Actions.ZonesUpdated, zones);
+  get('/api/zones').then((zones) => dispatch(Actions.ZonesUpdated, zones));
+  get('/api/lights').then((lights) => dispatch(Actions.LightsUpdated, lights));
 }
 run();

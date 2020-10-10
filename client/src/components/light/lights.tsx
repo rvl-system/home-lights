@@ -18,8 +18,52 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import { Typography } from '@material-ui/core';
+import { List, ListItem } from '@material-ui/core';
+import {
+  CreateLightButton,
+  CreateLightButtonDispatch
+} from './createLightButton';
+import { EditLightButtonDispatch } from './editLightButton';
+import { DeleteLightButtonDispatch } from './deleteLightButton';
+import { useContainerStyles } from '../lib/pageStyles';
+import { Light as LightType } from '../../common/types';
+import { Light } from './light';
 
-export const Lights: FunctionComponent<null> = () => {
-  return <Typography>Lights</Typography>;
+export interface LightsProps {
+  lights: LightType[];
+}
+
+export type LightsDispatch = CreateLightButtonDispatch &
+  EditLightButtonDispatch &
+  DeleteLightButtonDispatch;
+
+export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
+  props
+) => {
+  const classes = useContainerStyles();
+  return (
+    <div className={classes.container}>
+      <div className={classes.altHeader}>
+        <CreateLightButton
+          createRVLLight={props.createRVLLight}
+          createPhilipsHueLight={props.createPhilipsHueLight}
+        />
+      </div>
+      <div className={classes.content}>
+        <div className={classes.innerContent}>
+          <List component="nav">
+            {props.lights.map((light) => (
+              <ListItem key={light.id}>
+                <Light
+                  light={light}
+                  editLight={props.editLight}
+                  deleteLight={props.deleteLight}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      </div>
+    </div>
+  );
 };

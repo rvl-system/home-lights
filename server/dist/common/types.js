@@ -18,4 +18,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LightType = void 0;
+// ---- Light Types ----
+var LightType;
+(function (LightType) {
+    LightType["RVL"] = "rvl";
+    LightType["PhilipsHue"] = "philips-hue";
+})(LightType = exports.LightType || (exports.LightType = {}));
 //# sourceMappingURL=types.js.map

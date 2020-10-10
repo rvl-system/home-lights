@@ -19,12 +19,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { Edit, Close } from '@material-ui/icons';
+import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons';
 import { Zone as ZoneType } from '../../common/types';
 import { EditMode } from '../../types';
 import { CreateZoneButton } from './createZoneButton';
 import { Zone } from './zone';
-import { useStyles } from '../lib/pageStyles';
+import { useContainerStyles } from '../lib/pageStyles';
 
 export interface ZonesProps {
   zones: ZoneType[];
@@ -39,7 +39,7 @@ export interface ZonesDispatch {
 
 export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
   const [editMode, setEditMode] = React.useState(EditMode.view);
-  const classes = useStyles();
+  const classes = useContainerStyles();
   return (
     <div className={classes.container}>
       <Fade in={editMode === EditMode.edit}>
@@ -53,7 +53,7 @@ export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
           variant="outlined"
           onClick={() => setEditMode(EditMode.edit)}
         >
-          <Edit />
+          <EditIcon />
         </Button>
       </Fade>
       <Fade in={editMode === EditMode.edit} mountOnEnter unmountOnExit>
@@ -62,7 +62,7 @@ export const Zones: FunctionComponent<ZonesProps & ZonesDispatch> = (props) => {
           variant="outlined"
           onClick={() => setEditMode(EditMode.view)}
         >
-          <Close />
+          <CloseIcon />
         </Button>
       </Fade>
 

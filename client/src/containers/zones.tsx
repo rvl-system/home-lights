@@ -23,11 +23,9 @@ import { StatePaths, Actions } from '../types';
 import { Zone } from '../common/types';
 
 export const ZonesContainer = createContainer(
-  (getState): ZonesProps => {
-    return {
-      zones: getState(StatePaths.Zones)
-    };
-  },
+  (getState): ZonesProps => ({
+    zones: getState(StatePaths.Zones)
+  }),
   (dispatch): ZonesDispatch => ({
     createZone(name: string) {
       dispatch(Actions.CreateZone, name);
