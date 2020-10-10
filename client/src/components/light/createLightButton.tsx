@@ -83,14 +83,11 @@ export function CreateLightButton(
         onChange={handleChange}
         open={openDialog}
         title="Create light"
-        description='Create a light. A light in Home Lights represents a
-          physical light in your home, e.g. "Left bedside lamp," "Kitchen
-          accent," etc.'
         confirmLabel="Create light"
       >
         <SelectDialogInput
           name="type"
-          description="The type of light to connect to"
+          description="Type of light to connect to"
           selectValues={[
             {
               value: LightType.RVL,
@@ -105,14 +102,14 @@ export function CreateLightButton(
         />
         <TextDialogInput
           name="name"
-          description="Friendly name of the light"
-          inputPlaceholder="name"
+          description="Descriptive name for the light"
+          inputPlaceholder="e.g. Left bedside tamp"
         />
         {reduce(lightType, {
           [LightType.RVL]: () => (
             <SelectDialogInput
               name="channel"
-              description="The RVL light channel"
+              description="Channel"
               selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
                 (_, i) => ({
                   value: i.toString(),

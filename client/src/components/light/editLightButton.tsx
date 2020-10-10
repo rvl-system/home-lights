@@ -73,15 +73,15 @@ export const EditLightButton: FunctionComponent<
       >
         <TextDialogInput
           name="name"
-          description="Friendly name of the light"
-          inputPlaceholder="name"
+          description="Name"
+          inputPlaceholder="e.g. Left bedside tamp"
           defaultValue={props.light.name}
         />
         {reduce(props.light.type, {
           [LightType.RVL]: () => (
             <SelectDialogInput
               name="channel"
-              description="The RVL light channel"
+              description="Channel"
               selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
                 (_, i) => ({
                   value: i.toString(),

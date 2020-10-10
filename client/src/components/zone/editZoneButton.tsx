@@ -19,7 +19,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { InputDialog } from '../lib/inputDialog';
+import { Dialog } from '../lib/dialog';
+import { TextDialogInput } from '../lib/textDialogInput';
 import { Edit as EditIcon } from '@material-ui/icons';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
@@ -39,11 +40,11 @@ export const EditZoneButton: FunctionComponent<
 > = (props) => {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
 
-  function handleEditConfirm(name: string) {
+  function handleEditConfirm(options: Record<string, string>) {
     handleEditClose();
     props.editZone({
       ...props.zone,
-      name
+      name: options.name
     });
   }
 
@@ -65,14 +66,19 @@ export const EditZoneButton: FunctionComponent<
         </Button>
       </Fade>
 
-      <InputDialog
+      <Dialog
         onConfirm={handleEditConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
         title={`Edit ${props.zone.name}`}
-        inputPlaceholder="e.g. Kitchen"
-        defaultValue={props.zone.name}
-      />
+      >
+        <TextDialogInput
+          name="name"
+          description="Name"
+          inputPlaceholder="e.g. Kitchen"
+          defaultValue={props.zone.name}
+        />
+      </Dialog>
     </React.Fragment>
   );
 };
