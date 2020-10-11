@@ -53,7 +53,15 @@ export async function setLightState(
 }
 
 async function discoverBridge(): Promise<string | null> {
-  const bridges = await v3.discovery.nupnpSearch();
+  let bridges: any;
+  try {
+    bridges = await v3.discovery.nupnpSearch();
+  } catch {
+    console.log(
+      'Failed to search for Philips Hue bridges, calls to set state on Philips Hue lights will be ignored'
+    );
+    return null;
+  }
 
   if (bridges.length === 0) {
     console.log(
