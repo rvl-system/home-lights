@@ -24,7 +24,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
-import { LightType } from '../../common/types';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 
 const useStyles = makeStyles({
@@ -49,11 +48,7 @@ export function CreateLightButton(
   }
 
   function handleConfirm(values: DialogValue) {
-    switch (values.type) {
-      case LightType.RVL:
-        props.createRVLLight(values.name, parseInt(values.channel));
-        break;
-    }
+    props.createRVLLight(values.name, parseInt(values.channel));
     handleClose();
   }
 
