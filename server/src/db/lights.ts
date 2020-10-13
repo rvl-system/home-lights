@@ -29,6 +29,17 @@ import {
 } from '../common/types';
 import { NUM_RVL_CHANNELS } from '../common/config';
 
+export const LIGHT_SCHEMA = `
+CREATE TABLE "lights" (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  type TEXT NOT NULL,
+  channel INTEGER UNIQUE,
+  philips_hue_id TEXT,
+  zone_id INTEGER,
+  FOREIGN KEY (zone_id) REFERENCES zones(id)
+)`;
+
 export async function getLights(): Promise<Light[]> {
   return dbAll(`SELECT * FROM lights`) as Promise<Light[]>;
 }

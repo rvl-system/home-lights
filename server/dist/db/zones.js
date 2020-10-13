@@ -18,8 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteZone = exports.editZone = exports.createZone = exports.getZones = void 0;
+exports.deleteZone = exports.editZone = exports.createZone = exports.getZones = exports.ZONE_SCHEMA = void 0;
 const sqlite_1 = require("../sqlite");
+exports.ZONE_SCHEMA = `
+CREATE TABLE "zones" (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE
+)`;
 async function getZones() {
     return sqlite_1.dbAll(`SELECT * FROM zones`);
 }

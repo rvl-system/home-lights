@@ -1,4 +1,4 @@
-d; /*
+/*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
 This file is part of Home Lights.

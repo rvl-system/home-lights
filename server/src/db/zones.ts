@@ -20,6 +20,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { dbRun, dbAll } from '../sqlite';
 import { Zone, CreateZoneRequest } from '../common/types';
 
+export const ZONE_SCHEMA = `
+CREATE TABLE "zones" (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE
+)`;
+
 export async function getZones(): Promise<Zone[]> {
   return dbAll(`SELECT * FROM zones`) as Promise<Zone[]>;
 }

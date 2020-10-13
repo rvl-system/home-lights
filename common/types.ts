@@ -100,4 +100,5 @@ export interface CreateRVLLightRequest extends CreateLightRequest {
 
 export interface CreatePhilipsHueLightRequest extends CreateLightRequest {
   type: LightType.PhilipsHue;
+  philipsHueID: string;
 }

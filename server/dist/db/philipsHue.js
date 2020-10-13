@@ -18,8 +18,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setPhilipsHueInfo = exports.getPhilipsHueInfo = void 0;
+exports.setPhilipsHueInfo = exports.getPhilipsHueInfo = exports.PHILIPS_HUE_INFO_SCHEMA = void 0;
 const sqlite_1 = require("../sqlite");
+exports.PHILIPS_HUE_INFO_SCHEMA = `
+CREATE TABLE "philips_hue_info" (
+  username TEXT NOT NULL UNIQUE,
+  key TEXT NOT NULL
+)`;
 async function getPhilipsHueInfo() {
     const rows = await sqlite_1.dbAll(`SELECT * FROM "philips_hue_info"`);
     switch (rows.length) {

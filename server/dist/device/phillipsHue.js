@@ -47,7 +47,7 @@ async function discoverBridge() {
         bridges = await node_hue_api_1.v3.discovery.nupnpSearch();
     }
     catch {
-        console.log('Unable to search for Philips Hue bridges');
+        console.log('Failed to search for Philips Hue bridges, calls to set state on Philips Hue lights will be ignored');
         return null;
     }
     if (bridges.length === 0) {

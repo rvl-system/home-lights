@@ -18,10 +18,20 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLight = exports.editLight = exports.createLight = exports.getLights = void 0;
+exports.deleteLight = exports.editLight = exports.createLight = exports.getLights = exports.LIGHT_SCHEMA = void 0;
 const sqlite_1 = require("../sqlite");
 const types_1 = require("../common/types");
 const config_1 = require("../common/config");
+exports.LIGHT_SCHEMA = `
+CREATE TABLE "lights" (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  type TEXT NOT NULL,
+  channel INTEGER UNIQUE,
+  philips_hue_id TEXT,
+  zone_id INTEGER,
+  FOREIGN KEY (zone_id) REFERENCES zones(id)
+)`;
 async function getLights() {
     return sqlite_1.dbAll(`SELECT * FROM lights`);
 }
