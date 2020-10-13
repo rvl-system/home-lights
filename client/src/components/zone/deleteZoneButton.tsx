@@ -65,9 +65,9 @@ export const DeleteZoneButton: FunctionComponent<
         }}
         onCancel={handleDeleteClose}
         open={deleteDialogOpen}
-        title="Delete Zone"
-        description={`Are you sure you want to delete zone ${props.zone.name}?`}
-        confirmLabel="Delete Zone"
+        title={`Delete "${props.zone.name}"?`}
+        description="This operation cannot be undone"
+        confirmLabel="Delete zone"
         confirmColor="secondary"
       />
     </React.Fragment>

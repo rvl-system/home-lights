@@ -61,9 +61,9 @@ export const DeleteLightButton: FunctionComponent<
         }}
         onCancel={handleDeleteClose}
         open={deleteDialogOpen}
-        title="Delete Light"
-        description={`Are you sure you want to delete light ${props.light.name}?`}
-        confirmLabel="Delete Light"
+        title={`Delete "${props.light.name}"?`}
+        description="This operation cannot be undone"
+        confirmLabel="Delete light"
         confirmColor="secondary"
       />
     </React.Fragment>

@@ -61,11 +61,6 @@ export interface CreateRVLLightRequest extends CreateLightRequest {
   channel: number;
 }
 
-export interface CreatePhilipsHueLightRequest extends CreateLightRequest {
-  type: LightType.PhilipsHue;
-  philipsHueID: string;
-}
-
 // ---- Scene Types ----
 
 export interface Scene {
@@ -82,4 +77,27 @@ export interface RoomLightState {
 
 export interface SetLightStateRequest {
   rooms: RoomLightState[];
+}
+
+export interface RVLLight extends Light {
+  type: LightType.RVL;
+  channel: number;
+}
+
+export interface PhilipsHueLight extends Light {
+  type: LightType.PhilipsHue;
+}
+
+export interface CreateLightRequest {
+  name: string;
+  type: LightType;
+}
+
+export interface CreateRVLLightRequest extends CreateLightRequest {
+  type: LightType.RVL;
+  channel: number;
+}
+
+export interface CreatePhilipsHueLightRequest extends CreateLightRequest {
+  type: LightType.PhilipsHue;
 }

@@ -56,7 +56,7 @@ export interface DialogProps {
   onChange?: (newValue: DialogValue) => void;
   open: boolean;
   title: string;
-  description: string;
+  description?: string;
   confirmLabel?: string;
   confirmColor?: Color;
   cancelLabel?: string;
@@ -156,14 +156,18 @@ export const Dialog: FunctionComponent<DialogProps> = ({
       <MaterialDialog open={open} onClose={onCancel}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{description}</DialogContentText>
+          {description && <DialogContentText>{description}</DialogContentText>}
           {children}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleOnCancel} color={cancelColor}>
             {cancelLabel}
           </Button>
-          <Button onClick={handleOnConfirm} color={confirmColor}>
+          <Button
+            onClick={handleOnConfirm}
+            color={confirmColor}
+            variant="contained"
+          >
             {confirmLabel}
           </Button>
         </DialogActions>

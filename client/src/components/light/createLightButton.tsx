@@ -1,4 +1,4 @@
-/*
+d; /*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
 This file is part of Home Lights.
@@ -79,32 +79,33 @@ export function CreateLightButton(
         onChange={handleChange}
         open={openDialog}
         title="Create light"
-        description='Create a light. A light in Home Lights represents a
-          physical light in your home, e.g. "Left bedside lamp," "Kitchen
-          accent," etc.'
-        confirmLabel="Create"
+        confirmLabel="Create light"
       >
         <SelectDialogInput
           name="type"
-          description="The type of light to connect to"
+          description="Type of light"
           selectValues={[
             {
               value: LightType.RVL,
               label: 'RVL'
+            },
+            {
+              value: LightType.PhilipsHue,
+              label: 'Philips Hue'
             }
           ]}
           defaultValue={LightType.RVL}
         />
         <TextDialogInput
           name="name"
-          description="Friendly name of the light"
-          inputPlaceholder="name"
+          description="Descriptive name for the light"
+          inputPlaceholder="e.g. Left bedside lamp"
         />
         {reduce(lightType, {
           [LightType.RVL]: () => (
             <SelectDialogInput
               name="channel"
-              description="The RVL light channel"
+              description="Channel"
               selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
                 (_, i) => ({
                   value: i.toString(),
@@ -113,7 +114,8 @@ export function CreateLightButton(
               )}
               defaultValue={'0'}
             />
-          )
+          ),
+          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
         })}
       </Dialog>
     </div>

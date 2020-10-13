@@ -21,7 +21,8 @@ import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputDialog } from '../lib/inputDialog';
+import { Dialog } from '../lib/dialog';
+import { TextDialogInput } from '../lib/textDialogInput';
 
 const useStyles = makeStyles({
   container: {
@@ -54,19 +55,22 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
       >
         <AddIcon />
       </Button>
-      <InputDialog
-        onConfirm={(name) => {
+      <Dialog
+        onConfirm={(options) => {
           handleClose();
-          props.createZone(name);
+          props.createZone(options.name);
         }}
         onCancel={handleClose}
         open={openDialog}
-        title="Create Zone"
-        description='Enter a descriptive name for the zone you wish to add, e.g.
-          "kitchen," "guest bedzone", "left side bed nightstand" etc.'
-        inputPlaceholder="e.g. Kitchen"
-        confirmLabel="Create"
-      />
+        title="Create zone"
+        confirmLabel="Create zone"
+      >
+        <TextDialogInput
+          name="name"
+          description="Descriptive name for the room or area"
+          inputPlaceholder="e.g. Kitchen"
+        />
+      </Dialog>
     </div>
   );
 };

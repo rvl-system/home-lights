@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Typography } from '@material-ui/core';
-import { Light as LightInterfaceType, LightType } from '../../common/types';
+import { Light as LightInterfaceType } from '../../common/types';
 import { EditLightButton, EditLightButtonDispatch } from './editLightButton';
 import {
   DeleteLightButton,
@@ -35,27 +35,22 @@ export type LightDispatch = EditLightButtonDispatch & DeleteLightButtonDispatch;
 
 export const Light: FunctionComponent<LightProps & LightDispatch> = (props) => {
   const classes = useContentStyles();
-  const canEdit = props.light.type !== LightType.PhilipsHue;
   return (
     <React.Fragment>
       <div className={classes.itemHeading}>
-        {canEdit && (
-          <DeleteLightButton
-            light={props.light}
-            className={classes.leftButton}
-            deleteLight={props.deleteLight}
-          />
-        )}
+        <DeleteLightButton
+          light={props.light}
+          className={classes.leftButton}
+          deleteLight={props.deleteLight}
+        />
         <Typography className={classes.itemTitle}>
           {props.light.name}
         </Typography>
-        {canEdit && (
-          <EditLightButton
-            className={classes.rightButton}
-            light={props.light}
-            editLight={props.editLight}
-          />
-        )}
+        <EditLightButton
+          className={classes.rightButton}
+          light={props.light}
+          editLight={props.editLight}
+        />
       </div>
     </React.Fragment>
   );

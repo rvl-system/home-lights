@@ -69,22 +69,20 @@ export const EditLightButton: FunctionComponent<
         onConfirm={handleConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
-        title="Create Zone"
-        description='Edit a light. A light in Home Lights represents a
-        physical light in your home, e.g. "Left bedside lamp," "Kitchen
-        accent," etc.'
+        title={`Edit "${props.light.name}"`}
+        confirmLabel="Save light"
       >
         <TextDialogInput
           name="name"
-          description="Friendly name of the light"
-          inputPlaceholder="name"
+          description="Name"
+          inputPlaceholder="e.g. Left bedside lamp"
           defaultValue={props.light.name}
         />
         {reduce(props.light.type, {
           [LightType.RVL]: () => (
             <SelectDialogInput
               name="channel"
-              description="The RVL light channel"
+              description="Channel"
               selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
                 (_, i) => ({
                   value: i.toString(),
