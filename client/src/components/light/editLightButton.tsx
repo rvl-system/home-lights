@@ -30,6 +30,7 @@ import { NUM_RVL_CHANNELS } from '../../common/config';
 export interface EditLightButtonProps {
   light: Light;
   className: string;
+  canChangeName: boolean;
 }
 
 export interface EditLightButtonDispatch {
@@ -72,12 +73,14 @@ export const EditLightButton: FunctionComponent<
         title={`Edit "${props.light.name}"`}
         confirmLabel="Save light"
       >
-        <TextDialogInput
-          name="name"
-          description="Name"
-          inputPlaceholder="e.g. Left bedside lamp"
-          defaultValue={props.light.name}
-        />
+        {props.canChangeName && (
+          <TextDialogInput
+            name="name"
+            description="Name"
+            inputPlaceholder="e.g. Left bedside lamp"
+            defaultValue={props.light.name}
+          />
+        )}
         {reduce(props.light.type, {
           [LightType.RVL]: () => (
             <SelectDialogInput

@@ -21,7 +21,6 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { reduce } from 'conditional-reduce';
 import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
@@ -44,7 +43,6 @@ export function CreateLightButton(
   props: CreateLightButtonDispatch
 ): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [lightType, setLightType] = React.useState(LightType.RVL);
 
   function handleClose() {
     setOpenDialog(false);
@@ -57,10 +55,6 @@ export function CreateLightButton(
         break;
     }
     handleClose();
-  }
-
-  function handleChange(newState: DialogValue) {
-    setLightType(newState.type as LightType);
   }
 
   const classes = useStyles();
@@ -76,47 +70,26 @@ export function CreateLightButton(
       <Dialog
         onConfirm={handleConfirm}
         onCancel={handleClose}
-        onChange={handleChange}
         open={openDialog}
         title="Create light"
         confirmLabel="Create light"
       >
-        <SelectDialogInput
-          name="type"
-          description="Type of light"
-          selectValues={[
-            {
-              value: LightType.RVL,
-              label: 'RVL'
-            },
-            {
-              value: LightType.PhilipsHue,
-              label: 'Philips Hue'
-            }
-          ]}
-          defaultValue={LightType.RVL}
-        />
         <TextDialogInput
           name="name"
           description="Descriptive name for the light"
           inputPlaceholder="e.g. Left bedside lamp"
         />
-        {reduce(lightType, {
-          [LightType.RVL]: () => (
-            <SelectDialogInput
-              name="channel"
-              description="Channel"
-              selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-                (_, i) => ({
-                  value: i.toString(),
-                  label: i.toString()
-                })
-              )}
-              defaultValue={'0'}
-            />
-          ),
-          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
-        })}
+        <SelectDialogInput
+          name="channel"
+          description="Channel"
+          selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
+            (_, i) => ({
+              value: i.toString(),
+              label: i.toString()
+            })
+          )}
+          defaultValue={'0'}
+        />
       </Dialog>
     </div>
   );

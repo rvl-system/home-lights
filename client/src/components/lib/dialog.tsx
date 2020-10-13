@@ -106,7 +106,7 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   function getDefaultValue(
     child: ReactElement
   ): { name: string; defaultValue: string } {
-    if (!child.props) {
+    if (!child || !child.props) {
       return { name: '', defaultValue: '' };
     }
     const name = child.props.name;
