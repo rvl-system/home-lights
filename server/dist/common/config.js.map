@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 {"version":3,"file":"config.js","sourceRoot":"","sources":["../../src/common/config.ts"],"names":[],"mappings":";;;AAAA,8BAA8B;AACjB,QAAA,gBAAgB,GAAG,CAAC,CAAC;AAElC,sCAAsC;AACzB,QAAA,oBAAoB,GAAG,aAAa,CAAC;AACrC,QAAA,uBAAuB,GAAG,kBAAkB,CAAC"}
-=======
-{"version":3,"file":"config.js","sourceRoot":"","sources":["../../src/common/config.ts"],"names":[],"mappings":";;;AAAa,QAAA,gBAAgB,GAAG,CAAC,CAAC"}
->>>>>>> rewrite

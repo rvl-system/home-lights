@@ -24,60 +24,9 @@ const db_1 = require("./db");
 const device_1 = require("./device");
 async function run() {
     await db_1.init();
-<<<<<<< HEAD
     await device_1.init();
     await endpoints_1.init();
     console.log('\n=== Home Lights Running ===\n');
-=======
-    app.register(fastify_static_1.default, {
-        root: path_1.join(__dirname, '..', '..', 'public')
-    });
-    // ---- Zones Endpoints ----
-    app.get('/api/zones', async () => {
-        return await db_1.getZones();
-    });
-    app.post('/api/zones', async (req) => {
-        const zoneRequest = req.body;
-        await db_1.createZone(zoneRequest);
-        return {};
-    });
-    app.put('/api/zone/:id', async (req) => {
-        const zone = req.body;
-        await db_1.editZone(zone);
-        return {};
-    });
-    app.delete('/api/zone/:id', async (req) => {
-        const { id } = req.params;
-        await db_1.deleteZone(parseInt(id));
-        return {};
-    });
-    // ---- Lights Endpoints ----
-    app.get('/api/lights', async () => {
-        return await db_1.getLights();
-    });
-    app.post('/api/lights', async (req) => {
-        const zoneRequest = req.body;
-        await db_1.createLight(zoneRequest);
-        return {};
-    });
-    app.put('/api/light/:id', async (req) => {
-        const zone = req.body;
-        await db_1.editLight(zone);
-        return {};
-    });
-    app.delete('/api/light/:id', async (req) => {
-        const { id } = req.params;
-        await db_1.deleteLight(parseInt(id));
-        return {};
-    });
-    app.listen(port, (err, address) => {
-        if (err) {
-            app.log.error(err);
-            process.exit(1);
-        }
-        console.log(`Server listening on ${address}`);
-    });
->>>>>>> rewrite
 }
 exports.run = run;
 //# sourceMappingURL=index.js.map
