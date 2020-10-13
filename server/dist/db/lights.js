@@ -33,7 +33,33 @@ CREATE TABLE "lights" (
   FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
 async function getLights() {
-    return sqlite_1.dbAll(`SELECT * FROM lights`);
+    const rawResults = await sqlite_1.dbAll(`SELECT * FROM lights`);
+    return (await rawResults).map((light) => {
+        switch (light.type) {
+            case types_1.LightType.RVL: {
+                const rvlLight = {
+                    id: light.id,
+                    name: light.name,
+                    type: light.type,
+                    channel: light.channel,
+                    zoneID: light.zone_id
+                };
+                return rvlLight;
+            }
+            case types_1.LightType.PhilipsHue: {
+                const hueLight = {
+                    id: light.id,
+                    name: light.name,
+                    type: light.type,
+                    philipsHueID: light.philips_hue_id,
+                    zoneID: light.zone_id
+                };
+                return hueLight;
+            }
+            default:
+                throw new Error(`Found unknown light type in database "${light.type}"`);
+        }
+    });
 }
 exports.getLights = getLights;
 async function createLight(lightRequest) {

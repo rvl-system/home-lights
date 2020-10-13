@@ -41,7 +41,33 @@ CREATE TABLE "lights" (
 )`;
 
 export async function getLights(): Promise<Light[]> {
-  return dbAll(`SELECT * FROM lights`) as Promise<Light[]>;
+  const rawResults = await dbAll(`SELECT * FROM lights`);
+  return (await rawResults).map((light) => {
+    switch (light.type) {
+      case LightType.RVL: {
+        const rvlLight: RVLLight = {
+          id: light.id,
+          name: light.name,
+          type: light.type,
+          channel: light.channel,
+          zoneID: light.zone_id
+        };
+        return rvlLight;
+      }
+      case LightType.PhilipsHue: {
+        const hueLight: PhilipsHueLight = {
+          id: light.id,
+          name: light.name,
+          type: light.type,
+          philipsHueID: light.philips_hue_id,
+          zoneID: light.zone_id
+        };
+        return hueLight;
+      }
+      default:
+        throw new Error(`Found unknown light type in database "${light.type}"`);
+    }
+  });
 }
 
 export async function createLight(
