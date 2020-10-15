@@ -18,7 +18,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import { Typography } from '@material-ui/core';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography
+} from '@material-ui/core';
 import { Light as LightInterfaceType, LightType } from '../../common/types';
 import { EditLightButton, EditLightButtonDispatch } from './editLightButton';
 import {
@@ -37,25 +42,32 @@ export const Light: FunctionComponent<LightProps & LightDispatch> = (props) => {
   const classes = useContentStyles();
   const canEdit = props.light.type === LightType.RVL;
   return (
-    <React.Fragment>
-      <div className={classes.itemHeading}>
-        {canEdit && (
-          <DeleteLightButton
+    <Accordion>
+      <AccordionSummary>
+        <div className={classes.itemHeading}>
+          {canEdit ? (
+            <DeleteLightButton
+              light={props.light}
+              className={classes.leftButton}
+              deleteLight={props.deleteLight}
+            />
+          ) : (
+            <div className={classes.leftButton}></div>
+          )}
+          <Typography className={classes.itemTitle}>
+            {props.light.name}
+          </Typography>
+          <EditLightButton
+            className={classes.rightButton}
             light={props.light}
-            className={classes.leftButton}
-            deleteLight={props.deleteLight}
+            editLight={props.editLight}
+            canChangeName={canEdit}
           />
-        )}
-        <Typography className={classes.itemTitle}>
-          {props.light.name}
-        </Typography>
-        <EditLightButton
-          className={classes.rightButton}
-          light={props.light}
-          editLight={props.editLight}
-          canChangeName={canEdit}
-        />
-      </div>
-    </React.Fragment>
+        </div>
+      </AccordionSummary>
+      <AccordionDetails className={classes.detailContainer}>
+        <Typography>TODO: extra details about light</Typography>
+      </AccordionDetails>
+    </Accordion>
   );
 };

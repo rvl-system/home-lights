@@ -18,7 +18,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import { List, ListItem } from '@material-ui/core';
 import {
   CreateLightButton,
   CreateLightButtonDispatch
@@ -48,17 +47,14 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
       </div>
       <div className={classes.content}>
         <div className={classes.innerContent}>
-          <List component="nav">
-            {props.lights.map((light) => (
-              <ListItem key={light.id}>
-                <Light
-                  light={light}
-                  editLight={props.editLight}
-                  deleteLight={props.deleteLight}
-                />
-              </ListItem>
-            ))}
-          </List>
+          {props.lights.map((light) => (
+            <Light
+              key={light.id}
+              light={light}
+              editLight={props.editLight}
+              deleteLight={props.deleteLight}
+            />
+          ))}
         </div>
       </div>
     </div>
