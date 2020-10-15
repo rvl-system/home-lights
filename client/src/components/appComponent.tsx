@@ -30,7 +30,7 @@ import { SelectedTab } from '../types';
 
 import { ZonesContainer } from '../containers/zonesContainer';
 import { PatternsContainer } from '../containers/patternsContainer';
-import { LightsContainer } from '../containers/lightsContainer';
+import { LightsTabContainer } from '../containers/lightsTabContainer';
 
 export interface AppComponentProps {
   activeTab: SelectedTab;
@@ -77,7 +77,7 @@ export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
           {reduce(props.activeTab, {
             [SelectedTab.Zones]: () => <ZonesContainer />,
             [SelectedTab.Patterns]: () => <PatternsContainer />,
-            [SelectedTab.Lights]: () => <LightsContainer />
+            [SelectedTab.Lights]: () => <LightsTabContainer />
           })}
         </div>
         <div className={classes.footer}>

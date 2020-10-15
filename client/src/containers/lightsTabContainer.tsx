@@ -19,20 +19,20 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { createContainer } from 'reduxology';
 import {
-  Lights,
-  LightsDispatch,
-  LightsProps
-} from '../components/light/lights';
+  LightsTab,
+  LightsTabDispatch,
+  LightsTabProps
+} from '../components/light/lightsTab';
 import { StatePaths, Actions } from '../types';
 
-export const LightsContainer = createContainer(
-  (getState): LightsProps => ({
+export const LightsTabContainer = createContainer(
+  (getState): LightsTabProps => ({
     lights: getState(StatePaths.Lights)
   }),
-  (dispatch): LightsDispatch => ({
+  (dispatch): LightsTabDispatch => ({
     deleteLight(id: number) {
       dispatch(Actions.DeleteLight, id);
     }
   }),
-  Lights
+  LightsTab
 );

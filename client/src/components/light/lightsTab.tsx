@@ -22,17 +22,17 @@ import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { useContainerStyles } from '../lib/pageStyles';
 import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
 import { Light as LightType } from '../../common/types';
-import { Light } from './light';
+import { LightComponent } from './lightComponent';
 
-export interface LightsProps {
+export interface LightsTabProps {
   lights: LightType[];
 }
 
-export type LightsDispatch = DeleteLightButtonDispatch;
+export type LightsTabDispatch = DeleteLightButtonDispatch;
 
-export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
-  props
-) => {
+export const LightsTab: FunctionComponent<
+  LightsTabProps & LightsTabDispatch
+> = (props) => {
   const classes = useContainerStyles();
   return (
     <div className={classes.container}>
@@ -42,7 +42,7 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
       <div className={classes.content}>
         <div className={classes.innerContent}>
           {props.lights.map((light) => (
-            <Light
+            <LightComponent
               key={light.id}
               light={light}
               deleteLight={props.deleteLight}

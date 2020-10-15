@@ -37,13 +37,15 @@ import {
 } from './deleteLightButton';
 import { useContentStyles } from '../lib/pageStyles';
 
-export interface LightProps {
+export interface LightComponentProps {
   light: LightInterfaceType;
 }
 
-export type LightDispatch = DeleteLightButtonDispatch;
+export type LightComponentDispatch = DeleteLightButtonDispatch;
 
-export const Light: FunctionComponent<LightProps & LightDispatch> = (props) => {
+export const LightComponent: FunctionComponent<
+  LightComponentProps & LightComponentDispatch
+> = (props) => {
   const classes = useContentStyles();
   const canEdit = props.light.type === LightType.RVL;
   return (
