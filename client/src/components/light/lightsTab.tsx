@@ -21,11 +21,11 @@ import React, { FunctionComponent } from 'react';
 import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { useContainerStyles } from '../lib/pageStyles';
 import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
-import { Light as LightType } from '../../common/types';
+import { Light } from '../../common/types';
 import { LightComponent } from './lightComponent';
 
 export interface LightsTabProps {
-  lights: LightType[];
+  lights: Light[];
 }
 
 export type LightsTabDispatch = DeleteLightButtonDispatch;

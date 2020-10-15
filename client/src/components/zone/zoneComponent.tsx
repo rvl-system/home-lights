@@ -25,7 +25,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
-import { Zone as ZoneType } from '../../common/types';
+import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
 import { EditZoneButton, EditZoneButtonDispatch } from './editZoneButton';
 import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
@@ -33,7 +33,7 @@ import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 import { useContentStyles } from '../lib/pageStyles';
 
 export interface ZoneComponentProps {
-  zone: ZoneType;
+  zone: Zone;
   editMode: EditMode;
 }
 
