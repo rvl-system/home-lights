@@ -28,7 +28,8 @@ import { reduce } from 'conditional-reduce';
 import {
   Light as LightInterfaceType,
   LightType,
-  RVLLight
+  RVLLight,
+  Zone
 } from '../../common/types';
 import { EditLightButtonContainer } from '../../containers/editLightButtonContainer';
 import {
@@ -39,6 +40,7 @@ import { useContentStyles } from '../lib/pageStyles';
 
 export interface LightComponentProps {
   light: LightInterfaceType;
+  zones: Zone[];
 }
 
 export type LightComponentDispatch = DeleteLightButtonDispatch;
@@ -48,6 +50,7 @@ export const LightComponent: FunctionComponent<
 > = (props) => {
   const classes = useContentStyles();
   const canEdit = props.light.type === LightType.RVL;
+  const zone = props.zones.find((zone) => zone.id === props.light.zone);
   return (
     <Accordion>
       <AccordionSummary>
@@ -72,6 +75,7 @@ export const LightComponent: FunctionComponent<
         </div>
       </AccordionSummary>
       <AccordionDetails className={classes.detailContainer}>
+        <Typography>Zone: {zone ? zone.name : <em>Unassigned</em>}</Typography>
         {reduce(props.light.type, {
           [LightType.RVL]: () => (
             <Typography>

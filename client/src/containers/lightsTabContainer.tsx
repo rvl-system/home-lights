@@ -27,7 +27,8 @@ import { StatePaths, Actions } from '../types';
 
 export const LightsTabContainer = createContainer(
   (getState): LightsTabProps => ({
-    lights: getState(StatePaths.Lights)
+    lights: getState(StatePaths.Lights),
+    zones: getState(StatePaths.Zones)
   }),
   (dispatch): LightsTabDispatch => ({
     deleteLight(id: number) {

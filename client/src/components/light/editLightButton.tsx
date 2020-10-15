@@ -82,6 +82,19 @@ export const EditLightButton: FunctionComponent<
             defaultValue={props.light.name}
           />
         )}
+        <SelectDialogInput
+          name="zone"
+          description="Zone"
+          selectValues={[{ value: -1, label: 'Unassigned' }].concat(
+            props.zones.map((zone) => ({
+              value: zone.id,
+              label: zone.name
+            }))
+          )}
+          defaultValue={
+            typeof props.light.zone === 'number' ? props.light.zone : -1
+          }
+        />
         {reduce(props.light.type, {
           [LightType.RVL]: () => (
             <SelectDialogInput

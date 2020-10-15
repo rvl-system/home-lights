@@ -21,11 +21,12 @@ import React, { FunctionComponent } from 'react';
 import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { useContainerStyles } from '../lib/pageStyles';
 import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
-import { Light } from '../../common/types';
+import { Light, Zone } from '../../common/types';
 import { LightComponent } from './lightComponent';
 
 export interface LightsTabProps {
   lights: Light[];
+  zones: Zone[];
 }
 
 export type LightsTabDispatch = DeleteLightButtonDispatch;
@@ -46,6 +47,7 @@ export const LightsTab: FunctionComponent<
               key={light.id}
               light={light}
               deleteLight={props.deleteLight}
+              zones={props.zones}
             />
           ))}
         </div>

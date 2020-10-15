@@ -50,7 +50,7 @@ export async function getLights(): Promise<Light[]> {
           name: light.name,
           type: light.type,
           channel: light.channel,
-          zoneID: light.zone_id
+          zone: light.zone_id
         };
         return rvlLight;
       }
@@ -60,7 +60,7 @@ export async function getLights(): Promise<Light[]> {
           name: light.name,
           type: light.type,
           philipsHueID: light.philips_hue_id,
-          zoneID: light.zone_id
+          zone: light.zone_id
         };
         return hueLight;
       }
@@ -97,11 +97,12 @@ export async function createLight(
     case LightType.PhilipsHue: {
       const philipsHueLightRequest: CreatePhilipsHueLightRequest = lightRequest as CreatePhilipsHueLightRequest;
       await dbRun(
-        `INSERT INTO lights (name, type, philips_hue_id) values (?, ?, ?)`,
+        `INSERT INTO lights (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)`,
         [
           philipsHueLightRequest.name,
           LightType.PhilipsHue,
-          philipsHueLightRequest.philipsHueID
+          philipsHueLightRequest.philipsHueID,
+          philipsHueLightRequest.zone
         ]
       );
       break;
@@ -113,16 +114,16 @@ export async function editLight(light: Light): Promise<void> {
   switch (light.type) {
     case LightType.RVL:
       const rvlLight: RVLLight = light as RVLLight;
-      await dbRun('UPDATE lights SET name = ?, channel = ? WHERE id = ?', [
-        rvlLight.name,
-        rvlLight.channel,
-        rvlLight.id
-      ]);
+      await dbRun(
+        'UPDATE lights SET name = ?, channel = ?, zone_id=? WHERE id = ?',
+        [rvlLight.name, rvlLight.channel, rvlLight.zone, rvlLight.id]
+      );
       break;
     case LightType.PhilipsHue:
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
-      await dbRun('UPDATE lights SET name = ?, WHERE id = ?', [
+      await dbRun('UPDATE lights SET name = ?, zone_id=? WHERE id = ?', [
         hueLight.name,
+        hueLight.zone,
         hueLight.id
       ]);
       break;

@@ -42,7 +42,7 @@ async function getLights() {
                     name: light.name,
                     type: light.type,
                     channel: light.channel,
-                    zoneID: light.zone_id
+                    zone: light.zone_id
                 };
                 return rvlLight;
             }
@@ -52,7 +52,7 @@ async function getLights() {
                     name: light.name,
                     type: light.type,
                     philipsHueID: light.philips_hue_id,
-                    zoneID: light.zone_id
+                    zone: light.zone_id
                 };
                 return hueLight;
             }
@@ -81,10 +81,11 @@ async function createLight(lightRequest) {
         }
         case types_1.LightType.PhilipsHue: {
             const philipsHueLightRequest = lightRequest;
-            await sqlite_1.dbRun(`INSERT INTO lights (name, type, philips_hue_id) values (?, ?, ?)`, [
+            await sqlite_1.dbRun(`INSERT INTO lights (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)`, [
                 philipsHueLightRequest.name,
                 types_1.LightType.PhilipsHue,
-                philipsHueLightRequest.philipsHueID
+                philipsHueLightRequest.philipsHueID,
+                philipsHueLightRequest.zone
             ]);
             break;
         }
@@ -95,16 +96,13 @@ async function editLight(light) {
     switch (light.type) {
         case types_1.LightType.RVL:
             const rvlLight = light;
-            await sqlite_1.dbRun('UPDATE lights SET name = ?, channel = ? WHERE id = ?', [
-                rvlLight.name,
-                rvlLight.channel,
-                rvlLight.id
-            ]);
+            await sqlite_1.dbRun('UPDATE lights SET name = ?, channel = ?, zone_id=? WHERE id = ?', [rvlLight.name, rvlLight.channel, rvlLight.zone, rvlLight.id]);
             break;
         case types_1.LightType.PhilipsHue:
             const hueLight = light;
-            await sqlite_1.dbRun('UPDATE lights SET name = ?, WHERE id = ?', [
+            await sqlite_1.dbRun('UPDATE lights SET name = ?, zone_id=? WHERE id = ?', [
                 hueLight.name,
+                hueLight.zone,
                 hueLight.id
             ]);
             break;

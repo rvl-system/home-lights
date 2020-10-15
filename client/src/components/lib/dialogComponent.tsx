@@ -154,7 +154,11 @@ export const DialogComponent: FunctionComponent<DialogComponentProps> = ({
 
   return (
     <React.Fragment>
-      <MaterialDialog open={open} onClose={onCancel}>
+      <MaterialDialog
+        open={open}
+        onClose={onCancel}
+        onClick={(e) => e.stopPropagation()}
+      >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           {description && <DialogContentText>{description}</DialogContentText>}

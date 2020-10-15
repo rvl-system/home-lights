@@ -97,6 +97,15 @@ export const useContentStyles = makeStyles((theme) => ({
     'grid-column-start': 'right-icon-start',
     'grid-column-end': 'end',
     'grid-row-start': 1,
+    'grid-row-end': 1,
+    'margin-right': '12px'
+  },
+  rightAccordionButton: {
+    'min-width': '2em',
+    width: '2em',
+    'grid-column-start': 'right-icon-start',
+    'grid-column-end': 'end',
+    'grid-row-start': 1,
     'grid-row-end': 1
   }
 }));

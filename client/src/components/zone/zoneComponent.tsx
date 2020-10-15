@@ -66,7 +66,7 @@ export const ZoneComponent: FunctionComponent<
               {props.zone.name}
             </Typography>
             <EditZoneButton
-              className={classes.rightButton}
+              className={classes.rightAccordionButton}
               zone={props.zone}
               editMode={props.editMode}
               editZone={props.editZone}
