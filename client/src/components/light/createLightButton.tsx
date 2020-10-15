@@ -25,6 +25,7 @@ import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
 import { NUM_RVL_CHANNELS } from '../../common/config';
+import { Zone } from '../../common/types';
 
 const useStyles = makeStyles({
   container: {
@@ -34,12 +35,16 @@ const useStyles = makeStyles({
   }
 });
 
+export interface CreateLightButtonProps {
+  zones: Zone[];
+}
+
 export interface CreateLightButtonDispatch {
   createRVLLight: (name: string, channel: number) => void;
 }
 
 export function CreateLightButton(
-  props: CreateLightButtonDispatch
+  props: CreateLightButtonProps & CreateLightButtonDispatch
 ): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
 

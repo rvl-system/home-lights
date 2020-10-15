@@ -24,19 +24,12 @@ import {
   LightsProps
 } from '../components/light/lights';
 import { StatePaths, Actions } from '../types';
-import { Light } from '../common/types';
 
 export const LightsContainer = createContainer(
   (getState): LightsProps => ({
     lights: getState(StatePaths.Lights)
   }),
   (dispatch): LightsDispatch => ({
-    createRVLLight(name: string, channel: number) {
-      dispatch(Actions.CreateRVLLight, name, channel);
-    },
-    editLight(light: Light) {
-      dispatch(Actions.EditLight, light);
-    },
     deleteLight(id: number) {
       dispatch(Actions.DeleteLight, id);
     }

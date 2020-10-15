@@ -18,13 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import {
-  CreateLightButton,
-  CreateLightButtonDispatch
-} from './createLightButton';
-import { EditLightButtonDispatch } from './editLightButton';
 import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { useContainerStyles } from '../lib/pageStyles';
+import { CreateLightButtonContainer } from '../../containers/createLightButton';
 import { Light as LightType } from '../../common/types';
 import { Light } from './light';
 
@@ -32,9 +28,7 @@ export interface LightsProps {
   lights: LightType[];
 }
 
-export type LightsDispatch = CreateLightButtonDispatch &
-  EditLightButtonDispatch &
-  DeleteLightButtonDispatch;
+export type LightsDispatch = DeleteLightButtonDispatch;
 
 export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
   props
@@ -43,7 +37,7 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
   return (
     <div className={classes.container}>
       <div className={classes.altHeader}>
-        <CreateLightButton createRVLLight={props.createRVLLight} />
+        <CreateLightButtonContainer />
       </div>
       <div className={classes.content}>
         <div className={classes.innerContent}>
@@ -51,7 +45,6 @@ export const Lights: FunctionComponent<LightsProps & LightsDispatch> = (
             <Light
               key={light.id}
               light={light}
-              editLight={props.editLight}
               deleteLight={props.deleteLight}
             />
           ))}

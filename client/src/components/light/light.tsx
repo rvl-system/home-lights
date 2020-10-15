@@ -24,8 +24,13 @@ import {
   AccordionDetails,
   Typography
 } from '@material-ui/core';
-import { Light as LightInterfaceType, LightType } from '../../common/types';
-import { EditLightButton, EditLightButtonDispatch } from './editLightButton';
+import { reduce } from 'conditional-reduce';
+import {
+  Light as LightInterfaceType,
+  LightType,
+  RVLLight
+} from '../../common/types';
+import { EditLightButtonContainer } from '../../containers/editLightButton';
 import {
   DeleteLightButton,
   DeleteLightButtonDispatch
@@ -36,7 +41,7 @@ export interface LightProps {
   light: LightInterfaceType;
 }
 
-export type LightDispatch = EditLightButtonDispatch & DeleteLightButtonDispatch;
+export type LightDispatch = DeleteLightButtonDispatch;
 
 export const Light: FunctionComponent<LightProps & LightDispatch> = (props) => {
   const classes = useContentStyles();
@@ -57,16 +62,22 @@ export const Light: FunctionComponent<LightProps & LightDispatch> = (props) => {
           <Typography className={classes.itemTitle}>
             {props.light.name}
           </Typography>
-          <EditLightButton
+          <EditLightButtonContainer
             className={classes.rightButton}
             light={props.light}
-            editLight={props.editLight}
             canChangeName={canEdit}
           />
         </div>
       </AccordionSummary>
       <AccordionDetails className={classes.detailContainer}>
-        <Typography>TODO: extra details about light</Typography>
+        {reduce(props.light.type, {
+          [LightType.RVL]: () => (
+            <Typography>
+              Channel: {(props.light as RVLLight).channel}
+            </Typography>
+          ),
+          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
+        })}
       </AccordionDetails>
     </Accordion>
   );

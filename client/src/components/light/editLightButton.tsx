@@ -24,13 +24,14 @@ import { Dialog, DialogValue } from '../lib/dialog';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
 import { Edit as EditIcon } from '@material-ui/icons';
-import { Light, RVLLight, LightType } from '../../common/types';
+import { Light, RVLLight, LightType, Zone } from '../../common/types';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 
 export interface EditLightButtonProps {
   light: Light;
   className: string;
   canChangeName: boolean;
+  zones: Zone[];
 }
 
 export interface EditLightButtonDispatch {
