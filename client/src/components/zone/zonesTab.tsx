@@ -32,7 +32,7 @@ export interface ZonesTabProps {
 
 export interface ZonesTabDispatch {
   createZone: (name: string) => void;
-  editZone: (zone: ZoneType) => void;
+  editZone: (zone: Zone) => void;
   deleteZone: (id: number) => void;
   toggleZonePower: (id: number, powerState: boolean) => void;
 }

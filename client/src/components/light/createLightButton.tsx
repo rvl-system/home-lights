@@ -40,7 +40,7 @@ export interface CreateLightButtonProps {
 }
 
 export interface CreateLightButtonDispatch {
-  createRVLLight: (name: string, channel: number) => void;
+  createRVLLight: (name: string, channel: number, zone?: number) => void;
 }
 
 export function CreateLightButton(
@@ -53,7 +53,11 @@ export function CreateLightButton(
   }
 
   function handleConfirm(values: DialogValue) {
-    props.createRVLLight(values.name, parseInt(values.channel));
+    props.createRVLLight(
+      values.name as string,
+      values.channel as number,
+      values.zone !== -1 ? (values.zone as number) : undefined
+    );
     handleClose();
   }
 
@@ -80,15 +84,26 @@ export function CreateLightButton(
           inputPlaceholder="e.g. Left bedside lamp"
         />
         <SelectDialogInput
+          name="zone"
+          description="Zone"
+          selectValues={[{ value: -1, label: 'Unassigned' }].concat(
+            props.zones.map((zone) => ({
+              value: zone.id,
+              label: zone.name
+            }))
+          )}
+          defaultValue={-1}
+        />
+        <SelectDialogInput
           name="channel"
           description="Channel"
           selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
             (_, i) => ({
-              value: i.toString(),
+              value: i,
               label: i.toString()
             })
           )}
-          defaultValue={'0'}
+          defaultValue={0}
         />
       </DialogComponent>
     </div>

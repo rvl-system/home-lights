@@ -55,6 +55,7 @@ export interface PhilipsHueLight extends Light {
 export interface CreateLightRequest {
   name: string;
   type: LightType;
+  zone?: number;
 }
 
 export interface CreateRVLLightRequest extends CreateLightRequest {

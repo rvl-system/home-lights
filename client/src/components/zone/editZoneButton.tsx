@@ -40,11 +40,11 @@ export const EditZoneButton: FunctionComponent<
 > = (props) => {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
 
-  function handleEditConfirm(options: Record<string, string>) {
+  function handleEditConfirm(options: Record<string, string | number>) {
     handleEditClose();
     props.editZone({
       ...props.zone,
-      name: options.name
+      name: options.name as string
     });
   }
 

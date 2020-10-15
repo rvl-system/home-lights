@@ -22,17 +22,21 @@ import { Actions } from '../types';
 import { CreateRVLLightRequest, Light, LightType } from '../common/types';
 import { get, post, put, del } from '../util/api';
 
-listen(Actions.CreateRVLLight, async (name: string, channel: number) => {
-  const createBody: CreateRVLLightRequest = {
-    type: LightType.RVL,
-    name,
-    channel
-  };
-  await post('/api/lights', createBody);
+listen(
+  Actions.CreateRVLLight,
+  async (name: string, channel: number, zone?: number) => {
+    const createBody: CreateRVLLightRequest = {
+      type: LightType.RVL,
+      name,
+      channel,
+      zone
+    };
+    await post('/api/lights', createBody);
 
-  const updatedLights = await get('/api/lights');
-  dispatch(Actions.LightsUpdated, updatedLights);
-});
+    const updatedLights = await get('/api/lights');
+    dispatch(Actions.LightsUpdated, updatedLights);
+  }
+);
 
 listen(Actions.EditLight, async (light: Light) => {
   await put(`/api/light/${light.id}`, light);

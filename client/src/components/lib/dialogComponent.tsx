@@ -44,11 +44,11 @@ export const useDefaultStyles = makeStyles({
 export interface DialogInputBaseProps {
   name: string;
   description?: string;
-  defaultValue?: string;
-  onValueChange?: (name: string, newValue: string) => void;
+  defaultValue?: string | number;
+  onValueChange?: (name: string, newValue: string | number) => void;
 }
 
-export type DialogValue = Record<string, string>;
+export type DialogValue = Record<string, string | number>;
 
 export interface DialogComponentProps {
   onConfirm?: (newValue: DialogValue) => void;
@@ -105,7 +105,7 @@ export const DialogComponent: FunctionComponent<DialogComponentProps> = ({
 
   function getDefaultValue(
     child: ReactElement
-  ): { name: string; defaultValue: string } {
+  ): { name: string; defaultValue: string | number } {
     if (!child || !child.props) {
       return { name: '', defaultValue: '' };
     }
@@ -113,7 +113,8 @@ export const DialogComponent: FunctionComponent<DialogComponentProps> = ({
     if (typeof name !== 'string') {
       return { name: '', defaultValue: '' };
     }
-    const defaultValue: string = child.props.defaultValue || '';
+    const defaultValue: string =
+      child.props.defaultValue === undefined ? '' : child.props.defaultValue;
     return { name, defaultValue };
   }
 

@@ -30,8 +30,8 @@ export const CreateLightButtonContainer = createContainer(
     zones: getState(StatePaths.Zones)
   }),
   (dispatch): CreateLightButtonDispatch => ({
-    createRVLLight(name: string, channel: number) {
-      dispatch(Actions.CreateRVLLight, name, channel);
+    createRVLLight(name: string, channel: number, zone?: number) {
+      dispatch(Actions.CreateRVLLight, name, channel, zone);
     }
   }),
   CreateLightButton

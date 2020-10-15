@@ -58,7 +58,7 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
       <DialogComponent
         onConfirm={(options) => {
           handleClose();
-          props.createZone(options.name);
+          props.createZone(options.name as string);
         }}
         onCancel={handleClose}
         open={openDialog}
