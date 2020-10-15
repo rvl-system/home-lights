@@ -71,10 +71,11 @@ async function createLight(lightRequest) {
                 rvlLightRequest.channel >= config_1.NUM_RVL_CHANNELS) {
                 throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
             }
-            await sqlite_1.dbRun(`INSERT INTO lights (name, type, channel) values (?, ?, ?)`, [
+            await sqlite_1.dbRun(`INSERT INTO lights (name, type, channel, zone_id) values (?, ?, ?, ?)`, [
                 rvlLightRequest.name,
                 types_1.LightType.RVL,
-                rvlLightRequest.channel
+                rvlLightRequest.channel,
+                rvlLightRequest.zone
             ]);
             break;
         }

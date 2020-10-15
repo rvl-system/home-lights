@@ -83,11 +83,15 @@ export async function createLight(
       ) {
         throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
       }
-      await dbRun(`INSERT INTO lights (name, type, channel) values (?, ?, ?)`, [
-        rvlLightRequest.name,
-        LightType.RVL,
-        rvlLightRequest.channel
-      ]);
+      await dbRun(
+        `INSERT INTO lights (name, type, channel, zone_id) values (?, ?, ?, ?)`,
+        [
+          rvlLightRequest.name,
+          LightType.RVL,
+          rvlLightRequest.channel,
+          rvlLightRequest.zone
+        ]
+      );
       break;
     }
     case LightType.PhilipsHue: {
