@@ -18,15 +18,15 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createContainer } from 'reduxology';
-import { App, AppProps } from '../components/app';
+import { AppComponent, AppComponentProps } from '../components/appComponent';
 import { StatePaths } from '../types';
 
 export const AppContainer = createContainer(
-  (getState): AppProps => {
+  (getState): AppComponentProps => {
     return {
       activeTab: getState(StatePaths.SelectedTab)
     };
   },
   () => ({}),
-  App
+  AppComponent
 );

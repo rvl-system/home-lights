@@ -21,7 +21,7 @@ import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { Dialog } from '../lib/dialog';
+import { DialogComponent } from '../lib/dialogComponent';
 import { TextDialogInput } from '../lib/textDialogInput';
 
 const useStyles = makeStyles({
@@ -55,7 +55,7 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
       >
         <AddIcon />
       </Button>
-      <Dialog
+      <DialogComponent
         onConfirm={(options) => {
           handleClose();
           props.createZone(options.name);
@@ -70,7 +70,7 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
           description="Descriptive name for the room or area"
           inputPlaceholder="e.g. Kitchen"
         />
-      </Dialog>
+      </DialogComponent>
     </div>
   );
 };

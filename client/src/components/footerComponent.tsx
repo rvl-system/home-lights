@@ -34,7 +34,7 @@ export interface FooterComponentDispatch {
   selectTab(newTab: SelectedTab): void;
 }
 
-export const Footer: FunctionComponent<
+export const FooterComponent: FunctionComponent<
   FooterComponentProps & FooterComponentDispatch
 > = (props) => {
   return (

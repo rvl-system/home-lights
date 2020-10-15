@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { InputLabel, Select, MenuItem } from '@material-ui/core';
-import { DialogInputBaseProps, useDefaultStyles } from './dialog';
+import { DialogInputBaseProps, useDefaultStyles } from './dialogComponent';
 
 export interface SelectDialogInputProps extends DialogInputBaseProps {
   selectValues: Array<{ value: string; label: string }>;

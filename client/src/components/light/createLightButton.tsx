@@ -21,7 +21,7 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { Dialog, DialogValue } from '../lib/dialog';
+import { DialogComponent, DialogValue } from '../lib/dialogComponent';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
 import { NUM_RVL_CHANNELS } from '../../common/config';
@@ -67,7 +67,7 @@ export function CreateLightButton(
       >
         <AddIcon />
       </Button>
-      <Dialog
+      <DialogComponent
         onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
@@ -90,7 +90,7 @@ export function CreateLightButton(
           )}
           defaultValue={'0'}
         />
-      </Dialog>
+      </DialogComponent>
     </div>
   );
 }

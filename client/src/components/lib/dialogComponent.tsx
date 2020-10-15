@@ -50,7 +50,7 @@ export interface DialogInputBaseProps {
 
 export type DialogValue = Record<string, string>;
 
-export interface DialogProps {
+export interface DialogComponentProps {
   onConfirm?: (newValue: DialogValue) => void;
   onCancel?: () => void;
   onChange?: (newValue: DialogValue) => void;
@@ -63,7 +63,7 @@ export interface DialogProps {
   cancelColor?: Color;
 }
 
-export const Dialog: FunctionComponent<DialogProps> = ({
+export const DialogComponent: FunctionComponent<DialogComponentProps> = ({
   children,
   onConfirm,
   onCancel,

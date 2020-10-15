@@ -32,7 +32,7 @@ import { ZonesContainer } from '../containers/zonesContainer';
 import { PatternsContainer } from '../containers/patternsContainer';
 import { LightsContainer } from '../containers/lightsContainer';
 
-export interface AppProps {
+export interface AppComponentProps {
   activeTab: SelectedTab;
 }
 
@@ -57,7 +57,7 @@ const useStyles = makeStyles({
   }
 });
 
-export const App: FunctionComponent<AppProps> = (props) => {
+export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(
     () =>

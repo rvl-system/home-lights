@@ -20,10 +20,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { createContainer } from 'reduxology';
 import { StatePaths, Actions } from '../types';
 import {
-  Footer,
+  FooterComponent,
   FooterComponentProps,
   FooterComponentDispatch
-} from '../components/footer';
+} from '../components/footerComponent';
 
 export const FooterContainer = createContainer(
   (getState): FooterComponentProps => {
@@ -38,5 +38,5 @@ export const FooterContainer = createContainer(
       }
     };
   },
-  Footer
+  FooterComponent
 );
