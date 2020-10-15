@@ -30,7 +30,7 @@ import {
   LightType,
   RVLLight
 } from '../../common/types';
-import { EditLightButtonContainer } from '../../containers/editLightButton';
+import { EditLightButtonContainer } from '../../containers/editLightButtonContainer';
 import {
   DeleteLightButton,
   DeleteLightButtonDispatch

@@ -25,12 +25,12 @@ import {
   createMuiTheme,
   MuiThemeProvider
 } from '@material-ui/core/styles';
-import { FooterContainer } from '../containers/footer';
+import { FooterContainer } from '../containers/footerContainer';
 import { SelectedTab } from '../types';
 
-import { ZonesContainer } from '../containers/zones';
-import { PatternsContainer } from '../containers/patterns';
-import { LightsContainer } from '../containers/lights';
+import { ZonesContainer } from '../containers/zonesContainer';
+import { PatternsContainer } from '../containers/patternsContainer';
+import { LightsContainer } from '../containers/lightsContainer';
 
 export interface AppProps {
   activeTab: SelectedTab;

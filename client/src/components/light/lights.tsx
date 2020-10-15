@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import React, { FunctionComponent } from 'react';
 import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { useContainerStyles } from '../lib/pageStyles';
-import { CreateLightButtonContainer } from '../../containers/createLightButton';
+import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
 import { Light as LightType } from '../../common/types';
 import { Light } from './light';
 
