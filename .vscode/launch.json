@@ -14,11 +14,7 @@
         "${workspaceFolder}/server/dist/**/*.js"
       ],
       "console": "internalConsole",
-      "outputCapture": "std""sourceMapPathOverrides": {
-        "webpack:///./~/*": "${workspaceRoot}/node_modules/*",
-        "webpack:///./*": "${workspaceRoot}/*",
-        "webpack:///*": "*"
-      },
+      "outputCapture": "std",
       "env": {
         "NODE_DEBUG": "node-hue-api"
       }
