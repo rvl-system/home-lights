@@ -18,17 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography
-} from '@material-ui/core';
-import { reduce } from 'conditional-reduce';
+import { Accordion, AccordionSummary, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Light as LightInterfaceType,
   LightType,
-  RVLLight,
   Zone
 } from '../../common/types';
 import { EditLightButtonContainer } from '../../containers/editLightButtonContainer';
@@ -37,6 +31,12 @@ import {
   DeleteLightButtonDispatch
 } from './deleteLightButton';
 import { useContentStyles } from '../lib/pageStyles';
+
+const styles = makeStyles({
+  caption: {
+    'padding-left': '15px'
+  }
+});
 
 export interface LightComponentProps {
   light: LightInterfaceType;
@@ -48,43 +48,38 @@ export type LightComponentDispatch = DeleteLightButtonDispatch;
 export const LightComponent: FunctionComponent<
   LightComponentProps & LightComponentDispatch
 > = (props) => {
-  const classes = useContentStyles();
+  const classes = styles();
+  const contentClasses = useContentStyles();
   const canEdit = props.light.type === LightType.RVL;
   const zone = props.zones.find((zone) => zone.id === props.light.zone);
   return (
-    <Accordion>
+    <Accordion expanded={false}>
       <AccordionSummary>
-        <div className={classes.itemHeading}>
+        <div className={contentClasses.itemHeading}>
           {canEdit ? (
             <DeleteLightButton
               light={props.light}
-              className={classes.leftButton}
+              className={contentClasses.leftButton}
               deleteLight={props.deleteLight}
             />
           ) : (
-            <div className={classes.leftButton}></div>
+            <div className={contentClasses.leftButton}></div>
           )}
-          <Typography className={classes.itemTitle}>
-            {props.light.name}
-          </Typography>
+          <div>
+            <Typography className={contentClasses.itemTitle}>
+              {props.light.name}
+            </Typography>
+            <Typography variant="caption" className={classes.caption}>
+              {zone ? zone.name : <em>Unassigned</em>}
+            </Typography>
+          </div>
           <EditLightButtonContainer
-            className={classes.rightButton}
+            className={contentClasses.rightButton}
             light={props.light}
             canChangeName={canEdit}
           />
         </div>
       </AccordionSummary>
-      <AccordionDetails className={classes.detailContainer}>
-        <Typography>Zone: {zone ? zone.name : <em>Unassigned</em>}</Typography>
-        {reduce(props.light.type, {
-          [LightType.RVL]: () => (
-            <Typography>
-              Channel: {(props.light as RVLLight).channel}
-            </Typography>
-          ),
-          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
-        })}
-      </AccordionDetails>
     </Accordion>
   );
 };
