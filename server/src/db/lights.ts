@@ -131,5 +131,8 @@ export async function editLight(light: Light): Promise<void> {
 }
 
 export async function deleteLight(id: number): Promise<void> {
-  await dbRun('DELETE FROM lights WHERE id = ?', [id]);
+  await dbRun('DELETE FROM lights WHERE id = ? AND type != ?', [
+    id,
+    LightType.PhilipsHue
+  ]);
 }

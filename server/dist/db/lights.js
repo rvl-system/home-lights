@@ -110,7 +110,10 @@ async function editLight(light) {
 }
 exports.editLight = editLight;
 async function deleteLight(id) {
-    await sqlite_1.dbRun('DELETE FROM lights WHERE id = ?', [id]);
+    await sqlite_1.dbRun('DELETE FROM lights WHERE id = ? AND type != ?', [
+        id,
+        types_1.LightType.PhilipsHue
+    ]);
 }
 exports.deleteLight = deleteLight;
 //# sourceMappingURL=lights.js.map
