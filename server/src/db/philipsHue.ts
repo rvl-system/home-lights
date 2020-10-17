@@ -31,7 +31,7 @@ export interface PhilipsHueInfo {
 }
 
 export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | null> {
-  const rows = await dbAll(`SELECT * FROM "philips_hue_info"`);
+  const rows = await dbAll('SELECT * FROM "philips_hue_info"');
   switch (rows.length) {
     case 0:
       return null;
@@ -39,13 +39,13 @@ export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | null> {
       return rows[0] as PhilipsHueInfo;
     default:
       throw new Error(
-        `Internal Error: philips_hue_info unexpectedly has more than one row`
+        'Internal Error: philips_hue_info unexpectedly has more than one row'
       );
   }
 }
 
 export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
-  await dbRun(`INSERT INTO philips_hue_info (username, key) VALUES(?, ?)`, [
+  await dbRun('INSERT INTO philips_hue_info (username, key) VALUES(?, ?)', [
     info.username,
     info.key
   ]);

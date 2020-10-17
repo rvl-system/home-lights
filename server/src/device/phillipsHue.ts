@@ -91,7 +91,7 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
   // Create an unauthenticated instance of the Hue API so that we can create a new user
   const unauthenticatedApi = await v3.api.createLocal(bridgeIP).connect();
 
-  // Create the user and store it to the database for future user
+  // Create the user and store it to the database for future use
   try {
     const createdUser = await unauthenticatedApi.users.createUser(
       PHILIPS_HUE_APP_NAME,

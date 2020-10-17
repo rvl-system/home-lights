@@ -20,6 +20,7 @@ module.exports = {
     }
   },
   rules: {
+    quotes: ['error', 'single'],
     '@typescript-eslint/no-explicit-any': 0,
     'react/display-name': 0,
     'react/prop-types': 0

@@ -34,15 +34,15 @@ const DB_FILE = join(
 export async function reset(): Promise<void> {
   console.log('Resetting database...');
   await init();
-  await dbAll(`DROP TABLE zones`);
-  await dbAll(`DROP TABLE lights`);
-  await dbAll(`DROP TABLE philips_hue_info`);
+  await dbAll('DROP TABLE zones');
+  await dbAll('DROP TABLE lights');
+  await dbAll('DROP TABLE philips_hue_info');
   await create();
   console.log('done');
 }
 
 async function create(): Promise<void> {
-  console.log(`Creating database tables...`);
+  console.log('Creating database tables...');
   await dbRun(ZONE_SCHEMA);
   await dbRun(LIGHT_SCHEMA);
   await dbRun(PHILIPS_HUE_INFO_SCHEMA);

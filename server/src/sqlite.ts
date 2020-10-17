@@ -43,7 +43,7 @@ export async function dbRun(
   parameters?: Array<string | number | undefined>
 ): Promise<number> {
   if (!db) {
-    throw createInternalError(`dbRun called before database initialized`);
+    throw createInternalError('dbRun called before database initialized');
   }
   return new Promise((resolve, reject) => {
     db.run(query, parameters || [], function (err) {
@@ -64,7 +64,7 @@ export async function dbAll(
   parameters: string[] = []
 ): Promise<Array<Record<string, any>>> {
   if (!db) {
-    throw createInternalError(`dbAll called before database initialized`);
+    throw createInternalError('dbAll called before database initialized');
   }
   return new Promise((resolve, reject) => {
     db.all(query, parameters, (err, results) => {
@@ -85,7 +85,7 @@ export async function dbGet(
   parameters: string[] = []
 ): Promise<Record<string, any>> {
   if (!db) {
-    throw createInternalError(`dbGet called before database initialized`);
+    throw createInternalError('dbGet called before database initialized');
   }
   return new Promise((resolve, reject) => {
     db.get(query, parameters, (err, result) => {

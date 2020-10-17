@@ -41,7 +41,7 @@ CREATE TABLE "lights" (
 )`;
 
 export async function getLights(): Promise<Light[]> {
-  const rawResults = await dbAll(`SELECT * FROM lights`);
+  const rawResults = await dbAll('SELECT * FROM lights');
   return rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
@@ -92,7 +92,7 @@ export async function createLight(
         throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
       }
       await dbRun(
-        `INSERT INTO lights (name, type, channel, zone_id) values (?, ?, ?, ?)`,
+        'INSERT INTO lights (name, type, channel, zone_id) values (?, ?, ?, ?)',
         [
           rvlLightRequest.name,
           LightType.RVL,
@@ -105,7 +105,7 @@ export async function createLight(
     case LightType.PhilipsHue: {
       const philipsHueLightRequest: CreatePhilipsHueLightRequest = createLightRequest as CreatePhilipsHueLightRequest;
       await dbRun(
-        `INSERT INTO lights (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)`,
+        'INSERT INTO lights (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)',
         [
           philipsHueLightRequest.name,
           LightType.PhilipsHue,

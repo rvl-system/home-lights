@@ -27,13 +27,13 @@ CREATE TABLE "zones" (
 )`;
 
 export async function getZones(): Promise<Zone[]> {
-  return dbAll(`SELECT * FROM zones`) as Promise<Zone[]>;
+  return dbAll('SELECT * FROM zones') as Promise<Zone[]>;
 }
 
 export async function createZone(
   zoneRequest: CreateZoneRequest
 ): Promise<void> {
-  await dbRun(`INSERT INTO zones (name) values (?)`, [zoneRequest.name]);
+  await dbRun('INSERT INTO zones (name) values (?)', [zoneRequest.name]);
 }
 
 export async function editZone(zone: Zone): Promise<void> {

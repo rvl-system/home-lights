@@ -97,7 +97,7 @@ export const DialogComponent: FunctionComponent<DialogComponentProps> = ({
     };
     if (!newChildProps.onValueChange) {
       throw new Error(
-        `Internal Error: "onValueChange" is unexpectedly undefined`
+        'Internal Error: "onValueChange" is unexpectedly undefined'
       );
     }
     return cloneElement(child as any, newChildProps);
