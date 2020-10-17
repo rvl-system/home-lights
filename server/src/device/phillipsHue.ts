@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { v3 } from 'node-hue-api';
+import { v3 as philipsHue } from 'node-hue-api';
 import Api = require('node-hue-api/lib/api/Api');
 import {
   PHILIPS_HUE_APP_NAME,
@@ -41,7 +41,9 @@ export async function init(): Promise<void> {
   }
   console.log('Connecting to Philips Hue bridge...');
   const username = await getOrCreateUser(bridgeIP);
-  authenticatedApi = await v3.api.createLocal(bridgeIP).connect(username);
+  authenticatedApi = await philipsHue.api
+    .createLocal(bridgeIP)
+    .connect(username);
   await updateLights();
   console.log('Phillips Hue bridge initialized');
 }
@@ -55,7 +57,7 @@ export async function setLightState(
 async function discoverBridge(): Promise<string | null> {
   let bridges: any;
   try {
-    bridges = await v3.discovery.nupnpSearch();
+    bridges = await philipsHue.discovery.nupnpSearch();
   } catch {
     console.log(
       'Failed to search for Philips Hue bridges, calls to set state on Philips Hue lights will be ignored'
@@ -89,7 +91,9 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
   );
 
   // Create an unauthenticated instance of the Hue API so that we can create a new user
-  const unauthenticatedApi = await v3.api.createLocal(bridgeIP).connect();
+  const unauthenticatedApi = await philipsHue.api
+    .createLocal(bridgeIP)
+    .connect();
 
   // Create the user and store it to the database for future use
   try {
@@ -97,7 +101,6 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
       PHILIPS_HUE_APP_NAME,
       PHILIPS_HUE_DEVICE_NAME
     );
-    console.log(createdUser);
     setPhilipsHueInfo({
       username: createdUser.username,
       key: createdUser.clientkey
