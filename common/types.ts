@@ -39,7 +39,7 @@ export interface Light {
   id: number;
   type: LightType;
   name: string;
-  zone: number;
+  zoneID: number;
 }
 
 export interface RVLLight extends Light {

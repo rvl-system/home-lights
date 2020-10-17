@@ -59,3 +59,7 @@ typings/
 
 # tsconfig
 tsconfig.tsbuildinfo
+
+# build artifacts
+server/dist
+public/bundle.js

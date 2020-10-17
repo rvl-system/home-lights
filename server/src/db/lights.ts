@@ -42,25 +42,33 @@ CREATE TABLE "lights" (
 
 export async function getLights(): Promise<Light[]> {
   const rawResults = await dbAll(`SELECT * FROM lights`);
-  return (await rawResults).map((light) => {
+  return rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
+        const { id, name, type, channel, zone_id: zone } = light;
         const rvlLight: RVLLight = {
-          id: light.id,
-          name: light.name,
-          type: light.type,
-          channel: light.channel,
-          zone: light.zone_id
+          id,
+          name,
+          type,
+          channel,
+          zoneID: zone
         };
         return rvlLight;
       }
       case LightType.PhilipsHue: {
+        const {
+          id,
+          name,
+          type,
+          philips_hue_id: philipsHueID,
+          zone_id: zone
+        } = light;
         const hueLight: PhilipsHueLight = {
-          id: light.id,
-          name: light.name,
-          type: light.type,
-          philipsHueID: light.philips_hue_id,
-          zone: light.zone_id
+          id,
+          name,
+          type,
+          philipsHueID,
+          zoneID: zone
         };
         return hueLight;
       }
@@ -71,11 +79,11 @@ export async function getLights(): Promise<Light[]> {
 }
 
 export async function createLight(
-  lightRequest: CreateLightRequest
+  createLightRequest: CreateLightRequest
 ): Promise<void> {
-  switch (lightRequest.type) {
+  switch (createLightRequest.type) {
     case LightType.RVL: {
-      const rvlLightRequest: CreateRVLLightRequest = lightRequest as CreateRVLLightRequest;
+      const rvlLightRequest: CreateRVLLightRequest = createLightRequest as CreateRVLLightRequest;
       if (
         !Number.isInteger(rvlLightRequest.channel) ||
         rvlLightRequest.channel < 0 ||
@@ -95,7 +103,7 @@ export async function createLight(
       break;
     }
     case LightType.PhilipsHue: {
-      const philipsHueLightRequest: CreatePhilipsHueLightRequest = lightRequest as CreatePhilipsHueLightRequest;
+      const philipsHueLightRequest: CreatePhilipsHueLightRequest = createLightRequest as CreatePhilipsHueLightRequest;
       await dbRun(
         `INSERT INTO lights (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)`,
         [
@@ -116,14 +124,14 @@ export async function editLight(light: Light): Promise<void> {
       const rvlLight: RVLLight = light as RVLLight;
       await dbRun(
         'UPDATE lights SET name = ?, channel = ?, zone_id=? WHERE id = ?',
-        [rvlLight.name, rvlLight.channel, rvlLight.zone, rvlLight.id]
+        [rvlLight.name, rvlLight.channel, rvlLight.zoneID, rvlLight.id]
       );
       break;
     case LightType.PhilipsHue:
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
       await dbRun('UPDATE lights SET name = ?, zone_id=? WHERE id = ?', [
         hueLight.name,
-        hueLight.zone,
+        hueLight.zoneID,
         hueLight.id
       ]);
       break;

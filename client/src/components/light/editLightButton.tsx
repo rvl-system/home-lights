@@ -92,7 +92,7 @@ export const EditLightButton: FunctionComponent<
             }))
           )}
           defaultValue={
-            typeof props.light.zone === 'number' ? props.light.zone : -1
+            typeof props.light.zoneID === 'number' ? props.light.zoneID : -1
           }
         />
         {reduce(props.light.type, {
