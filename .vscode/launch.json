@@ -14,7 +14,10 @@
         "${workspaceFolder}/server/dist/**/*.js"
       ],
       "console": "internalConsole",
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "env": {
+        "NODE_DEBUG": "node-hue-api"
+      }
     },
     {
       "type": "node",

@@ -20,16 +20,18 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
 import { reduce } from 'conditional-reduce';
-import { Dialog, DialogValue } from '../lib/dialog';
+import { DialogComponent, DialogValue } from '../lib/dialogComponent';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
 import { Edit as EditIcon } from '@material-ui/icons';
-import { Light, RVLLight, LightType } from '../../common/types';
+import { Light, RVLLight, LightType, Zone } from '../../common/types';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 
 export interface EditLightButtonProps {
   light: Light;
   className: string;
+  canChangeName: boolean;
+  zones: Zone[];
 }
 
 export interface EditLightButtonDispatch {
@@ -65,18 +67,33 @@ export const EditLightButton: FunctionComponent<
         <EditIcon />
       </Button>
 
-      <Dialog
+      <DialogComponent
         onConfirm={handleConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
         title={`Edit "${props.light.name}"`}
         confirmLabel="Save light"
       >
-        <TextDialogInput
-          name="name"
-          description="Name"
-          inputPlaceholder="e.g. Left bedside lamp"
-          defaultValue={props.light.name}
+        {props.canChangeName && (
+          <TextDialogInput
+            name="name"
+            description="Name"
+            inputPlaceholder="e.g. Left bedside lamp"
+            defaultValue={props.light.name}
+          />
+        )}
+        <SelectDialogInput
+          name="zone"
+          description="Zone"
+          selectValues={[{ value: -1, label: 'Unassigned' }].concat(
+            props.zones.map((zone) => ({
+              value: zone.id,
+              label: zone.name
+            }))
+          )}
+          defaultValue={
+            typeof props.light.zoneID === 'number' ? props.light.zoneID : -1
+          }
         />
         {reduce(props.light.type, {
           [LightType.RVL]: () => (
@@ -94,7 +111,7 @@ export const EditLightButton: FunctionComponent<
           ),
           [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
         })}
-      </Dialog>
+      </DialogComponent>
     </React.Fragment>
   );
 };

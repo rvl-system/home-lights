@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { TextField, InputLabel } from '@material-ui/core';
-import { DialogInputBaseProps, useDefaultStyles } from './dialog';
+import { DialogInputBaseProps, useDefaultStyles } from './dialogComponent';
 
 export interface TextDialogInputProps extends DialogInputBaseProps {
   inputPlaceholder?: string;

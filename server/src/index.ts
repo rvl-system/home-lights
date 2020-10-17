@@ -17,94 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { join } from 'path';
-import fastify from 'fastify';
-import fastifyStatic from 'fastify-static';
-import { getEnvironmentVariable } from './util';
-import {
-  init,
-  getZones,
-  createZone,
-  editZone,
-  deleteZone,
-  getLights,
-  createLight,
-  editLight,
-  deleteLight
-} from './db';
-import {
-  CreateZoneRequest,
-  Zone,
-  CreateLightRequest,
-  Light
-} from './common/types';
+import { init as initEndpoints } from './endpoints';
+import { init as initDB } from './db';
+import { init as initDevice } from './device';
 
 export async function run(): Promise<void> {
-  const port = parseInt(getEnvironmentVariable('PORT', '3000'));
-
-  const app = fastify({
-    logger: true
-  });
-
-  await init();
-
-  app.register(fastifyStatic, {
-    root: join(__dirname, '..', '..', 'public')
-  });
-
-  // ---- Zones Endpoints ----
-
-  app.get('/api/zones', async () => {
-    return await getZones();
-  });
-
-  app.post('/api/zones', async (req) => {
-    const zoneRequest = req.body as CreateZoneRequest;
-    await createZone(zoneRequest);
-    return {};
-  });
-
-  app.put('/api/zone/:id', async (req) => {
-    const zone = req.body as Zone;
-    await editZone(zone);
-    return {};
-  });
-
-  app.delete('/api/zone/:id', async (req) => {
-    const { id } = req.params as { id: string };
-    await deleteZone(parseInt(id));
-    return {};
-  });
-
-  // ---- Lights Endpoints ----
-
-  app.get('/api/lights', async () => {
-    return await getLights();
-  });
-
-  app.post('/api/lights', async (req) => {
-    const zoneRequest = req.body as CreateLightRequest;
-    await createLight(zoneRequest);
-    return {};
-  });
-
-  app.put('/api/light/:id', async (req) => {
-    const zone = req.body as Light;
-    await editLight(zone);
-    return {};
-  });
-
-  app.delete('/api/light/:id', async (req) => {
-    const { id } = req.params as { id: string };
-    await deleteLight(parseInt(id));
-    return {};
-  });
-
-  app.listen(port, (err, address) => {
-    if (err) {
-      app.log.error(err);
-      process.exit(1);
-    }
-    console.log(`Server listening on ${address}`);
-  });
+  await initDB();
+  await initDevice();
+  await initEndpoints();
+  console.log('\n=== Home Lights Running ===\n');
 }

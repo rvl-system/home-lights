@@ -33,7 +33,6 @@ export enum Actions {
 
   LightsUpdated = 'LightsUpdated',
   CreateRVLLight = 'CreateRVLLight',
-  CreateHueLight = 'CreateHueLight',
   EditLight = 'EditLight',
   DeleteLight = 'DeleteLight'
 }

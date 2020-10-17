@@ -7,19 +7,22 @@
     "prebuild": "eslint -c ../.eslintrc.js src/",
     "build": "tsc",
     "start": "node ./bin/server.js",
+    "reset-db": "node ./bin/resetdb.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/node": "^14.0.27",
+    "@types/node": "^14.11.8",
     "@types/sqlite3": "^3.1.6",
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "eslint": "^7.10.0",
-    "fastify": "^3.2.0",
-    "fastify-static": "^3.2.0",
+    "eslint": "^7.11.0",
+    "fastify": "^3.6.0",
+    "fastify-static": "^3.2.1",
+    "node-hue-api": "^4.0.9",
+    "rvl-node": "^6.0.1",
     "sqlite3": "^5.0.0"
   }
 }

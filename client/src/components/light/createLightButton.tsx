@@ -21,12 +21,11 @@ import * as React from 'react';
 import { Button } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { reduce } from 'conditional-reduce';
-import { Dialog, DialogValue } from '../lib/dialog';
+import { DialogComponent, DialogValue } from '../lib/dialogComponent';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
-import { LightType } from '../../common/types';
 import { NUM_RVL_CHANNELS } from '../../common/config';
+import { Zone } from '../../common/types';
 
 const useStyles = makeStyles({
   container: {
@@ -36,35 +35,30 @@ const useStyles = makeStyles({
   }
 });
 
+export interface CreateLightButtonProps {
+  zones: Zone[];
+}
+
 export interface CreateLightButtonDispatch {
-  createRVLLight: (name: string, channel: number) => void;
-  createPhilipsHueLight: (name: string) => void;
+  createRVLLight: (name: string, channel: number, zone?: number) => void;
 }
 
 export function CreateLightButton(
-  props: CreateLightButtonDispatch
+  props: CreateLightButtonProps & CreateLightButtonDispatch
 ): JSX.Element {
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [lightType, setLightType] = React.useState(LightType.RVL);
 
   function handleClose() {
     setOpenDialog(false);
   }
 
   function handleConfirm(values: DialogValue) {
-    switch (values.type) {
-      case LightType.RVL:
-        props.createRVLLight(values.name, parseInt(values.channel));
-        break;
-      case LightType.PhilipsHue:
-        props.createPhilipsHueLight(values.name);
-        break;
-    }
+    props.createRVLLight(
+      values.name as string,
+      values.channel as number,
+      values.zone !== -1 ? (values.zone as number) : undefined
+    );
     handleClose();
-  }
-
-  function handleChange(newState: DialogValue) {
-    setLightType(newState.type as LightType);
   }
 
   const classes = useStyles();
@@ -77,51 +71,41 @@ export function CreateLightButton(
       >
         <AddIcon />
       </Button>
-      <Dialog
+      <DialogComponent
         onConfirm={handleConfirm}
         onCancel={handleClose}
-        onChange={handleChange}
         open={openDialog}
         title="Create light"
         confirmLabel="Create light"
       >
-        <SelectDialogInput
-          name="type"
-          description="Type of light"
-          selectValues={[
-            {
-              value: LightType.RVL,
-              label: 'RVL'
-            },
-            {
-              value: LightType.PhilipsHue,
-              label: 'Philips Hue'
-            }
-          ]}
-          defaultValue={LightType.RVL}
-        />
         <TextDialogInput
           name="name"
           description="Descriptive name for the light"
           inputPlaceholder="e.g. Left bedside lamp"
         />
-        {reduce(lightType, {
-          [LightType.RVL]: () => (
-            <SelectDialogInput
-              name="channel"
-              description="Channel"
-              selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-                (_, i) => ({
-                  value: i.toString(),
-                  label: i.toString()
-                })
-              )}
-              defaultValue={'0'}
-            />
-          ),
-          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
-        })}
-      </Dialog>
+        <SelectDialogInput
+          name="zone"
+          description="Zone"
+          selectValues={[{ value: -1, label: 'Unassigned' }].concat(
+            props.zones.map((zone) => ({
+              value: zone.id,
+              label: zone.name
+            }))
+          )}
+          defaultValue={-1}
+        />
+        <SelectDialogInput
+          name="channel"
+          description="Channel"
+          selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
+            (_, i) => ({
+              value: i,
+              label: i.toString()
+            })
+          )}
+          defaultValue={0}
+        />
+      </DialogComponent>
     </div>
   );
 }
