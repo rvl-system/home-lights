@@ -1,34 +1,28 @@
 {
-  "name": "home-lights",
+  "name": "home-lights-server",
   "version": "1.0.0",
-  "description": "Control system for my home lighting system",
-  "main": "dist/index.js",
+  "description": "Server for Home Lights",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "tslint src/**/*.ts",
+    "prebuild": "eslint -c ../.eslintrc.js src/",
     "build": "tsc",
-    "start": "node dist/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nebrius/home-lights.git"
+    "start": "node ./bin/server.js",
+    "reset-db": "node ./bin/resetdb.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/nebrius/home-lights/issues"
-  },
-  "homepage": "https://github.com/nebrius/home-lights#readme",
   "devDependencies": {
-    "@types/express": "^4.17.7",
-    "tslint": "^5.20.1",
+    "@types/node": "^14.11.8",
+    "@types/sqlite3": "^3.1.6",
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "handlebars": "^4.7.6",
+    "eslint": "^7.11.0",
+    "fastify": "^3.6.0",
+    "fastify-static": "^3.2.1",
+    "node-hue-api": "^4.0.9",
     "rvl-node": "^6.0.1",
-    "strict-event-emitter-types": "^2.0.0"
+    "sqlite3": "^5.0.0"
   }
 }

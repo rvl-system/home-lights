@@ -8,13 +8,16 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Server",
-      "program": "${workspaceFolder}\\server\\src\\index.ts",
+      "program": "${workspaceFolder}/server/bin/server.js",
       "args": [ "Wi-Fi" ],
       "outFiles": [
-        "${workspaceFolder}/**/*.js"
+        "${workspaceFolder}/server/dist/**/*.js"
       ],
       "console": "internalConsole",
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "env": {
+        "NODE_DEBUG": "node-hue-api"
+      }
     },
     {
       "type": "node",

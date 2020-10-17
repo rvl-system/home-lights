@@ -1,28 +1,32 @@
-const { join } = require('path');
+const path = require('path');
 
 module.exports = {
   entry: './src/index.tsx',
-
   mode: 'development',
-
-  output: {
-    filename: 'bundle.js',
-    path: join(__dirname, '..', 'public')
-  },
-
-  // Enable sourcemaps for debugging webpack's output.
   devtool: 'inline-source-map',
-
-  resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ['.ts', '.tsx', '.js', '.json']
-  },
-
   module: {
     rules: [
-      // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-      { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ }
+      {
+        enforce: 'pre',
+        test: /\.tsx?$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        options: {
+          emitError: true
+        }
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/
+      }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, '..', 'public')
   }
-
 };

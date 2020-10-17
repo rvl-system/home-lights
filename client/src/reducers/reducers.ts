@@ -17,19 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { render } from 'react-dom';
-import { createRoot, dispatch } from 'reduxology';
-import { AppContainer } from './containers/appContainer';
-import { get } from './util/api';
-import { Actions } from './types';
-
-import './reducers/reducers';
-import './listeners/listeners';
-
-async function run() {
-  render(createRoot(AppContainer), document.getElementById('app'));
-
-  get('/api/zones').then((zones) => dispatch(Actions.ZonesUpdated, zones));
-  get('/api/lights').then((lights) => dispatch(Actions.LightsUpdated, lights));
-}
-run();
+import './zonesReducer';
+import './lightsReducer';
+import './selectedTabReducer';

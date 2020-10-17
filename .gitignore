@@ -57,5 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# next.js build output
-.next
+# tsconfig
+tsconfig.tsbuildinfo
+
+# build artifacts
+server/dist
+public/bundle.js

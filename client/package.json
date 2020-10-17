@@ -1,36 +1,29 @@
 {
-  "name": "home-lights",
+  "name": "home-lights-client",
   "version": "1.0.0",
-  "description": "Control system for my home lighting system",
+  "description": "Client for Home Lights",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "tslint src/**/*",
-    "build": "webpack"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nebrius/home-lights.git"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/nebrius/home-lights/issues"
-  },
-  "homepage": "https://github.com/nebrius/home-lights#readme",
   "devDependencies": {
-    "@types/color-convert": "^1.9.0",
-    "@types/react": "^16.9.44",
+    "@types/react": "^16.9.52",
     "@types/react-dom": "^16.9.8",
-    "ts-loader": "^5.4.5",
-    "tslint": "^5.20.1",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.1",
+    "ts-loader": "^8.0.5",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "color-convert": "^2.0.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "conditional-reduce": "^1.2.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "reduxology": "^1.1.0"
   }
 }
