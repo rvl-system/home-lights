@@ -97,15 +97,18 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
 
   // Create the user and store it to the database for future use
   try {
-    const createdUser = await unauthenticatedApi.users.createUser(
+    const {
+      username,
+      clientkey: key
+    } = await unauthenticatedApi.users.createUser(
       PHILIPS_HUE_APP_NAME,
       PHILIPS_HUE_DEVICE_NAME
     );
     setPhilipsHueInfo({
-      username: createdUser.username,
-      key: createdUser.clientkey
+      username,
+      key
     });
-    return createdUser.username;
+    return username;
   } catch (e) {
     if (e.getHueErrorType() === 101) {
       throw new Error(
