@@ -31,5 +31,8 @@ async function run() {
 
   get('/api/zones').then((zones) => dispatch(Actions.ZonesUpdated, zones));
   get('/api/lights').then((lights) => dispatch(Actions.LightsUpdated, lights));
+  get('/api/patterns').then((patterns) =>
+    dispatch(Actions.PatternsUpdated, patterns)
+  );
 }
 run();

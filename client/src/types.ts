@@ -31,6 +31,11 @@ export enum Actions {
   DeleteZone = 'DeleteZone',
   EditZone = 'EditZone',
 
+  PatternsUpdated = 'PatternsUpdated',
+  CreatePattern = 'CreatePattern',
+  EditPattern = 'EditPattern',
+  DeletePattern = 'DeletePattern',
+
   LightsUpdated = 'LightsUpdated',
   CreateRVLLight = 'CreateRVLLight',
   EditLight = 'EditLight',

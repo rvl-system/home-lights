@@ -131,7 +131,7 @@ export async function editLight(light: Light): Promise<void> {
     case LightType.PhilipsHue:
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
       await dbRun(
-        `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?'`,
+        `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
         [hueLight.name, hueLight.zoneID, hueLight.id]
       );
       break;
