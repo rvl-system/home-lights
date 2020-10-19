@@ -24,12 +24,12 @@ import { get, post, put, del } from '../util/api';
 
 listen(
   Actions.CreateRVLLight,
-  async (name: string, channel: number, zone?: number) => {
+  async (name: string, channel: number, zoneID?: number) => {
     const createBody: CreateRVLLightRequest = {
       type: LightType.RVL,
       name,
       channel,
-      zone
+      zoneID
     };
     await post('/api/lights', createBody);
 

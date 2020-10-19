@@ -83,7 +83,7 @@ export const EditLightButton: FunctionComponent<
           />
         )}
         <SelectDialogInput
-          name="zone"
+          name="zoneID"
           description="Zone"
           selectValues={[{ value: -1, label: 'Unassigned' }].concat(
             props.zones.map((zone) => ({

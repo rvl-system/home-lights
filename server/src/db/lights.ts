@@ -45,13 +45,13 @@ export async function getLights(): Promise<Light[]> {
   return rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
-        const { id, name, type, channel, zone_id: zone } = light;
+        const { id, name, type, channel, zone_id: zoneID } = light;
         const rvlLight: RVLLight = {
           id,
           name,
           type,
           channel,
-          zoneID: zone
+          zoneID
         };
         return rvlLight;
       }
@@ -61,14 +61,14 @@ export async function getLights(): Promise<Light[]> {
           name,
           type,
           philips_hue_id: philipsHueID,
-          zone_id: zone
+          zone_id: zoneID
         } = light;
         const hueLight: PhilipsHueLight = {
           id,
           name,
           type,
           philipsHueID,
-          zoneID: zone
+          zoneID
         };
         return hueLight;
       }
@@ -97,7 +97,7 @@ export async function createLight(
           rvlLightRequest.name,
           LightType.RVL,
           rvlLightRequest.channel,
-          rvlLightRequest.zone
+          rvlLightRequest.zoneID
         ]
       );
       break;
@@ -110,7 +110,7 @@ export async function createLight(
           philipsHueLightRequest.name,
           LightType.PhilipsHue,
           philipsHueLightRequest.philipsHueID,
-          philipsHueLightRequest.zone
+          philipsHueLightRequest.zoneID
         ]
       );
       break;
@@ -123,13 +123,13 @@ export async function editLight(light: Light): Promise<void> {
     case LightType.RVL:
       const rvlLight: RVLLight = light as RVLLight;
       await dbRun(
-        'UPDATE lights SET name = ?, channel = ?, zone_id=? WHERE id = ?',
+        'UPDATE lights SET name = ?, channel = ?, zone_id = ? WHERE id = ?',
         [rvlLight.name, rvlLight.channel, rvlLight.zoneID, rvlLight.id]
       );
       break;
     case LightType.PhilipsHue:
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
-      await dbRun('UPDATE lights SET name = ?, zone_id=? WHERE id = ?', [
+      await dbRun('UPDATE lights SET name = ?, zone_id = ? WHERE id = ?', [
         hueLight.name,
         hueLight.zoneID,
         hueLight.id

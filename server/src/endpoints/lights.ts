@@ -27,14 +27,14 @@ export function init(app: FastifyInstance): void {
   });
 
   app.post('/api/lights', async (req) => {
-    const zoneRequest = req.body as CreateLightRequest;
-    await createLight(zoneRequest);
+    const lightRequest = req.body as CreateLightRequest;
+    await createLight(lightRequest);
     return {};
   });
 
   app.put('/api/light/:id', async (req) => {
-    const zone = req.body as Light;
-    await editLight(zone);
+    const light = req.body as Light;
+    await editLight(light);
     return {};
   });
 
