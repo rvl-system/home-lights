@@ -40,8 +40,6 @@ export function init(app: FastifyInstance): void {
 
   app.delete('/api/light/:id', async (req) => {
     const { id } = req.params as { id: string };
-    // TODO: make sure this isn't a Philips Hue light, since they're synced with
-    // the bridge and will reappear on server restart
     await deleteLight(parseInt(id));
     return {};
   });
