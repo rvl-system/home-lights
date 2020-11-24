@@ -17,37 +17,49 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { listen, dispatch } from 'reduxology';
-import { Actions } from '../types';
+import { createListener, dispatch } from '../reduxology';
+import { ActionType } from '../types';
 import { CreateRVLLightRequest, Light, LightType } from '../common/types';
 import { get, post, put, del } from '../util/api';
 
-listen(
-  Actions.CreateRVLLight,
-  async (name: string, channel: number, zoneID?: number) => {
+const createRVLLightListener = createListener(
+  ActionType.CreateRVLLight,
+  async ({ name, channel, zoneId }) => {
     const createBody: CreateRVLLightRequest = {
       type: LightType.RVL,
       name,
       channel,
-      zoneID
+      zoneId
     };
     await post('/api/lights', createBody);
 
-    const updatedLights = await get('/api/lights');
-    dispatch(Actions.LightsUpdated, updatedLights);
+    const updatedLights = (await get('/api/lights')) as Light[]; // TODO: type this like we do actions
+    dispatch(ActionType.LightsUpdated, updatedLights);
   }
 );
 
-listen(Actions.EditLight, async (light: Light) => {
-  await put(`/api/light/${light.id}`, light);
+const editLightListener = createListener(
+  ActionType.EditLight,
+  async (light) => {
+    await put(`/api/light/${light.id}`, light);
 
-  const updatedLights = await get('/api/lights');
-  dispatch(Actions.LightsUpdated, updatedLights);
-});
+    const updatedLights = (await get('/api/lights')) as Light[]; // TODO: type this like we do actions
+    dispatch(ActionType.LightsUpdated, updatedLights);
+  }
+);
 
-listen(Actions.DeleteLight, async (id: number) => {
-  await del(`/api/light/${id}`);
+const deleteLightListener = createListener(
+  ActionType.DeleteLight,
+  async (id) => {
+    await del(`/api/light/${id}`);
 
-  const updatedLights = await get('/api/lights');
-  dispatch(Actions.LightsUpdated, updatedLights);
-});
+    const updatedLights = (await get('/api/lights')) as Light[]; // TODO: type this like we do actions
+    dispatch(ActionType.LightsUpdated, updatedLights);
+  }
+);
+
+export const lightsListeners = [
+  createRVLLightListener,
+  editLightListener,
+  deleteLightListener
+];

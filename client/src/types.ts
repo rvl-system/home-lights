@@ -17,13 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-export enum StatePaths {
+import { Light, Zone } from './common/types';
+
+export enum SliceName {
   Zones = 'Zones',
   Lights = 'Lights',
   SelectedTab = 'SelectedTab'
 }
 
-export enum Actions {
+export enum ActionType {
   SelectTab = 'SelectTab',
 
   ZonesUpdated = 'ZonesUpdated',
@@ -36,6 +38,31 @@ export enum Actions {
   EditLight = 'EditLight',
   DeleteLight = 'DeleteLight'
 }
+
+export interface State {
+  [SliceName.Zones]: Zone[];
+  [SliceName.Lights]: Light[];
+  [SliceName.SelectedTab]: SelectedTab;
+}
+
+export interface Actions {
+  [ActionType.SelectTab]: SelectedTab;
+
+  [ActionType.ZonesUpdated]: Zone[];
+  [ActionType.CreateZone]: string;
+  [ActionType.EditZone]: Zone;
+  [ActionType.DeleteZone]: number;
+
+  [ActionType.LightsUpdated]: Light[];
+  [ActionType.CreateRVLLight]: {
+    name: string;
+    channel: number;
+    zoneId?: number;
+  };
+  [ActionType.EditLight]: Light;
+  [ActionType.DeleteLight]: number;
+}
+
 export enum SelectedTab {
   Zones = 'Zones',
   Patterns = 'Patterns',

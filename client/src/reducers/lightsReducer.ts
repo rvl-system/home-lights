@@ -17,13 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createReducer } from 'reduxology';
-import { StatePaths, Actions } from '../types';
-import { Light } from '../common/types';
+import { createReducer } from '../reduxology';
+import { SliceName, ActionType } from '../types';
 
-createReducer(StatePaths.Lights, []).handle(
-  Actions.LightsUpdated,
-  (state: Light[], updatedLights: Light[]): Light[] => {
-    return updatedLights;
-  }
+export const lightsReducer = createReducer(SliceName.Lights, []);
+
+lightsReducer.handle(
+  ActionType.LightsUpdated,
+  (state, updatedLights) => updatedLights
 );

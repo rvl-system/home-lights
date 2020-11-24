@@ -17,30 +17,29 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from 'reduxology';
+import { createContainer } from '../reduxology';
 import {
   ZonesTab,
   ZonesTabProps,
   ZonesTabDispatch
 } from '../components/zone/zonesTab';
-import { StatePaths, Actions } from '../types';
-import { Zone } from '../common/types';
+import { SliceName, ActionType } from '../types';
 
 export const ZonesTabContainer = createContainer(
   (getState): ZonesTabProps => ({
-    zones: getState(StatePaths.Zones)
+    zones: getState(SliceName.Zones)
   }),
   (dispatch): ZonesTabDispatch => ({
-    createZone(name: string) {
-      dispatch(Actions.CreateZone, name);
+    createZone(name) {
+      dispatch(ActionType.CreateZone, name);
     },
-    editZone(zone: Zone) {
-      dispatch(Actions.EditZone, zone);
+    editZone(zone) {
+      dispatch(ActionType.EditZone, zone);
     },
-    deleteZone(id: number) {
-      dispatch(Actions.DeleteZone, id);
+    deleteZone(id) {
+      dispatch(ActionType.DeleteZone, id);
     },
-    toggleZonePower(id: number, powerState: boolean) {
+    toggleZonePower(id, powerState) {
       console.log(`Toggling zone ${id} power to ${powerState}`);
       // TODO
     }

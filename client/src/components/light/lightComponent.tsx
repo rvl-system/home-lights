@@ -51,7 +51,7 @@ export const LightComponent: FunctionComponent<
   const classes = styles();
   const contentClasses = useContentStyles();
   const canEdit = props.light.type === LightType.RVL;
-  const zone = props.zones.find((zone) => zone.id === props.light.zoneID);
+  const zone = props.zones.find((zone) => zone.id === props.light.zoneId);
   return (
     <Accordion expanded={false}>
       <AccordionSummary>

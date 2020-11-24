@@ -17,13 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createReducer } from 'reduxology';
-import { StatePaths, Actions } from '../types';
-import { Zone } from '../common/types';
+import { createReducer } from '../reduxology';
+import { SliceName, ActionType } from '../types';
 
-createReducer(StatePaths.Zones, []).handle(
-  Actions.ZonesUpdated,
-  (state: Zone[], updateZones: Zone[]): Zone[] => {
-    return updateZones;
-  }
+export const zonesReducer = createReducer(SliceName.Zones, []);
+
+zonesReducer.handle(
+  ActionType.ZonesUpdated,
+  (state, updateZones) => updateZones
 );

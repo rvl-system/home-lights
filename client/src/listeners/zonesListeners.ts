@@ -17,29 +17,41 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { listen, dispatch } from 'reduxology';
-import { Actions } from '../types';
+import { createListener, dispatch } from '../reduxology';
+import { ActionType } from '../types';
 import { CreateZoneRequest, Zone } from '../common/types';
 import { get, post, put, del } from '../util/api';
 
-listen(Actions.CreateZone, async (name: string) => {
-  const createBody: CreateZoneRequest = { name };
-  await post('/api/zones', createBody);
+const createZoneListener = createListener(
+  ActionType.CreateZone,
+  async (name) => {
+    const createBody: CreateZoneRequest = { name };
+    await post('/api/zones', createBody);
 
-  const updatedZones = await get('/api/zones');
-  dispatch(Actions.ZonesUpdated, updatedZones);
-});
+    const updatedZones = (await get('/api/zones')) as Zone[]; // TODO: type this like we do actions
+    dispatch(ActionType.ZonesUpdated, updatedZones);
+  }
+);
 
-listen(Actions.EditZone, async (zone: Zone) => {
+const editZoneListener = createListener(ActionType.EditZone, async (zone) => {
   await put(`/api/zone/${zone.id}`, zone);
 
-  const updatedZones = await get('/api/zones');
-  dispatch(Actions.ZonesUpdated, updatedZones);
+  const updatedZones = (await get('/api/zones')) as Zone[]; // TODO: type this like we do actions
+  dispatch(ActionType.ZonesUpdated, updatedZones);
 });
 
-listen(Actions.DeleteZone, async (id: number) => {
-  await del(`/api/zone/${id}`);
+const deleteZoneListener = createListener(
+  ActionType.DeleteZone,
+  async (id: number) => {
+    await del(`/api/zone/${id}`);
 
-  const updatedZones = await get('/api/zones');
-  dispatch(Actions.ZonesUpdated, updatedZones);
-});
+    const updatedZones = (await get('/api/zones')) as Zone[]; // TODO: type this like we do actions
+    dispatch(ActionType.ZonesUpdated, updatedZones);
+  }
+);
+
+export const zonesListeners = [
+  createZoneListener,
+  editZoneListener,
+  deleteZoneListener
+];

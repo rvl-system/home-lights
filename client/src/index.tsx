@@ -18,18 +18,29 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { render } from 'react-dom';
-import { createRoot, dispatch } from 'reduxology';
+import { createApp, dispatch } from './reduxology';
 import { AppContainer } from './containers/appContainer';
 import { get } from './util/api';
-import { Actions } from './types';
+import { ActionType } from './types';
+import { reducers } from './reducers/reducers';
+import { listeners } from './listeners/listeners';
+import { Light, Zone } from './common/types';
 
-import './reducers/reducers';
-import './listeners/listeners';
+const app = createApp({
+  container: AppContainer,
+  reducers,
+  listeners
+});
 
-async function run() {
-  render(createRoot(AppContainer), document.getElementById('app'));
+function run() {
+  render(app, document.getElementById('app'));
 
-  get('/api/zones').then((zones) => dispatch(Actions.ZonesUpdated, zones));
-  get('/api/lights').then((lights) => dispatch(Actions.LightsUpdated, lights));
+  // TODO: type api calls like we do actions
+  get('/api/zones').then((zones) =>
+    dispatch(ActionType.ZonesUpdated, zones as Zone[])
+  );
+  get('/api/lights').then((lights) =>
+    dispatch(ActionType.LightsUpdated, lights as Light[])
+  );
 }
 run();

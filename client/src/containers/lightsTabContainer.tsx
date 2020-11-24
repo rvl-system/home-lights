@@ -17,22 +17,22 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from 'reduxology';
+import { createContainer } from '../reduxology';
 import {
   LightsTab,
   LightsTabDispatch,
   LightsTabProps
 } from '../components/light/lightsTab';
-import { StatePaths, Actions } from '../types';
+import { SliceName, ActionType } from '../types';
 
 export const LightsTabContainer = createContainer(
   (getState): LightsTabProps => ({
-    lights: getState(StatePaths.Lights),
-    zones: getState(StatePaths.Zones)
+    lights: getState(SliceName.Lights),
+    zones: getState(SliceName.Zones)
   }),
   (dispatch): LightsTabDispatch => ({
-    deleteLight(id: number) {
-      dispatch(Actions.DeleteLight, id);
+    deleteLight(id) {
+      dispatch(ActionType.DeleteLight, id);
     }
   }),
   LightsTab
