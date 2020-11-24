@@ -19,8 +19,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { dbRun, dbAll } from '../sqlite';
 
+export const PHILIPS_HUE_TABLE_NAME = 'philips_hue_info';
 export const PHILIPS_HUE_INFO_SCHEMA = `
-CREATE TABLE "philips_hue_info" (
+CREATE TABLE "${PHILIPS_HUE_TABLE_NAME}" (
   username TEXT NOT NULL UNIQUE,
   key TEXT NOT NULL
 )`;
@@ -31,7 +32,7 @@ export interface PhilipsHueInfo {
 }
 
 export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | null> {
-  const rows = await dbAll('SELECT * FROM "philips_hue_info"');
+  const rows = await dbAll(`SELECT * FROM ${PHILIPS_HUE_TABLE_NAME}`);
   switch (rows.length) {
     case 0:
       return null;
@@ -45,8 +46,8 @@ export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | null> {
 }
 
 export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
-  await dbRun('INSERT INTO philips_hue_info (username, key) VALUES(?, ?)', [
-    info.username,
-    info.key
-  ]);
+  await dbRun(
+    `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key) VALUES(?, ?)`,
+    [info.username, info.key]
+  );
 }

@@ -29,8 +29,9 @@ import {
 } from '../common/types';
 import { NUM_RVL_CHANNELS } from '../common/config';
 
+export const LIGHT_TABLE_NAME = 'lights';
 export const LIGHT_SCHEMA = `
-CREATE TABLE "lights" (
+CREATE TABLE "${LIGHT_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL,
@@ -41,7 +42,7 @@ CREATE TABLE "lights" (
 )`;
 
 export async function getLights(): Promise<Light[]> {
-  const rawResults = await dbAll('SELECT * FROM lights');
+  const rawResults = await dbAll(`SELECT * FROM ${LIGHT_TABLE_NAME}`);
   return rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
@@ -92,7 +93,7 @@ export async function createLight(
         throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
       }
       await dbRun(
-        'INSERT INTO lights (name, type, channel, zone_id) values (?, ?, ?, ?)',
+        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, channel, zone_id) values (?, ?, ?, ?)`,
         [
           rvlLightRequest.name,
           LightType.RVL,
@@ -105,7 +106,7 @@ export async function createLight(
     case LightType.PhilipsHue: {
       const philipsHueLightRequest: CreatePhilipsHueLightRequest = createLightRequest as CreatePhilipsHueLightRequest;
       await dbRun(
-        'INSERT INTO lights (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)',
+        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)`,
         [
           philipsHueLightRequest.name,
           LightType.PhilipsHue,
@@ -123,23 +124,22 @@ export async function editLight(light: Light): Promise<void> {
     case LightType.RVL:
       const rvlLight: RVLLight = light as RVLLight;
       await dbRun(
-        'UPDATE lights SET name = ?, channel = ?, zone_id = ? WHERE id = ?',
-        [rvlLight.name, rvlLight.channel, rvlLight.zoneId, rvlLight.id]
+        `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, channel = ?, zone_id = ? WHERE id = ?`,
+        [rvlLight.name, rvlLight.channel, rvlLight.zoneID, rvlLight.id]
       );
       break;
     case LightType.PhilipsHue:
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
-      await dbRun('UPDATE lights SET name = ?, zone_id = ? WHERE id = ?', [
-        hueLight.name,
-        hueLight.zoneId,
-        hueLight.id
-      ]);
+      await dbRun(
+        `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
+        [hueLight.name, hueLight.zoneID, hueLight.id]
+      );
       break;
   }
 }
 
 export async function deleteLight(id: number): Promise<void> {
-  await dbRun('DELETE FROM lights WHERE id = ? AND type != ?', [
+  await dbRun(`DELETE FROM ${LIGHT_TABLE_NAME} WHERE id = ? AND type != ?`, [
     id,
     LightType.PhilipsHue
   ]);

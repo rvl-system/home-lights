@@ -20,26 +20,32 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { dbRun, dbAll } from '../sqlite';
 import { Zone, CreateZoneRequest } from '../common/types';
 
+export const ZONES_TABLE_NAME = 'zones';
 export const ZONE_SCHEMA = `
-CREATE TABLE "zones" (
+CREATE TABLE "${ZONES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE
 )`;
 
 export async function getZones(): Promise<Zone[]> {
-  return dbAll('SELECT * FROM zones') as Promise<Zone[]>;
+  return dbAll(`SELECT * FROM ${ZONES_TABLE_NAME}`) as Promise<Zone[]>;
 }
 
 export async function createZone(
   zoneRequest: CreateZoneRequest
 ): Promise<void> {
-  await dbRun('INSERT INTO zones (name) values (?)', [zoneRequest.name]);
+  await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) values (?)`, [
+    zoneRequest.name
+  ]);
 }
 
 export async function editZone(zone: Zone): Promise<void> {
-  await dbRun('UPDATE zones SET name = ? WHERE id = ?', [zone.name, zone.id]);
+  await dbRun(`UPDATE ${ZONES_TABLE_NAME} SET name = ? WHERE id = ?`, [
+    zone.name,
+    zone.id
+  ]);
 }
 
 export async function deleteZone(id: number): Promise<void> {
-  await dbRun('DELETE FROM zones WHERE id = ?', [id]);
+  await dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [id]);
 }

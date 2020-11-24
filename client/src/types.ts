@@ -33,6 +33,11 @@ export enum ActionType {
   DeleteZone = 'DeleteZone',
   EditZone = 'EditZone',
 
+  PatternsUpdated = 'PatternsUpdated',
+  CreatePattern = 'CreatePattern',
+  EditPattern = 'EditPattern',
+  DeletePattern = 'DeletePattern',
+
   LightsUpdated = 'LightsUpdated',
   CreateRVLLight = 'CreateRVLLight',
   EditLight = 'EditLight',

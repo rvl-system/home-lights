@@ -21,26 +21,18 @@ import { render } from 'react-dom';
 import { createApp, dispatch } from './reduxology';
 import { AppContainer } from './containers/appContainer';
 import { get } from './util/api';
-import { ActionType } from './types';
-import { reducers } from './reducers/reducers';
-import { listeners } from './listeners/listeners';
-import { Light, Zone } from './common/types';
+import { Actions } from './types';
 
-const app = createApp({
-  container: AppContainer,
-  reducers,
-  listeners
-});
+import './reducers/reducers';
+import './listeners/listeners';
 
-function run() {
-  render(app, document.getElementById('app'));
+async function run() {
+  render(createRoot(AppContainer), document.getElementById('app'));
 
-  // TODO: type api calls like we do actions
-  get('/api/zones').then((zones) =>
-    dispatch(ActionType.ZonesUpdated, zones as Zone[])
-  );
-  get('/api/lights').then((lights) =>
-    dispatch(ActionType.LightsUpdated, lights as Light[])
+  get('/api/zones').then((zones) => dispatch(Actions.ZonesUpdated, zones));
+  get('/api/lights').then((lights) => dispatch(Actions.LightsUpdated, lights));
+  get('/api/patterns').then((patterns) =>
+    dispatch(Actions.PatternsUpdated, patterns)
   );
 }
 run();

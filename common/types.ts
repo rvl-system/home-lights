@@ -23,10 +23,7 @@ export interface Zone {
   id: number;
   name: string;
 }
-
-export interface CreateZoneRequest {
-  name: string;
-}
+export type CreateZoneRequest = Omit<Zone, 'id'>;
 
 // ---- Light Types ----
 
@@ -41,21 +38,18 @@ export interface Light {
   name: string;
   zoneId?: number;
 }
+export type CreateLightRequest = Omit<Light, 'id'>;
 
 export interface RVLLight extends Light {
   type: LightType.RVL;
   channel: number;
 }
+export type CreateRVLLightRequest = Omit<RVLLight, 'id'>;
 
 export interface PhilipsHueLight extends Light {
   type: LightType.PhilipsHue;
   philipsHueID: string;
 }
-
-export type CreateLightRequest = Omit<Light, 'id'>;
-
-export type CreateRVLLightRequest = Omit<RVLLight, 'id'>;
-
 export type CreatePhilipsHueLightRequest = Omit<PhilipsHueLight, 'id'>;
 
 // ---- Scene Types ----
@@ -65,25 +59,72 @@ export interface Scene {
   // TODO
 }
 
-// ---- Light State ----
+// ---- Pattern Types ----
 
-export interface RoomLightState {
-  power: boolean;
-  scene: Scene;
+export enum PatternType {
+  Solid = 'solid',
+  Pulse = 'pulse',
+  Rainbow = 'rainbow',
+  ColorCycle = 'colorCycle',
+  Wave = 'wave'
 }
 
-export interface SetLightStateRequest {
-  rooms: RoomLightState[];
+export interface Color {
+  hue: number;
+  saturation: number;
 }
 
-export interface RVLLight extends Light {
-  type: LightType.RVL;
-  channel: number;
+export interface Pattern {
+  id: number;
+  name: string;
+  type: PatternType;
+  data: Record<string, unknown>;
 }
+export type CreatePatternRequest = Omit<Pattern, 'id'>;
 
-export interface PhilipsHueLight extends Light {
-  type: LightType.PhilipsHue;
+export interface SolidPattern extends Pattern {
+  type: PatternType.Solid;
+  data: {
+    color: Color;
+  };
 }
+export type CreateSolidPatternRequest = Omit<SolidPattern, 'id'>;
+
+export interface PulsePattern extends Pattern {
+  type: PatternType.Pulse;
+  data: {
+    rate: number;
+    color: Color;
+  };
+}
+export type CreatePulsePatternRequest = Omit<PulsePattern, 'id'>;
+
+export interface RainbowPattern extends Pattern {
+  type: PatternType.Rainbow;
+  data: {
+    rate: number;
+  };
+}
+export type CreateRainbowPatternRequest = Omit<RainbowPattern, 'id'>;
+
+export interface ColorCyclePattern extends Pattern {
+  type: PatternType.ColorCycle;
+  data: {
+    rate: number;
+  };
+}
+export type CreateColorCyclePatternRequest = Omit<ColorCyclePattern, 'id'>;
+
+export interface WavePattern extends Pattern {
+  type: PatternType.ColorCycle;
+  data: {
+    rate: number;
+    waveColor: Color;
+    foregroundColor: Color;
+    backgroundColor: Color;
+  };
+}
+export type CreateWavePatternRequest = Omit<WavePattern, 'id'>;
 
 // ---- Light State ----
 
