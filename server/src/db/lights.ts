@@ -125,14 +125,14 @@ export async function editLight(light: Light): Promise<void> {
       const rvlLight: RVLLight = light as RVLLight;
       await dbRun(
         `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, channel = ?, zone_id = ? WHERE id = ?`,
-        [rvlLight.name, rvlLight.channel, rvlLight.zoneID, rvlLight.id]
+        [rvlLight.name, rvlLight.channel, rvlLight.zoneId, rvlLight.id]
       );
       break;
     case LightType.PhilipsHue:
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
       await dbRun(
         `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
-        [hueLight.name, hueLight.zoneID, hueLight.id]
+        [hueLight.name, hueLight.zoneId, hueLight.id]
       );
       break;
   }

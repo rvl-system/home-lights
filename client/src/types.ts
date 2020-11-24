@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Light, Zone } from './common/types';
+import { CreatePatternRequest, Light, Pattern, Zone } from './common/types';
 
 export enum SliceName {
   Zones = 'Zones',
@@ -57,6 +57,11 @@ export interface Actions {
   [ActionType.CreateZone]: string;
   [ActionType.EditZone]: Zone;
   [ActionType.DeleteZone]: number;
+
+  [ActionType.PatternsUpdated]: Pattern[];
+  [ActionType.CreatePattern]: CreatePatternRequest;
+  [ActionType.EditPattern]: Pattern;
+  [ActionType.DeletePattern]: number;
 
   [ActionType.LightsUpdated]: Light[];
   [ActionType.CreateRVLLight]: {
