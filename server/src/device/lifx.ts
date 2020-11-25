@@ -21,11 +21,50 @@ import fetch from 'node-fetch';
 
 const LIFX_URL = 'https://api.lifx.com/v1';
 const TOKEN = process.env['LIFX_TOKEN'];
+const LOCATION = process.env['LIFX_LOCATION'];
 
-// get lights descriptors: curl -H "Authorization: Bearer ${token}" "https://api.lifx.com/v1/lights/all"
+interface LIFXBulbDescriptor {
+  id: string;
+  uuid: string;
+  label: string;
+  connected: boolean;
+  power: 'on' | 'off';
+  color: {
+    hue: number;
+    saturation: number;
+    kelvin: number;
+  };
+  brightness: number;
+  group: {
+    id: string;
+    name: string;
+  };
+  location: {
+    id: string;
+    name: string;
+  };
+  product: {
+    name: string;
+    identifier: string;
+    company: string;
+    vendor_id: number;
+    product_id: number;
+    capabilities: {
+      has_color: boolean;
+      has_variable_color_temp: boolean;
+      has_ir: boolean;
+      has_chain: boolean;
+      has_multizone: boolean;
+      min_kelvin: number;
+      max_kelvin: number;
+    };
+  };
+  last_seen: string;
+  seconds_since_seen: number;
+}
 
-async function getLights(token: string) {
-  const response = await fetch(`${LIFX_URL}/lights/all`, {
+async function getLights(token: string, location: string) {
+  const response = await fetch(`${LIFX_URL}/lights/location:${location}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -38,7 +77,10 @@ export async function init(): Promise<void> {
     console.log('No LIFX token found, disabling LIFX support');
     return;
   }
+  if (!LOCATION) {
+    throw new Error('LIFX_LOCATION environment variable is required');
+  }
   console.log('Discovering LIFX lights');
-  const lights = await getLights(TOKEN);
+  const lights = (await getLights(TOKEN, LOCATION)) as LIFXBulbDescriptor[];
   console.log(lights);
 }
