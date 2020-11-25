@@ -17,26 +17,28 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {
-  init as initPhilipsHue,
-  setLightState as setRVLLightState
-} from './device/phillipsHue';
-import {
-  init as initRVL,
-  setLightState as setPhilipsHueLightState
-} from './device/rvl';
-import { init as initLIFX } from './device/lifx';
-import { SetLightStateRequest } from './common/types';
+import fetch from 'node-fetch';
 
-export async function init(): Promise<void> {
-  await initRVL();
-  await initPhilipsHue();
-  await initLIFX();
+const LIFX_URL = 'https://api.lifx.com/v1';
+const TOKEN = process.env['LIFX_TOKEN'];
+
+// get lights descriptors: curl -H "Authorization: Bearer ${token}" "https://api.lifx.com/v1/lights/all"
+
+async function getLights(token: string) {
+  const response = await fetch(`${LIFX_URL}/lights/all`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return await response.json();
 }
 
-export async function setLightState(
-  lightState: SetLightStateRequest
-): Promise<void> {
-  setRVLLightState(lightState);
-  setPhilipsHueLightState(lightState);
+export async function init(): Promise<void> {
+  if (!TOKEN) {
+    console.log('No LIFX token found, disabling LIFX support');
+    return;
+  }
+  console.log('Discovering LIFX lights');
+  const lights = await getLights(TOKEN);
+  console.log(lights);
 }
