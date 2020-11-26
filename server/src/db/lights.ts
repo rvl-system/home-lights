@@ -26,7 +26,8 @@ import {
   CreateRVLLightRequest,
   PhilipsHueLight,
   CreatePhilipsHueLightRequest,
-  CreateLIFXLightRequest
+  CreateLIFXLightRequest,
+  LIFXLight
 } from '../common/types';
 import { NUM_RVL_CHANNELS } from '../common/config';
 
@@ -74,6 +75,17 @@ export async function getLights(): Promise<Light[]> {
           zoneId
         };
         return hueLight;
+      }
+      case LightType.LIFX: {
+        const { id, name, type, lifx_id: lifxId, zone_id: zoneId } = light;
+        const lifxLight: LIFXLight = {
+          id,
+          name,
+          type,
+          lifxId,
+          zoneId
+        };
+        return lifxLight;
       }
       default:
         throw new Error(`Found unknown light type in database "${light.type}"`);
@@ -136,26 +148,36 @@ export async function createLight(
 
 export async function editLight(light: Light): Promise<void> {
   switch (light.type) {
-    case LightType.RVL:
+    case LightType.RVL: {
       const rvlLight: RVLLight = light as RVLLight;
       await dbRun(
         `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, channel = ?, zone_id = ? WHERE id = ?`,
         [rvlLight.name, rvlLight.channel, rvlLight.zoneId, rvlLight.id]
       );
       break;
-    case LightType.PhilipsHue:
+    }
+    case LightType.PhilipsHue: {
       const hueLight: PhilipsHueLight = light as PhilipsHueLight;
       await dbRun(
         `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
         [hueLight.name, hueLight.zoneId, hueLight.id]
       );
       break;
+    }
+    case LightType.LIFX: {
+      const lifxLight: LIFXLight = light as LIFXLight;
+      await dbRun(
+        `UPDATE ${LIGHT_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
+        [lifxLight.name, lifxLight.zoneId, lifxLight.id]
+      );
+      break;
+    }
   }
 }
 
 export async function deleteLight(id: number): Promise<void> {
-  await dbRun(`DELETE FROM ${LIGHT_TABLE_NAME} WHERE id = ? AND type != ?`, [
+  await dbRun(`DELETE FROM ${LIGHT_TABLE_NAME} WHERE id = ? AND type = ?`, [
     id,
-    LightType.PhilipsHue
+    LightType.RVL
   ]);
 }

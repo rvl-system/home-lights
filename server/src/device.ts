@@ -33,7 +33,9 @@ import { SetLightStateRequest } from './common/types';
 
 export async function init(): Promise<void> {
   await initRVL();
+  if (false) {
     await initPhilipsHue();
+  }
   await initLIFX();
 }
 

@@ -109,7 +109,8 @@ export const EditLightButton: FunctionComponent<
               defaultValue={(props.light as RVLLight).channel.toString()}
             />
           ),
-          [LightType.PhilipsHue]: () => <div></div> // We'll likely add stuff later
+          [LightType.PhilipsHue]: () => <div></div>, // We'll likely add stuff later,
+          [LightType.LIFX]: () => <div></div> // We'll likely add stuff later
         })}
       </DialogComponent>
     </React.Fragment>
