@@ -25,18 +25,24 @@ import {
   init as initRVL,
   setLightState as setPhilipsHueLightState
 } from './device/rvl';
-import { init as initLIFX } from './device/lifx';
+import {
+  init as initLIFX,
+  setLightState as setLIFXLightState
+} from './device/lifx';
 import { SetLightStateRequest } from './common/types';
 
 export async function init(): Promise<void> {
   await initRVL();
-  await initPhilipsHue();
+    await initPhilipsHue();
   await initLIFX();
 }
 
 export async function setLightState(
   lightState: SetLightStateRequest
 ): Promise<void> {
-  setRVLLightState(lightState);
-  setPhilipsHueLightState(lightState);
+  await Promise.all([
+    () => setRVLLightState(lightState),
+    () => setPhilipsHueLightState(lightState),
+    () => setLIFXLightState(lightState)
+  ]);
 }

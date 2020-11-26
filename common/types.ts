@@ -29,7 +29,8 @@ export type CreateZoneRequest = Omit<Zone, 'id'>;
 
 export enum LightType {
   RVL = 'rvl',
-  PhilipsHue = 'philips-hue'
+  PhilipsHue = 'philips-hue',
+  LIFX = 'lifx'
 }
 
 export interface Light {
@@ -51,6 +52,12 @@ export interface PhilipsHueLight extends Light {
   philipsHueID: string;
 }
 export type CreatePhilipsHueLightRequest = Omit<PhilipsHueLight, 'id'>;
+
+export interface LIFXLight extends Light {
+  type: LightType.LIFX;
+  lifxId: string;
+}
+export type CreateLIFXLightRequest = Omit<LIFXLight, 'id'>;
 
 // ---- Scene Types ----
 

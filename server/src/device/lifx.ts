@@ -18,8 +18,15 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import fetch from 'node-fetch';
+import {
+  LightType,
+  SetLightStateRequest,
+  LIFXLight,
+  CreateLIFXLightRequest
+} from '../common/types';
+import { getLights, createLight, deleteLight } from '../db/lights';
 
-const LIFX_URL = 'https://api.lifx.com/v1';
+const LIFX_URL = 'https://api.lifx.com/v1/lights';
 const TOKEN = process.env['LIFX_TOKEN'];
 const LOCATION = process.env['LIFX_LOCATION'];
 
@@ -63,13 +70,55 @@ interface LIFXBulbDescriptor {
   seconds_since_seen: number;
 }
 
-async function getLights(token: string, location: string) {
-  const response = await fetch(`${LIFX_URL}/lights/location:${location}`, {
+async function getLIFXLights(
+  token: string,
+  location: string
+): Promise<LIFXBulbDescriptor[]> {
+  const response = await fetch(`${LIFX_URL}/location:${location}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
   });
   return await response.json();
+}
+
+async function updateLights(token: string, location: string): Promise<void> {
+  const lights = await getLIFXLights(token, location);
+  const dbLights = await getLights();
+
+  // Add lights from LIFX that are not in the DB
+  for (const light of lights) {
+    if (
+      !dbLights.find(
+        (dbLight) =>
+          dbLight.type === LightType.LIFX &&
+          (dbLight as LIFXLight).lifxId === light.id
+      )
+    ) {
+      console.log(
+        `Found LIFX light "${light.label}" not in database, adding...`
+      );
+      const newLight: CreateLIFXLightRequest = {
+        lifxId: light.id,
+        type: LightType.LIFX,
+        name: light.label
+      };
+      await createLight(newLight);
+    }
+  }
+
+  // Delete lights from DB that are no longer in LIFX
+  for (const dbLight of dbLights) {
+    if (dbLight.type !== LightType.LIFX) {
+      continue;
+    }
+    if (!lights.find((light) => light.id === (dbLight as LIFXLight).lifxId)) {
+      console.log(
+        `LIFX light "${dbLight.name}" is no longer registered with the LIFX service, deleting...`
+      );
+      await deleteLight(dbLight.id);
+    }
+  }
 }
 
 export async function init(): Promise<void> {
@@ -81,6 +130,14 @@ export async function init(): Promise<void> {
     throw new Error('LIFX_LOCATION environment variable is required');
   }
   console.log('Discovering LIFX lights');
-  const lights = (await getLights(TOKEN, LOCATION)) as LIFXBulbDescriptor[];
-  console.log(lights);
+  await updateLights(TOKEN, LOCATION);
+}
+
+export async function setLightState(
+  lightState: SetLightStateRequest
+): Promise<void> {
+  if (!TOKEN || !LOCATION) {
+    return;
+  }
+  console.log(lightState);
 }

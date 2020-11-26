@@ -116,6 +116,9 @@ export async function createLight(
       );
       break;
     }
+    case LightType.LIFX: {
+      console.log('Creating light', createLightRequest);
+    }
   }
 }
 
