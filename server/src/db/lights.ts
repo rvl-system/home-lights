@@ -25,7 +25,8 @@ import {
   RVLLight,
   CreateRVLLightRequest,
   PhilipsHueLight,
-  CreatePhilipsHueLightRequest
+  CreatePhilipsHueLightRequest,
+  CreateLIFXLightRequest
 } from '../common/types';
 import { NUM_RVL_CHANNELS } from '../common/config';
 
@@ -36,7 +37,8 @@ CREATE TABLE "${LIGHT_TABLE_NAME}" (
   name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL,
   channel INTEGER UNIQUE,
-  philips_hue_id TEXT,
+  philips_hue_id TEXT UNIQUE,
+  lifx_id TEXT UNIQUE,
   zone_id INTEGER,
   FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
@@ -117,7 +119,17 @@ export async function createLight(
       break;
     }
     case LightType.LIFX: {
-      console.log('Creating light', createLightRequest);
+      const lifxLightRequest: CreateLIFXLightRequest = createLightRequest as CreateLIFXLightRequest;
+      await dbRun(
+        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, lifx_id, zone_id) values (?, ?, ?, ?)`,
+        [
+          lifxLightRequest.name,
+          LightType.LIFX,
+          lifxLightRequest.lifxId,
+          lifxLightRequest.zoneId
+        ]
+      );
+      break;
     }
   }
 }
