@@ -20,8 +20,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Zone } from '../common/types';
 import {
   ZoneScenesComponent,
-  ZoneScenesProps,
-  ZoneScenesDispatch
+  ZoneScenesComponentProps,
+  ZoneScenesComponentDispatch
 } from '../components/scene/zoneScenesComponent';
 import { createContainer } from '../reduxology';
 import { SliceName, ActionType } from '../types';
@@ -31,14 +31,17 @@ export interface ZoneScenesContainerProps {
 }
 
 export const ZoneScenesContainer = createContainer(
-  (getState, ownProps: ZoneScenesContainerProps): ZoneScenesProps => ({
+  (getState, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => ({
     zone: ownProps.zone,
     zoneScenes: getState(SliceName.Scenes).filter(
       (scene) => scene.zoneId === ownProps.zone.id
     ),
     zoneLights: []
   }),
-  (dispatch, ownProps: ZoneScenesContainerProps): ZoneScenesDispatch => ({
+  (
+    dispatch,
+    ownProps: ZoneScenesContainerProps
+  ): ZoneScenesComponentDispatch => ({
     createScene(name, lights) {
       dispatch(ActionType.CreateScene, {
         zoneId: ownProps.zone.id,

@@ -55,7 +55,7 @@ export async function createPattern(
   pattern: CreatePatternRequest
 ): Promise<void> {
   await dbRun(
-    `INSERT INTO ${PATTERN_TABLE_NAME} (name, type, data) values (?, ?, ?)`,
+    `INSERT INTO ${PATTERN_TABLE_NAME} (name, type, data) VALUES (?, ?, ?)`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data)]
   );
   await updateColors();

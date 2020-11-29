@@ -19,21 +19,34 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import React, { FunctionComponent } from 'react';
 import { Light, Scene, SceneLightEntry, Zone } from '../../common/types';
+import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
-export interface ZoneScenesProps {
+export interface ZoneScenesComponentProps {
   zone: Zone;
   zoneScenes: Scene[];
   zoneLights: Light[];
 }
 
-export interface ZoneScenesDispatch {
+export interface ZoneScenesComponentDispatch extends SceneComponentDispatch {
   createScene: (name: string, lights: SceneLightEntry[]) => void;
-  editScene: (scene: Scene) => void;
-  deleteScene: (id: number) => void;
 }
 
 export const ZoneScenesComponent: FunctionComponent<
-  ZoneScenesProps & ZoneScenesDispatch
+  ZoneScenesComponentProps & ZoneScenesComponentDispatch
 > = (props) => {
-  return <div>{props.zone.name} scenes</div>;
+  return (
+    <div>
+      {props.zone.name} scenes
+      <div>
+        {props.zoneScenes.map((scene) => (
+          <SceneComponent
+            key={scene.id}
+            scene={scene}
+            editScene={props.editScene}
+            deleteScene={props.deleteScene}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };

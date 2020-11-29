@@ -45,10 +45,14 @@ export async function getScenes(): Promise<Scene[]> {
 export async function createScene(
   sceneRequest: CreateSceneRequest
 ): Promise<void> {
-  await dbRun(`INSERT INTO ${SCENES_TABLE_NAME} (name, lights) values (?, ?)`, [
-    sceneRequest.name,
-    JSON.stringify(sceneRequest.lights)
-  ]);
+  await dbRun(
+    `INSERT INTO ${SCENES_TABLE_NAME} (zone_id, name, lights) VALUES (?, ?, ?)`,
+    [
+      sceneRequest.zoneId,
+      sceneRequest.name,
+      JSON.stringify(sceneRequest.lights)
+    ]
+  );
 }
 
 export async function editScene(scene: Scene): Promise<void> {

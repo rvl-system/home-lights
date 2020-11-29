@@ -111,7 +111,7 @@ export async function createLight(
         throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
       }
       await dbRun(
-        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, channel, zone_id) values (?, ?, ?, ?)`,
+        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, channel, zone_id) VALUES (?, ?, ?, ?)`,
         [
           rvlLightRequest.name,
           LightType.RVL,
@@ -124,7 +124,7 @@ export async function createLight(
     case LightType.PhilipsHue: {
       const philipsHueLightRequest: CreatePhilipsHueLightRequest = createLightRequest as CreatePhilipsHueLightRequest;
       await dbRun(
-        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, philips_hue_id, zone_id) values (?, ?, ?, ?)`,
+        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, philips_hue_id, zone_id) VALUES (?, ?, ?, ?)`,
         [
           philipsHueLightRequest.name,
           LightType.PhilipsHue,
@@ -137,7 +137,7 @@ export async function createLight(
     case LightType.LIFX: {
       const lifxLightRequest: CreateLIFXLightRequest = createLightRequest as CreateLIFXLightRequest;
       await dbRun(
-        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, lifx_id, zone_id) values (?, ?, ?, ?)`,
+        `INSERT INTO ${LIGHT_TABLE_NAME} (name, type, lifx_id, zone_id) VALUES (?, ?, ?, ?)`,
         [
           lifxLightRequest.name,
           LightType.LIFX,
