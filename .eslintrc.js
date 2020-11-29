@@ -22,20 +22,42 @@ module.exports = {
     '@typescript-eslint/naming-convention': [
       'error',
       {
+        format: ['camelCase'],
+        leadingUnderscore: 'forbid',
+        selector: 'default'
+      },
+      {
+        format: ['camelCase', 'UPPER_CASE'],
+        leadingUnderscore: 'forbid',
+        selector: 'variable'
+      },
+      {
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+        leadingUnderscore: 'forbid',
+        selector: 'variable',
+        modifiers: ['const']
+      },
+      {
         format: ['PascalCase'],
         leadingUnderscore: 'forbid',
         selector: 'typeLike'
       },
       {
-        format: null,
+        format: ['PascalCase'],
         leadingUnderscore: 'forbid',
-        modifiers: ['protected', 'public', 'static', 'readonly', 'abstract'],
-        selector: 'memberLike'
+        selector: 'enumMember'
       },
       {
         format: null,
-        leadingUnderscore: 'require',
-        modifiers: ['private'],
+        leadingUnderscore: 'forbid',
+        modifiers: [
+          'protected',
+          'public',
+          'static',
+          'readonly',
+          'abstract',
+          'private'
+        ],
         selector: 'memberLike'
       }
     ],

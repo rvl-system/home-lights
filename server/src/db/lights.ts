@@ -49,6 +49,7 @@ export async function getLights(): Promise<Light[]> {
   return rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         const { id, name, type, channel, zone_id: zoneId } = light;
         const rvlLight: RVLLight = {
           id,
@@ -64,7 +65,9 @@ export async function getLights(): Promise<Light[]> {
           id,
           name,
           type,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           philips_hue_id: philipsHueID,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           zone_id: zoneId
         } = light;
         const hueLight: PhilipsHueLight = {
@@ -77,6 +80,7 @@ export async function getLights(): Promise<Light[]> {
         return hueLight;
       }
       case LightType.LIFX: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         const { id, name, type, lifx_id: lifxId, zone_id: zoneId } = light;
         const lifxLight: LIFXLight = {
           id,

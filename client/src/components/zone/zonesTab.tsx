@@ -40,29 +40,29 @@ export interface ZonesTabDispatch {
 export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
   props
 ) => {
-  const [editMode, setEditMode] = React.useState(EditMode.view);
+  const [editMode, setEditMode] = React.useState(EditMode.Operation);
   const classes = useContainerStyles();
   return (
     <div className={classes.container}>
-      <Fade in={editMode === EditMode.edit}>
+      <Fade in={editMode === EditMode.Edit}>
         <div className={classes.altHeader}>
           <CreateZoneButton createZone={props.createZone} />
         </div>
       </Fade>
-      <Fade in={editMode === EditMode.view} mountOnEnter unmountOnExit>
+      <Fade in={editMode === EditMode.Operation} mountOnEnter unmountOnExit>
         <Button
           className={classes.header}
           variant="outlined"
-          onClick={() => setEditMode(EditMode.edit)}
+          onClick={() => setEditMode(EditMode.Edit)}
         >
           <EditIcon />
         </Button>
       </Fade>
-      <Fade in={editMode === EditMode.edit} mountOnEnter unmountOnExit>
+      <Fade in={editMode === EditMode.Edit} mountOnEnter unmountOnExit>
         <Button
           className={classes.header}
           variant="outlined"
-          onClick={() => setEditMode(EditMode.view)}
+          onClick={() => setEditMode(EditMode.Operation)}
         >
           <CloseIcon />
         </Button>

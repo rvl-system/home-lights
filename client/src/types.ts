@@ -80,8 +80,8 @@ export enum SelectedTab {
 }
 
 export enum EditMode {
-  view = 'view',
-  edit = 'edit'
+  Operation = 'Operation',
+  Edit = 'Edit'
 }
 
 export type Color = 'inherit' | 'primary' | 'secondary' | 'default' | undefined;

@@ -45,7 +45,7 @@ export const DeleteZoneButton: FunctionComponent<
 
   return (
     <React.Fragment>
-      <Fade in={props.editMode === EditMode.edit} mountOnEnter unmountOnExit>
+      <Fade in={props.editMode === EditMode.Edit} mountOnEnter unmountOnExit>
         <Button
           className={props.className}
           color="secondary"
