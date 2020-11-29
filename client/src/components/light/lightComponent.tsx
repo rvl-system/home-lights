@@ -17,20 +17,20 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { Accordion, AccordionSummary, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import React, { FunctionComponent } from 'react';
 import {
   Light as LightInterfaceType,
   LightType,
   Zone
 } from '../../common/types';
 import { EditLightButtonContainer } from '../../containers/editLightButtonContainer';
+import { useContentStyles } from '../lib/pageStyles';
 import {
   DeleteLightButton,
   DeleteLightButtonDispatch
 } from './deleteLightButton';
-import { useContentStyles } from '../lib/pageStyles';
 
 const styles = makeStyles({
   caption: {

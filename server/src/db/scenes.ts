@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { dbRun, dbAll } from '../sqlite';
 import { CreateSceneRequest, Scene } from '../common/types';
+import { dbRun, dbAll } from '../sqlite';
 
 export const SCENES_TABLE_NAME = 'scenes';
 export const SCENE_SCHEMA = `

@@ -18,8 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
-import { getZones, createZone, editZone, deleteZone } from '../db/zones';
 import { CreateZoneRequest, Zone } from '../common/types';
+import { getZones, createZone, editZone, deleteZone } from '../db/zones';
 
 export function init(app: FastifyInstance): void {
   app.get('/api/zones', async () => {

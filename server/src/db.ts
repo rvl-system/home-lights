@@ -19,21 +19,21 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
-import { getEnvironmentVariable } from './util';
-import { init as initDB, dbRun, dbAll } from './sqlite';
-import { ZONE_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
-import { SCENE_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
-import {
-  PHILIPS_HUE_INFO_SCHEMA,
-  PHILIPS_HUE_TABLE_NAME
-} from './db/philipsHue';
+import { LIGHT_SCHEMA, LIGHT_TABLE_NAME } from './db/lights';
 import {
   PATTERN_SCHEMA,
   PATTERN_TABLE_NAME,
   COLORS_SCHEMA,
   COLORS_TABLE_NAME
 } from './db/patterns';
-import { LIGHT_SCHEMA, LIGHT_TABLE_NAME } from './db/lights';
+import {
+  PHILIPS_HUE_INFO_SCHEMA,
+  PHILIPS_HUE_TABLE_NAME
+} from './db/philipsHue';
+import { SCENE_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
+import { ZONE_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
+import { init as initDB, dbRun, dbAll } from './sqlite';
+import { getEnvironmentVariable } from './util';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),

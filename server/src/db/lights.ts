@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { dbRun, dbAll } from '../sqlite';
+import { NUM_RVL_CHANNELS } from '../common/config';
 import {
   LightType,
   Light,
@@ -29,7 +29,7 @@ import {
   CreateLIFXLightRequest,
   LIFXLight
 } from '../common/types';
-import { NUM_RVL_CHANNELS } from '../common/config';
+import { dbRun, dbAll } from '../sqlite';
 
 export const LIGHT_TABLE_NAME = 'lights';
 export const LIGHT_SCHEMA = `

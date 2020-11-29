@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
+import { Edit as EditIcon } from '@material-ui/icons';
 import { reduce } from 'conditional-reduce';
+import React, { FunctionComponent } from 'react';
+import { NUM_RVL_CHANNELS } from '../../common/config';
+import { Light, RVLLight, LightType, Zone } from '../../common/types';
 import { DialogComponent, DialogValue } from '../lib/dialogComponent';
 import { SelectDialogInput } from '../lib/selectDialogInput';
 import { TextDialogInput } from '../lib/textDialogInput';
-import { Edit as EditIcon } from '@material-ui/icons';
-import { Light, RVLLight, LightType, Zone } from '../../common/types';
-import { NUM_RVL_CHANNELS } from '../../common/config';
 
 export interface EditLightButtonProps {
   light: Light;

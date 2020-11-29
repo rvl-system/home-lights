@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { Button } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { Add as AddIcon } from '@material-ui/icons';
+import React, { FunctionComponent } from 'react';
 import { DialogComponent } from '../lib/dialogComponent';
 import { TextDialogInput } from '../lib/textDialogInput';
 

@@ -29,8 +29,8 @@ import {
   PhilipsHueLight,
   SetLightStateRequest
 } from '../common/types';
-import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 import { getLights, createLight, deleteLight } from '../db/lights';
+import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 
 let authenticatedApi: Api;
 

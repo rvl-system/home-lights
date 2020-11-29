@@ -18,8 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
-import { getLights, createLight, editLight, deleteLight } from '../db/lights';
 import { CreateLightRequest, Light } from '../common/types';
+import { getLights, createLight, editLight, deleteLight } from '../db/lights';
 
 export function init(app: FastifyInstance): void {
   app.get('/api/lights', async () => {

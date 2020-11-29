@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
-import { DialogComponent } from '../lib/dialogComponent';
-import { TextDialogInput } from '../lib/textDialogInput';
 import { Edit as EditIcon } from '@material-ui/icons';
+import React, { FunctionComponent } from 'react';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
+import { DialogComponent } from '../lib/dialogComponent';
+import { TextDialogInput } from '../lib/textDialogInput';
 
 export interface EditZoneButtonProps {
   zone: Zone;

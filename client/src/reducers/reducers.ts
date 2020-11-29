@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { zonesReducer } from './zonesReducer';
 import { lightsReducer } from './lightsReducer';
 import { selectedTabReducer } from './selectedTabReducer';
+import { zonesReducer } from './zonesReducer';
 
 export const reducers = [zonesReducer, lightsReducer, selectedTabReducer];

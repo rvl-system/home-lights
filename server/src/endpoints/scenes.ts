@@ -18,8 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
-import { getScenes, createScene, editScene, deleteScene } from '../db/scenes';
 import { CreateSceneRequest, Scene } from '../common/types';
+import { getScenes, createScene, editScene, deleteScene } from '../db/scenes';
 
 export function init(app: FastifyInstance): void {
   app.get('/api/scenes', async () => {

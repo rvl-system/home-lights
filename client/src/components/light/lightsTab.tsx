@@ -18,10 +18,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { FunctionComponent } from 'react';
-import { DeleteLightButtonDispatch } from './deleteLightButton';
-import { useContainerStyles } from '../lib/pageStyles';
-import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
 import { Light, Zone } from '../../common/types';
+import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
+import { useContainerStyles } from '../lib/pageStyles';
+import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { LightComponent } from './lightComponent';
 
 export interface LightsTabProps {

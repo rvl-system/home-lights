@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons';
+import React, { FunctionComponent } from 'react';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
+import { useContainerStyles } from '../lib/pageStyles';
 import { CreateZoneButton } from './createZoneButton';
 import { ZoneComponent } from './zoneComponent';
-import { useContainerStyles } from '../lib/pageStyles';
 
 export interface ZonesTabProps {
   zones: Zone[];

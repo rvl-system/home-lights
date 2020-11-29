@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { init as initEndpoints } from './endpoints';
 import { init as initDB } from './db';
 import { init as initDevice } from './device';
+import { init as initEndpoints } from './endpoints';
 
 export async function run(): Promise<void> {
   await initDB();
