@@ -22,8 +22,9 @@ import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { getEnvironmentVariable } from './util';
 import { init as initZones } from './endpoints/zones';
-import { init as initLights } from './endpoints/lights';
+import { init as initScenes } from './endpoints/scenes';
 import { init as initPatterns } from './endpoints/patterns';
+import { init as initLights } from './endpoints/lights';
 
 export function init(): Promise<void> {
   return new Promise((resolve) => {
@@ -35,8 +36,9 @@ export function init(): Promise<void> {
     });
 
     initZones(app);
-    initLights(app);
+    initScenes(app);
     initPatterns(app);
+    initLights(app);
 
     app.listen(port, (err, address) => {
       if (err) {

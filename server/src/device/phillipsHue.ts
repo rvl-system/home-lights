@@ -35,11 +35,12 @@ import { getLights, createLight, deleteLight } from '../db/lights';
 let authenticatedApi: Api;
 
 export async function init(): Promise<void> {
+  console.log('Looking for Philips Hue bridge...');
   const bridgeIP = await discoverBridge();
   if (!bridgeIP) {
     return;
   }
-  console.log('Connecting to Philips Hue bridge...');
+  console.log(`Connecting to Philips Hue bridge at ${bridgeIP}...`);
   const username = await getOrCreateUser(bridgeIP);
   authenticatedApi = await philipsHue.api
     .createLocal(bridgeIP)

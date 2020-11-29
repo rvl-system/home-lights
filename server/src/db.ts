@@ -22,7 +22,7 @@ import { join, dirname } from 'path';
 import { getEnvironmentVariable } from './util';
 import { init as initDB, dbRun, dbAll } from './sqlite';
 import { ZONE_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
-import { LIGHT_SCHEMA, LIGHT_TABLE_NAME } from './db/lights';
+import { SCENE_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
 import {
   PHILIPS_HUE_INFO_SCHEMA,
   PHILIPS_HUE_TABLE_NAME
@@ -33,6 +33,7 @@ import {
   COLORS_SCHEMA,
   COLORS_TABLE_NAME
 } from './db/patterns';
+import { LIGHT_SCHEMA, LIGHT_TABLE_NAME } from './db/lights';
 
 const DB_FILE = join(
   getEnvironmentVariable('HOME'),
@@ -44,10 +45,11 @@ export async function reset(): Promise<void> {
   console.log('Resetting database...');
   await init();
   await dbAll(`DROP TABLE ${ZONES_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${LIGHT_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${PHILIPS_HUE_TABLE_NAME}`);
+  await dbAll(`DROP TABLE ${SCENES_TABLE_NAME}`);
   await dbAll(`DROP TABLE ${PATTERN_TABLE_NAME}`);
   await dbAll(`DROP TABLE ${COLORS_TABLE_NAME}`);
+  await dbAll(`DROP TABLE ${LIGHT_TABLE_NAME}`);
+  await dbAll(`DROP TABLE ${PHILIPS_HUE_TABLE_NAME}`);
   await create();
   console.log('done');
 }
@@ -55,10 +57,11 @@ export async function reset(): Promise<void> {
 async function create(): Promise<void> {
   console.log('Creating database tables...');
   await dbRun(ZONE_SCHEMA);
-  await dbRun(LIGHT_SCHEMA);
-  await dbRun(PHILIPS_HUE_INFO_SCHEMA);
+  await dbRun(SCENE_SCHEMA);
   await dbRun(PATTERN_SCHEMA);
   await dbRun(COLORS_SCHEMA);
+  await dbRun(LIGHT_SCHEMA);
+  await dbRun(PHILIPS_HUE_INFO_SCHEMA);
 }
 
 export async function init(): Promise<void> {

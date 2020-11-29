@@ -25,16 +25,21 @@ export const SCENE_SCHEMA = `
 CREATE TABLE "${SCENES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,
-  lights TEXT NOT NULL
+  lights TEXT NOT NULL,
+  zone_id INTEGER,
+  FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
 
 export async function getScenes(): Promise<Scene[]> {
   const rows = await dbAll(`SELECT * FROM ${SCENES_TABLE_NAME}`);
-  return rows.map((row) => ({
-    id: row.id,
-    name: row.name,
-    lights: JSON.parse(row.lights)
-  }));
+  return rows.map(
+    (row): Scene => ({
+      id: row.id,
+      name: row.name,
+      zoneId: row.zone_id,
+      lights: JSON.parse(row.lights)
+    })
+  );
 }
 
 export async function createScene(

@@ -69,6 +69,7 @@ export interface SceneLightEntry {
 
 export interface Scene {
   id: number;
+  zoneId: number;
   name: string;
   lights: SceneLightEntry[];
 }
