@@ -17,36 +17,52 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { List, ListItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
-import { Light, Scene, SceneLightEntry, Zone } from '../../common/types';
+import { Light, Scene } from '../../common/types';
+import { EditMode } from '../../types';
+import {
+  CreateSceneButton,
+  CreateSceneButtonDispatch
+} from './createSceneButton';
 import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
 export interface ZoneScenesComponentProps {
-  zone: Zone;
   zoneScenes: Scene[];
   zoneLights: Light[];
+  editMode: EditMode;
 }
 
-export interface ZoneScenesComponentDispatch extends SceneComponentDispatch {
-  createScene: (name: string, lights: SceneLightEntry[]) => void;
-}
+export type ZoneScenesComponentDispatch = SceneComponentDispatch &
+  CreateSceneButtonDispatch;
+
+const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%'
+  }
+}));
 
 export const ZoneScenesComponent: FunctionComponent<
   ZoneScenesComponentProps & ZoneScenesComponentDispatch
 > = (props) => {
+  const classes = useStyles();
   return (
     <div>
-      {props.zone.name} scenes
-      <div>
+      {props.editMode === EditMode.Edit && (
+        <CreateSceneButton createScene={props.createScene} />
+      )}
+      <List className={classes.root}>
         {props.zoneScenes.map((scene) => (
-          <SceneComponent
-            key={scene.id}
-            scene={scene}
-            editScene={props.editScene}
-            deleteScene={props.deleteScene}
-          />
+          <ListItem key={scene.id}>
+            <SceneComponent
+              scene={scene}
+              editScene={props.editScene}
+              deleteScene={props.deleteScene}
+            />
+          </ListItem>
         ))}
-      </div>
+      </List>
     </div>
   );
 };

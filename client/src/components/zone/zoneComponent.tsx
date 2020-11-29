@@ -75,7 +75,7 @@ export const ZoneComponent: FunctionComponent<
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.detailContainer}>
-          <ZoneScenesContainer zone={props.zone} />
+          <ZoneScenesContainer zone={props.zone} editMode={props.editMode} />
         </AccordionDetails>
       </Accordion>
     </React.Fragment>

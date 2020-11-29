@@ -24,19 +24,20 @@ import {
   ZoneScenesComponentDispatch
 } from '../components/scene/zoneScenesComponent';
 import { createContainer } from '../reduxology';
-import { SliceName, ActionType } from '../types';
+import { SliceName, ActionType, EditMode } from '../types';
 
 export interface ZoneScenesContainerProps {
   zone: Zone;
+  editMode: EditMode;
 }
 
 export const ZoneScenesContainer = createContainer(
   (getState, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => ({
-    zone: ownProps.zone,
     zoneScenes: getState(SliceName.Scenes).filter(
       (scene) => scene.zoneId === ownProps.zone.id
     ),
-    zoneLights: []
+    zoneLights: [],
+    editMode: ownProps.editMode
   }),
   (
     dispatch,
