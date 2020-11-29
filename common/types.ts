@@ -61,10 +61,18 @@ export type CreateLIFXLightRequest = Omit<LIFXLight, 'id'>;
 
 // ---- Scene Types ----
 
+export interface SceneLightEntry {
+  light: Light;
+  pattern: Pattern;
+  brightness: number;
+}
+
 export interface Scene {
   id: number;
-  // TODO
+  name: string;
+  lights: SceneLightEntry[];
 }
+export type CreateSceneRequest = Omit<Scene, 'id'>;
 
 // ---- Pattern Types ----
 
