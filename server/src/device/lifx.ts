@@ -30,6 +30,8 @@ const LIFX_URL = 'https://api.lifx.com/v1/lights';
 const TOKEN = process.env['LIFX_TOKEN'];
 const LOCATION = process.env['LIFX_LOCATION'];
 
+// We're matching the LIFX API here, which uses snake_case, so disable the linter rule
+/* eslint-disable @typescript-eslint/naming-convention */
 interface LIFXBulbDescriptor {
   id: string;
   uuid: string;
@@ -69,6 +71,7 @@ interface LIFXBulbDescriptor {
   last_seen: string;
   seconds_since_seen: number;
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 async function getLIFXLights(
   token: string,
@@ -76,7 +79,7 @@ async function getLIFXLights(
 ): Promise<LIFXBulbDescriptor[]> {
   const response = await fetch(`${LIFX_URL}/location:${location}`, {
     headers: {
-      Authorization: `Bearer ${token}`
+      authorization: `Bearer ${token}`
     }
   });
   return await response.json();

@@ -101,7 +101,7 @@ export const EditLightButton: FunctionComponent<
               name="channel"
               description="Channel"
               selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-                (_, i) => ({
+                (key, i) => ({
                   value: i.toString(),
                   label: i.toString()
                 })

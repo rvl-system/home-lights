@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 import { Zone } from '../../common/types';
 import { DialogComponent, DialogValue } from '../lib/dialogComponent';
@@ -43,9 +43,9 @@ export interface CreateLightButtonDispatch {
   createRVLLight: (name: string, channel: number, zone?: number) => void;
 }
 
-export function CreateLightButton(
-  props: CreateLightButtonProps & CreateLightButtonDispatch
-): JSX.Element {
+export const CreateLightButton: FunctionComponent<
+  CreateLightButtonProps & CreateLightButtonDispatch
+> = (props) => {
   const [openDialog, setOpenDialog] = React.useState(false);
 
   function handleClose() {
@@ -98,7 +98,7 @@ export function CreateLightButton(
           name="channel"
           description="Channel"
           selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-            (_, i) => ({
+            (key, i) => ({
               value: i,
               label: i.toString()
             })
@@ -108,4 +108,4 @@ export function CreateLightButton(
       </DialogComponent>
     </div>
   );
-}
+};

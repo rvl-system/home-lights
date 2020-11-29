@@ -37,7 +37,7 @@ export const ZonePowerSwitch: FunctionComponent<
 > = (props) => {
   return (
     <React.Fragment>
-      {props.editMode === EditMode.view && (
+      {props.editMode === EditMode.Operation && (
         <Switch
           className={props.className}
           color="default"
