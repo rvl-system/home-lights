@@ -26,6 +26,7 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Zone } from '../../common/types';
+import { ZoneScenesContainer } from '../../containers/zoneScenesContainer';
 import { EditMode } from '../../types';
 import { useContentStyles } from '../lib/pageStyles';
 import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
@@ -74,7 +75,7 @@ export const ZoneComponent: FunctionComponent<
           </div>
         </AccordionSummary>
         <AccordionDetails className={classes.detailContainer}>
-          <Typography>TODO: scenes for {props.zone.name}</Typography>
+          <ZoneScenesContainer zone={props.zone} />
         </AccordionDetails>
       </Accordion>
     </React.Fragment>

@@ -17,14 +17,23 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { lightsReducer } from './lightsReducer';
-import { scenesReducer } from './scenesReducer';
-import { selectedTabReducer } from './selectedTabReducer';
-import { zonesReducer } from './zonesReducer';
+import React, { FunctionComponent } from 'react';
+import { Light, Scene, SceneLightEntry, Zone } from '../../common/types';
 
-export const reducers = [
-  zonesReducer,
-  scenesReducer,
-  lightsReducer,
-  selectedTabReducer
-];
+export interface ZoneScenesProps {
+  zone: Zone;
+  zoneScenes: Scene[];
+  zoneLights: Light[];
+}
+
+export interface ZoneScenesDispatch {
+  createScene: (name: string, lights: SceneLightEntry[]) => void;
+  editScene: (scene: Scene) => void;
+  deleteScene: (id: number) => void;
+}
+
+export const ZoneScenesComponent: FunctionComponent<
+  ZoneScenesProps & ZoneScenesDispatch
+> = (props) => {
+  return <div>{props.zone.name} scenes</div>;
+};

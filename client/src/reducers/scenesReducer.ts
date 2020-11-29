@@ -17,14 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { lightsReducer } from './lightsReducer';
-import { scenesReducer } from './scenesReducer';
-import { selectedTabReducer } from './selectedTabReducer';
-import { zonesReducer } from './zonesReducer';
+import { createReducer } from '../reduxology';
+import { SliceName, ActionType } from '../types';
 
-export const reducers = [
-  zonesReducer,
-  scenesReducer,
-  lightsReducer,
-  selectedTabReducer
-];
+export const scenesReducer = createReducer(SliceName.Scenes, []);
+
+scenesReducer.handle(
+  ActionType.ScenesUpdated,
+  (state, updatedScenes) => updatedScenes
+);
