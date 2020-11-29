@@ -57,6 +57,7 @@ export const ZoneScenesComponent: FunctionComponent<
           <ListItem key={scene.id}>
             <SceneComponent
               scene={scene}
+              editMode={props.editMode}
               editScene={props.editScene}
               deleteScene={props.deleteScene}
             />

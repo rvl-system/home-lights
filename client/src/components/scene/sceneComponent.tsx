@@ -17,20 +17,44 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { Scene } from '../../common/types';
+import { EditMode } from '../../types';
+import { useContentStyles } from '../lib/pageStyles';
+import {
+  DeleteSceneButton,
+  DeleteSceneButtonDispatch
+} from './deleteSceneButton';
+import { EditSceneButton, EditSceneButtonDispatch } from './editSceneButton';
 
 export interface SceneComponentProps {
   scene: Scene;
+  editMode: EditMode;
 }
 
-export interface SceneComponentDispatch {
-  editScene: (scene: Scene) => void;
-  deleteScene: (id: number) => void;
-}
+export type SceneComponentDispatch = DeleteSceneButtonDispatch &
+  EditSceneButtonDispatch;
 
 export const SceneComponent: FunctionComponent<
   SceneComponentProps & SceneComponentDispatch
 > = (props) => {
-  return <div>Scene {props.scene.name}</div>;
+  const classes = useContentStyles();
+  return (
+    <div className={classes.itemHeading}>
+      <DeleteSceneButton
+        scene={props.scene}
+        editMode={props.editMode}
+        className={classes.leftButton}
+        deleteScene={props.deleteScene}
+      />
+      <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
+      <EditSceneButton
+        className={classes.rightAccordionButton}
+        scene={props.scene}
+        editMode={props.editMode}
+        editScene={props.editScene}
+      />
+    </div>
+  );
 };
