@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
 import {
   ZonesTab,
   ZonesTabProps,
   ZonesTabDispatch
 } from '../components/zone/zonesTab';
+import { createContainer } from '../reduxology';
 import { SliceName, ActionType } from '../types';
 
 export const ZonesTabContainer = createContainer(

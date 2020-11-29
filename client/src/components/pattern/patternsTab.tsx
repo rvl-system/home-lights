@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { Typography } from '@material-ui/core';
+import React, { FunctionComponent } from 'react';
 
 export const PatternsTab: FunctionComponent<null> = () => {
   return <Typography>Patterns</Typography>;

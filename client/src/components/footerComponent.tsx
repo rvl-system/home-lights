@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import {
   Home as HomeIcon,
   BlurLinear as BlurLinearIcon,
   EmojiObjects as EmojiObjectsIcon
 } from '@material-ui/icons';
+import React, { FunctionComponent } from 'react';
 import { SelectedTab } from '../types';
 
 export interface FooterComponentProps {

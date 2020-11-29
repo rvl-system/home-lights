@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
 import {
   CreateLightButton,
   CreateLightButtonProps,
   CreateLightButtonDispatch
 } from '../components/light/createLightButton';
+import { createContainer } from '../reduxology';
 import { SliceName, ActionType } from '../types';
 
 export const CreateLightButtonContainer = createContainer(

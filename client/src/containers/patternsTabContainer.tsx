@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
 import { PatternsTab } from '../components/pattern/patternsTab';
+import { createContainer } from '../reduxology';
 
 export const PatternsTabContainer = createContainer(
   () => ({}),

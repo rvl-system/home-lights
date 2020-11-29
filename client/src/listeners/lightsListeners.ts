@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { CreateRVLLightRequest, Light, LightType } from '../common/types';
 import { createListener, dispatch } from '../reduxology';
 import { ActionType } from '../types';
-import { CreateRVLLightRequest, Light, LightType } from '../common/types';
 import { get, post, put, del } from '../util/api';
 
 const createRVLLightListener = createListener(

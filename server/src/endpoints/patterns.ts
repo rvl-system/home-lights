@@ -18,13 +18,13 @@ along with Home Patterns.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
+import { Pattern, CreatePatternRequest } from '../common/types';
 import {
   getPatterns,
   createPattern,
   editPattern,
   deletePattern
 } from '../db/patterns';
-import { Pattern, CreatePatternRequest } from '../common/types';
 
 export function init(app: FastifyInstance): void {
   app.get('/api/patterns', async () => {

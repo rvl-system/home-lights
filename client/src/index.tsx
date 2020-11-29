@@ -18,14 +18,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { render } from 'react-dom';
-import { createApp, dispatch } from './reduxology';
-import { AppContainer } from './containers/appContainer';
-import { get } from './util/api';
-import { ActionType } from './types';
-
-import { reducers } from './reducers/reducers';
-import { listeners } from './listeners/listeners';
 import { Light, Zone, Pattern } from './common/types';
+import { AppContainer } from './containers/appContainer';
+import { listeners } from './listeners/listeners';
+import { reducers } from './reducers/reducers';
+import { createApp, dispatch } from './reduxology';
+import { ActionType } from './types';
+import { get } from './util/api';
 
 async function run() {
   const app = createApp({

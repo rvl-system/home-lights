@@ -17,6 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { SetLightStateRequest } from './common/types';
+import {
+  init as initLIFX,
+  setLightState as setLIFXLightState
+} from './device/lifx';
 import {
   init as initPhilipsHue,
   setLightState as setRVLLightState
@@ -25,11 +30,6 @@ import {
   init as initRVL,
   setLightState as setPhilipsHueLightState
 } from './device/rvl';
-import {
-  init as initLIFX,
-  setLightState as setLIFXLightState
-} from './device/lifx';
-import { SetLightStateRequest } from './common/types';
 
 export async function init(): Promise<void> {
   await initRVL();

@@ -20,10 +20,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { getEnvironmentVariable } from './util';
-import { init as initZones } from './endpoints/zones';
 import { init as initLights } from './endpoints/lights';
 import { init as initPatterns } from './endpoints/patterns';
+import { init as initZones } from './endpoints/zones';
+import { getEnvironmentVariable } from './util';
 
 export function init(): Promise<void> {
   return new Promise((resolve) => {

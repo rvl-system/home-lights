@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { zonesListeners } from './zonesListeners';
 import { lightsListeners } from './lightsListeners';
+import { zonesListeners } from './zonesListeners';
 
 export const listeners = [...zonesListeners, ...lightsListeners];

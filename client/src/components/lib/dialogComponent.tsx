@@ -17,12 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, {
-  FunctionComponent,
-  cloneElement,
-  Children,
-  ReactElement
-} from 'react';
 import {
   Button,
   Dialog as MaterialDialog,
@@ -32,6 +26,12 @@ import {
   DialogContentText
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import React, {
+  FunctionComponent,
+  cloneElement,
+  Children,
+  ReactElement
+} from 'react';
 import { Color } from '../../types';
 
 export const useDefaultStyles = makeStyles({

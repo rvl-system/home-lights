@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
 import { AppComponent, AppComponentProps } from '../components/appComponent';
+import { createContainer } from '../reduxology';
 import { SliceName } from '../types';
 
 export const AppContainer = createContainer(
