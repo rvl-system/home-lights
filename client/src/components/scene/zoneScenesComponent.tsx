@@ -38,6 +38,9 @@ export type ZoneScenesComponentDispatch = SceneComponentDispatch &
   CreateSceneButtonDispatch;
 
 const useStyles = makeStyles(() => ({
+  container: {
+    'padding-right': '20px'
+  },
   root: {
     width: '100%'
   }
@@ -48,10 +51,7 @@ export const ZoneScenesComponent: FunctionComponent<
 > = (props) => {
   const classes = useStyles();
   return (
-    <div>
-      {props.editMode === EditMode.Edit && (
-        <CreateSceneButton createScene={props.createScene} />
-      )}
+    <div className={classes.container}>
       <List className={classes.root}>
         {props.zoneScenes.map((scene) => (
           <ListItem key={scene.id}>
@@ -64,6 +64,9 @@ export const ZoneScenesComponent: FunctionComponent<
           </ListItem>
         ))}
       </List>
+      {props.editMode === EditMode.Edit && (
+        <CreateSceneButton createScene={props.createScene} />
+      )}
     </div>
   );
 };

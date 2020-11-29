@@ -48,6 +48,9 @@ export const SceneComponent: FunctionComponent<
         className={classes.leftButton}
         deleteScene={props.deleteScene}
       />
+      {props.editMode === EditMode.Operation && (
+        <div className={classes.leftButton}></div>
+      )}
       <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
       <EditSceneButton
         className={classes.rightAccordionButton}
