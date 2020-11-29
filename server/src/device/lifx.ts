@@ -86,6 +86,7 @@ async function getLIFXLights(
 }
 
 async function updateLights(token: string, location: string): Promise<void> {
+  console.log('Reconciling LIFX lights in bridge vs database');
   const lights = await getLIFXLights(token, location);
   const dbLights = await getLights();
 

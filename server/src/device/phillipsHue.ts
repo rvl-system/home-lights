@@ -122,6 +122,7 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
 }
 
 async function updateLights(): Promise<void> {
+  console.log('Reconciling Phillips Hue lights in bridge vs database');
   const bridgeLights = await authenticatedApi.lights.getAll();
   const dbLights = await getLights();
 
