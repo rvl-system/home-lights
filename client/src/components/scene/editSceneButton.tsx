@@ -33,6 +33,7 @@ export interface EditSceneButtonDispatch {
   editScene: (scene: Scene) => void;
 }
 
+// TODO: implement the modal in https://github.com/rvl-system/home-lights/issues/52
 export const EditSceneButton: FunctionComponent<
   EditSceneButtonProps & EditSceneButtonDispatch
 > = (props) => {
