@@ -22,6 +22,7 @@ import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Scene } from '../../common/types';
 import { EditMode } from '../../types';
+import { DialogComponent } from '../lib/dialogComponent';
 
 export interface DeleteSceneButtonProps {
   scene: Scene;
@@ -37,6 +38,12 @@ export interface DeleteSceneButtonDispatch {
 export const DeleteSceneButton: FunctionComponent<
   DeleteSceneButtonDispatch & DeleteSceneButtonProps
 > = (props) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+
+  function handleDeleteClose() {
+    setDeleteDialogOpen(false);
+  }
+
   return (
     <React.Fragment>
       <Fade in={props.editMode === EditMode.Edit} mountOnEnter unmountOnExit>
@@ -45,12 +52,25 @@ export const DeleteSceneButton: FunctionComponent<
           color="secondary"
           onClick={(e) => {
             e.stopPropagation();
-            console.log('Delete scene');
+            setDeleteDialogOpen(true);
           }}
         >
           <DeleteIcon />
         </Button>
       </Fade>
+
+      <DialogComponent
+        onConfirm={() => {
+          handleDeleteClose();
+          props.deleteScene(props.scene.id);
+        }}
+        onCancel={handleDeleteClose}
+        open={deleteDialogOpen}
+        title={`Delete "${props.scene.name}"?`}
+        description="This operation cannot be undone"
+        confirmLabel="Delete light"
+        confirmColor="secondary"
+      />
     </React.Fragment>
   );
 };

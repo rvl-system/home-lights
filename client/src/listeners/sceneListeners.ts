@@ -17,12 +17,19 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { lightsListeners } from './lightsListeners';
-import { sceneListeners } from './sceneListeners';
-import { zonesListeners } from './zonesListeners';
+import { Scene } from '../common/types';
+import { createListener, dispatch } from '../reduxology';
+import { ActionType } from '../types';
+import { get, del } from '../util/api';
 
-export const listeners = [
-  ...zonesListeners,
-  ...sceneListeners,
-  ...lightsListeners
-];
+const deleteSceneListener = createListener(
+  ActionType.DeleteScene,
+  async (id: number) => {
+    await del(`/api/scene/${id}`);
+
+    const updatedScenes = (await get('/api/scenes')) as Scene[];
+    dispatch(ActionType.ScenesUpdated, updatedScenes);
+  }
+);
+
+export const sceneListeners = [deleteSceneListener];

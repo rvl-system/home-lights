@@ -28,9 +28,11 @@ import {
 
 export enum SliceName {
   Zones = 'Zones',
+  Scenes = 'Scenes',
+  Patterns = 'Patterns',
   Lights = 'Lights',
-  SelectedTab = 'SelectedTab',
-  Scenes = 'Scenes'
+  Colors = 'Colors',
+  SelectedTab = 'SelectedTab'
 }
 
 export enum ActionType {

@@ -33,7 +33,7 @@ const createRVLLightListener = createListener(
     };
     await post('/api/lights', createBody);
 
-    const updatedLights = (await get('/api/lights')) as Light[]; // TODO: type this like we do actions
+    const updatedLights = (await get('/api/lights')) as Light[];
     dispatch(ActionType.LightsUpdated, updatedLights);
   }
 );
