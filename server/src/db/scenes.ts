@@ -21,7 +21,7 @@ import { CreateSceneRequest, Scene } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 
 export const SCENES_TABLE_NAME = 'scenes';
-export const SCENE_SCHEMA = `
+export const SCENES_SCHEMA = `
 CREATE TABLE "${SCENES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,

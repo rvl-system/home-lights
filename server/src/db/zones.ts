@@ -21,7 +21,7 @@ import { Zone, CreateZoneRequest } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 
 export const ZONES_TABLE_NAME = 'zones';
-export const ZONE_SCHEMA = `
+export const ZONES_SCHEMA = `
 CREATE TABLE "${ZONES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE
