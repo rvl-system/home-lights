@@ -34,7 +34,6 @@ export interface DeleteSceneButtonDispatch {
   deleteScene: (id: number) => void;
 }
 
-// TODO: implement the modal in https://github.com/rvl-system/home-lights/issues/52
 export const DeleteSceneButton: FunctionComponent<
   DeleteSceneButtonDispatch & DeleteSceneButtonProps
 > = (props) => {
