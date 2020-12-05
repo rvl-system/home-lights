@@ -17,7 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { FunctionComponent } from 'react';
+import { Divider, List } from '@material-ui/core';
+import React, { Fragment, FunctionComponent } from 'react';
 import { Light, Zone } from '../../common/types';
 import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
 import { useContainerStyles } from '../lib/pageStyles';
@@ -42,14 +43,20 @@ export const LightsTab: FunctionComponent<
       </div>
       <div className={classes.content}>
         <div className={classes.innerContent}>
-          {props.lights.map((light) => (
-            <LightComponent
-              key={light.id}
-              light={light}
-              deleteLight={props.deleteLight}
-              zones={props.zones}
-            />
-          ))}
+          <List>
+            {props.lights.map((light) => (
+              <Fragment key={light.id}>
+                <Divider />
+                <LightComponent
+                  key={light.id}
+                  light={light}
+                  deleteLight={props.deleteLight}
+                  zones={props.zones}
+                />
+              </Fragment>
+            ))}
+            <Divider />
+          </List>
         </div>
       </div>
     </div>
