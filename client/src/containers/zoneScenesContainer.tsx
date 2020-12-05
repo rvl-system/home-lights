@@ -33,6 +33,7 @@ export interface ZoneScenesContainerProps {
 
 export const ZoneScenesContainer = createContainer(
   (getState, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => ({
+    zone: ownProps.zone,
     zoneScenes: getState(SliceName.Scenes).filter(
       (scene) => scene.zoneId === ownProps.zone.id
     ),

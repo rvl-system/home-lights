@@ -17,11 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { SceneLightEntry } from '../../common/types';
+import { CreateSceneRequest, SceneLightEntry } from '../../common/types';
+import { SceneDialogContainer } from '../../containers/sceneDialogContainer';
 
 const useStyles = makeStyles({
   container: {
@@ -34,23 +33,30 @@ const useStyles = makeStyles({
   }
 });
 
+export interface CreateSceneButtonProps {
+  zoneId: number;
+}
+
 export interface CreateSceneButtonDispatch {
   createScene: (name: string, lights: SceneLightEntry[]) => void;
 }
 
-// TODO: implement the modal in https://github.com/rvl-system/home-lights/issues/52
-export const CreateSceneButton: FunctionComponent<CreateSceneButtonDispatch> = () => {
+export const CreateSceneButton: FunctionComponent<
+  CreateSceneButtonProps & CreateSceneButtonDispatch
+> = (props) => {
   const classes = useStyles();
+
+  function onConfirm(scene: CreateSceneRequest) {
+    props.createScene(scene.name, scene.lights);
+  }
+
   return (
     <div className={classes.container}>
-      <Button
+      <SceneDialogContainer
         className={classes.button}
-        variant="outlined"
-        color="primary"
-        onClick={() => console.log('Create Scene')}
-      >
-        <AddIcon />
-      </Button>
+        zoneId={props.zoneId}
+        onConfirm={onConfirm}
+      />
     </div>
   );
 };

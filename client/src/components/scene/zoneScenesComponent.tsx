@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Divider, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, FunctionComponent } from 'react';
-import { Light, Scene } from '../../common/types';
+import { Light, Scene, Zone } from '../../common/types';
 import { EditMode } from '../../types';
 import {
   CreateSceneButton,
@@ -29,6 +29,7 @@ import {
 import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
 export interface ZoneScenesComponentProps {
+  zone: Zone;
   zoneScenes: Scene[];
   zoneLights: Light[];
   editMode: EditMode;
@@ -67,7 +68,10 @@ export const ZoneScenesComponent: FunctionComponent<
         <Divider />
       </List>
       {props.editMode === EditMode.Edit && (
-        <CreateSceneButton createScene={props.createScene} />
+        <CreateSceneButton
+          createScene={props.createScene}
+          zoneId={props.zone.id}
+        />
       )}
     </div>
   );

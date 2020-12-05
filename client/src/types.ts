@@ -64,6 +64,7 @@ export interface State {
   [SliceName.Scenes]: Scene[];
   [SliceName.Lights]: Light[];
   [SliceName.SelectedTab]: SelectedTab;
+  [SliceName.Patterns]: Pattern[];
 }
 
 export interface Actions {
