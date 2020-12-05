@@ -21,7 +21,7 @@ import { Button } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Light } from '../../common/types';
-import { DialogComponent } from '../lib/dialogComponent';
+import { ConfirmDialog } from '../lib/confirmDialog';
 
 export interface DeleteLightButtonProps {
   light: Light;
@@ -54,7 +54,7 @@ export const DeleteLightButton: FunctionComponent<
         <DeleteIcon />
       </Button>
 
-      <DialogComponent
+      <ConfirmDialog
         onConfirm={() => {
           handleDeleteClose();
           props.deleteLight(props.light.id);

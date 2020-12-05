@@ -71,7 +71,18 @@ export const useContentStyles = makeStyles((theme) => ({
       '[left-icon-start] auto [title-start] 1fr [right-icon-start] auto [end]',
     'grid-template-rows': 'auto',
     width: '100%',
-    height: '38px',
+    height: '50px',
+    'align-items': 'center'
+  },
+  listItem: {
+    display: 'grid',
+    'grid-template-columns':
+      '[left-icon-start] auto [title-start] 1fr [right-icon-start] auto [end]',
+    'grid-template-rows': 'auto',
+    width: '100%',
+    height: '65px',
+    'padding-left': '10px',
+    'padding-right': '10px',
     'align-items': 'center'
   },
   leftButton: {

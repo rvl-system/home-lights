@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Accordion, AccordionSummary, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
 import {
@@ -53,33 +53,29 @@ export const LightComponent: FunctionComponent<
   const canEdit = props.light.type === LightType.RVL;
   const zone = props.zones.find((zone) => zone.id === props.light.zoneId);
   return (
-    <Accordion expanded={false}>
-      <AccordionSummary>
-        <div className={contentClasses.itemHeading}>
-          {canEdit ? (
-            <DeleteLightButton
-              light={props.light}
-              className={contentClasses.leftButton}
-              deleteLight={props.deleteLight}
-            />
-          ) : (
-            <div className={contentClasses.leftButton}></div>
-          )}
-          <div>
-            <Typography className={contentClasses.itemTitle}>
-              {props.light.name}
-            </Typography>
-            <Typography variant="caption" className={classes.caption}>
-              {zone ? zone.name : <em>Unassigned</em>}
-            </Typography>
-          </div>
-          <EditLightButtonContainer
-            className={contentClasses.rightButton}
-            light={props.light}
-            canChangeName={canEdit}
-          />
-        </div>
-      </AccordionSummary>
-    </Accordion>
+    <div className={contentClasses.listItem}>
+      {canEdit ? (
+        <DeleteLightButton
+          light={props.light}
+          className={contentClasses.leftButton}
+          deleteLight={props.deleteLight}
+        />
+      ) : (
+        <div className={contentClasses.leftButton}></div>
+      )}
+      <div>
+        <Typography className={contentClasses.itemTitle}>
+          {props.light.name}
+        </Typography>
+        <Typography variant="caption" className={classes.caption}>
+          {zone ? zone.name : <em>Unassigned</em>}
+        </Typography>
+      </div>
+      <EditLightButtonContainer
+        className={contentClasses.rightButton}
+        light={props.light}
+        canChangeName={canEdit}
+      />
+    </div>
   );
 };
