@@ -36,21 +36,18 @@ export interface SceneComponentProps {
 export type SceneComponentDispatch = DeleteSceneButtonDispatch &
   EditSceneButtonDispatch;
 
-export const SceneComponent: FunctionComponent<
+const EditSceneComponent: FunctionComponent<
   SceneComponentProps & SceneComponentDispatch
 > = (props) => {
   const classes = useContentStyles();
   return (
-    <ListItem className={classes.listItem} button>
+    <ListItem className={classes.listItem}>
       <DeleteSceneButton
         scene={props.scene}
         editMode={props.editMode}
         className={classes.leftButton}
         deleteScene={props.deleteScene}
       />
-      {props.editMode === EditMode.Operation && (
-        <div className={classes.leftButton}></div>
-      )}
       <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
       <EditSceneButton
         className={classes.rightAccordionButton}
@@ -59,5 +56,26 @@ export const SceneComponent: FunctionComponent<
         editScene={props.editScene}
       />
     </ListItem>
+  );
+};
+
+const OperationSceneComponent: FunctionComponent<
+  SceneComponentProps & SceneComponentDispatch
+> = (props) => {
+  const classes = useContentStyles();
+  return (
+    <ListItem className={classes.listItem} button>
+      <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
+    </ListItem>
+  );
+};
+
+export const SceneComponent: FunctionComponent<
+  SceneComponentProps & SceneComponentDispatch
+> = (props) => {
+  return props.editMode === EditMode.Edit ? (
+    <EditSceneComponent {...props} />
+  ) : (
+    <OperationSceneComponent {...props} />
   );
 };
