@@ -158,6 +158,7 @@ export const DialogComponent: FunctionComponent<DialogComponentProps> = ({
         open={open}
         onClose={onCancel}
         onClick={(e) => e.stopPropagation()}
+        fullScreen
       >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>

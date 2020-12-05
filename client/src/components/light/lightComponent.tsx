@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Typography } from '@material-ui/core';
+import { ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
 import {
@@ -53,7 +53,7 @@ export const LightComponent: FunctionComponent<
   const canEdit = props.light.type === LightType.RVL;
   const zone = props.zones.find((zone) => zone.id === props.light.zoneId);
   return (
-    <div className={contentClasses.listItem}>
+    <ListItem className={contentClasses.listItem}>
       {canEdit ? (
         <DeleteLightButton
           light={props.light}
@@ -76,6 +76,6 @@ export const LightComponent: FunctionComponent<
         light={props.light}
         canChangeName={canEdit}
       />
-    </div>
+    </ListItem>
   );
 };
