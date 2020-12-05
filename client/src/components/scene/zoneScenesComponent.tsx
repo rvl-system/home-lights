@@ -53,18 +53,18 @@ export const ZoneScenesComponent: FunctionComponent<
   return (
     <div className={classes.container}>
       <List className={classes.root}>
-        {props.zoneScenes.map((scene, i) => (
+        {props.zoneScenes.map((scene) => (
           <Fragment key={scene.id}>
+            <Divider />
             <SceneComponent
               scene={scene}
               editMode={props.editMode}
               editScene={props.editScene}
               deleteScene={props.deleteScene}
             />
-            {props.editMode === EditMode.Edit ||
-              (i !== props.zoneScenes.length - 1 && <Divider />)}
           </Fragment>
         ))}
+        <Divider />
       </List>
       {props.editMode === EditMode.Edit && (
         <CreateSceneButton createScene={props.createScene} />
