@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { List, ListItem } from '@material-ui/core';
+import { Divider, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { FunctionComponent } from 'react';
+import React, { Fragment, FunctionComponent } from 'react';
 import { Light, Scene } from '../../common/types';
 import { EditMode } from '../../types';
 import {
@@ -53,15 +53,17 @@ export const ZoneScenesComponent: FunctionComponent<
   return (
     <div className={classes.container}>
       <List className={classes.root}>
-        {props.zoneScenes.map((scene) => (
-          <ListItem key={scene.id}>
+        {props.zoneScenes.map((scene, i) => (
+          <Fragment key={scene.id}>
             <SceneComponent
               scene={scene}
               editMode={props.editMode}
               editScene={props.editScene}
               deleteScene={props.deleteScene}
             />
-          </ListItem>
+            {props.editMode === EditMode.Edit ||
+              (i !== props.zoneScenes.length - 1 && <Divider />)}
+          </Fragment>
         ))}
       </List>
       {props.editMode === EditMode.Edit && (

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Typography } from '@material-ui/core';
+import { ListItem, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { Scene } from '../../common/types';
 import { EditMode } from '../../types';
@@ -41,7 +41,7 @@ export const SceneComponent: FunctionComponent<
 > = (props) => {
   const classes = useContentStyles();
   return (
-    <div className={classes.itemHeading}>
+    <ListItem className={classes.listItem} button>
       <DeleteSceneButton
         scene={props.scene}
         editMode={props.editMode}
@@ -58,6 +58,6 @@ export const SceneComponent: FunctionComponent<
         editMode={props.editMode}
         editScene={props.editScene}
       />
-    </div>
+    </ListItem>
   );
 };

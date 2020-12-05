@@ -24,10 +24,11 @@ export const SCENES_TABLE_NAME = 'scenes';
 export const SCENES_SCHEMA = `
 CREATE TABLE "${SCENES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
   lights TEXT NOT NULL,
   zone_id INTEGER,
-  FOREIGN KEY (zone_id) REFERENCES zones(id)
+  FOREIGN KEY (zone_id) REFERENCES zones(id),
+  UNIQUE (name, zone_id)
 )`;
 
 export async function getScenes(): Promise<Scene[]> {
