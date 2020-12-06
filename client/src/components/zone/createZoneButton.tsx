@@ -21,8 +21,7 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { DialogComponent } from '../lib/dialogComponent';
-import { TextDialogInput } from '../lib/textDialogInput';
+import { FormInput, SpecType } from '../lib/formInput';
 
 const useStyles = makeStyles({
   container: {
@@ -55,7 +54,7 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
       >
         <AddIcon />
       </Button>
-      <DialogComponent
+      <FormInput
         onConfirm={(options) => {
           handleClose();
           props.createZone(options.name as string);
@@ -64,13 +63,15 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
         open={openDialog}
         title="Create zone"
         confirmLabel="Create zone"
-      >
-        <TextDialogInput
-          name="name"
-          description="Descriptive name for the room or area"
-          inputPlaceholder="e.g. Kitchen"
-        />
-      </DialogComponent>
+        spec={[
+          {
+            type: SpecType.Text,
+            name: 'name',
+            description: 'Descriptive name for the room or area',
+            inputPlaceholder: 'e.g. Kitchen'
+          }
+        ]}
+      />
     </div>
   );
 };

@@ -23,9 +23,7 @@ import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 import { Zone } from '../../common/types';
-import { DialogComponent, DialogValue } from '../lib/dialogComponent';
-import { SelectDialogInput } from '../lib/selectDialogInput';
-import { TextDialogInput } from '../lib/textDialogInput';
+import { FormInput, SpecType } from '../lib/formInput';
 
 const useStyles = makeStyles({
   container: {
@@ -52,11 +50,11 @@ export const CreateLightButton: FunctionComponent<
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: DialogValue) {
+  function handleConfirm(values: Record<string, string>) {
     props.createRVLLight(
       values.name as string,
-      values.channel as number,
-      values.zone !== -1 ? (values.zone as number) : undefined
+      parseInt(values.channel),
+      values.zone !== '-1' ? parseInt(values.zone) : undefined
     );
     handleClose();
   }
@@ -71,41 +69,46 @@ export const CreateLightButton: FunctionComponent<
       >
         <AddIcon />
       </Button>
-      <DialogComponent
+
+      <FormInput
         onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
         title="Create light"
         confirmLabel="Create light"
-      >
-        <TextDialogInput
-          name="name"
-          description="Descriptive name for the light"
-          inputPlaceholder="e.g. Left bedside lamp"
-        />
-        <SelectDialogInput
-          name="zone"
-          description="Zone"
-          selectValues={[{ value: -1, label: 'Unassigned' }].concat(
-            props.zones.map((zone) => ({
-              value: zone.id,
-              label: zone.name
-            }))
-          )}
-          defaultValue={-1}
-        />
-        <SelectDialogInput
-          name="channel"
-          description="Channel"
-          selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-            (key, i) => ({
-              value: i,
-              label: i.toString()
-            })
-          )}
-          defaultValue={0}
-        />
-      </DialogComponent>
+        spec={[
+          {
+            type: SpecType.Text,
+            name: 'name',
+            description: 'Descriptive name for the light',
+            inputPlaceholder: 'e.g. Left bedside lamp'
+          },
+          {
+            type: SpecType.Select,
+            name: 'zone',
+            description: 'Zone',
+            options: [{ value: '-1', label: 'Unassigned' }].concat(
+              props.zones.map((zone) => ({
+                value: zone.id.toString(),
+                label: zone.name
+              }))
+            ),
+            defaultValue: '-1'
+          },
+          {
+            type: SpecType.Select,
+            name: 'channel',
+            description: 'Channel',
+            options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
+              (key, i) => ({
+                value: i.toString(),
+                label: i.toString()
+              })
+            ),
+            defaultValue: '0'
+          }
+        ]}
+      />
     </div>
   );
 };
