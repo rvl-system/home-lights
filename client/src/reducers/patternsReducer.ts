@@ -18,6 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createReducer } from '../reduxology';
-import { SliceName } from '../types';
+import { ActionType, SliceName } from '../types';
 
 export const patternsReducer = createReducer(SliceName.Patterns, []);
+
+patternsReducer.handle(
+  ActionType.PatternsUpdated,
+  (state, updatedPatterns) => updatedPatterns
+);
