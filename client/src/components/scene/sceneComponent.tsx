@@ -20,21 +20,20 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { ListItem, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { Scene } from '../../common/types';
+import { EditSceneButtonContainer } from '../../containers/editSceneContainerButton';
 import { EditMode } from '../../types';
 import { useContentStyles } from '../lib/pageStyles';
 import {
   DeleteSceneButton,
   DeleteSceneButtonDispatch
 } from './deleteSceneButton';
-import { EditSceneButton, EditSceneButtonDispatch } from './editSceneButton';
 
 export interface SceneComponentProps {
   scene: Scene;
   editMode: EditMode;
 }
 
-export type SceneComponentDispatch = DeleteSceneButtonDispatch &
-  EditSceneButtonDispatch;
+export type SceneComponentDispatch = DeleteSceneButtonDispatch;
 
 const EditSceneComponent: FunctionComponent<
   SceneComponentProps & SceneComponentDispatch
@@ -49,12 +48,7 @@ const EditSceneComponent: FunctionComponent<
         deleteScene={props.deleteScene}
       />
       <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
-      <EditSceneButton
-        className={classes.rightAccordionButton}
-        scene={props.scene}
-        editMode={props.editMode}
-        editScene={props.editScene}
-      />
+      <EditSceneButtonContainer scene={props.scene} />
     </ListItem>
   );
 };

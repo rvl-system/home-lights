@@ -17,33 +17,32 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Zone } from '../common/types';
+import { Scene } from '../common/types';
 import {
-  ZoneScenesComponent,
-  ZoneScenesComponentProps,
-  ZoneScenesComponentDispatch
-} from '../components/scene/zoneScenesComponent';
+  EditSceneButton,
+  EditSceneButtonProps,
+  EditSceneButtonDispatch
+} from '../components/scene/editSceneButton';
 import { createContainer } from '../reduxology';
-import { SliceName, ActionType, EditMode } from '../types';
+import { ActionType, SliceName } from '../types';
 
-export interface ZoneScenesContainerProps {
-  zone: Zone;
-  editMode: EditMode;
+export interface EditSceneButtonContainerProps {
+  scene: Scene;
 }
 
-export const ZoneScenesContainer = createContainer(
-  (getState, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => ({
-    zone: ownProps.zone,
-    zoneScenes: getState(SliceName.Scenes).filter(
-      (scene) => scene.zoneId === ownProps.zone.id
-    ),
-    zoneLights: [],
-    editMode: ownProps.editMode
+export const EditSceneButtonContainer = createContainer(
+  (
+    getState,
+    ownProps: EditSceneButtonContainerProps
+  ): EditSceneButtonProps => ({
+    scene: ownProps.scene,
+    patterns: getState(SliceName.Patterns),
+    lights: getState(SliceName.Lights)
   }),
-  (dispatch): ZoneScenesComponentDispatch => ({
-    deleteScene(id) {
-      dispatch(ActionType.DeleteScene, id);
+  (dispatch): EditSceneButtonDispatch => ({
+    editScene(scene) {
+      dispatch(ActionType.EditScene, scene);
     }
   }),
-  ZoneScenesComponent
+  EditSceneButton
 );

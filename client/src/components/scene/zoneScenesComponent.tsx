@@ -56,7 +56,6 @@ export const ZoneScenesComponent: FunctionComponent<
             <SceneComponent
               scene={scene}
               editMode={props.editMode}
-              editScene={props.editScene}
               deleteScene={props.deleteScene}
             />
           </Fragment>

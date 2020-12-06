@@ -58,7 +58,7 @@ export const CreateSceneButton: FunctionComponent<
     handleClose();
     const lights: SceneLightEntry[] = [];
     for (const value in values) {
-      const match = /^light-([0-9]*)$/.exec(value);
+      const match = /^pattern-([0-9]*)$/.exec(value);
       if (match) {
         lights.push({
           lightId: parseInt(match[1]),
@@ -101,7 +101,7 @@ export const CreateSceneButton: FunctionComponent<
     });
     spec.push({
       type: SpecType.Select,
-      name: `light-${light.id}`,
+      name: `pattern-${light.id}`,
       description: 'Pattern',
       options: [{ value: 'off', label: 'Off' }].concat(
         props.patterns.map((pattern) => ({
