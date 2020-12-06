@@ -84,7 +84,8 @@ export const EditSceneButton: FunctionComponent<
       type: SpecType.Text,
       name: 'name',
       description: 'Scene name',
-      inputPlaceholder: 'e.g. Chill'
+      inputPlaceholder: 'e.g. Chill',
+      defaultValue: props.scene.name
     }
   ];
   for (const lightEntry of props.scene.lights) {

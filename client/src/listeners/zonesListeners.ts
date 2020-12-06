@@ -40,15 +40,12 @@ const editZoneListener = createListener(ActionType.EditZone, async (zone) => {
   dispatch(ActionType.ZonesUpdated, updatedZones);
 });
 
-const deleteZoneListener = createListener(
-  ActionType.DeleteZone,
-  async (id: number) => {
-    await del(`/api/zone/${id}`);
+const deleteZoneListener = createListener(ActionType.DeleteZone, async (id) => {
+  await del(`/api/zone/${id}`);
 
-    const updatedZones = (await get('/api/zones')) as Zone[];
-    dispatch(ActionType.ZonesUpdated, updatedZones);
-  }
-);
+  const updatedZones = (await get('/api/zones')) as Zone[];
+  dispatch(ActionType.ZonesUpdated, updatedZones);
+});
 
 export const zonesListeners = [
   createZoneListener,

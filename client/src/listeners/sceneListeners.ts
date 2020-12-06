@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { CreateSceneRequest, Scene } from '../common/types';
 import { createListener, dispatch } from '../reduxology';
 import { ActionType } from '../types';
-import { get, del, post } from '../util/api';
+import { get, del, post, put } from '../util/api';
 
 const createScenesListener = createListener(
   ActionType.CreateScene,
@@ -37,9 +37,19 @@ const createScenesListener = createListener(
   }
 );
 
+const editSceneListener = createListener(
+  ActionType.EditScene,
+  async (scene) => {
+    await put(`/api/scene/${scene.id}`, scene);
+
+    const updatedScenes = (await get('/api/scenes')) as Scene[];
+    dispatch(ActionType.ScenesUpdated, updatedScenes);
+  }
+);
+
 const deleteSceneListener = createListener(
   ActionType.DeleteScene,
-  async (id: number) => {
+  async (id) => {
     await del(`/api/scene/${id}`);
 
     const updatedScenes = (await get('/api/scenes')) as Scene[];
@@ -47,4 +57,8 @@ const deleteSceneListener = createListener(
   }
 );
 
-export const sceneListeners = [createScenesListener, deleteSceneListener];
+export const sceneListeners = [
+  createScenesListener,
+  editSceneListener,
+  deleteSceneListener
+];
