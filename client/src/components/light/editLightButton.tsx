@@ -19,13 +19,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 import { Light, RVLLight, LightType, Zone } from '../../common/types';
-import { DialogComponent, DialogValue } from '../lib/dialogComponent';
-import { SelectDialogInput } from '../lib/selectDialogInput';
-import { TextDialogInput } from '../lib/textDialogInput';
+import { FormInput, SpecType, Spec } from '../lib/formInput';
 
 export interface EditLightButtonProps {
   light: Light;
@@ -43,16 +40,58 @@ export const EditLightButton: FunctionComponent<
 > = (props) => {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
 
-  function handleConfirm(values: DialogValue) {
+  function handleConfirm(values: Record<string, string>) {
     handleEditClose();
-    props.editLight({
-      ...props.light,
-      ...values
-    });
+    const newLight: RVLLight = {
+      id: props.light.id,
+      type: LightType.RVL,
+      name: values.name as string,
+      channel: parseInt(values.channel),
+      zoneId: values.zone !== '-1' ? parseInt(values.zoneId) : undefined
+    };
+    props.editLight(newLight);
   }
 
   function handleEditClose() {
     setEditDialogOpen(false);
+  }
+
+  const spec: Spec[] = [];
+  if (props.canChangeName) {
+    spec.push({
+      type: SpecType.Text,
+      name: 'name',
+      description: 'Name',
+      inputPlaceholder: 'e.g. Left bedside lamp',
+      defaultValue: props.light.name
+    });
+  }
+  spec.push({
+    type: SpecType.Select,
+    name: 'zoneId',
+    description: 'Zone',
+    options: [{ value: '-1', label: 'Unassigned' }].concat(
+      props.zones.map((zone) => ({
+        value: zone.id.toString(),
+        label: zone.name
+      }))
+    ),
+    defaultValue:
+      typeof props.light.zoneId === 'number'
+        ? props.light.zoneId.toString()
+        : '-1'
+  });
+  if (props.light.type === LightType.RVL) {
+    spec.push({
+      type: SpecType.Select,
+      name: 'channel',
+      description: 'Channel',
+      options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
+        value: i.toString(),
+        label: i.toString()
+      })),
+      defaultValue: (props.light as RVLLight).channel.toString()
+    });
   }
 
   return (
@@ -67,52 +106,14 @@ export const EditLightButton: FunctionComponent<
         <EditIcon />
       </Button>
 
-      <DialogComponent
+      <FormInput
         onConfirm={handleConfirm}
         onCancel={handleEditClose}
         open={editDialogOpen}
         title={`Edit "${props.light.name}"`}
         confirmLabel="Save light"
-      >
-        {props.canChangeName && (
-          <TextDialogInput
-            name="name"
-            description="Name"
-            inputPlaceholder="e.g. Left bedside lamp"
-            defaultValue={props.light.name}
-          />
-        )}
-        <SelectDialogInput
-          name="zoneId"
-          description="Zone"
-          selectValues={[{ value: -1, label: 'Unassigned' }].concat(
-            props.zones.map((zone) => ({
-              value: zone.id,
-              label: zone.name
-            }))
-          )}
-          defaultValue={
-            typeof props.light.zoneId === 'number' ? props.light.zoneId : -1
-          }
-        />
-        {reduce(props.light.type, {
-          [LightType.RVL]: () => (
-            <SelectDialogInput
-              name="channel"
-              description="Channel"
-              selectValues={Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-                (key, i) => ({
-                  value: i.toString(),
-                  label: i.toString()
-                })
-              )}
-              defaultValue={(props.light as RVLLight).channel.toString()}
-            />
-          ),
-          [LightType.PhilipsHue]: () => <div></div>, // We'll likely add stuff later,
-          [LightType.LIFX]: () => <div></div> // We'll likely add stuff later
-        })}
-      </DialogComponent>
+        spec={spec}
+      />
     </React.Fragment>
   );
 };
