@@ -85,7 +85,7 @@ export const SceneDialog: FunctionComponent<
     {
       type: SpecType.Text,
       name: 'name',
-      description: 'Name',
+      description: 'Scene name',
       inputPlaceholder: 'e.g. Chill',
       defaultValue: scene.name
     }
@@ -113,7 +113,7 @@ export const SceneDialog: FunctionComponent<
       description: 'Brightness',
       min: 0,
       max: 255,
-      defaultValue: 0 // TODO: wire up in edit mode to existing value
+      defaultValue: 255 // TODO: wire up in edit mode to existing value
     });
   }
 

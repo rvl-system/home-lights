@@ -57,7 +57,11 @@ export const useStyles = makeStyles((theme) => ({
   },
   content: {
     'flex-grow': 1,
-    padding: '20px'
+    padding: '20px',
+    overflow: 'scroll'
+  },
+  label: {
+    'padding-bottom': '20px'
   },
   row: {
     'padding-bottom': '30px'
@@ -158,7 +162,11 @@ export function FormInput<
         break;
       }
       case SpecType.Label: {
-        inputs.push(<Typography key={i}>{entry.label}</Typography>);
+        inputs.push(
+          <Typography key={i} className={classes.label} variant="h5">
+            {entry.label}
+          </Typography>
+        );
         break;
       }
       case SpecType.Select: {
@@ -209,15 +217,19 @@ export function FormInput<
         break;
       }
       case SpecType.Range: {
+        const min = typeof entry.min === 'number' ? entry.min : 0;
+        const max = typeof entry.max === 'number' ? entry.max : 100;
+        const defaultValue =
+          typeof entry.defaultValue === 'number' ? entry.defaultValue : max;
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && <InputLabel>{entry.description}</InputLabel>}
             <Slider
-              defaultValue={entry.defaultValue || 0}
+              defaultValue={defaultValue}
               valueLabelDisplay="auto"
               step={entry.step || 1}
-              min={entry.min || 0}
-              max={entry.max || 100}
+              min={min}
+              max={max}
               onChange={(e, newValue) => {
                 console.log(newValue);
               }}
