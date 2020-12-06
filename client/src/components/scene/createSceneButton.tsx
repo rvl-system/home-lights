@@ -69,7 +69,19 @@ export const CreateSceneButton: FunctionComponent<
       }
     }
 
-    // TODO: brightness
+    for (const value in values) {
+      const match = /^brightness-([0-9]*)$/.exec(value);
+      if (match) {
+        const lightId = parseInt(match[1]);
+        const light = lights.find((light) => light.lightId === lightId);
+        if (!light) {
+          throw new Error(
+            `Internal Error: could not find brightness entry for light ${lightId}`
+          );
+        }
+        light.brightness = parseInt(values[value]);
+      }
+    }
 
     props.createScene(values.name, lights);
   }

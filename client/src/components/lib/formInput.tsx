@@ -231,7 +231,10 @@ export function FormInput<
               min={min}
               max={max}
               onChange={(e, newValue) => {
-                console.log(newValue);
+                setValues({
+                  ...values,
+                  [entry.name]: newValue
+                });
               }}
             />
           </div>

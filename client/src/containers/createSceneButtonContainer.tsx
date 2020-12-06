@@ -23,7 +23,7 @@ import {
   CreateSceneButtonDispatch
 } from '../components/scene/createSceneButton';
 import { createContainer } from '../reduxology';
-import { SliceName } from '../types';
+import { ActionType, SliceName } from '../types';
 
 export interface CreateSceneButtonContainerProps {
   zoneId: number;
@@ -40,9 +40,16 @@ export const CreateSceneButtonContainer = createContainer(
     ),
     patterns: getState(SliceName.Patterns)
   }),
-  (dispatch): CreateSceneButtonDispatch => ({
+  (
+    dispatch,
+    ownProps: CreateSceneButtonContainerProps
+  ): CreateSceneButtonDispatch => ({
     createScene(name, lights) {
-      console.log(`Create scene ${name}`, lights);
+      dispatch(ActionType.CreateScene, {
+        zoneId: ownProps.zoneId,
+        name,
+        lights
+      });
     }
   }),
   CreateSceneButton

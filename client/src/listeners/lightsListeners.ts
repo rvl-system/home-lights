@@ -43,7 +43,7 @@ const editLightListener = createListener(
   async (light) => {
     await put(`/api/light/${light.id}`, light);
 
-    const updatedLights = (await get('/api/lights')) as Light[]; // TODO: type this like we do actions
+    const updatedLights = (await get('/api/lights')) as Light[];
     dispatch(ActionType.LightsUpdated, updatedLights);
   }
 );
@@ -53,7 +53,7 @@ const deleteLightListener = createListener(
   async (id) => {
     await del(`/api/light/${id}`);
 
-    const updatedLights = (await get('/api/lights')) as Light[]; // TODO: type this like we do actions
+    const updatedLights = (await get('/api/lights')) as Light[];
     dispatch(ActionType.LightsUpdated, updatedLights);
   }
 );
