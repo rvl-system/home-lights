@@ -17,13 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, DialogContentText } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { Add as AddIcon, Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { Fragment, FunctionComponent } from 'react';
 import { CreateSceneRequest, Scene, Light, Pattern } from '../../common/types';
-import { DialogComponent, DialogValue } from '../lib/dialogComponent';
-import { SelectDialogInput } from '../lib/selectDialogInput';
-import { TextDialogInput } from '../lib/textDialogInput';
+import { FormInput, Spec, SpecType } from '../lib/formInput';
 
 export interface SceneDialogProps {
   scene?: Scene;
@@ -55,7 +53,7 @@ export const SceneDialog: FunctionComponent<
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: DialogValue) {
+  function handleConfirm(values: Record<string, string>) {
     handleClose();
     props.onConfirm({
       ...scene,
@@ -63,8 +61,36 @@ export const SceneDialog: FunctionComponent<
     });
   }
 
+  const spec: Spec[] = [
+    {
+      type: SpecType.Text,
+      name: 'name',
+      description: 'Name',
+      inputPlaceholder: 'e.g. Chill',
+      defaultValue: scene.name
+    }
+  ];
+  for (const light of props.lights) {
+    spec.push({
+      type: SpecType.Label,
+      label: light.name
+    });
+    spec.push({
+      type: SpecType.Select,
+      name: `pattern-${light.id}`,
+      description: 'Pattern',
+      options: [{ value: '-1', label: 'Off' }].concat(
+        props.patterns.map((pattern) => ({
+          value: pattern.id.toString(),
+          label: pattern.name
+        }))
+      ),
+      defaultValue: '-1'
+    });
+  }
+
   return (
-    <React.Fragment>
+    <Fragment>
       <Button
         variant="outlined"
         color="primary"
@@ -74,36 +100,14 @@ export const SceneDialog: FunctionComponent<
         {isEdit ? <EditIcon /> : <AddIcon />}
       </Button>
 
-      <DialogComponent
+      <FormInput
         onConfirm={handleConfirm}
-        onCancel={() => handleClose()}
+        onCancel={handleClose}
         open={openDialog}
         title={isEdit ? `Edit ${scene.name}` : 'Create Scene'}
-        confirmLabel="Save light"
-      >
-        <TextDialogInput
-          name="name"
-          description="Name"
-          inputPlaceholder="e.g. Chill"
-          defaultValue={scene.name}
-        />
-        {props.lights.map((light) => (
-          <React.Fragment key={light.id}>
-            <DialogContentText>{light.name}</DialogContentText>
-            <SelectDialogInput
-              name={`pattern-${light.id}`}
-              description="Pattern"
-              selectValues={[{ value: -1, label: 'Off' }].concat(
-                props.patterns.map((pattern) => ({
-                  value: pattern.id,
-                  label: pattern.name
-                }))
-              )}
-              defaultValue={-1}
-            />
-          </React.Fragment>
-        ))}
-      </DialogComponent>
-    </React.Fragment>
+        confirmLabel={isEdit ? 'Save scene' : 'Create scene'}
+        spec={spec}
+      />
+    </Fragment>
   );
 };
