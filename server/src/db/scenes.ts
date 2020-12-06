@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { MAX_BRIGHTNESS } from '../common/config';
 import { CreateSceneRequest, Scene } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 
@@ -26,21 +27,29 @@ CREATE TABLE "${SCENES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   lights TEXT NOT NULL,
+  brightness INTEGER NOT NULL DEFAULT ${MAX_BRIGHTNESS},
   zone_id INTEGER,
   FOREIGN KEY (zone_id) REFERENCES zones(id),
   UNIQUE (name, zone_id)
 )`;
 
-export async function getScenes(): Promise<Scene[]> {
+let scenes: Scene[] = [];
+
+export async function init(): Promise<void> {
   const rows = await dbAll(`SELECT * FROM ${SCENES_TABLE_NAME}`);
-  return rows.map(
+  scenes = rows.map(
     (row): Scene => ({
       id: row.id,
       name: row.name,
-      zoneId: row.zone_id,
-      lights: JSON.parse(row.lights)
+      lights: JSON.parse(row.lights),
+      brightness: row.brightness,
+      zoneId: row.zone_id
     })
   );
+}
+
+export function getScenes(): Scene[] {
+  return scenes;
 }
 
 export async function createScene(
@@ -54,6 +63,7 @@ export async function createScene(
       JSON.stringify(sceneRequest.lights)
     ]
   );
+  await init();
 }
 
 export async function editScene(scene: Scene): Promise<void> {
@@ -61,8 +71,21 @@ export async function editScene(scene: Scene): Promise<void> {
     `UPDATE ${SCENES_TABLE_NAME} SET name = ?, lights = ? WHERE id = ?`,
     [scene.name, JSON.stringify(scene.lights), scene.id]
   );
+  await init();
 }
 
 export async function deleteScene(id: number): Promise<void> {
   await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [id]);
+  await init();
+}
+
+export async function setSceneBrightness(
+  id: number,
+  brightness: number
+): Promise<void> {
+  await dbRun(`UPDATE ${SCENES_TABLE_NAME} SET brightness = ? WHERE id = ?`, [
+    brightness,
+    id
+  ]);
+  await init();
 }

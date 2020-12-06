@@ -17,12 +17,19 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { FastifyInstance } from 'fastify';
-import { createScene, editScene, deleteScene } from '../db/scenes';
-import { post, put, del } from './endpoint';
+import { SystemState } from '../common/types';
+import { createReducer } from '../reduxology';
+import { SliceName, ActionType } from '../types';
 
-export function init(app: FastifyInstance): void {
-  app.post('/api/scenes', post(createScene));
-  app.put('/api/scene/:id', put(editScene));
-  app.delete('/api/scene/:id', del(deleteScene));
+// Typing this return type explicitly is very hard, but can be inferred easily
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function createStateReducers(initialSystemState: SystemState) {
+  const stateReducer = createReducer(SliceName.State, initialSystemState);
+
+  stateReducer.handle(
+    ActionType.AppStateUpdated,
+    (state, { systemState }) => systemState
+  );
+
+  return stateReducer;
 }

@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { Zone } from '../common/types';
+import { getItem } from '../common/util';
 import {
   ZoneScenesComponent,
   ZoneScenesComponentProps,
@@ -32,17 +33,28 @@ export interface ZoneScenesContainerProps {
 }
 
 export const ZoneScenesContainer = createContainer(
-  (getState, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => ({
-    zone: ownProps.zone,
-    zoneScenes: getState(SliceName.Scenes).filter(
-      (scene) => scene.zoneId === ownProps.zone.id
-    ),
-    zoneLights: [],
-    editMode: ownProps.editMode
-  }),
+  (getState, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => {
+    const state = getItem(
+      ownProps.zone.id,
+      getState(SliceName.State).zoneStates,
+      'zoneId'
+    );
+    return {
+      zone: ownProps.zone,
+      zoneScenes: getState(SliceName.Scenes).filter(
+        (scene) => scene.zoneId === ownProps.zone.id
+      ),
+      zoneLights: [],
+      editMode: ownProps.editMode,
+      state
+    };
+  },
   (dispatch): ZoneScenesComponentDispatch => ({
     deleteScene(id) {
       dispatch(ActionType.DeleteScene, id);
+    },
+    setZoneScene(zoneId, sceneId) {
+      dispatch(ActionType.SetZoneScene, { zoneId, sceneId });
     }
   }),
   ZoneScenesComponent

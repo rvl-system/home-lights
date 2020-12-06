@@ -18,29 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
-import { CreateZoneRequest, Zone } from '../common/types';
-import { getZones, createZone, editZone, deleteZone } from '../db/zones';
+import { createZone, editZone, deleteZone } from '../db/zones';
+import { post, put, del } from './endpoint';
 
 export function init(app: FastifyInstance): void {
-  app.get('/api/zones', async () => {
-    return await getZones();
-  });
-
-  app.post('/api/zones', async (req) => {
-    const zoneRequest = req.body as CreateZoneRequest;
-    await createZone(zoneRequest);
-    return {};
-  });
-
-  app.put('/api/zone/:id', async (req) => {
-    const zone = req.body as Zone;
-    await editZone(zone);
-    return {};
-  });
-
-  app.delete('/api/zone/:id', async (req) => {
-    const { id } = req.params as { id: string };
-    await deleteZone(parseInt(id));
-    return {};
-  });
+  app.post('/api/zones', post(createZone));
+  app.put('/api/zone/:id', put(editZone));
+  app.delete('/api/zone/:id', del(deleteZone));
 }

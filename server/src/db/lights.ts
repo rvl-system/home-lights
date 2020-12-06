@@ -44,9 +44,11 @@ CREATE TABLE "${LIGHTS_TABLE_NAME}" (
   FOREIGN KEY (zone_id) REFERENCES zones(id)
 )`;
 
-export async function getLights(): Promise<Light[]> {
+let lights: Light[] = [];
+
+export async function init(): Promise<void> {
   const rawResults = await dbAll(`SELECT * FROM ${LIGHTS_TABLE_NAME}`);
-  return rawResults.map((light) => {
+  lights = rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -56,7 +58,7 @@ export async function getLights(): Promise<Light[]> {
           name,
           type,
           channel,
-          zoneId
+          zoneId: typeof zoneId === 'number' ? zoneId : undefined
         };
         return rvlLight;
       }
@@ -75,7 +77,7 @@ export async function getLights(): Promise<Light[]> {
           name,
           type,
           philipsHueID,
-          zoneId
+          zoneId: typeof zoneId === 'number' ? zoneId : undefined
         };
         return hueLight;
       }
@@ -87,7 +89,7 @@ export async function getLights(): Promise<Light[]> {
           name,
           type,
           lifxId,
-          zoneId
+          zoneId: typeof zoneId === 'number' ? zoneId : undefined
         };
         return lifxLight;
       }
@@ -95,6 +97,10 @@ export async function getLights(): Promise<Light[]> {
         throw new Error(`Found unknown light type in database "${light.type}"`);
     }
   });
+}
+
+export function getLights(): Light[] {
+  return lights;
 }
 
 export async function createLight(
@@ -148,6 +154,7 @@ export async function createLight(
       break;
     }
   }
+  await init();
 }
 
 export async function editLight(light: Light): Promise<void> {
@@ -177,6 +184,7 @@ export async function editLight(light: Light): Promise<void> {
       break;
     }
   }
+  await init();
 }
 
 export async function deleteLight(id: number): Promise<void> {
@@ -184,4 +192,5 @@ export async function deleteLight(id: number): Promise<void> {
     id,
     LightType.RVL
   ]);
+  await init();
 }

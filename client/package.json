@@ -11,19 +11,21 @@
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@types/debounce": "^1.2.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "ts-loader": "^8.0.11",
     "typescript": "^4.1.2",
-    "webpack": "^5.6.0",
+    "webpack": "^5.10.0",
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.1",
-    "@material-ui/icons": "^4.9.1",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
     "conditional-reduce": "^1.2.0",
+    "debounce": "^1.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "reduxology": "^2.0.0"
+    "reduxology": "^2.1.0"
   }
 }

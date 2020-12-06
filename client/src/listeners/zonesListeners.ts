@@ -17,34 +17,28 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { CreateZoneRequest, Zone } from '../common/types';
+import { CreateZoneRequest } from '../common/types';
 import { createListener, dispatch } from '../reduxology';
 import { ActionType } from '../types';
-import { get, post, put, del } from '../util/api';
+import { post, put, del } from '../util/api';
 
 const createZoneListener = createListener(
   ActionType.CreateZone,
   async (name) => {
     const createBody: CreateZoneRequest = { name };
-    await post('/api/zones', createBody);
-
-    const updatedZones = (await get('/api/zones')) as Zone[];
-    dispatch(ActionType.ZonesUpdated, updatedZones);
+    const appState = await post('/api/zones', createBody);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 
 const editZoneListener = createListener(ActionType.EditZone, async (zone) => {
-  await put(`/api/zone/${zone.id}`, zone);
-
-  const updatedZones = (await get('/api/zones')) as Zone[];
-  dispatch(ActionType.ZonesUpdated, updatedZones);
+  const appState = await put(`/api/zone/${zone.id}`, zone);
+  dispatch(ActionType.AppStateUpdated, appState);
 });
 
 const deleteZoneListener = createListener(ActionType.DeleteZone, async (id) => {
-  await del(`/api/zone/${id}`);
-
-  const updatedZones = (await get('/api/zones')) as Zone[];
-  dispatch(ActionType.ZonesUpdated, updatedZones);
+  const appState = await del(`/api/zone/${id}`);
+  dispatch(ActionType.AppStateUpdated, appState);
 });
 
 export const zonesListeners = [

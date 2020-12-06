@@ -21,7 +21,9 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
+import { MAX_BRIGHTNESS, BRIGHTNESS_STEP } from '../../common/config';
 import { Light, Pattern, SceneLightEntry } from '../../common/types';
+import { getItem } from '../../common/util';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
@@ -73,12 +75,7 @@ export const CreateSceneButton: FunctionComponent<
       const match = /^brightness-([0-9]*)$/.exec(value);
       if (match) {
         const lightId = parseInt(match[1]);
-        const light = lights.find((light) => light.lightId === lightId);
-        if (!light) {
-          throw new Error(
-            `Internal Error: could not find brightness entry for light ${lightId}`
-          );
-        }
+        const light = getItem(lightId, lights, 'lightId');
         light.brightness = parseInt(values[value]);
       }
     }
@@ -116,8 +113,9 @@ export const CreateSceneButton: FunctionComponent<
       name: `brightness-${light.id}`,
       description: 'Brightness',
       min: 0,
-      max: 255,
-      defaultValue: 255
+      max: MAX_BRIGHTNESS,
+      step: BRIGHTNESS_STEP,
+      defaultValue: MAX_BRIGHTNESS
     });
   }
 

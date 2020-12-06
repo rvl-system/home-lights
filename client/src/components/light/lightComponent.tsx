@@ -25,6 +25,7 @@ import {
   LightType,
   Zone
 } from '../../common/types';
+import { getItem } from '../../common/util';
 import { EditLightButtonContainer } from '../../containers/editLightButtonContainer';
 import { useContentStyles } from '../lib/pageStyles';
 import {
@@ -51,7 +52,10 @@ export const LightComponent: FunctionComponent<
   const classes = styles();
   const contentClasses = useContentStyles();
   const canEdit = props.light.type === LightType.RVL;
-  const zone = props.zones.find((zone) => zone.id === props.light.zoneId);
+  let zone: Zone | undefined;
+  if (props.light.zoneId !== undefined) {
+    zone = getItem(props.light.zoneId, props.zones);
+  }
   return (
     <ListItem className={contentClasses.listItem}>
       {canEdit ? (

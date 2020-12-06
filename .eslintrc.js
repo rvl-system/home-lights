@@ -61,7 +61,6 @@ module.exports = {
         selector: 'memberLike'
       }
     ],
-    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/prefer-function-type': 'error',
     'import/order': [
       'error',

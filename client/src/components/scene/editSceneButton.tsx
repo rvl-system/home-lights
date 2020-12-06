@@ -21,6 +21,7 @@ import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Light, Pattern, Scene, SceneLightEntry } from '../../common/types';
+import { getItem } from '../../common/util';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 import { useContentStyles } from '../lib/pageStyles';
 
@@ -62,12 +63,7 @@ export const EditSceneButton: FunctionComponent<
       const match = /^brightness-([0-9]*)$/.exec(value);
       if (match) {
         const lightId = parseInt(match[1]);
-        const light = lights.find((light) => light.lightId === lightId);
-        if (!light) {
-          throw new Error(
-            `Internal Error: could not find brightness entry for light ${lightId}`
-          );
-        }
+        const light = getItem(lightId, lights, 'lightId');
         light.brightness = parseInt(values[value]);
       }
     }
@@ -89,22 +85,10 @@ export const EditSceneButton: FunctionComponent<
     }
   ];
   for (const lightEntry of props.scene.lights) {
-    const light = props.lights.find((light) => light.id === lightEntry.lightId);
-    if (!light) {
-      throw new Error(
-        `Internal Error: could not find light with ID ${lightEntry.lightId}`
-      );
-    }
-    let pattern;
-    if (lightEntry.patternId) {
-      pattern = props.patterns.find(
-        (pattern) => pattern.id === lightEntry.patternId
-      );
-      if (!pattern) {
-        throw new Error(
-          `Internal Error: could not find pattern with ID ${lightEntry.patternId}`
-        );
-      }
+    const light = getItem(lightEntry.lightId, props.lights);
+    let pattern: Pattern | undefined;
+    if (lightEntry.patternId !== undefined) {
+      pattern = getItem(lightEntry.patternId, props.patterns);
     }
     spec.push({
       type: FormSchemaType.Label,

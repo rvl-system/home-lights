@@ -18,13 +18,17 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import fetch from 'node-fetch';
+import { MAX_BRIGHTNESS } from '../common/config';
 import {
   LightType,
-  SetLightStateRequest,
   LIFXLight,
-  CreateLIFXLightRequest
+  CreateLIFXLightRequest,
+  PatternType,
+  SolidPattern
 } from '../common/types';
+import { getItem } from '../common/util';
 import { getLights, createLight, deleteLight } from '../db/lights';
+import { SetLightStateOptions } from './types';
 
 const LIFX_URL = 'https://api.lifx.com/v1/lights';
 const TOKEN = process.env['LIFX_TOKEN'];
@@ -137,11 +141,75 @@ export async function init(): Promise<void> {
   await updateLights(TOKEN, LOCATION);
 }
 
-export async function setLightState(
-  lightState: SetLightStateRequest
-): Promise<void> {
-  if (!TOKEN || !LOCATION) {
+interface LIFXLightConfig {
+  id: string;
+  power: 'on' | 'off';
+  color: {
+    hue: number; // 0-360
+    saturation: number; // 0-1
+    brightness: number; // 0-1
+  };
+}
+
+async function sendLightStates(token: string, config: LIFXLightConfig[]) {
+  const response = await fetch(`${LIFX_URL}/states`, {
+    method: 'PUT',
+    headers: {
+      authorization: `Bearer ${token}`,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      states: config.map((entry) => ({
+        selector: `id:${entry.id}`,
+        power: entry.power,
+        color: entry.color,
+        fast: true
+      }))
+    })
+  });
+  return await response.json();
+}
+
+export async function setLightState({
+  zoneState,
+  scene,
+  lights,
+  patterns
+}: SetLightStateOptions): Promise<void> {
+  if (!TOKEN || !LOCATION || zoneState.currentSceneId === undefined) {
     return;
   }
-  console.log(lightState);
+  const config: LIFXLightConfig[] = [];
+  for (const lightEntry of scene.lights) {
+    const light = getItem(lightEntry.lightId, lights);
+    if (light.type !== LightType.LIFX) {
+      continue;
+    }
+
+    const color = {
+      hue: 0,
+      saturation: 0,
+      brightness: 0
+    };
+    if (lightEntry.patternId !== undefined) {
+      const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
+      if (pattern.type !== PatternType.Solid) {
+        throw new Error(
+          `Internal Error: pattern type ${pattern.type} cannot be used with LIFX`
+        );
+      }
+      color.hue = pattern.data.color.hue;
+      color.saturation = pattern.data.color.saturation;
+      color.brightness =
+        (lightEntry.brightness / MAX_BRIGHTNESS) *
+        (scene.brightness / MAX_BRIGHTNESS);
+    }
+    config.push({
+      id: (light as LIFXLight).lifxId,
+      power: zoneState.power ? 'on' : 'off',
+      color
+    });
+  }
+
+  await sendLightStates(TOKEN, config);
 }

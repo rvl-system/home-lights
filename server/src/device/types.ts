@@ -17,12 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { FastifyInstance } from 'fastify';
-import { createScene, editScene, deleteScene } from '../db/scenes';
-import { post, put, del } from './endpoint';
+import { Light, Pattern, Scene, ZoneState } from '../common/types';
 
-export function init(app: FastifyInstance): void {
-  app.post('/api/scenes', post(createScene));
-  app.put('/api/scene/:id', put(editScene));
-  app.delete('/api/scene/:id', del(deleteScene));
+export interface SetLightStateOptions {
+  zoneState: ZoneState;
+  scene: Scene;
+  lights: Light[];
+  patterns: Pattern[];
 }

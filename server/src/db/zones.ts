@@ -27,8 +27,14 @@ CREATE TABLE "${ZONES_TABLE_NAME}" (
   name TEXT NOT NULL UNIQUE
 )`;
 
-export async function getZones(): Promise<Zone[]> {
-  return dbAll(`SELECT * FROM ${ZONES_TABLE_NAME}`) as Promise<Zone[]>;
+let zones: Zone[] = [];
+
+export async function init(): Promise<void> {
+  zones = (await dbAll(`SELECT * FROM ${ZONES_TABLE_NAME}`)) as Zone[];
+}
+
+export function getZones(): Zone[] {
+  return zones;
 }
 
 export async function createZone(
@@ -37,6 +43,7 @@ export async function createZone(
   await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) VALUES (?)`, [
     zoneRequest.name
   ]);
+  await init();
 }
 
 export async function editZone(zone: Zone): Promise<void> {
@@ -44,8 +51,10 @@ export async function editZone(zone: Zone): Promise<void> {
     zone.name,
     zone.id
   ]);
+  await init();
 }
 
 export async function deleteZone(id: number): Promise<void> {
   await dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [id]);
+  await init();
 }

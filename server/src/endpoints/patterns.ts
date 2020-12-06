@@ -18,34 +18,11 @@ along with Home Patterns.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
-import { Pattern, CreatePatternRequest } from '../common/types';
-import {
-  getPatterns,
-  createPattern,
-  editPattern,
-  deletePattern
-} from '../db/patterns';
+import { createPattern, editPattern, deletePattern } from '../db/patterns';
+import { post, put, del } from './endpoint';
 
 export function init(app: FastifyInstance): void {
-  app.get('/api/patterns', async () => {
-    return await getPatterns();
-  });
-
-  app.post('/api/patterns', async (req) => {
-    const patternRequest = req.body as CreatePatternRequest;
-    await createPattern(patternRequest);
-    return {};
-  });
-
-  app.put('/api/patterns/:id', async (req) => {
-    const pattern = req.body as Pattern;
-    await editPattern(pattern);
-    return {};
-  });
-
-  app.delete('/api/patterns/:id', async (req) => {
-    const { id } = req.params as { id: string };
-    await deletePattern(parseInt(id));
-    return {};
-  });
+  app.post('/api/patterns', post(createPattern));
+  app.put('/api/patterns/:id', put(editPattern));
+  app.delete('/api/patterns/:id', del(deletePattern));
 }
