@@ -20,7 +20,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button } from '@material-ui/core';
 import { Add as AddIcon, Edit as EditIcon } from '@material-ui/icons';
 import React, { Fragment, FunctionComponent } from 'react';
-import { CreateSceneRequest, Scene, Light, Pattern } from '../../common/types';
+import {
+  CreateSceneRequest,
+  Scene,
+  Light,
+  Pattern,
+  SceneLightEntry
+} from '../../common/types';
 import { FormInput, Spec, SpecType } from '../lib/formInput';
 
 export interface SceneDialogProps {
@@ -55,9 +61,23 @@ export const SceneDialog: FunctionComponent<
 
   function handleConfirm(values: Record<string, string>) {
     handleClose();
+    const lights: SceneLightEntry[] = [];
+    for (const value in values) {
+      const match = /^light-([0-9]*)$/.exec(value);
+      if (match) {
+        const patternId = parseInt(values[value]);
+        lights.push({
+          lightId: parseInt(match[1]),
+          patternId: patternId === -1 ? undefined : patternId,
+          brightness: 0
+        });
+      }
+    }
+    // TODO: brightness
     props.onConfirm({
       ...scene,
-      ...values
+      name: values.name,
+      lights
     });
   }
 
@@ -77,7 +97,7 @@ export const SceneDialog: FunctionComponent<
     });
     spec.push({
       type: SpecType.Select,
-      name: `pattern-${light.id}`,
+      name: `light-${light.id}`,
       description: 'Pattern',
       options: [{ value: '-1', label: 'Off' }].concat(
         props.patterns.map((pattern) => ({
