@@ -65,10 +65,10 @@ export const SceneDialog: FunctionComponent<
     for (const value in values) {
       const match = /^light-([0-9]*)$/.exec(value);
       if (match) {
-        const patternId = parseInt(values[value]);
         lights.push({
           lightId: parseInt(match[1]),
-          patternId: patternId === -1 ? undefined : patternId,
+          patternId:
+            values[value] === 'off' ? undefined : parseInt(values[value]),
           brightness: 0
         });
       }
@@ -99,13 +99,21 @@ export const SceneDialog: FunctionComponent<
       type: SpecType.Select,
       name: `light-${light.id}`,
       description: 'Pattern',
-      options: [{ value: '-1', label: 'Off' }].concat(
+      options: [{ value: 'off', label: 'Off' }].concat(
         props.patterns.map((pattern) => ({
           value: pattern.id.toString(),
           label: pattern.name
         }))
       ),
-      defaultValue: '-1'
+      defaultValue: 'off' // TODO: wire up in edit mode to existing value
+    });
+    spec.push({
+      type: SpecType.Range,
+      name: `brightness-${light.id}`,
+      description: 'Brightness',
+      min: 0,
+      max: 255,
+      defaultValue: 0 // TODO: wire up in edit mode to existing value
     });
   }
 

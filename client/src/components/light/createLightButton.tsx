@@ -54,7 +54,7 @@ export const CreateLightButton: FunctionComponent<
     props.createRVLLight(
       values.name as string,
       parseInt(values.channel),
-      values.zone !== '-1' ? parseInt(values.zone) : undefined
+      values.zone !== 'off' ? parseInt(values.zone) : undefined
     );
     handleClose();
   }
@@ -87,13 +87,13 @@ export const CreateLightButton: FunctionComponent<
             type: SpecType.Select,
             name: 'zone',
             description: 'Zone',
-            options: [{ value: '-1', label: 'Unassigned' }].concat(
+            options: [{ value: 'off', label: 'Unassigned' }].concat(
               props.zones.map((zone) => ({
                 value: zone.id.toString(),
                 label: zone.name
               }))
             ),
-            defaultValue: '-1'
+            defaultValue: 'off'
           },
           {
             type: SpecType.Select,

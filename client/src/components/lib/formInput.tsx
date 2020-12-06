@@ -23,6 +23,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Slider,
   TextField,
   Typography
 } from '@material-ui/core';
@@ -72,11 +73,12 @@ export const useStyles = makeStyles((theme) => ({
 export enum SpecType {
   Text = 'text',
   Select = 'select',
+  Range = 'range',
   Label = 'label',
   Divider = 'divider'
 }
 
-export type Spec = TextSpec | SelectSpec | LabelSpec | Divider;
+export type Spec = TextSpec | SelectSpec | RangeSpec | LabelSpec | Divider;
 
 interface TextSpec {
   type: SpecType.Text;
@@ -95,6 +97,16 @@ interface SelectSpec {
     value: string;
     label: string;
   }[];
+}
+
+interface RangeSpec {
+  type: SpecType.Range;
+  name: string;
+  description: string;
+  defaultValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 interface LabelSpec {
@@ -124,7 +136,10 @@ export interface FormInputDispatch<T> {
 // pass the type generic around if we did, so we have to use a function
 // declaration instead
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export function FormInput<T extends Record<string, string>, K extends keyof T>(
+export function FormInput<
+  T extends Record<string, string | number>,
+  K extends keyof T
+>(
   props: PropsWithChildren<FormInputProps & FormInputDispatch<T>>
 ): JSX.Element | null {
   if (!props.open) {
@@ -191,6 +206,25 @@ export function FormInput<T extends Record<string, string>, K extends keyof T>(
           </div>
         );
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
+        break;
+      }
+      case SpecType.Range: {
+        inputs.push(
+          <div key={i} className={classes.row}>
+            {entry.description && <InputLabel>{entry.description}</InputLabel>}
+            <Slider
+              defaultValue={entry.defaultValue || 0}
+              valueLabelDisplay="auto"
+              step={entry.step || 1}
+              min={entry.min || 0}
+              max={entry.max || 100}
+              onChange={(e, newValue) => {
+                console.log(newValue);
+              }}
+            />
+          </div>
+        );
+        defaultValues[entry.name as K] = (entry.defaultValue || 0) as T[K];
         break;
       }
     }

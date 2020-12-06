@@ -47,7 +47,7 @@ export const EditLightButton: FunctionComponent<
       type: LightType.RVL,
       name: values.name as string,
       channel: parseInt(values.channel),
-      zoneId: values.zone !== '-1' ? parseInt(values.zoneId) : undefined
+      zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
     };
     props.editLight(newLight);
   }
@@ -70,7 +70,7 @@ export const EditLightButton: FunctionComponent<
     type: SpecType.Select,
     name: 'zoneId',
     description: 'Zone',
-    options: [{ value: '-1', label: 'Unassigned' }].concat(
+    options: [{ value: 'off', label: 'Unassigned' }].concat(
       props.zones.map((zone) => ({
         value: zone.id.toString(),
         label: zone.name
@@ -79,7 +79,7 @@ export const EditLightButton: FunctionComponent<
     defaultValue:
       typeof props.light.zoneId === 'number'
         ? props.light.zoneId.toString()
-        : '-1'
+        : 'off'
   });
   if (props.light.type === LightType.RVL) {
     spec.push({
