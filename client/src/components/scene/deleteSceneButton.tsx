@@ -22,7 +22,7 @@ import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Scene } from '../../common/types';
 import { EditMode } from '../../types';
-import { DialogComponent } from '../lib/dialogComponent';
+import { ConfirmDialog } from '../lib/confirmDialog';
 
 export interface DeleteSceneButtonProps {
   scene: Scene;
@@ -58,7 +58,7 @@ export const DeleteSceneButton: FunctionComponent<
         </Button>
       </Fade>
 
-      <DialogComponent
+      <ConfirmDialog
         onConfirm={() => {
           handleDeleteClose();
           props.deleteScene(props.scene.id);
