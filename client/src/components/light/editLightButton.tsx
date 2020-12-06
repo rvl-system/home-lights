@@ -21,7 +21,14 @@ import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
-import { Light, RVLLight, LightType, Zone } from '../../common/types';
+import {
+  Light,
+  RVLLight,
+  LightType,
+  Zone,
+  PhilipsHueLight,
+  LIFXLight
+} from '../../common/types';
 import { FormInput, SpecType, Spec } from '../lib/formInput';
 
 export interface EditLightButtonProps {
@@ -42,14 +49,34 @@ export const EditLightButton: FunctionComponent<
 
   function handleConfirm(values: Record<string, string>) {
     handleEditClose();
-    const newLight: RVLLight = {
-      id: props.light.id,
-      type: LightType.RVL,
-      name: values.name as string,
-      channel: parseInt(values.channel),
-      zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
-    };
-    props.editLight(newLight);
+    switch (props.light.type) {
+      case LightType.RVL: {
+        const newLight: RVLLight = {
+          ...(props.light as RVLLight),
+          name: values.name as string,
+          channel: parseInt(values.channel),
+          zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
+        };
+        props.editLight(newLight);
+        break;
+      }
+      case LightType.PhilipsHue: {
+        const newLight: PhilipsHueLight = {
+          ...(props.light as PhilipsHueLight),
+          zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
+        };
+        props.editLight(newLight);
+        break;
+      }
+      case LightType.LIFX: {
+        const newLight: LIFXLight = {
+          ...(props.light as LIFXLight),
+          zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
+        };
+        props.editLight(newLight);
+        break;
+      }
+    }
   }
 
   function handleEditClose() {
