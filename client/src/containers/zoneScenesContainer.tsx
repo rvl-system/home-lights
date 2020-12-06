@@ -40,17 +40,7 @@ export const ZoneScenesContainer = createContainer(
     zoneLights: [],
     editMode: ownProps.editMode
   }),
-  (
-    dispatch,
-    ownProps: ZoneScenesContainerProps
-  ): ZoneScenesComponentDispatch => ({
-    createScene(name, lights) {
-      dispatch(ActionType.CreateScene, {
-        zoneId: ownProps.zone.id,
-        name,
-        lights
-      });
-    },
+  (dispatch): ZoneScenesComponentDispatch => ({
     editScene(scene) {
       dispatch(ActionType.EditScene, scene);
     },

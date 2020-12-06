@@ -17,35 +17,33 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Scene } from '../common/types';
 import {
-  SceneDialog,
-  SceneDialogProps,
-  SceneDialogDispatch
-} from '../components/scene/sceneDialog';
+  CreateSceneButton,
+  CreateSceneButtonProps,
+  CreateSceneButtonDispatch
+} from '../components/scene/createSceneButton';
 import { createContainer } from '../reduxology';
 import { SliceName } from '../types';
 
-export interface SceneDialogContainerProps {
-  scene?: Scene;
+export interface CreateSceneButtonContainerProps {
   zoneId: number;
-  className: string;
 }
 
-export type SceneDialogContainerDispatch = SceneDialogDispatch;
-
-export const SceneDialogContainer = createContainer(
-  (getState, ownProps: SceneDialogContainerProps): SceneDialogProps => ({
-    scene: ownProps.scene,
+export const CreateSceneButtonContainer = createContainer(
+  (
+    getState,
+    ownProps: CreateSceneButtonContainerProps
+  ): CreateSceneButtonProps => ({
     zoneId: ownProps.zoneId,
-    className: ownProps.className,
     lights: getState(SliceName.Lights).filter(
       (light) => light.zoneId === ownProps.zoneId
     ),
     patterns: getState(SliceName.Patterns)
   }),
-  (dispatch, ownProps: SceneDialogContainerDispatch): SceneDialogDispatch => ({
-    onConfirm: ownProps.onConfirm
+  (dispatch): CreateSceneButtonDispatch => ({
+    createScene(name, lights) {
+      console.log(`Create scene ${name}`, lights);
+    }
   }),
-  SceneDialog
+  CreateSceneButton
 );

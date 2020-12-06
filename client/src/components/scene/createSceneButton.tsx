@@ -17,10 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { CreateSceneRequest, SceneLightEntry } from '../../common/types';
-import { SceneDialogContainer } from '../../containers/sceneDialogContainer';
+import { Light, Pattern, SceneLightEntry } from '../../common/types';
+import { FormInput, Spec, SpecType } from '../lib/formInput';
 
 const useStyles = makeStyles({
   container: {
@@ -35,6 +37,8 @@ const useStyles = makeStyles({
 
 export interface CreateSceneButtonProps {
   zoneId: number;
+  patterns: Pattern[];
+  lights: Light[];
 }
 
 export interface CreateSceneButtonDispatch {
@@ -44,18 +48,86 @@ export interface CreateSceneButtonDispatch {
 export const CreateSceneButton: FunctionComponent<
   CreateSceneButtonProps & CreateSceneButtonDispatch
 > = (props) => {
-  const classes = useStyles();
+  const [openDialog, setOpenDialog] = React.useState(false);
 
-  function onConfirm(scene: CreateSceneRequest) {
-    props.createScene(scene.name, scene.lights);
+  function handleClose() {
+    setOpenDialog(false);
   }
 
+  function handleConfirm(values: Record<string, string>) {
+    handleClose();
+    const lights: SceneLightEntry[] = [];
+    for (const value in values) {
+      const match = /^light-([0-9]*)$/.exec(value);
+      if (match) {
+        lights.push({
+          lightId: parseInt(match[1]),
+          patternId:
+            values[value] === 'off' ? undefined : parseInt(values[value]),
+          brightness: 0
+        });
+      }
+    }
+
+    // TODO: brightness
+
+    props.createScene(values.name, lights);
+  }
+
+  const spec: Spec[] = [
+    {
+      type: SpecType.Text,
+      name: 'name',
+      description: 'Scene name',
+      inputPlaceholder: 'e.g. Chill'
+    }
+  ];
+  for (const light of props.lights) {
+    spec.push({
+      type: SpecType.Label,
+      label: light.name
+    });
+    spec.push({
+      type: SpecType.Select,
+      name: `light-${light.id}`,
+      description: 'Pattern',
+      options: [{ value: 'off', label: 'Off' }].concat(
+        props.patterns.map((pattern) => ({
+          value: pattern.id.toString(),
+          label: pattern.name
+        }))
+      ),
+      defaultValue: 'off'
+    });
+    spec.push({
+      type: SpecType.Range,
+      name: `brightness-${light.id}`,
+      description: 'Brightness',
+      min: 0,
+      max: 255,
+      defaultValue: 255
+    });
+  }
+
+  const classes = useStyles();
   return (
     <div className={classes.container}>
-      <SceneDialogContainer
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={() => setOpenDialog(true)}
         className={classes.button}
-        zoneId={props.zoneId}
-        onConfirm={onConfirm}
+      >
+        <AddIcon />
+      </Button>
+
+      <FormInput
+        onConfirm={handleConfirm}
+        onCancel={handleClose}
+        open={openDialog}
+        title="Create Scene"
+        confirmLabel="Create scene"
+        spec={spec}
       />
     </div>
   );

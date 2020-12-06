@@ -21,11 +21,8 @@ import { Divider, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, FunctionComponent } from 'react';
 import { Light, Scene, Zone } from '../../common/types';
+import { CreateSceneButtonContainer } from '../../containers/createSceneButtonContainer';
 import { EditMode } from '../../types';
-import {
-  CreateSceneButton,
-  CreateSceneButtonDispatch
-} from './createSceneButton';
 import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
 export interface ZoneScenesComponentProps {
@@ -35,8 +32,7 @@ export interface ZoneScenesComponentProps {
   editMode: EditMode;
 }
 
-export type ZoneScenesComponentDispatch = SceneComponentDispatch &
-  CreateSceneButtonDispatch;
+export type ZoneScenesComponentDispatch = SceneComponentDispatch;
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -68,10 +64,7 @@ export const ZoneScenesComponent: FunctionComponent<
         <Divider />
       </List>
       {props.editMode === EditMode.Edit && (
-        <CreateSceneButton
-          createScene={props.createScene}
-          zoneId={props.zone.id}
-        />
+        <CreateSceneButtonContainer zoneId={props.zone.id} />
       )}
     </div>
   );
