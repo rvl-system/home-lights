@@ -25,6 +25,8 @@ import { NUM_RVL_CHANNELS } from '../../common/config';
 import { Zone } from '../../common/types';
 import { FormInput, SpecType } from '../lib/formInput';
 
+const OFF = 'off';
+
 const useStyles = makeStyles({
   container: {
     display: 'flex',
@@ -54,7 +56,7 @@ export const CreateLightButton: FunctionComponent<
     props.createRVLLight(
       values.name as string,
       parseInt(values.channel),
-      values.zone !== 'off' ? parseInt(values.zone) : undefined
+      values.zone !== OFF ? parseInt(values.zone) : undefined
     );
     handleClose();
   }
@@ -87,13 +89,13 @@ export const CreateLightButton: FunctionComponent<
             type: SpecType.Select,
             name: 'zone',
             description: 'Zone',
-            options: [{ value: 'off', label: 'Unassigned' }].concat(
+            options: [{ value: OFF, label: 'Unassigned' }].concat(
               props.zones.map((zone) => ({
                 value: zone.id.toString(),
                 label: zone.name
               }))
             ),
-            defaultValue: 'off'
+            defaultValue: OFF
           },
           {
             type: SpecType.Select,

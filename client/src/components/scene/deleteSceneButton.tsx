@@ -67,7 +67,7 @@ export const DeleteSceneButton: FunctionComponent<
         open={deleteDialogOpen}
         title={`Delete "${props.scene.name}"?`}
         description="This operation cannot be undone"
-        confirmLabel="Delete light"
+        confirmLabel="Delete scene"
         confirmColor="secondary"
       />
     </React.Fragment>

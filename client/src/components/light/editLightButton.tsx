@@ -31,6 +31,8 @@ import {
 } from '../../common/types';
 import { FormInput, SpecType, Spec } from '../lib/formInput';
 
+const OFF = 'off';
+
 export interface EditLightButtonProps {
   light: Light;
   className: string;
@@ -55,7 +57,7 @@ export const EditLightButton: FunctionComponent<
           ...(props.light as RVLLight),
           name: values.name as string,
           channel: parseInt(values.channel),
-          zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
+          zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
         };
         props.editLight(newLight);
         break;
@@ -63,7 +65,7 @@ export const EditLightButton: FunctionComponent<
       case LightType.PhilipsHue: {
         const newLight: PhilipsHueLight = {
           ...(props.light as PhilipsHueLight),
-          zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
+          zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
         };
         props.editLight(newLight);
         break;
@@ -71,7 +73,7 @@ export const EditLightButton: FunctionComponent<
       case LightType.LIFX: {
         const newLight: LIFXLight = {
           ...(props.light as LIFXLight),
-          zoneId: values.zone !== 'off' ? parseInt(values.zoneId) : undefined
+          zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
         };
         props.editLight(newLight);
         break;
@@ -97,7 +99,7 @@ export const EditLightButton: FunctionComponent<
     type: SpecType.Select,
     name: 'zoneId',
     description: 'Zone',
-    options: [{ value: 'off', label: 'Unassigned' }].concat(
+    options: [{ value: OFF, label: 'Unassigned' }].concat(
       props.zones.map((zone) => ({
         value: zone.id.toString(),
         label: zone.name
@@ -106,7 +108,7 @@ export const EditLightButton: FunctionComponent<
     defaultValue:
       typeof props.light.zoneId === 'number'
         ? props.light.zoneId.toString()
-        : 'off'
+        : OFF
   });
   if (props.light.type === LightType.RVL) {
     spec.push({
