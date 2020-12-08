@@ -91,7 +91,7 @@ export const CreateSceneButton: FunctionComponent<
       type: SpecType.Text,
       name: 'name',
       description: 'Scene name',
-      inputPlaceholder: 'e.g. Chill'
+      inputPlaceholder: 'e.g. Party Mode'
     }
   ];
   for (const light of props.lights) {
