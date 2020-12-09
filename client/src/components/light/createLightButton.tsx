@@ -23,7 +23,7 @@ import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 import { Zone } from '../../common/types';
-import { FormInput, SpecType } from '../lib/formInput';
+import { FormInput, FormSchemaType } from '../lib/formInput';
 
 const OFF = 'off';
 
@@ -78,15 +78,15 @@ export const CreateLightButton: FunctionComponent<
         open={openDialog}
         title="Create light"
         confirmLabel="Create light"
-        spec={[
+        schema={[
           {
-            type: SpecType.Text,
+            type: FormSchemaType.Text,
             name: 'name',
             description: 'Descriptive name for the light',
             inputPlaceholder: 'e.g. Left bedside lamp'
           },
           {
-            type: SpecType.Select,
+            type: FormSchemaType.Select,
             name: 'zone',
             description: 'Zone',
             options: [{ value: OFF, label: 'Unassigned' }].concat(
@@ -98,7 +98,7 @@ export const CreateLightButton: FunctionComponent<
             defaultValue: OFF
           },
           {
-            type: SpecType.Select,
+            type: FormSchemaType.Select,
             name: 'channel',
             description: 'Channel',
             options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map(

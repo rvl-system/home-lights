@@ -21,7 +21,7 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { FormInput, SpecType } from '../lib/formInput';
+import { FormInput, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
   container: {
@@ -63,9 +63,9 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
         open={openDialog}
         title="Create zone"
         confirmLabel="Create zone"
-        spec={[
+        schema={[
           {
-            type: SpecType.Text,
+            type: FormSchemaType.Text,
             name: 'name',
             description: 'Descriptive name for the room or area',
             inputPlaceholder: 'e.g. Kitchen'

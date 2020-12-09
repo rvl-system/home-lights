@@ -22,7 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Light, Pattern, SceneLightEntry } from '../../common/types';
-import { FormInput, Spec, SpecType } from '../lib/formInput';
+import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
   container: {
@@ -86,9 +86,9 @@ export const CreateSceneButton: FunctionComponent<
     props.createScene(values.name, lights);
   }
 
-  const spec: Spec[] = [
+  const spec: FormSchema[] = [
     {
-      type: SpecType.Text,
+      type: FormSchemaType.Text,
       name: 'name',
       description: 'Scene name',
       inputPlaceholder: 'e.g. Party Mode'
@@ -96,11 +96,11 @@ export const CreateSceneButton: FunctionComponent<
   ];
   for (const light of props.lights) {
     spec.push({
-      type: SpecType.Label,
+      type: FormSchemaType.Label,
       label: light.name
     });
     spec.push({
-      type: SpecType.Select,
+      type: FormSchemaType.Select,
       name: `pattern-${light.id}`,
       description: 'Pattern',
       options: [{ value: 'off', label: 'Off' }].concat(
@@ -112,7 +112,7 @@ export const CreateSceneButton: FunctionComponent<
       defaultValue: 'off'
     });
     spec.push({
-      type: SpecType.Range,
+      type: FormSchemaType.Range,
       name: `brightness-${light.id}`,
       description: 'Brightness',
       min: 0,
@@ -139,7 +139,7 @@ export const CreateSceneButton: FunctionComponent<
         open={openDialog}
         title="Create Scene"
         confirmLabel="Create scene"
-        spec={spec}
+        schema={spec}
       />
     </div>
   );

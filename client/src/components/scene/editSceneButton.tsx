@@ -21,7 +21,7 @@ import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Light, Pattern, Scene, SceneLightEntry } from '../../common/types';
-import { FormInput, Spec, SpecType } from '../lib/formInput';
+import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 import { useContentStyles } from '../lib/pageStyles';
 
 export interface EditSceneButtonProps {
@@ -79,9 +79,9 @@ export const EditSceneButton: FunctionComponent<
     });
   }
 
-  const spec: Spec[] = [
+  const spec: FormSchema[] = [
     {
-      type: SpecType.Text,
+      type: FormSchemaType.Text,
       name: 'name',
       description: 'Scene name',
       inputPlaceholder: 'e.g. Chill',
@@ -107,11 +107,11 @@ export const EditSceneButton: FunctionComponent<
       }
     }
     spec.push({
-      type: SpecType.Label,
+      type: FormSchemaType.Label,
       label: light.name
     });
     spec.push({
-      type: SpecType.Select,
+      type: FormSchemaType.Select,
       name: `pattern-${light.id}`,
       description: 'Pattern',
       options: [{ value: 'off', label: 'Off' }].concat(
@@ -123,7 +123,7 @@ export const EditSceneButton: FunctionComponent<
       defaultValue: pattern ? pattern.id.toString() : 'off'
     });
     spec.push({
-      type: SpecType.Range,
+      type: FormSchemaType.Range,
       name: `brightness-${light.id}`,
       description: 'Brightness',
       min: 0,
@@ -153,7 +153,7 @@ export const EditSceneButton: FunctionComponent<
         open={openDialog}
         title={`Edit "${props.scene.name}"`}
         confirmLabel="Save scene"
-        spec={spec}
+        schema={spec}
       />
     </React.Fragment>
   );

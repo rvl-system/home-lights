@@ -22,7 +22,7 @@ import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Zone } from '../../common/types';
 import { EditMode } from '../../types';
-import { FormInput, SpecType } from '../lib/formInput';
+import { FormInput, FormSchemaType } from '../lib/formInput';
 
 export interface EditZoneButtonProps {
   zone: Zone;
@@ -71,9 +71,9 @@ export const EditZoneButton: FunctionComponent<
         open={editDialogOpen}
         title={`Edit ${props.zone.name}`}
         confirmLabel="Save zone"
-        spec={[
+        schema={[
           {
-            type: SpecType.Text,
+            type: FormSchemaType.Text,
             name: 'name',
             description: 'Name',
             inputPlaceholder: 'e.g. Kitchen',

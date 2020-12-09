@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import {
   Button,
-  Divider,
+  Divider as DividerSchema,
   InputLabel,
   MenuItem,
   Select,
@@ -74,7 +74,7 @@ export const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export enum SpecType {
+export enum FormSchemaType {
   Text = 'text',
   Select = 'select',
   Range = 'range',
@@ -82,18 +82,23 @@ export enum SpecType {
   Divider = 'divider'
 }
 
-export type Spec = TextSpec | SelectSpec | RangeSpec | LabelSpec | Divider;
+export type FormSchema =
+  | TextSchema
+  | SelectSchema
+  | RangeSchema
+  | LabelSchema
+  | DividerSchema;
 
-interface TextSpec {
-  type: SpecType.Text;
+interface TextSchema {
+  type: FormSchemaType.Text;
   name: string;
   description: string;
   defaultValue?: string;
   inputPlaceholder?: string;
 }
 
-interface SelectSpec {
-  type: SpecType.Select;
+interface SelectSchema {
+  type: FormSchemaType.Select;
   name: string;
   description: string;
   defaultValue: string;
@@ -103,8 +108,8 @@ interface SelectSpec {
   }[];
 }
 
-interface RangeSpec {
-  type: SpecType.Range;
+interface RangeSchema {
+  type: FormSchemaType.Range;
   name: string;
   description: string;
   defaultValue?: number;
@@ -113,19 +118,19 @@ interface RangeSpec {
   step?: number;
 }
 
-interface LabelSpec {
-  type: SpecType.Label;
+interface LabelSchema {
+  type: FormSchemaType.Label;
   label: string;
 }
 
-interface Divider {
-  type: SpecType.Divider;
+interface DividerSchema {
+  type: FormSchemaType.Divider;
 }
 
 export interface FormInputProps {
   open: boolean;
   title: string;
-  spec: Spec[];
+  schema: FormSchema[];
   confirmLabel?: string;
   confirmColor?: Color;
 }
@@ -154,14 +159,14 @@ export function FormInput<
 
   const inputs: JSX.Element[] = [];
   const defaultValues: T = {} as T;
-  for (let i = 0; i < props.spec.length; i++) {
-    const entry = props.spec[i];
+  for (let i = 0; i < props.schema.length; i++) {
+    const entry = props.schema[i];
     switch (entry.type) {
-      case SpecType.Divider: {
-        inputs.push(<Divider key={i} />);
+      case FormSchemaType.Divider: {
+        inputs.push(<DividerSchema key={i} />);
         break;
       }
-      case SpecType.Label: {
+      case FormSchemaType.Label: {
         inputs.push(
           <Typography key={i} className={classes.label} variant="h5">
             {entry.label}
@@ -169,7 +174,7 @@ export function FormInput<
         );
         break;
       }
-      case SpecType.Select: {
+      case FormSchemaType.Select: {
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && <InputLabel>{entry.description}</InputLabel>}
@@ -193,7 +198,7 @@ export function FormInput<
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
         break;
       }
-      case SpecType.Text: {
+      case FormSchemaType.Text: {
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && <InputLabel>{entry.description}</InputLabel>}
@@ -216,7 +221,7 @@ export function FormInput<
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
         break;
       }
-      case SpecType.Range: {
+      case FormSchemaType.Range: {
         const min = typeof entry.min === 'number' ? entry.min : 0;
         const max = typeof entry.max === 'number' ? entry.max : 100;
         const defaultValue =

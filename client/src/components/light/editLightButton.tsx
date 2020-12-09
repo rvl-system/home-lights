@@ -29,7 +29,7 @@ import {
   PhilipsHueLight,
   LIFXLight
 } from '../../common/types';
-import { FormInput, SpecType, Spec } from '../lib/formInput';
+import { FormInput, FormSchemaType, FormSchema } from '../lib/formInput';
 
 const OFF = 'off';
 
@@ -85,10 +85,10 @@ export const EditLightButton: FunctionComponent<
     setEditDialogOpen(false);
   }
 
-  const spec: Spec[] = [];
+  const spec: FormSchema[] = [];
   if (props.canChangeName) {
     spec.push({
-      type: SpecType.Text,
+      type: FormSchemaType.Text,
       name: 'name',
       description: 'Name',
       inputPlaceholder: 'e.g. Left bedside lamp',
@@ -96,7 +96,7 @@ export const EditLightButton: FunctionComponent<
     });
   }
   spec.push({
-    type: SpecType.Select,
+    type: FormSchemaType.Select,
     name: 'zoneId',
     description: 'Zone',
     options: [{ value: OFF, label: 'Unassigned' }].concat(
@@ -112,7 +112,7 @@ export const EditLightButton: FunctionComponent<
   });
   if (props.light.type === LightType.RVL) {
     spec.push({
-      type: SpecType.Select,
+      type: FormSchemaType.Select,
       name: 'channel',
       description: 'Channel',
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
@@ -141,7 +141,7 @@ export const EditLightButton: FunctionComponent<
         open={editDialogOpen}
         title={`Edit "${props.light.name}"`}
         confirmLabel="Save light"
-        spec={spec}
+        schema={spec}
       />
     </React.Fragment>
   );
