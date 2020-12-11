@@ -17,11 +17,21 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { CreatePatternRequest, Light, Pattern, Zone } from './common/types';
+import {
+  CreatePatternRequest,
+  CreateSceneRequest,
+  Light,
+  Pattern,
+  Scene,
+  Zone
+} from './common/types';
 
 export enum SliceName {
   Zones = 'Zones',
+  Scenes = 'Scenes',
+  Patterns = 'Patterns',
   Lights = 'Lights',
+  Colors = 'Colors',
   SelectedTab = 'SelectedTab'
 }
 
@@ -32,6 +42,11 @@ export enum ActionType {
   CreateZone = 'CreateZone',
   DeleteZone = 'DeleteZone',
   EditZone = 'EditZone',
+
+  ScenesUpdated = 'ScenesUpdated',
+  CreateScene = 'CreateScene',
+  DeleteScene = 'DeleteScene',
+  EditScene = 'EditScene',
 
   PatternsUpdated = 'PatternsUpdated',
   CreatePattern = 'CreatePattern',
@@ -46,8 +61,10 @@ export enum ActionType {
 
 export interface State {
   [SliceName.Zones]: Zone[];
+  [SliceName.Scenes]: Scene[];
   [SliceName.Lights]: Light[];
   [SliceName.SelectedTab]: SelectedTab;
+  [SliceName.Patterns]: Pattern[];
 }
 
 export interface Actions {
@@ -57,6 +74,11 @@ export interface Actions {
   [ActionType.CreateZone]: string;
   [ActionType.EditZone]: Zone;
   [ActionType.DeleteZone]: number;
+
+  [ActionType.ScenesUpdated]: Scene[];
+  [ActionType.CreateScene]: CreateSceneRequest;
+  [ActionType.EditScene]: Scene;
+  [ActionType.DeleteScene]: number;
 
   [ActionType.PatternsUpdated]: Pattern[];
   [ActionType.CreatePattern]: CreatePatternRequest;

@@ -47,7 +47,7 @@ export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | null> {
 
 export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
   await dbRun(
-    `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key) VALUES(?, ?)`,
+    `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key) VALUES (?, ?)`,
     [info.username, info.key]
   );
 }

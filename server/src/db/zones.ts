@@ -21,7 +21,7 @@ import { Zone, CreateZoneRequest } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 
 export const ZONES_TABLE_NAME = 'zones';
-export const ZONE_SCHEMA = `
+export const ZONES_SCHEMA = `
 CREATE TABLE "${ZONES_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE
@@ -34,7 +34,7 @@ export async function getZones(): Promise<Zone[]> {
 export async function createZone(
   zoneRequest: CreateZoneRequest
 ): Promise<void> {
-  await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) values (?)`, [
+  await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) VALUES (?)`, [
     zoneRequest.name
   ]);
 }

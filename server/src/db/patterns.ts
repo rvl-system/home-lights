@@ -20,9 +20,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Pattern, CreatePatternRequest } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 
-export const PATTERN_TABLE_NAME = 'patterns';
-export const PATTERN_SCHEMA = `
-CREATE TABLE "${PATTERN_TABLE_NAME}" (
+export const PATTERNS_TABLE_NAME = 'patterns';
+export const PATTERNS_SCHEMA = `
+CREATE TABLE "${PATTERNS_TABLE_NAME}" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL,
@@ -55,7 +55,7 @@ export async function createPattern(
   pattern: CreatePatternRequest
 ): Promise<void> {
   await dbRun(
-    `INSERT INTO ${PATTERN_TABLE_NAME} (name, type, data) values (?, ?, ?)`,
+    `INSERT INTO ${PATTERNS_TABLE_NAME} (name, type, data) VALUES (?, ?, ?)`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data)]
   );
   await updateColors();
@@ -63,13 +63,13 @@ export async function createPattern(
 
 export async function editPattern(pattern: Pattern): Promise<void> {
   await dbRun(
-    `UPDATE ${PATTERN_TABLE_NAME} SET name = ?, type = ?, data = ? WHERE id = ?`,
+    `UPDATE ${PATTERNS_TABLE_NAME} SET name = ?, type = ?, data = ? WHERE id = ?`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data), pattern.id]
   );
   await updateColors();
 }
 
 export async function deletePattern(id: number): Promise<void> {
-  await dbRun(`DELETE FROM ${PATTERN_TABLE_NAME} WHERE id = ?`, [id]);
+  await dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [id]);
   await updateColors();
 }

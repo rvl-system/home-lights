@@ -28,7 +28,7 @@ const createZoneListener = createListener(
     const createBody: CreateZoneRequest = { name };
     await post('/api/zones', createBody);
 
-    const updatedZones = (await get('/api/zones')) as Zone[]; // TODO: type this like we do actions
+    const updatedZones = (await get('/api/zones')) as Zone[];
     dispatch(ActionType.ZonesUpdated, updatedZones);
   }
 );
@@ -36,19 +36,16 @@ const createZoneListener = createListener(
 const editZoneListener = createListener(ActionType.EditZone, async (zone) => {
   await put(`/api/zone/${zone.id}`, zone);
 
-  const updatedZones = (await get('/api/zones')) as Zone[]; // TODO: type this like we do actions
+  const updatedZones = (await get('/api/zones')) as Zone[];
   dispatch(ActionType.ZonesUpdated, updatedZones);
 });
 
-const deleteZoneListener = createListener(
-  ActionType.DeleteZone,
-  async (id: number) => {
-    await del(`/api/zone/${id}`);
+const deleteZoneListener = createListener(ActionType.DeleteZone, async (id) => {
+  await del(`/api/zone/${id}`);
 
-    const updatedZones = (await get('/api/zones')) as Zone[]; // TODO: type this like we do actions
-    dispatch(ActionType.ZonesUpdated, updatedZones);
-  }
-);
+  const updatedZones = (await get('/api/zones')) as Zone[];
+  dispatch(ActionType.ZonesUpdated, updatedZones);
+});
 
 export const zonesListeners = [
   createZoneListener,

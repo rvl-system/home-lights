@@ -19,10 +19,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import {
   Button,
-  Divider,
+  Divider as DividerSchema,
   InputLabel,
   MenuItem,
   Select,
+  Slider,
   TextField,
   Typography
 } from '@material-ui/core';
@@ -56,7 +57,11 @@ export const useStyles = makeStyles((theme) => ({
   },
   content: {
     'flex-grow': 1,
-    padding: '20px'
+    padding: '20px',
+    overflow: 'scroll'
+  },
+  label: {
+    'padding-bottom': '20px'
   },
   row: {
     'padding-bottom': '30px'
@@ -69,25 +74,31 @@ export const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export enum SpecType {
+export enum FormSchemaType {
   Text = 'text',
   Select = 'select',
+  Range = 'range',
   Label = 'label',
   Divider = 'divider'
 }
 
-export type Spec = TextSpec | SelectSpec | LabelSpec | Divider;
+export type FormSchema =
+  | TextSchema
+  | SelectSchema
+  | RangeSchema
+  | LabelSchema
+  | DividerSchema;
 
-interface TextSpec {
-  type: SpecType.Text;
+interface TextSchema {
+  type: FormSchemaType.Text;
   name: string;
   description: string;
   defaultValue?: string;
   inputPlaceholder?: string;
 }
 
-interface SelectSpec {
-  type: SpecType.Select;
+interface SelectSchema {
+  type: FormSchemaType.Select;
   name: string;
   description: string;
   defaultValue: string;
@@ -97,19 +108,29 @@ interface SelectSpec {
   }[];
 }
 
-interface LabelSpec {
-  type: SpecType.Label;
+interface RangeSchema {
+  type: FormSchemaType.Range;
+  name: string;
+  description: string;
+  defaultValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+interface LabelSchema {
+  type: FormSchemaType.Label;
   label: string;
 }
 
-interface Divider {
-  type: SpecType.Divider;
+interface DividerSchema {
+  type: FormSchemaType.Divider;
 }
 
 export interface FormInputProps {
   open: boolean;
   title: string;
-  spec: Spec[];
+  schema: FormSchema[];
   confirmLabel?: string;
   confirmColor?: Color;
 }
@@ -124,7 +145,10 @@ export interface FormInputDispatch<T> {
 // pass the type generic around if we did, so we have to use a function
 // declaration instead
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export function FormInput<T extends Record<string, string>, K extends keyof T>(
+export function FormInput<
+  T extends Record<string, string | number>,
+  K extends keyof T
+>(
   props: PropsWithChildren<FormInputProps & FormInputDispatch<T>>
 ): JSX.Element | null {
   if (!props.open) {
@@ -135,18 +159,22 @@ export function FormInput<T extends Record<string, string>, K extends keyof T>(
 
   const inputs: JSX.Element[] = [];
   const defaultValues: T = {} as T;
-  for (let i = 0; i < props.spec.length; i++) {
-    const entry = props.spec[i];
+  for (let i = 0; i < props.schema.length; i++) {
+    const entry = props.schema[i];
     switch (entry.type) {
-      case SpecType.Divider: {
-        inputs.push(<Divider key={i} />);
+      case FormSchemaType.Divider: {
+        inputs.push(<DividerSchema key={i} />);
         break;
       }
-      case SpecType.Label: {
-        inputs.push(<Typography key={i}>{entry.label}</Typography>);
+      case FormSchemaType.Label: {
+        inputs.push(
+          <Typography key={i} className={classes.label} variant="h5">
+            {entry.label}
+          </Typography>
+        );
         break;
       }
-      case SpecType.Select: {
+      case FormSchemaType.Select: {
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && <InputLabel>{entry.description}</InputLabel>}
@@ -170,7 +198,7 @@ export function FormInput<T extends Record<string, string>, K extends keyof T>(
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
         break;
       }
-      case SpecType.Text: {
+      case FormSchemaType.Text: {
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && <InputLabel>{entry.description}</InputLabel>}
@@ -191,6 +219,32 @@ export function FormInput<T extends Record<string, string>, K extends keyof T>(
           </div>
         );
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
+        break;
+      }
+      case FormSchemaType.Range: {
+        const min = typeof entry.min === 'number' ? entry.min : 0;
+        const max = typeof entry.max === 'number' ? entry.max : 100;
+        const defaultValue =
+          typeof entry.defaultValue === 'number' ? entry.defaultValue : max;
+        inputs.push(
+          <div key={i} className={classes.row}>
+            {entry.description && <InputLabel>{entry.description}</InputLabel>}
+            <Slider
+              defaultValue={defaultValue}
+              valueLabelDisplay="auto"
+              step={entry.step || 1}
+              min={min}
+              max={max}
+              onChange={(e, newValue) => {
+                setValues({
+                  ...values,
+                  [entry.name]: newValue
+                });
+              }}
+            />
+          </div>
+        );
+        defaultValues[entry.name as K] = (entry.defaultValue || 0) as T[K];
         break;
       }
     }

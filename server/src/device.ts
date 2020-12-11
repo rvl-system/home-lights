@@ -33,9 +33,7 @@ import {
 
 export async function init(): Promise<void> {
   await initRVL();
-  if (false) {
-    await initPhilipsHue();
-  }
+  await initPhilipsHue();
   await initLIFX();
 }
 

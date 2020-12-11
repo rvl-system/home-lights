@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { render } from 'react-dom';
-import { Light, Zone, Pattern } from './common/types';
+import { Light, Zone, Pattern, Scene } from './common/types';
 import { AppContainer } from './containers/appContainer';
 import { listeners } from './listeners/listeners';
 import { reducers } from './reducers/reducers';
@@ -26,23 +26,25 @@ import { createApp, dispatch } from './reduxology';
 import { ActionType } from './types';
 import { get } from './util/api';
 
-async function run() {
-  const app = createApp({
-    container: AppContainer,
-    listeners,
-    reducers
-  });
+const app = createApp({
+  container: AppContainer,
+  listeners,
+  reducers
+});
 
-  render(app, document.getElementById('app'));
+render(app, document.getElementById('app'));
 
+Promise.all([
   get('/api/zones').then((zones) =>
     dispatch(ActionType.ZonesUpdated, zones as Zone[])
-  );
-  get('/api/lights').then((lights) =>
-    dispatch(ActionType.LightsUpdated, lights as Light[])
-  );
+  ),
+  get('/api/scenes').then((scenes) =>
+    dispatch(ActionType.ScenesUpdated, scenes as Scene[])
+  ),
   get('/api/patterns').then((patterns) =>
     dispatch(ActionType.PatternsUpdated, patterns as Pattern[])
-  );
-}
-run();
+  ),
+  get('/api/lights').then((lights) =>
+    dispatch(ActionType.LightsUpdated, lights as Light[])
+  )
+]);

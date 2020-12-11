@@ -18,37 +18,29 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { Button, Fade } from '@material-ui/core';
-import { Edit as EditIcon } from '@material-ui/icons';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { Zone } from '../../common/types';
+import { Scene } from '../../common/types';
 import { EditMode } from '../../types';
-import { FormInput, FormSchemaType } from '../lib/formInput';
+import { ConfirmDialog } from '../lib/confirmDialog';
 
-export interface EditZoneButtonProps {
-  zone: Zone;
+export interface DeleteSceneButtonProps {
+  scene: Scene;
   editMode: EditMode;
   className: string;
 }
 
-export interface EditZoneButtonDispatch {
-  editZone: (zone: Zone) => void;
+export interface DeleteSceneButtonDispatch {
+  deleteScene: (id: number) => void;
 }
 
-export const EditZoneButton: FunctionComponent<
-  EditZoneButtonProps & EditZoneButtonDispatch
+export const DeleteSceneButton: FunctionComponent<
+  DeleteSceneButtonDispatch & DeleteSceneButtonProps
 > = (props) => {
-  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
-  function handleEditConfirm(options: Record<string, string | number>) {
-    handleEditClose();
-    props.editZone({
-      ...props.zone,
-      name: options.name as string
-    });
-  }
-
-  function handleEditClose() {
-    setEditDialogOpen(false);
+  function handleDeleteClose() {
+    setDeleteDialogOpen(false);
   }
 
   return (
@@ -56,30 +48,27 @@ export const EditZoneButton: FunctionComponent<
       <Fade in={props.editMode === EditMode.Edit} mountOnEnter unmountOnExit>
         <Button
           className={props.className}
+          color="secondary"
           onClick={(e) => {
             e.stopPropagation();
-            setEditDialogOpen(true);
+            setDeleteDialogOpen(true);
           }}
         >
-          <EditIcon />
+          <DeleteIcon />
         </Button>
       </Fade>
 
-      <FormInput
-        onConfirm={handleEditConfirm}
-        onCancel={handleEditClose}
-        open={editDialogOpen}
-        title={`Edit ${props.zone.name}`}
-        confirmLabel="Save zone"
-        schema={[
-          {
-            type: FormSchemaType.Text,
-            name: 'name',
-            description: 'Name',
-            inputPlaceholder: 'e.g. Kitchen',
-            defaultValue: props.zone.name
-          }
-        ]}
+      <ConfirmDialog
+        onConfirm={() => {
+          handleDeleteClose();
+          props.deleteScene(props.scene.id);
+        }}
+        onCancel={handleDeleteClose}
+        open={deleteDialogOpen}
+        title={`Delete "${props.scene.name}"?`}
+        description="This operation cannot be undone"
+        confirmLabel="Delete scene"
+        confirmColor="secondary"
       />
     </React.Fragment>
   );

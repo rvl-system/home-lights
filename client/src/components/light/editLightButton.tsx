@@ -21,8 +21,17 @@ import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
-import { Light, RVLLight, LightType, Zone } from '../../common/types';
-import { FormInput, SpecType, Spec } from '../lib/formInput';
+import {
+  Light,
+  RVLLight,
+  LightType,
+  Zone,
+  PhilipsHueLight,
+  LIFXLight
+} from '../../common/types';
+import { FormInput, FormSchemaType, FormSchema } from '../lib/formInput';
+
+const OFF = 'off';
 
 export interface EditLightButtonProps {
   light: Light;
@@ -42,24 +51,44 @@ export const EditLightButton: FunctionComponent<
 
   function handleConfirm(values: Record<string, string>) {
     handleEditClose();
-    const newLight: RVLLight = {
-      id: props.light.id,
-      type: LightType.RVL,
-      name: values.name as string,
-      channel: parseInt(values.channel),
-      zoneId: values.zone !== '-1' ? parseInt(values.zoneId) : undefined
-    };
-    props.editLight(newLight);
+    switch (props.light.type) {
+      case LightType.RVL: {
+        const newLight: RVLLight = {
+          ...(props.light as RVLLight),
+          name: values.name as string,
+          channel: parseInt(values.channel),
+          zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
+        };
+        props.editLight(newLight);
+        break;
+      }
+      case LightType.PhilipsHue: {
+        const newLight: PhilipsHueLight = {
+          ...(props.light as PhilipsHueLight),
+          zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
+        };
+        props.editLight(newLight);
+        break;
+      }
+      case LightType.LIFX: {
+        const newLight: LIFXLight = {
+          ...(props.light as LIFXLight),
+          zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
+        };
+        props.editLight(newLight);
+        break;
+      }
+    }
   }
 
   function handleEditClose() {
     setEditDialogOpen(false);
   }
 
-  const spec: Spec[] = [];
+  const spec: FormSchema[] = [];
   if (props.canChangeName) {
     spec.push({
-      type: SpecType.Text,
+      type: FormSchemaType.Text,
       name: 'name',
       description: 'Name',
       inputPlaceholder: 'e.g. Left bedside lamp',
@@ -67,10 +96,10 @@ export const EditLightButton: FunctionComponent<
     });
   }
   spec.push({
-    type: SpecType.Select,
+    type: FormSchemaType.Select,
     name: 'zoneId',
     description: 'Zone',
-    options: [{ value: '-1', label: 'Unassigned' }].concat(
+    options: [{ value: OFF, label: 'Unassigned' }].concat(
       props.zones.map((zone) => ({
         value: zone.id.toString(),
         label: zone.name
@@ -79,11 +108,11 @@ export const EditLightButton: FunctionComponent<
     defaultValue:
       typeof props.light.zoneId === 'number'
         ? props.light.zoneId.toString()
-        : '-1'
+        : OFF
   });
   if (props.light.type === LightType.RVL) {
     spec.push({
-      type: SpecType.Select,
+      type: FormSchemaType.Select,
       name: 'channel',
       description: 'Channel',
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
@@ -112,7 +141,7 @@ export const EditLightButton: FunctionComponent<
         open={editDialogOpen}
         title={`Edit "${props.light.name}"`}
         confirmLabel="Save light"
-        spec={spec}
+        schema={spec}
       />
     </React.Fragment>
   );

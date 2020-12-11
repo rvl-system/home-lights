@@ -18,6 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { lightsListeners } from './lightsListeners';
+import { sceneListeners } from './sceneListeners';
 import { zonesListeners } from './zonesListeners';
 
-export const listeners = [...zonesListeners, ...lightsListeners];
+export const listeners = [
+  ...zonesListeners,
+  ...sceneListeners,
+  ...lightsListeners
+];
