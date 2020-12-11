@@ -66,7 +66,7 @@ export async function setLightState({
       controllers.set(light.channel, controller);
     }
 
-    if (lightEntry.patternId !== undefined) {
+    if (zoneState.power && lightEntry.patternId !== undefined) {
       controller.setPowerState(true);
       controller.setBrightness(scene.brightness);
       const pattern = getItem(lightEntry.patternId, patterns);

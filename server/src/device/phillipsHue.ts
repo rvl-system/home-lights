@@ -76,7 +76,9 @@ export async function setLightState({
     }
 
     let lightState: InstanceType<typeof LightState>;
-    if (lightEntry.patternId !== undefined) {
+    if (!zoneState.power) {
+      lightState = new LightState().off();
+    } else if (lightEntry.patternId !== undefined) {
       const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
       if (pattern.type !== PatternType.Solid) {
         throw new Error(
@@ -102,6 +104,8 @@ export async function setLightState({
       authenticatedApi.lights.setLightState(
         idMap.get((light as PhilipsHueLight).philipsHueID),
         lightState
+        // The Hue API does strange things with types, gotta cast to any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ) as any
     );
   }
@@ -109,6 +113,8 @@ export async function setLightState({
 }
 
 async function discoverBridge(): Promise<string | null> {
+  // The Hue API does strange things with types, gotta cast to any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let bridges: any;
   try {
     bridges = await philipsHue.discovery.nupnpSearch();
