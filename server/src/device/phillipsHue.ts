@@ -20,19 +20,26 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { v3 as philipsHue } from 'node-hue-api';
 import Api = require('node-hue-api/lib/api/Api');
 import {
+  MAX_BRIGHTNESS,
   PHILIPS_HUE_APP_NAME,
   PHILIPS_HUE_DEVICE_NAME
 } from '../common/config';
 import {
   CreatePhilipsHueLightRequest,
   LightType,
+  PatternType,
   PhilipsHueLight,
-  SetLightStateRequest
+  SolidPattern
 } from '../common/types';
+import { getItem } from '../common/util';
 import { getLights, createLight, deleteLight } from '../db/lights';
 import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
+import { SetLightStateOptions } from './types';
 
-let authenticatedApi: Api;
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const { LightState } = philipsHue.lightStates;
+let authenticatedApi: Api | undefined;
+const idMap = new Map<string, number>();
 
 export async function init(): Promise<void> {
   console.log('Looking for Philips Hue bridge...');
@@ -49,13 +56,65 @@ export async function init(): Promise<void> {
   console.log('Phillips Hue bridge initialized');
 }
 
-export async function setLightState(
-  lightState: SetLightStateRequest
-): Promise<void> {
-  console.log(lightState);
+export async function setLightState({
+  zoneState,
+  scene,
+  lights,
+  patterns
+}: SetLightStateOptions): Promise<void> {
+  if (
+    zoneState.currentSceneId === undefined ||
+    authenticatedApi === undefined
+  ) {
+    return;
+  }
+  const promises: Promise<void>[] = [];
+  for (const lightEntry of scene.lights) {
+    const light = getItem(lightEntry.lightId, lights);
+    if (light.type !== LightType.PhilipsHue) {
+      continue;
+    }
+
+    let lightState: InstanceType<typeof LightState>;
+    if (!zoneState.power) {
+      lightState = new LightState().off();
+    } else if (lightEntry.patternId !== undefined) {
+      const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
+      if (pattern.type !== PatternType.Solid) {
+        throw new Error(
+          `Internal Error: pattern type ${pattern.type} cannot be used with Philips Hue`
+        );
+      }
+      lightState = new LightState()
+        .on(true)
+        .hsb(
+          pattern.data.color.hue,
+          Math.round(pattern.data.color.saturation * 100),
+          Math.round(
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+              (scene.brightness / MAX_BRIGHTNESS) *
+              100
+          )
+        );
+    } else {
+      lightState = new LightState().off();
+    }
+
+    promises.push(
+      authenticatedApi.lights.setLightState(
+        idMap.get((light as PhilipsHueLight).philipsHueID),
+        lightState
+        // The Hue API does strange things with types, gotta cast to any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any
+    );
+  }
+  await Promise.all(promises);
 }
 
 async function discoverBridge(): Promise<string | null> {
+  // The Hue API does strange things with types, gotta cast to any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let bridges: any;
   try {
     bridges = await philipsHue.discovery.nupnpSearch();
@@ -122,6 +181,9 @@ async function getOrCreateUser(bridgeIP: string): Promise<string> {
 }
 
 async function updateLights(): Promise<void> {
+  if (authenticatedApi === undefined) {
+    return;
+  }
   console.log('Reconciling Phillips Hue lights in bridge vs database');
   const bridgeLights = await authenticatedApi.lights.getAll();
   const dbLights = await getLights();
@@ -145,6 +207,7 @@ async function updateLights(): Promise<void> {
       };
       await createLight(newLight);
     }
+    idMap.set(bridgeLight.uniqueid, bridgeLight.id);
   }
 
   // Delete lights from DB that are no longer on the bridge

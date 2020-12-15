@@ -25,7 +25,7 @@
     "fastify-static": "^3.2.1",
     "node-fetch": "^2.6.1",
     "node-hue-api": "^4.0.9",
-    "rvl-node": "^6.0.1",
+    "rvl-node": "^6.1.0",
     "sqlite3": "^5.0.0"
   }
 }

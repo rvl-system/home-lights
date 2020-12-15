@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { CreateSceneRequest, Scene } from '../common/types';
+import { CreateSceneRequest } from '../common/types';
 import { createListener, dispatch } from '../reduxology';
 import { ActionType } from '../types';
-import { get, del, post, put } from '../util/api';
+import { del, post, put } from '../util/api';
 
 const createScenesListener = createListener(
   ActionType.CreateScene,
@@ -30,30 +30,24 @@ const createScenesListener = createListener(
       zoneId,
       lights
     };
-    await post('/api/scenes', createBody);
-
-    const updatedScenes = (await get('/api/scenes')) as Scene[];
-    dispatch(ActionType.ScenesUpdated, updatedScenes);
+    const appState = await post('/api/scenes', createBody);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 
 const editSceneListener = createListener(
   ActionType.EditScene,
   async (scene) => {
-    await put(`/api/scene/${scene.id}`, scene);
-
-    const updatedScenes = (await get('/api/scenes')) as Scene[];
-    dispatch(ActionType.ScenesUpdated, updatedScenes);
+    const appState = await put(`/api/scene/${scene.id}`, scene);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 
 const deleteSceneListener = createListener(
   ActionType.DeleteScene,
   async (id) => {
-    await del(`/api/scene/${id}`);
-
-    const updatedScenes = (await get('/api/scenes')) as Scene[];
-    dispatch(ActionType.ScenesUpdated, updatedScenes);
+    const appState = await del(`/api/scene/${id}`);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 

@@ -31,9 +31,12 @@ import {
 export interface SceneComponentProps {
   scene: Scene;
   editMode: EditMode;
+  selected: boolean;
 }
 
-export type SceneComponentDispatch = DeleteSceneButtonDispatch;
+export type SceneComponentDispatch = DeleteSceneButtonDispatch & {
+  setZoneScene: (zoneId: number, sceneId: number) => void;
+};
 
 const EditSceneComponent: FunctionComponent<
   SceneComponentProps & SceneComponentDispatch
@@ -58,8 +61,13 @@ const OperationSceneComponent: FunctionComponent<
 > = (props) => {
   const classes = useContentStyles();
   return (
-    <ListItem className={classes.listItem} button>
-      <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
+    <ListItem className={classes.listItem} button selected={props.selected}>
+      <Typography
+        className={classes.itemTitle}
+        onClick={() => props.setZoneScene(props.scene.zoneId, props.scene.id)}
+      >
+        {props.scene.name}
+      </Typography>
     </ListItem>
   );
 };

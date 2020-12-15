@@ -17,12 +17,19 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { Light } from '../common/types';
 import { createReducer } from '../reduxology';
 import { SliceName, ActionType } from '../types';
 
-export const lightsReducer = createReducer(SliceName.Lights, []);
+// Typing this return type explicitly is very hard, but can be inferred easily
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function createLightsReducers(initialPatterns: Light[]) {
+  const lightsReducer = createReducer(SliceName.Lights, initialPatterns);
 
-lightsReducer.handle(
-  ActionType.LightsUpdated,
-  (state, updatedLights) => updatedLights
-);
+  lightsReducer.handle(
+    ActionType.AppStateUpdated,
+    (state, { lights }) => lights
+  );
+
+  return lightsReducer;
+}

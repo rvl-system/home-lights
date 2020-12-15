@@ -21,9 +21,11 @@ import {
   CreatePatternRequest,
   CreateSceneRequest,
   Light,
+  SystemState,
   Pattern,
   Scene,
-  Zone
+  Zone,
+  AppState
 } from './common/types';
 
 export enum SliceName {
@@ -32,11 +34,17 @@ export enum SliceName {
   Patterns = 'Patterns',
   Lights = 'Lights',
   Colors = 'Colors',
-  SelectedTab = 'SelectedTab'
+  SelectedTab = 'SelectedTab',
+  State = 'State'
 }
 
 export enum ActionType {
   SelectTab = 'SelectTab',
+
+  AppStateUpdated = 'StateUpdated',
+  SetZoneScene = 'SetZoneScene',
+  SetZonePower = 'SetZonePower',
+  SetZoneBrightness = 'SetZoneBrightness',
 
   ZonesUpdated = 'ZonesUpdated',
   CreateZone = 'CreateZone',
@@ -65,27 +73,30 @@ export interface State {
   [SliceName.Lights]: Light[];
   [SliceName.SelectedTab]: SelectedTab;
   [SliceName.Patterns]: Pattern[];
+  [SliceName.State]: SystemState;
 }
 
 export interface Actions {
   [ActionType.SelectTab]: SelectedTab;
 
-  [ActionType.ZonesUpdated]: Zone[];
+  [ActionType.AppStateUpdated]: AppState;
+
+  [ActionType.SetZoneScene]: { zoneId: number; sceneId: number };
+  [ActionType.SetZonePower]: { zoneId: number; power: boolean };
+  [ActionType.SetZoneBrightness]: { zoneId: number; brightness: number };
+
   [ActionType.CreateZone]: string;
   [ActionType.EditZone]: Zone;
   [ActionType.DeleteZone]: number;
 
-  [ActionType.ScenesUpdated]: Scene[];
   [ActionType.CreateScene]: CreateSceneRequest;
   [ActionType.EditScene]: Scene;
   [ActionType.DeleteScene]: number;
 
-  [ActionType.PatternsUpdated]: Pattern[];
   [ActionType.CreatePattern]: CreatePatternRequest;
   [ActionType.EditPattern]: Pattern;
   [ActionType.DeletePattern]: number;
 
-  [ActionType.LightsUpdated]: Light[];
   [ActionType.CreateRVLLight]: {
     name: string;
     channel: number;

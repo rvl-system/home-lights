@@ -17,33 +17,29 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-export async function get(route: string): Promise<Record<string, any>> {
-  return send(route, 'GET');
+import { AppState } from '../common/types';
+
+export async function get<T>(route: string): Promise<T> {
+  return send(route, 'GET') as Promise<T>;
 }
 
-export async function post(
-  route: string,
-  body: Record<string, any>
-): Promise<Record<string, any>> {
-  return send(route, 'POST', body);
+export async function post(route: string, body: unknown): Promise<AppState> {
+  return send(route, 'POST', body) as Promise<AppState>;
 }
 
-export async function put(
-  route: string,
-  body: Record<string, any>
-): Promise<Record<string, any>> {
-  return send(route, 'PUT', body);
+export async function put(route: string, body: unknown): Promise<AppState> {
+  return send(route, 'PUT', body) as Promise<AppState>;
 }
 
-export async function del(route: string): Promise<Record<string, any>> {
-  return send(route, 'DELETE');
+export async function del(route: string): Promise<AppState> {
+  return send(route, 'DELETE') as Promise<AppState>;
 }
 
 async function send(
   route: string,
   method: string,
-  body?: Record<string, any>
-): Promise<Record<string, any>> {
+  body?: unknown
+): Promise<unknown> {
   const options: RequestInit = { method, credentials: 'same-origin' };
   if (body) {
     const headers = new Headers();

@@ -37,18 +37,18 @@ CREATE TABLE "${COLORS_TABLE_NAME}" (
   PRIMARY KEY (hue, saturation)
 )`;
 
-export async function getPatterns(): Promise<Pattern[]> {
-  const results: Pattern[] = (await dbAll(
-    'SELECT * FROM patterns'
-  )) as Pattern[];
-  return results.map((result) => ({
+let patterns: Pattern[] = [];
+
+export async function init(): Promise<void> {
+  const results = await dbAll('SELECT * FROM patterns');
+  patterns = results.map((result) => ({
     ...result,
     data: JSON.parse((result.data as unknown) as string)
-  }));
+  })) as Pattern[];
 }
 
-async function updateColors() {
-  // TODO: https://github.com/rvl-system/home-lights/issues/36
+export function getPatterns(): Pattern[] {
+  return patterns;
 }
 
 export async function createPattern(
@@ -58,7 +58,7 @@ export async function createPattern(
     `INSERT INTO ${PATTERNS_TABLE_NAME} (name, type, data) VALUES (?, ?, ?)`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data)]
   );
-  await updateColors();
+  await init();
 }
 
 export async function editPattern(pattern: Pattern): Promise<void> {
@@ -66,10 +66,10 @@ export async function editPattern(pattern: Pattern): Promise<void> {
     `UPDATE ${PATTERNS_TABLE_NAME} SET name = ?, type = ?, data = ? WHERE id = ?`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data), pattern.id]
   );
-  await updateColors();
+  await init();
 }
 
 export async function deletePattern(id: number): Promise<void> {
   await dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [id]);
-  await updateColors();
+  await init();
 }

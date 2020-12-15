@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { CreateRVLLightRequest, Light, LightType } from '../common/types';
+import { CreateRVLLightRequest, LightType } from '../common/types';
 import { createListener, dispatch } from '../reduxology';
 import { ActionType } from '../types';
-import { get, post, put, del } from '../util/api';
+import { post, put, del } from '../util/api';
 
 const createRVLLightListener = createListener(
   ActionType.CreateRVLLight,
@@ -31,30 +31,24 @@ const createRVLLightListener = createListener(
       channel,
       zoneId
     };
-    await post('/api/lights', createBody);
-
-    const updatedLights = (await get('/api/lights')) as Light[];
-    dispatch(ActionType.LightsUpdated, updatedLights);
+    const appState = await post('/api/lights', createBody);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 
 const editLightListener = createListener(
   ActionType.EditLight,
   async (light) => {
-    await put(`/api/light/${light.id}`, light);
-
-    const updatedLights = (await get('/api/lights')) as Light[];
-    dispatch(ActionType.LightsUpdated, updatedLights);
+    const appState = await put(`/api/light/${light.id}`, light);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 
 const deleteLightListener = createListener(
   ActionType.DeleteLight,
   async (id) => {
-    await del(`/api/light/${id}`);
-
-    const updatedLights = (await get('/api/lights')) as Light[];
-    dispatch(ActionType.LightsUpdated, updatedLights);
+    const appState = await del(`/api/light/${id}`);
+    dispatch(ActionType.AppStateUpdated, appState);
   }
 );
 

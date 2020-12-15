@@ -17,6 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// ---- App State ----
+
+export interface AppState {
+  zones: Zone[];
+  scenes: Scene[];
+  patterns: Pattern[];
+  lights: Light[];
+  systemState: SystemState;
+}
+
 // ---- Zone Types ----
 
 export interface Zone {
@@ -71,9 +81,10 @@ export interface Scene {
   id: number;
   zoneId: number;
   name: string;
+  brightness: number;
   lights: SceneLightEntry[];
 }
-export type CreateSceneRequest = Omit<Scene, 'id'>;
+export type CreateSceneRequest = Omit<Scene, 'id' | 'brightness'>;
 
 // ---- Pattern Types ----
 
@@ -142,13 +153,28 @@ export interface WavePattern extends Pattern {
 }
 export type CreateWavePatternRequest = Omit<WavePattern, 'id'>;
 
-// ---- Light State ----
+// ---- System State ----
 
-export interface RoomLightState {
+export interface ZoneState {
+  zoneId: number;
   power: boolean;
-  scene: Scene;
+  currentSceneId: number | undefined;
 }
 
-export interface SetLightStateRequest {
-  rooms: RoomLightState[];
+export interface SystemState {
+  zoneStates: ZoneState[];
 }
+
+export type SetZoneSceneRequest = {
+  sceneId: number;
+};
+
+export type SetZonePowerRequest = {
+  zoneId: number;
+  power: boolean;
+};
+
+export type SetZoneBrightnessRequest = {
+  zoneId: number;
+  brightness: number;
+};

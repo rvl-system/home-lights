@@ -26,10 +26,11 @@ export interface ZonePowerSwitchProps {
   zone: Zone;
   editMode: EditMode;
   className: string;
+  defaultChecked: boolean;
 }
 
 export interface ZonePowerSwitchDispatch {
-  toggleZonePower: (id: number, powerState: boolean) => void;
+  setZonePower: (id: number, powerState: boolean) => void;
 }
 
 export const ZonePowerSwitch: FunctionComponent<
@@ -45,8 +46,9 @@ export const ZonePowerSwitch: FunctionComponent<
             e.stopPropagation();
           }}
           onChange={(e) =>
-            props.toggleZonePower(props.zone.id, e.currentTarget.checked)
+            props.setZonePower(props.zone.id, e.currentTarget.checked)
           }
+          checked={props.defaultChecked}
         />
       )}
     </React.Fragment>

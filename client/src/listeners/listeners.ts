@@ -19,10 +19,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { lightsListeners } from './lightsListeners';
 import { sceneListeners } from './sceneListeners';
+import { stateListeners } from './stateListeners';
 import { zonesListeners } from './zonesListeners';
 
 export const listeners = [
   ...zonesListeners,
   ...sceneListeners,
-  ...lightsListeners
+  ...lightsListeners,
+  ...stateListeners
 ];

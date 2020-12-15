@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import debounce from 'debounce';
 import {
   ZonesTab,
   ZonesTabProps,
@@ -27,7 +28,9 @@ import { SliceName, ActionType } from '../types';
 
 export const ZonesTabContainer = createContainer(
   (getState): ZonesTabProps => ({
-    zones: getState(SliceName.Zones)
+    zones: getState(SliceName.Zones),
+    state: getState(SliceName.State),
+    scenes: getState(SliceName.Scenes)
   }),
   (dispatch): ZonesTabDispatch => ({
     createZone(name) {
@@ -39,10 +42,12 @@ export const ZonesTabContainer = createContainer(
     deleteZone(id) {
       dispatch(ActionType.DeleteZone, id);
     },
-    toggleZonePower(id, powerState) {
-      console.log(`Toggling zone ${id} power to ${powerState}`);
-      // TODO
-    }
+    setZonePower(zoneId, power) {
+      dispatch(ActionType.SetZonePower, { zoneId, power });
+    },
+    setZoneBrightness: debounce((zoneId, brightness) => {
+      dispatch(ActionType.SetZoneBrightness, { zoneId, brightness });
+    }, 33)
   }),
   ZonesTab
 );

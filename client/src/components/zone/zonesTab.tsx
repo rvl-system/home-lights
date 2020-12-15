@@ -20,7 +20,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { Zone } from '../../common/types';
+import { Scene, SystemState, Zone } from '../../common/types';
+import { getItem } from '../../common/util';
 import { EditMode } from '../../types';
 import { useContainerStyles } from '../lib/pageStyles';
 import { CreateZoneButton } from './createZoneButton';
@@ -28,13 +29,16 @@ import { ZoneComponent } from './zoneComponent';
 
 export interface ZonesTabProps {
   zones: Zone[];
+  scenes: Scene[];
+  state: SystemState;
 }
 
 export interface ZonesTabDispatch {
   createZone: (name: string) => void;
   editZone: (zone: Zone) => void;
   deleteZone: (id: number) => void;
-  toggleZonePower: (id: number, powerState: boolean) => void;
+  setZonePower: (id: number, powerState: boolean) => void;
+  setZoneBrightness: (id: number, brightness: number) => void;
 }
 
 export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
@@ -70,16 +74,25 @@ export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
 
       <div className={classes.content}>
         <div className={classes.innerContent}>
-          {props.zones.map((zone) => (
-            <ZoneComponent
-              key={zone.id}
-              zone={zone}
-              editMode={editMode}
-              editZone={props.editZone}
-              deleteZone={props.deleteZone}
-              toggleZonePower={props.toggleZonePower}
-            />
-          ))}
+          {props.zones.map((zone) => {
+            const state = getItem(zone.id, props.state.zoneStates, 'zoneId');
+            const currentScene = props.scenes.find(
+              (scene) => scene.id === state.currentSceneId
+            );
+            return (
+              <ZoneComponent
+                key={zone.id}
+                zone={zone}
+                state={state}
+                editMode={editMode}
+                editZone={props.editZone}
+                deleteZone={props.deleteZone}
+                setZonePower={props.setZonePower}
+                setZoneBrightness={props.setZoneBrightness}
+                currentScene={currentScene}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

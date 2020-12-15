@@ -17,16 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { lightsReducer } from './lightsReducer';
-import { patternsReducer } from './patternsReducer';
-import { scenesReducer } from './scenesReducer';
-import { selectedTabReducer } from './selectedTabReducer';
-import { zonesReducer } from './zonesReducer';
+import { reconcile as reconcileDevice } from './device';
 
-export const reducers = [
-  zonesReducer,
-  scenesReducer,
-  patternsReducer,
-  lightsReducer,
-  selectedTabReducer
-];
+export function reconcile(): void {
+  reconcileDevice();
+}

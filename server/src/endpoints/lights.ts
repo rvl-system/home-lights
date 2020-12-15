@@ -18,29 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { FastifyInstance } from 'fastify';
-import { CreateLightRequest, Light } from '../common/types';
-import { getLights, createLight, editLight, deleteLight } from '../db/lights';
+import { createLight, editLight, deleteLight } from '../db/lights';
+import { post, put, del } from './endpoint';
 
 export function init(app: FastifyInstance): void {
-  app.get('/api/lights', async () => {
-    return await getLights();
-  });
-
-  app.post('/api/lights', async (req) => {
-    const lightRequest = req.body as CreateLightRequest;
-    await createLight(lightRequest);
-    return {};
-  });
-
-  app.put('/api/light/:id', async (req) => {
-    const light = req.body as Light;
-    await editLight(light);
-    return {};
-  });
-
-  app.delete('/api/light/:id', async (req) => {
-    const { id } = req.params as { id: string };
-    await deleteLight(parseInt(id));
-    return {};
-  });
+  app.post('/api/lights', post(createLight));
+  app.put('/api/light/:id', put(editLight));
+  app.delete('/api/light/:id', del(deleteLight));
 }

@@ -18,33 +18,34 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { render } from 'react-dom';
-import { Light, Zone, Pattern, Scene } from './common/types';
+import { AppState } from './common/types';
 import { AppContainer } from './containers/appContainer';
 import { listeners } from './listeners/listeners';
-import { reducers } from './reducers/reducers';
-import { createApp, dispatch } from './reduxology';
-import { ActionType } from './types';
+import { createLightsReducers } from './reducers/lightsReducer';
+import { createPatternsReducers } from './reducers/patternsReducer';
+import { createScenesReducers } from './reducers/scenesReducer';
+import { selectedTabReducer } from './reducers/selectedTabReducer';
+import { createStateReducers } from './reducers/stateReducer';
+import { createZonesReducers } from './reducers/zonesReducer';
+import { createApp } from './reduxology';
 import { get } from './util/api';
 
-const app = createApp({
-  container: AppContainer,
-  listeners,
-  reducers
-});
+async function run() {
+  const appState = await get<AppState>('/api/app-state');
 
-render(app, document.getElementById('app'));
+  const app = createApp({
+    container: AppContainer,
+    listeners,
+    reducers: [
+      createZonesReducers(appState.zones),
+      createScenesReducers(appState.scenes),
+      createPatternsReducers(appState.patterns),
+      createLightsReducers(appState.lights),
+      createStateReducers(appState.systemState),
+      selectedTabReducer
+    ]
+  });
 
-Promise.all([
-  get('/api/zones').then((zones) =>
-    dispatch(ActionType.ZonesUpdated, zones as Zone[])
-  ),
-  get('/api/scenes').then((scenes) =>
-    dispatch(ActionType.ScenesUpdated, scenes as Scene[])
-  ),
-  get('/api/patterns').then((patterns) =>
-    dispatch(ActionType.PatternsUpdated, patterns as Pattern[])
-  ),
-  get('/api/lights').then((lights) =>
-    dispatch(ActionType.LightsUpdated, lights as Light[])
-  )
-]);
+  render(app, document.getElementById('app'));
+}
+run();

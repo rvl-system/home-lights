@@ -17,12 +17,22 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { FastifyInstance } from 'fastify';
-import { createScene, editScene, deleteScene } from '../db/scenes';
-import { post, put, del } from './endpoint';
-
-export function init(app: FastifyInstance): void {
-  app.post('/api/scenes', post(createScene));
-  app.put('/api/scene/:id', put(editScene));
-  app.delete('/api/scene/:id', del(deleteScene));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getItem<K, T extends Record<string, any>>(
+  id: K,
+  items: T[],
+  lookup?: ((item: T) => boolean) | string
+): T {
+  if (!lookup) {
+    lookup = (item) => item.id === id;
+  }
+  if (typeof lookup === 'string') {
+    const key = lookup;
+    lookup = (item) => item[key] === id;
+  }
+  const item = items.find(lookup);
+  if (!item) {
+    throw new Error(`Internal Error: could not find item ${id}`);
+  }
+  return item;
 }

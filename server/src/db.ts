@@ -19,19 +19,28 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
-import { LIGHTS_SCHEMA, LIGHTS_TABLE_NAME } from './db/lights';
+import {
+  LIGHTS_SCHEMA,
+  LIGHTS_TABLE_NAME,
+  init as initLights
+} from './db/lights';
 import {
   PATTERNS_SCHEMA,
   PATTERNS_TABLE_NAME,
   COLORS_SCHEMA,
-  COLORS_TABLE_NAME
+  COLORS_TABLE_NAME,
+  init as initPatterns
 } from './db/patterns';
 import {
   PHILIPS_HUE_INFO_SCHEMA,
   PHILIPS_HUE_TABLE_NAME
 } from './db/philipsHue';
-import { SCENES_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
-import { ZONES_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
+import {
+  SCENES_SCHEMA,
+  SCENES_TABLE_NAME,
+  init as initScenes
+} from './db/scenes';
+import { ZONES_SCHEMA, ZONES_TABLE_NAME, init as initZones } from './db/zones';
 import { init as initDB, dbRun, dbAll } from './sqlite';
 import { getEnvironmentVariable } from './util';
 
@@ -79,5 +88,8 @@ export async function init(): Promise<void> {
   if (isNewDB) {
     await create();
   }
+
+  await Promise.all([initZones(), initScenes(), initPatterns(), initLights()]);
+
   console.log('Database initialized');
 }

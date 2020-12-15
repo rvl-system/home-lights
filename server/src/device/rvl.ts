@@ -17,15 +17,76 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { SetLightStateRequest } from '../common/types';
+import {
+  createManager,
+  createWaveParameters,
+  createSolidColorWave,
+  RVLManager,
+  RVLController
+} from 'rvl-node';
+import { MAX_BRIGHTNESS } from '../common/config';
+import {
+  LightType,
+  PatternType,
+  RVLLight,
+  SolidPattern
+} from '../common/types';
+import { getItem } from '../common/util';
+import { SetLightStateOptions } from './types';
+
+let manager: RVLManager;
+const controllers = new Map<number, RVLController>();
 
 export async function init(): Promise<void> {
+  manager = await createManager();
   // Devices are initialized on a per-channel basis, so we do nothing here
   console.log('RVL devices initialized');
 }
 
-export async function setLightState(
-  lightState: SetLightStateRequest
-): Promise<void> {
-  console.log(lightState);
+export async function setLightState({
+  zoneState,
+  scene,
+  lights,
+  patterns
+}: SetLightStateOptions): Promise<void> {
+  if (zoneState.currentSceneId === undefined) {
+    return;
+  }
+
+  for (const lightEntry of scene.lights) {
+    const light = getItem(lightEntry.lightId, lights) as RVLLight;
+    if (light.type !== LightType.RVL) {
+      continue;
+    }
+    let controller = controllers.get(light.channel);
+    if (!controller) {
+      controller = await manager.createController({
+        channel: light.channel
+      });
+      controllers.set(light.channel, controller);
+    }
+
+    if (zoneState.power && lightEntry.patternId !== undefined) {
+      controller.setPowerState(true);
+      controller.setBrightness(scene.brightness);
+      const pattern = getItem(lightEntry.patternId, patterns);
+      switch (pattern.type) {
+        case PatternType.Solid: {
+          const { data } = pattern as SolidPattern;
+          controller.setWaveParameters(
+            createWaveParameters(
+              createSolidColorWave(
+                Math.round((data.color.hue / 360) * 255),
+                Math.round(data.color.saturation * 255),
+                Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
+              )
+            )
+          );
+          break;
+        }
+      }
+    } else {
+      controller.setPowerState(false);
+    }
+  }
 }

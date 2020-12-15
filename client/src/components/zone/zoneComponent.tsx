@@ -21,11 +21,14 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Typography
+  Typography,
+  Slider
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { Zone } from '../../common/types';
+import { BRIGHTNESS_STEP, MAX_BRIGHTNESS } from '../../common/config';
+import { Scene, Zone, ZoneState } from '../../common/types';
 import { ZoneScenesContainer } from '../../containers/zoneScenesContainer';
 import { EditMode } from '../../types';
 import { useContentStyles } from '../lib/pageStyles';
@@ -33,48 +36,80 @@ import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
 import { EditZoneButton, EditZoneButtonDispatch } from './editZoneButton';
 import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 
+const useStyles = makeStyles({
+  container: {
+    width: '100%'
+  }
+});
+
 export interface ZoneComponentProps {
   zone: Zone;
   editMode: EditMode;
+  state: ZoneState;
+  currentScene?: Scene;
 }
 
 export type ZoneComponentDispatch = EditZoneButtonDispatch &
   DeleteZoneButtonDispatch &
-  ZonePowerSwitchDispatch;
+  ZonePowerSwitchDispatch & {
+    setZoneBrightness: (zoneId: number, brightness: number) => void;
+  };
 
 export const ZoneComponent: FunctionComponent<
   ZoneComponentProps & ZoneComponentDispatch
 > = (props) => {
-  const classes = useContentStyles();
+  const classes = useStyles();
+  const contentClasses = useContentStyles();
   return (
     <React.Fragment>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel1a-header">
-          <div className={classes.itemHeading}>
-            <DeleteZoneButton
-              zone={props.zone}
-              editMode={props.editMode}
-              className={classes.leftButton}
-              deleteZone={props.deleteZone}
-            />
-            <ZonePowerSwitch
-              className={classes.leftButton}
-              zone={props.zone}
-              editMode={props.editMode}
-              toggleZonePower={props.toggleZonePower}
-            />
-            <Typography className={classes.itemTitle}>
-              {props.zone.name}
-            </Typography>
-            <EditZoneButton
-              className={classes.rightAccordionButton}
-              zone={props.zone}
-              editMode={props.editMode}
-              editZone={props.editZone}
-            />
+          <div className={classes.container}>
+            <div className={contentClasses.itemHeading}>
+              <DeleteZoneButton
+                zone={props.zone}
+                editMode={props.editMode}
+                className={contentClasses.leftButton}
+                deleteZone={props.deleteZone}
+              />
+              <ZonePowerSwitch
+                className={contentClasses.leftButton}
+                zone={props.zone}
+                editMode={props.editMode}
+                setZonePower={props.setZonePower}
+                defaultChecked={props.state.power}
+              />
+              <Typography className={contentClasses.itemTitle}>
+                {props.zone.name}
+              </Typography>
+              <EditZoneButton
+                className={contentClasses.rightAccordionButton}
+                zone={props.zone}
+                editMode={props.editMode}
+                editZone={props.editZone}
+              />
+            </div>
+            <div>
+              <Slider
+                disabled={props.state.currentSceneId === undefined}
+                value={props.currentScene ? props.currentScene.brightness : 0}
+                valueLabelDisplay="auto"
+                step={BRIGHTNESS_STEP}
+                min={0}
+                max={MAX_BRIGHTNESS}
+                onChange={(e, newValue) => {
+                  if (Array.isArray(newValue)) {
+                    throw new Error(
+                      'Internal Error: expected number but got number[]'
+                    );
+                  }
+                  props.setZoneBrightness(props.zone.id, newValue);
+                }}
+              />
+            </div>
           </div>
         </AccordionSummary>
-        <AccordionDetails className={classes.detailContainer}>
+        <AccordionDetails className={contentClasses.detailContainer}>
           <ZoneScenesContainer zone={props.zone} editMode={props.editMode} />
         </AccordionDetails>
       </Accordion>
