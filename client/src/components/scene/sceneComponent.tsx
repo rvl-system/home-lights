@@ -20,13 +20,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { ListItem, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { Scene } from '../../common/types';
-import { EditSceneButtonContainer } from '../../containers/editSceneContainerButton';
 import { EditMode } from '../../types';
 import { useContentStyles } from '../lib/pageStyles';
 import {
   DeleteSceneButton,
   DeleteSceneButtonDispatch
 } from './deleteSceneButton';
+import { EditSceneButtonContainer } from './editSceneContainerButton';
 
 export interface SceneComponentProps {
   scene: Scene;

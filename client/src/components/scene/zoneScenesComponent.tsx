@@ -21,8 +21,8 @@ import { Divider, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, FunctionComponent } from 'react';
 import { Light, Scene, Zone, ZoneState } from '../../common/types';
-import { CreateSceneButtonContainer } from '../../containers/createSceneButtonContainer';
 import { EditMode } from '../../types';
+import { CreateSceneButtonContainer } from './createSceneButtonContainer';
 import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
 export interface ZoneScenesComponentProps {

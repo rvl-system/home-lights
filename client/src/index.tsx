@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { render } from 'react-dom';
 import { AppState } from './common/types';
-import { AppContainer } from './containers/appContainer';
+import { AppContainer } from './components/appContainer';
 import { listeners } from './listeners/listeners';
 import { createLightsReducers } from './reducers/lightsReducer';
 import { createPatternsReducers } from './reducers/patternsReducer';

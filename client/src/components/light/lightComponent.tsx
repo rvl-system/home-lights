@@ -26,12 +26,12 @@ import {
   Zone
 } from '../../common/types';
 import { getItem } from '../../common/util';
-import { EditLightButtonContainer } from '../../containers/editLightButtonContainer';
 import { useContentStyles } from '../lib/pageStyles';
 import {
   DeleteLightButton,
   DeleteLightButtonDispatch
 } from './deleteLightButton';
+import { EditLightButtonContainer } from './editLightButtonContainer';
 
 const styles = makeStyles({
   caption: {

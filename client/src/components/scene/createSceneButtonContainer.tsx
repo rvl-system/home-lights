@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { createContainer } from '../../reduxology';
+import { ActionType, SliceName } from '../../types';
 import {
   CreateSceneButton,
   CreateSceneButtonProps,
   CreateSceneButtonDispatch
-} from '../components/scene/createSceneButton';
-import { createContainer } from '../reduxology';
-import { ActionType, SliceName } from '../types';
+} from './createSceneButton';
 
 export interface CreateSceneButtonContainerProps {
   zoneId: number;

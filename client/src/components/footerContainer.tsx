@@ -17,11 +17,26 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { PatternsTab } from '../components/pattern/patternsTab';
 import { createContainer } from '../reduxology';
+import { SliceName, ActionType } from '../types';
+import {
+  FooterComponent,
+  FooterComponentProps,
+  FooterComponentDispatch
+} from './footerComponent';
 
-export const PatternsTabContainer = createContainer(
-  () => ({}),
-  () => ({}),
-  PatternsTab
+export const FooterContainer = createContainer(
+  (getState): FooterComponentProps => {
+    return {
+      activeTab: getState(SliceName.SelectedTab)
+    };
+  },
+  (dispatch): FooterComponentDispatch => {
+    return {
+      selectTab(newTab) {
+        dispatch(ActionType.SelectTab, newTab);
+      }
+    };
+  },
+  FooterComponent
 );

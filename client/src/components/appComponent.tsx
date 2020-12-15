@@ -25,12 +25,12 @@ import {
 } from '@material-ui/core/styles';
 import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent } from 'react';
-import { FooterContainer } from '../containers/footerContainer';
 
-import { LightsTabContainer } from '../containers/lightsTabContainer';
-import { PatternsTabContainer } from '../containers/patternsTabContainer';
-import { ZonesTabContainer } from '../containers/zonesTabContainer';
 import { SelectedTab } from '../types';
+import { FooterContainer } from './footerContainer';
+import { LightsTabContainer } from './light/lightsTabContainer';
+import { PatternsTabContainer } from './pattern/patternsTabContainer';
+import { ZonesTabContainer } from './zone/zonesTabContainer';
 
 export interface AppComponentProps {
   activeTab: SelectedTab;

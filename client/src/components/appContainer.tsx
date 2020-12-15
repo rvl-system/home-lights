@@ -17,32 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Scene } from '../common/types';
-import {
-  EditSceneButton,
-  EditSceneButtonProps,
-  EditSceneButtonDispatch
-} from '../components/scene/editSceneButton';
 import { createContainer } from '../reduxology';
-import { ActionType, SliceName } from '../types';
+import { SliceName } from '../types';
+import { AppComponent, AppComponentProps } from './appComponent';
 
-export interface EditSceneButtonContainerProps {
-  scene: Scene;
-}
-
-export const EditSceneButtonContainer = createContainer(
-  (
-    getState,
-    ownProps: EditSceneButtonContainerProps
-  ): EditSceneButtonProps => ({
-    scene: ownProps.scene,
-    patterns: getState(SliceName.Patterns),
-    lights: getState(SliceName.Lights)
-  }),
-  (dispatch): EditSceneButtonDispatch => ({
-    editScene(scene) {
-      dispatch(ActionType.EditScene, scene);
-    }
-  }),
-  EditSceneButton
+export const AppContainer = createContainer(
+  (getState): AppComponentProps => {
+    return {
+      activeTab: getState(SliceName.SelectedTab)
+    };
+  },
+  () => ({}),
+  AppComponent
 );

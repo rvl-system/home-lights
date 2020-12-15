@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Zone } from '../common/types';
-import { getItem } from '../common/util';
+import { Zone } from '../../common/types';
+import { getItem } from '../../common/util';
+import { createContainer } from '../../reduxology';
+import { SliceName, ActionType, EditMode } from '../../types';
 import {
   ZoneScenesComponent,
   ZoneScenesComponentProps,
   ZoneScenesComponentDispatch
-} from '../components/scene/zoneScenesComponent';
-import { createContainer } from '../reduxology';
-import { SliceName, ActionType, EditMode } from '../types';
+} from './zoneScenesComponent';
 
 export interface ZoneScenesContainerProps {
   zone: Zone;

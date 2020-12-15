@@ -20,8 +20,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Divider, List } from '@material-ui/core';
 import React, { Fragment, FunctionComponent } from 'react';
 import { Light, Zone } from '../../common/types';
-import { CreateLightButtonContainer } from '../../containers/createLightButtonContainer';
 import { useContainerStyles } from '../lib/pageStyles';
+import { CreateLightButtonContainer } from './createLightButtonContainer';
 import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { LightComponent } from './lightComponent';
 

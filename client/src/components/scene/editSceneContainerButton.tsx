@@ -17,22 +17,32 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { Scene } from '../../common/types';
+import { createContainer } from '../../reduxology';
+import { ActionType, SliceName } from '../../types';
 import {
-  CreateLightButton,
-  CreateLightButtonProps,
-  CreateLightButtonDispatch
-} from '../components/light/createLightButton';
-import { createContainer } from '../reduxology';
-import { SliceName, ActionType } from '../types';
+  EditSceneButton,
+  EditSceneButtonProps,
+  EditSceneButtonDispatch
+} from './editSceneButton';
 
-export const CreateLightButtonContainer = createContainer(
-  (getState): CreateLightButtonProps => ({
-    zones: getState(SliceName.Zones)
+export interface EditSceneButtonContainerProps {
+  scene: Scene;
+}
+
+export const EditSceneButtonContainer = createContainer(
+  (
+    getState,
+    ownProps: EditSceneButtonContainerProps
+  ): EditSceneButtonProps => ({
+    scene: ownProps.scene,
+    patterns: getState(SliceName.Patterns),
+    lights: getState(SliceName.Lights)
   }),
-  (dispatch): CreateLightButtonDispatch => ({
-    createRVLLight(name, channel, zoneId) {
-      dispatch(ActionType.CreateRVLLight, { name, channel, zoneId });
+  (dispatch): EditSceneButtonDispatch => ({
+    editScene(scene) {
+      dispatch(ActionType.EditScene, scene);
     }
   }),
-  CreateLightButton
+  EditSceneButton
 );

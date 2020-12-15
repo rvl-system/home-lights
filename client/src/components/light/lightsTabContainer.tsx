@@ -17,28 +17,19 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {
-  EditLightButton,
-  EditLightButtonProps,
-  EditLightButtonDispatch
-} from '../components/light/editLightButton';
-import { createContainer } from '../reduxology';
-import { SliceName, ActionType } from '../types';
+import { createContainer } from '../../reduxology';
+import { SliceName, ActionType } from '../../types';
+import { LightsTab, LightsTabDispatch, LightsTabProps } from './lightsTab';
 
-export type EditLightButtonContainerProps = Omit<EditLightButtonProps, 'zones'>;
-
-export const EditLightButtonContainer = createContainer(
-  (
-    getState,
-    ownProps: EditLightButtonContainerProps
-  ): EditLightButtonProps => ({
-    ...ownProps,
+export const LightsTabContainer = createContainer(
+  (getState): LightsTabProps => ({
+    lights: getState(SliceName.Lights),
     zones: getState(SliceName.Zones)
   }),
-  (dispatch): EditLightButtonDispatch => ({
-    editLight(light) {
-      dispatch(ActionType.EditLight, light);
+  (dispatch): LightsTabDispatch => ({
+    deleteLight(id) {
+      dispatch(ActionType.DeleteLight, id);
     }
   }),
-  EditLightButton
+  LightsTab
 );
