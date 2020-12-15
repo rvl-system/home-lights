@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { SystemState, ZoneState } from './common/types';
+import { SystemState, Zone, ZoneState } from './common/types';
 import { getItem } from './common/util';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
@@ -43,7 +43,9 @@ const systemState: SystemState = {
 
 export async function init(): Promise<void> {
   await initRVL();
-  await initPhilipsHue();
+  if (false) {
+    await initPhilipsHue();
+  }
   await initLIFX();
   const zones = await getZones();
   for (const zone of zones) {
@@ -55,9 +57,7 @@ export async function init(): Promise<void> {
   }
 }
 
-export async function reconcile(): Promise<void> {
-  const zones = await getZones();
-
+export function reconcile(zones: Zone[]): void {
   // Add any new zones to state that were created
   for (const zone of zones) {
     if (

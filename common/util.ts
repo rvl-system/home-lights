@@ -18,11 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getItem<K, T extends Record<string, any>>(
+function lookupItem<K, T extends Record<string, any>>(
   id: K,
   items: T[],
   lookup?: ((item: T) => boolean) | string
-): T {
+): T | undefined {
   if (!lookup) {
     lookup = (item) => item.id === id;
   }
@@ -30,7 +30,25 @@ export function getItem<K, T extends Record<string, any>>(
     const key = lookup;
     lookup = (item) => item[key] === id;
   }
-  const item = items.find(lookup);
+  return items.find(lookup);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function hasItem<K, T extends Record<string, any>>(
+  id: K,
+  items: T[],
+  lookup?: ((item: T) => boolean) | string
+): boolean {
+  return !!lookupItem(id, items, lookup);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getItem<K, T extends Record<string, any>>(
+  id: K,
+  items: T[],
+  lookup?: ((item: T) => boolean) | string
+): T {
+  const item = lookupItem(id, items, lookup);
   if (!item) {
     throw new Error(`Internal Error: could not find item ${id}`);
   }

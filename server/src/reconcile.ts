@@ -17,8 +17,23 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { getLights, reconcile as reconcileLights } from './db/lights';
+import { getPatterns } from './db/patterns';
+import { reconcile as reconcileScenes } from './db/scenes';
+import { getZones } from './db/zones';
 import { reconcile as reconcileDevice } from './device';
 
-export function reconcile(): void {
-  reconcileDevice();
+// Order matters! Switching these will leave us in an inconsistent state
+export async function reconcile(): Promise<void> {
+  // Reconcile lights
+  const zones = getZones();
+  await reconcileLights(zones);
+
+  // Reconcile scenes
+  const patterns = getPatterns();
+  const lights = getLights();
+  await reconcileScenes(zones, patterns, lights);
+
+  // Reconcile device state
+  await reconcileDevice(zones);
 }

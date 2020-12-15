@@ -29,7 +29,7 @@ CREATE TABLE "${ZONES_TABLE_NAME}" (
 
 let zones: Zone[] = [];
 
-export async function init(): Promise<void> {
+export default async function updateCache(): Promise<void> {
   zones = (await dbAll(`SELECT * FROM ${ZONES_TABLE_NAME}`)) as Zone[];
 }
 
@@ -43,7 +43,7 @@ export async function createZone(
   await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) VALUES (?)`, [
     zoneRequest.name
   ]);
-  await init();
+  await updateCache();
 }
 
 export async function editZone(zone: Zone): Promise<void> {
@@ -51,10 +51,10 @@ export async function editZone(zone: Zone): Promise<void> {
     zone.name,
     zone.id
   ]);
-  await init();
+  await updateCache();
 }
 
 export async function deleteZone(id: number): Promise<void> {
   await dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [id]);
-  await init();
+  await updateCache();
 }

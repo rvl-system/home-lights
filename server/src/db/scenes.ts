@@ -18,7 +18,14 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { MAX_BRIGHTNESS } from '../common/config';
-import { CreateSceneRequest, Scene } from '../common/types';
+import {
+  CreateSceneRequest,
+  Light,
+  Pattern,
+  Scene,
+  Zone
+} from '../common/types';
+import { hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 
 export const SCENES_TABLE_NAME = 'scenes';
@@ -35,7 +42,7 @@ CREATE TABLE "${SCENES_TABLE_NAME}" (
 
 let scenes: Scene[] = [];
 
-export async function init(): Promise<void> {
+export default async function updateCache(): Promise<void> {
   const rows = await dbAll(`SELECT * FROM ${SCENES_TABLE_NAME}`);
   scenes = rows.map(
     (row): Scene => ({
@@ -46,6 +53,71 @@ export async function init(): Promise<void> {
       zoneId: row.zone_id
     })
   );
+}
+
+export async function reconcile(
+  zones: Zone[],
+  patterns: Pattern[],
+  lights: Light[]
+): Promise<void> {
+  let changesMade = false;
+  const scenes = getScenes();
+
+  // Check if the zone a scene is in was deleted, and delete it if so
+  for (let i = scenes.length - 1; i >= 0; i--) {
+    const scene = scenes[i];
+    if (!hasItem(scene.zoneId, zones)) {
+      await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [scene.id]);
+      scenes.splice(i, 1);
+      changesMade = true;
+    }
+  }
+
+  // Next, check if any lights were added or deleted, or if patterns were deleted
+  for (const scene of scenes) {
+    let sceneUpdated = false;
+    const lightEntries = scene.lights;
+    for (let i = lightEntries.length - 1; i >= 0; i--) {
+      const lightEntry = lightEntries[i];
+      if (!hasItem(lightEntry.lightId, lights)) {
+        // If the light no longer exists, delete it
+        lightEntries.splice(i, 1);
+      } else if (!hasItem(lightEntry.patternId, patterns)) {
+        // If the pattern for the light no longer exists, unassign it
+        lightEntry.patternId = undefined;
+        sceneUpdated = true;
+      }
+    }
+
+    // Check if there were any lights added to the zone for this scene
+    for (const light of lights) {
+      if (
+        scene.zoneId === light.zoneId &&
+        !hasItem(light.id, scene.lights, 'lightId')
+      ) {
+        scene.lights.push({
+          lightId: light.id,
+          brightness: MAX_BRIGHTNESS
+        });
+        sceneUpdated = true;
+      }
+    }
+
+    // If the lights were updated, save the changes to the database
+    if (sceneUpdated) {
+      await dbRun(`UPDATE ${SCENES_TABLE_NAME} SET lights = ? WHERE id = ?`, [
+        JSON.stringify(scene.lights),
+        scene.id
+      ]);
+      changesMade = true;
+    }
+  }
+
+  // Update the cache if changes were made
+  if (changesMade) {
+    await updateCache();
+  }
+  console.log(zones, patterns, lights);
 }
 
 export function getScenes(): Scene[] {
@@ -63,7 +135,7 @@ export async function createScene(
       JSON.stringify(sceneRequest.lights)
     ]
   );
-  await init();
+  await updateCache();
 }
 
 export async function editScene(scene: Scene): Promise<void> {
@@ -71,12 +143,12 @@ export async function editScene(scene: Scene): Promise<void> {
     `UPDATE ${SCENES_TABLE_NAME} SET name = ?, lights = ? WHERE id = ?`,
     [scene.name, JSON.stringify(scene.lights), scene.id]
   );
-  await init();
+  await updateCache();
 }
 
 export async function deleteScene(id: number): Promise<void> {
   await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [id]);
-  await init();
+  await updateCache();
 }
 
 export async function setSceneBrightness(
@@ -87,5 +159,5 @@ export async function setSceneBrightness(
     brightness,
     id
   ]);
-  await init();
+  await updateCache();
 }

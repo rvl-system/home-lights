@@ -19,28 +19,19 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
-import {
-  LIGHTS_SCHEMA,
-  LIGHTS_TABLE_NAME,
-  init as initLights
-} from './db/lights';
-import {
+import initLights, { LIGHTS_SCHEMA, LIGHTS_TABLE_NAME } from './db/lights';
+import initPatterns, {
   PATTERNS_SCHEMA,
   PATTERNS_TABLE_NAME,
   COLORS_SCHEMA,
-  COLORS_TABLE_NAME,
-  init as initPatterns
+  COLORS_TABLE_NAME
 } from './db/patterns';
 import {
   PHILIPS_HUE_INFO_SCHEMA,
   PHILIPS_HUE_TABLE_NAME
 } from './db/philipsHue';
-import {
-  SCENES_SCHEMA,
-  SCENES_TABLE_NAME,
-  init as initScenes
-} from './db/scenes';
-import { ZONES_SCHEMA, ZONES_TABLE_NAME, init as initZones } from './db/zones';
+import initScenes, { SCENES_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
+import initZones, { ZONES_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
 import { init as initDB, dbRun, dbAll } from './sqlite';
 import { getEnvironmentVariable } from './util';
 
