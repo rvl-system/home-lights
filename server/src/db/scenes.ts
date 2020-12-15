@@ -25,7 +25,7 @@ import {
   Scene,
   Zone
 } from '../common/types';
-import { hasItem } from '../common/util';
+import { getItem, hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 
 export const SCENES_TABLE_NAME = 'scenes';
@@ -79,8 +79,11 @@ export async function reconcile(
     const lightEntries = scene.lights;
     for (let i = lightEntries.length - 1; i >= 0; i--) {
       const lightEntry = lightEntries[i];
-      if (!hasItem(lightEntry.lightId, lights)) {
-        // If the light no longer exists, delete it
+      if (
+        !hasItem(lightEntry.lightId, lights) ||
+        getItem(lightEntry.lightId, lights).zoneId !== scene.zoneId
+      ) {
+        // If the light no longer exists or was moved to a different zone, delete it
         lightEntries.splice(i, 1);
       } else if (!hasItem(lightEntry.patternId, patterns)) {
         // If the pattern for the light no longer exists, unassign it
