@@ -33,6 +33,16 @@ function lookupItem<K, T extends Record<string, any>>(
   return items.find(lookup);
 }
 
+/**
+ * Checks whether or not an item an item exists in the array that matches the
+ * supplied item ID.
+ *
+ * @param id The ID of the item to search for
+ * @param items The list of items to search
+ * @param lookup Either the name of the ID property on each item in the list to
+ *   test against, or a test function that receives the item and returns whether
+ *   or not it matches. Default is "id"
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function hasItem<K, T extends Record<string, any>>(
   id: K,
@@ -42,6 +52,16 @@ export function hasItem<K, T extends Record<string, any>>(
   return !!lookupItem(id, items, lookup);
 }
 
+/**
+ * Retrieves an item from array that matches the supplied item ID, or throws an
+ * error if it's not found.
+ *
+ * @param id The ID of the item to search for
+ * @param items The list of items to search
+ * @param lookup Either the name of the ID property on each item in the list to
+ *   test against, or a test function that receives the item and returns whether
+ *   or not it matches. Default is "id"
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getItem<K, T extends Record<string, any>>(
   id: K,
@@ -53,4 +73,32 @@ export function getItem<K, T extends Record<string, any>>(
     throw new Error(`Internal Error: could not find item ${id}`);
   }
   return item;
+}
+
+type Value = unknown[] | Record<string, unknown> | Primitive;
+type Primitive = string | number | boolean | null | undefined;
+
+/**
+ * Iterates over nested objects/arrays and allows primitives to be mapped from
+ * one value to another.
+ */
+export function deepMap(
+  value: Value,
+  cb: (value: Primitive) => Primitive
+): Value {
+  if (Array.isArray(value)) {
+    const newValue = [];
+    for (let i = 0; i < value.length; i++) {
+      newValue[i] = deepMap(value[i] as Value, cb);
+    }
+    return newValue;
+  } else if (typeof value === 'object') {
+    const newValue: Record<string, unknown> = {};
+    for (const prop in value) {
+      newValue[prop] = deepMap(value[prop] as Value, cb);
+    }
+    return newValue;
+  } else {
+    return cb(value);
+  }
 }

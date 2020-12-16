@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { verbose, Database } from 'sqlite3';
+import { deepMap } from './common/util';
 import { createInternalError } from './util';
 
 let db: Database;
@@ -62,6 +63,7 @@ export async function dbRun(
 export async function dbAll(
   query: string,
   parameters: string[] = []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<Array<Record<string, any>>> {
   if (!db) {
     throw createInternalError('dbAll called before database initialized');
@@ -71,28 +73,8 @@ export async function dbAll(
       if (err) {
         reject(err);
       } else {
+        deepMap(results, (value) => (value === null ? undefined : value));
         resolve(results);
-      }
-    });
-  });
-}
-
-/**
- * Used to SELECT the first row out of the database
- */
-export async function dbGet(
-  query: string,
-  parameters: string[] = []
-): Promise<Record<string, any>> {
-  if (!db) {
-    throw createInternalError('dbGet called before database initialized');
-  }
-  return new Promise((resolve, reject) => {
-    db.get(query, parameters, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
       }
     });
   });
