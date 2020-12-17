@@ -29,7 +29,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { Color } from '../../types';
 
 export const useStyles = makeStyles((theme) => ({
@@ -95,6 +95,7 @@ interface TextSchema {
   description: string;
   defaultValue?: string;
   inputPlaceholder?: string;
+  takenValues?: string[];
 }
 
 interface SelectSchema {
@@ -105,6 +106,7 @@ interface SelectSchema {
   options: {
     value: string;
     label: string;
+    disabled?: boolean;
   }[];
 }
 
@@ -155,6 +157,19 @@ export function FormInput<
     return null;
   }
 
+  type ErrorStates = Record<string, { error: boolean; errorReason?: string }>;
+  const [textErrorStates, setTextErrorStates] = useState<ErrorStates>(
+    (() => {
+      const initialStates: ErrorStates = {};
+      for (const entry of props.schema) {
+        if (entry.type === FormSchemaType.Text) {
+          initialStates[entry.name] = { error: false };
+        }
+      }
+      return initialStates;
+    })()
+  );
+
   const classes = useStyles();
 
   const inputs: JSX.Element[] = [];
@@ -188,7 +203,11 @@ export function FormInput<
               }}
             >
               {entry.options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
+                <MenuItem
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}
+                >
                   {option.label}
                 </MenuItem>
               ))}
@@ -199,9 +218,15 @@ export function FormInput<
         break;
       }
       case FormSchemaType.Text: {
+        const { error, errorReason } = textErrorStates[entry.name];
         inputs.push(
           <div key={i} className={classes.row}>
-            {entry.description && <InputLabel>{entry.description}</InputLabel>}
+            {entry.description && (
+              <InputLabel error={error}>
+                {entry.description}
+                {error ? `: ${errorReason}` : ''}
+              </InputLabel>
+            )}
             <TextField
               autoFocus
               margin="dense"
@@ -209,11 +234,32 @@ export function FormInput<
               placeholder={entry.inputPlaceholder}
               fullWidth
               defaultValue={entry.defaultValue}
+              error={error}
               onChange={(e) => {
-                setValues({
-                  ...values,
-                  [entry.name]: e.currentTarget.value
-                });
+                const newValue = e.currentTarget.value;
+                if (!newValue) {
+                  textErrorStates[entry.name] = {
+                    error: true,
+                    errorReason: 'A value is required'
+                  };
+                } else if (
+                  entry.takenValues &&
+                  entry.takenValues.includes(newValue)
+                ) {
+                  textErrorStates[entry.name] = {
+                    error: true,
+                    errorReason: `"${newValue}" has already been taken`
+                  };
+                } else {
+                  textErrorStates[entry.name] = {
+                    error: false
+                  };
+                  setValues({
+                    ...values,
+                    [entry.name]: newValue
+                  });
+                }
+                setTextErrorStates(textErrorStates);
               }}
             />
           </div>
