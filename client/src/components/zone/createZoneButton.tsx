@@ -31,13 +31,17 @@ const useStyles = makeStyles({
   }
 });
 
+export interface CreateZoneButtonProps {
+  otherZoneNames: string[];
+}
+
 export interface CreateZoneButtonDispatch {
   createZone: (name: string) => void;
 }
 
-export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
-  props
-) => {
+export const CreateZoneButton: FunctionComponent<
+  CreateZoneButtonProps & CreateZoneButtonDispatch
+> = (props) => {
   const [openDialog, setOpenDialog] = React.useState(false);
 
   function handleClose() {
@@ -68,7 +72,8 @@ export const CreateZoneButton: FunctionComponent<CreateZoneButtonDispatch> = (
             type: FormSchemaType.Text,
             name: 'name',
             description: 'Descriptive name for the room or area',
-            inputPlaceholder: 'e.g. Kitchen'
+            inputPlaceholder: 'e.g. Kitchen',
+            takenValues: props.otherZoneNames
           }
         ]}
       />

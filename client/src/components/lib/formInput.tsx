@@ -223,12 +223,7 @@ export function FormInput<
         hasError = hasError || error;
         inputs.push(
           <div key={i} className={classes.row}>
-            {entry.description && (
-              <InputLabel error={error}>
-                {entry.description}
-                {error ? ` (${errorReason})` : ''}
-              </InputLabel>
-            )}
+            {entry.description && <InputLabel>{entry.description}</InputLabel>}
             <TextField
               autoFocus
               margin="dense"
@@ -264,6 +259,7 @@ export function FormInput<
                 setTextErrorStates(textErrorStates);
               }}
             />
+            {error && <InputLabel error={error}>{errorReason}</InputLabel>}
           </div>
         );
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];

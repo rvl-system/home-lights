@@ -17,27 +17,22 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import debounce from 'debounce';
 import { createContainer } from '../../reduxology';
 import { SliceName, ActionType } from '../../types';
-import { ZonesTab, ZonesTabProps, ZonesTabDispatch } from './zonesTab';
+import {
+  CreateZoneButton,
+  CreateZoneButtonProps,
+  CreateZoneButtonDispatch
+} from './createZoneButton';
 
-export const ZonesTabContainer = createContainer(
-  (getState): ZonesTabProps => ({
-    zones: getState(SliceName.Zones),
-    state: getState(SliceName.State),
-    scenes: getState(SliceName.Scenes)
+export const CreateZoneButtonContainer = createContainer(
+  (getState): CreateZoneButtonProps => ({
+    otherZoneNames: getState(SliceName.Zones).map((zone) => zone.name)
   }),
-  (dispatch): ZonesTabDispatch => ({
-    deleteZone(id) {
-      dispatch(ActionType.DeleteZone, id);
-    },
-    setZonePower(zoneId, power) {
-      dispatch(ActionType.SetZonePower, { zoneId, power });
-    },
-    setZoneBrightness: debounce((zoneId, brightness) => {
-      dispatch(ActionType.SetZoneBrightness, { zoneId, brightness });
-    }, 33)
+  (dispatch): CreateZoneButtonDispatch => ({
+    createZone(name) {
+      dispatch(ActionType.CreateZone, name);
+    }
   }),
-  ZonesTab
+  CreateZoneButton
 );
