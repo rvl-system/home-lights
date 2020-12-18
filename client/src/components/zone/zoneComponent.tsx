@@ -33,7 +33,7 @@ import { EditMode } from '../../types';
 import { useContentStyles } from '../lib/pageStyles';
 import { ZoneScenesContainer } from '../scene/zoneScenesContainer';
 import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
-import { EditZoneButton, EditZoneButtonDispatch } from './editZoneButton';
+import { EditZoneButtonContainer } from './editZoneButtonContainer';
 import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 
 const useStyles = makeStyles({
@@ -49,8 +49,7 @@ export interface ZoneComponentProps {
   currentScene?: Scene;
 }
 
-export type ZoneComponentDispatch = EditZoneButtonDispatch &
-  DeleteZoneButtonDispatch &
+export type ZoneComponentDispatch = DeleteZoneButtonDispatch &
   ZonePowerSwitchDispatch & {
     setZoneBrightness: (zoneId: number, brightness: number) => void;
   };
@@ -82,11 +81,10 @@ export const ZoneComponent: FunctionComponent<
               <Typography className={contentClasses.itemTitle}>
                 {props.zone.name}
               </Typography>
-              <EditZoneButton
+              <EditZoneButtonContainer
                 className={contentClasses.rightAccordionButton}
                 zone={props.zone}
                 editMode={props.editMode}
-                editZone={props.editZone}
               />
             </div>
             <div>

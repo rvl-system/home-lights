@@ -17,30 +17,30 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import debounce from 'debounce';
 import { createContainer } from '../../reduxology';
 import { SliceName, ActionType } from '../../types';
-import { ZonesTab, ZonesTabProps, ZonesTabDispatch } from './zonesTab';
+import {
+  EditZoneButton,
+  EditZoneButtonProps,
+  EditZoneButtonDispatch
+} from './editZoneButton';
 
-export const ZonesTabContainer = createContainer(
-  (getState): ZonesTabProps => ({
-    zones: getState(SliceName.Zones),
-    state: getState(SliceName.State),
-    scenes: getState(SliceName.Scenes)
+export type EditZoneButtonContainerProps = Omit<
+  EditZoneButtonProps,
+  'zoneNames'
+>;
+
+export const EditZoneButtonContainer = createContainer(
+  (getState, ownProps: EditZoneButtonContainerProps): EditZoneButtonProps => ({
+    ...ownProps,
+    otherZoneNames: getState(SliceName.Zones)
+      .map((zone) => zone.name)
+      .filter((zoneName) => zoneName !== ownProps.zone.name)
   }),
-  (dispatch): ZonesTabDispatch => ({
-    createZone(name) {
-      dispatch(ActionType.CreateZone, name);
-    },
-    deleteZone(id) {
-      dispatch(ActionType.DeleteZone, id);
-    },
-    setZonePower(zoneId, power) {
-      dispatch(ActionType.SetZonePower, { zoneId, power });
-    },
-    setZoneBrightness: debounce((zoneId, brightness) => {
-      dispatch(ActionType.SetZoneBrightness, { zoneId, brightness });
-    }, 33)
+  (dispatch): EditZoneButtonDispatch => ({
+    editZone(zone) {
+      dispatch(ActionType.EditZone, zone);
+    }
   }),
-  ZonesTab
+  EditZoneButton
 );

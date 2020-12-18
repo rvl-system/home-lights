@@ -174,6 +174,7 @@ export function FormInput<
 
   const inputs: JSX.Element[] = [];
   const defaultValues: T = {} as T;
+  let hasError = false;
   for (let i = 0; i < props.schema.length; i++) {
     const entry = props.schema[i];
     switch (entry.type) {
@@ -219,12 +220,13 @@ export function FormInput<
       }
       case FormSchemaType.Text: {
         const { error, errorReason } = textErrorStates[entry.name];
+        hasError = hasError || error;
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && (
               <InputLabel error={error}>
                 {entry.description}
-                {error ? `: ${errorReason}` : ''}
+                {error ? ` (${errorReason})` : ''}
               </InputLabel>
             )}
             <TextField
@@ -254,11 +256,11 @@ export function FormInput<
                   textErrorStates[entry.name] = {
                     error: false
                   };
-                  setValues({
-                    ...values,
-                    [entry.name]: newValue
-                  });
                 }
+                setValues({
+                  ...values,
+                  [entry.name]: newValue
+                });
                 setTextErrorStates(textErrorStates);
               }}
             />
@@ -322,6 +324,7 @@ export function FormInput<
         <Button
           variant="contained"
           color={props.confirmColor || 'primary'}
+          disabled={hasError}
           onClick={() => {
             props.onConfirm(values);
           }}

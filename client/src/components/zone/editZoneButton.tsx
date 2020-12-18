@@ -26,6 +26,7 @@ import { FormInput, FormSchemaType } from '../lib/formInput';
 
 export interface EditZoneButtonProps {
   zone: Zone;
+  otherZoneNames: string[];
   editMode: EditMode;
   className: string;
 }
@@ -77,7 +78,8 @@ export const EditZoneButton: FunctionComponent<
             name: 'name',
             description: 'Name',
             inputPlaceholder: 'e.g. Kitchen',
-            defaultValue: props.zone.name
+            defaultValue: props.zone.name,
+            takenValues: props.otherZoneNames
           }
         ]}
       />

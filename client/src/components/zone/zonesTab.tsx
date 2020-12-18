@@ -35,7 +35,6 @@ export interface ZonesTabProps {
 
 export interface ZonesTabDispatch {
   createZone: (name: string) => void;
-  editZone: (zone: Zone) => void;
   deleteZone: (id: number) => void;
   setZonePower: (id: number, powerState: boolean) => void;
   setZoneBrightness: (id: number, brightness: number) => void;
@@ -85,7 +84,6 @@ export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
                 zone={zone}
                 state={state}
                 editMode={editMode}
-                editZone={props.editZone}
                 deleteZone={props.deleteZone}
                 setZonePower={props.setZonePower}
                 setZoneBrightness={props.setZoneBrightness}
