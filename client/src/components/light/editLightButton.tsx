@@ -38,6 +38,7 @@ export interface EditLightButtonProps {
   className: string;
   canChangeName: boolean;
   zones: Zone[];
+  otherLightNames: string[];
 }
 
 export interface EditLightButtonDispatch {
@@ -92,7 +93,8 @@ export const EditLightButton: FunctionComponent<
       name: 'name',
       description: 'Name',
       inputPlaceholder: 'e.g. Left bedside lamp',
-      defaultValue: props.light.name
+      defaultValue: props.light.name,
+      takenValues: props.otherLightNames
     });
   }
   spec.push({

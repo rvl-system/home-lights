@@ -37,6 +37,7 @@ const useStyles = makeStyles({
 
 export interface CreateLightButtonProps {
   zones: Zone[];
+  otherLightNames: string[];
 }
 
 export interface CreateLightButtonDispatch {
@@ -83,7 +84,8 @@ export const CreateLightButton: FunctionComponent<
             type: FormSchemaType.Text,
             name: 'name',
             description: 'Descriptive name for the light',
-            inputPlaceholder: 'e.g. Left bedside lamp'
+            inputPlaceholder: 'e.g. Left bedside lamp',
+            takenValues: props.otherLightNames
           },
           {
             type: FormSchemaType.Select,

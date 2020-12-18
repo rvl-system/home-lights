@@ -33,7 +33,10 @@ export const EditLightButtonContainer = createContainer(
     ownProps: EditLightButtonContainerProps
   ): EditLightButtonProps => ({
     ...ownProps,
-    zones: getState(SliceName.Zones)
+    zones: getState(SliceName.Zones),
+    otherLightNames: getState(SliceName.Lights)
+      .map((light) => light.name)
+      .filter((lightName) => lightName !== ownProps.light.name)
   }),
   (dispatch): EditLightButtonDispatch => ({
     editLight(light) {
