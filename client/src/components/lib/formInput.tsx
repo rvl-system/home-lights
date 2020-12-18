@@ -157,13 +157,20 @@ export function FormInput<
     return null;
   }
 
-  type ErrorStates = Record<string, { error: boolean; errorReason?: string }>;
+  type ErrorStates = Record<
+    string,
+    { error: boolean; showError: boolean; errorReason?: string }
+  >;
   const [textErrorStates, setTextErrorStates] = useState<ErrorStates>(
     (() => {
       const initialStates: ErrorStates = {};
       for (const entry of props.schema) {
         if (entry.type === FormSchemaType.Text) {
-          initialStates[entry.name] = { error: false };
+          initialStates[entry.name] = {
+            error: !entry.defaultValue,
+            showError: false,
+            errorReason: 'A value is required'
+          };
         }
       }
       return initialStates;
@@ -219,7 +226,7 @@ export function FormInput<
         break;
       }
       case FormSchemaType.Text: {
-        const { error, errorReason } = textErrorStates[entry.name];
+        const { error, showError, errorReason } = textErrorStates[entry.name];
         hasError = hasError || error;
         inputs.push(
           <div key={i} className={classes.row}>
@@ -231,12 +238,13 @@ export function FormInput<
               placeholder={entry.inputPlaceholder}
               fullWidth
               defaultValue={entry.defaultValue}
-              error={error}
+              error={showError}
               onChange={(e) => {
                 const newValue = e.currentTarget.value;
                 if (!newValue) {
                   textErrorStates[entry.name] = {
                     error: true,
+                    showError: true,
                     errorReason: 'A value is required'
                   };
                 } else if (
@@ -245,11 +253,13 @@ export function FormInput<
                 ) {
                   textErrorStates[entry.name] = {
                     error: true,
+                    showError: true,
                     errorReason: `"${newValue}" has already been taken`
                   };
                 } else {
                   textErrorStates[entry.name] = {
-                    error: false
+                    error: false,
+                    showError: false
                   };
                 }
                 setValues({
@@ -259,7 +269,7 @@ export function FormInput<
                 setTextErrorStates(textErrorStates);
               }}
             />
-            {error && <InputLabel error={error}>{errorReason}</InputLabel>}
+            {showError && <InputLabel error={error}>{errorReason}</InputLabel>}
           </div>
         );
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
