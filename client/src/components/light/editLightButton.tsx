@@ -39,6 +39,7 @@ export interface EditLightButtonProps {
   canChangeName: boolean;
   zones: Zone[];
   otherLightNames: string[];
+  otherRVLChannels: number[];
 }
 
 export interface EditLightButtonDispatch {
@@ -119,7 +120,8 @@ export const EditLightButton: FunctionComponent<
       description: 'Channel',
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
         value: i.toString(),
-        label: i.toString()
+        label: i.toString(),
+        disabled: props.otherRVLChannels.includes(i)
       })),
       defaultValue: (props.light as RVLLight).channel.toString()
     });

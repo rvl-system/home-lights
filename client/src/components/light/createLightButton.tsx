@@ -38,6 +38,7 @@ const useStyles = makeStyles({
 export interface CreateLightButtonProps {
   zones: Zone[];
   otherLightNames: string[];
+  otherRVLChannels: number[];
 }
 
 export interface CreateLightButtonDispatch {
@@ -106,10 +107,24 @@ export const CreateLightButton: FunctionComponent<
             options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
               (key, i) => ({
                 value: i.toString(),
-                label: i.toString()
+                label: i.toString(),
+                disabled: props.otherRVLChannels.includes(i)
               })
             ),
-            defaultValue: '0'
+            defaultValue: (() => {
+              let defaultValue = 0;
+              while (
+                defaultValue < NUM_RVL_CHANNELS &&
+                props.otherRVLChannels.includes(defaultValue)
+              ) {
+                defaultValue++;
+              }
+              if (defaultValue === NUM_RVL_CHANNELS) {
+                // TODO: show error in UI
+                throw new Error('No available RVL channels');
+              }
+              return defaultValue.toString();
+            })()
           }
         ]}
       />
