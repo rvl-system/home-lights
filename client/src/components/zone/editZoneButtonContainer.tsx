@@ -33,7 +33,7 @@ export type EditZoneButtonContainerProps = Omit<
 export const EditZoneButtonContainer = createContainer(
   (getState, ownProps: EditZoneButtonContainerProps): EditZoneButtonProps => ({
     ...ownProps,
-    otherZoneNames: getState(SliceName.Zones)
+    unavailableZoneNames: getState(SliceName.Zones)
       .map((zone) => zone.name)
       .filter((zoneName) => zoneName !== ownProps.zone.name)
   }),

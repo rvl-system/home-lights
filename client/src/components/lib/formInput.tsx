@@ -95,7 +95,7 @@ interface TextSchema {
   description: string;
   defaultValue?: string;
   inputPlaceholder?: string;
-  takenValues?: string[];
+  unavailableValues?: string[];
 }
 
 interface SelectSchema {
@@ -248,8 +248,8 @@ export function FormInput<
                     errorReason: 'A value is required'
                   };
                 } else if (
-                  entry.takenValues &&
-                  entry.takenValues.includes(newValue)
+                  entry.unavailableValues &&
+                  entry.unavailableValues.includes(newValue)
                 ) {
                   textErrorStates[entry.name] = {
                     error: true,

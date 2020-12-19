@@ -29,8 +29,10 @@ import {
 export const CreateLightButtonContainer = createContainer(
   (getState): CreateLightButtonProps => ({
     zones: getState(SliceName.Zones),
-    otherLightNames: getState(SliceName.Lights).map((light) => light.name),
-    otherRVLChannels: getState(SliceName.Lights)
+    unavailableLightNames: getState(SliceName.Lights).map(
+      (light) => light.name
+    ),
+    unavailableRVLChannels: getState(SliceName.Lights)
       .filter((light) => light.type === LightType.RVL)
       .map((light) => (light as RVLLight).channel)
   }),

@@ -35,10 +35,10 @@ export const EditLightButtonContainer = createContainer(
   ): EditLightButtonProps => ({
     ...ownProps,
     zones: getState(SliceName.Zones),
-    otherLightNames: getState(SliceName.Lights)
+    unavailableLightNames: getState(SliceName.Lights)
       .map((light) => light.name)
       .filter((lightName) => lightName !== ownProps.light.name),
-    otherRVLChannels: getState(SliceName.Lights)
+    unavailableRVLChannels: getState(SliceName.Lights)
       .filter(
         (light) =>
           light.type === LightType.RVL && light.id !== ownProps.light.id

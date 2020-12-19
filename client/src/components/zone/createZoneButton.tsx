@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 export interface CreateZoneButtonProps {
-  otherZoneNames: string[];
+  unavailableZoneNames: string[];
 }
 
 export interface CreateZoneButtonDispatch {
@@ -73,7 +73,7 @@ export const CreateZoneButton: FunctionComponent<
             name: 'name',
             description: 'Descriptive name for the room or area',
             inputPlaceholder: 'e.g. Kitchen',
-            takenValues: props.otherZoneNames
+            unavailableValues: props.unavailableZoneNames
           }
         ]}
       />

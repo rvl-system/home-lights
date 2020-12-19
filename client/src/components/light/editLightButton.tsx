@@ -38,8 +38,8 @@ export interface EditLightButtonProps {
   className: string;
   canChangeName: boolean;
   zones: Zone[];
-  otherLightNames: string[];
-  otherRVLChannels: number[];
+  unavailableLightNames: string[];
+  unavailableRVLChannels: number[];
 }
 
 export interface EditLightButtonDispatch {
@@ -95,7 +95,7 @@ export const EditLightButton: FunctionComponent<
       description: 'Name',
       inputPlaceholder: 'e.g. Left bedside lamp',
       defaultValue: props.light.name,
-      takenValues: props.otherLightNames
+      unavailableValues: props.unavailableLightNames
     });
   }
   spec.push({
@@ -121,7 +121,7 @@ export const EditLightButton: FunctionComponent<
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
         value: i.toString(),
         label: i.toString(),
-        disabled: props.otherRVLChannels.includes(i)
+        disabled: props.unavailableRVLChannels.includes(i)
       })),
       defaultValue: (props.light as RVLLight).channel.toString()
     });

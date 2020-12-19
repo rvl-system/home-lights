@@ -38,7 +38,7 @@ export const EditSceneButtonContainer = createContainer(
     scene: ownProps.scene,
     patterns: getState(SliceName.Patterns),
     lights: getState(SliceName.Lights),
-    otherSceneNames: getState(SliceName.Scenes)
+    unavailableSceneNames: getState(SliceName.Scenes)
       .filter(
         (scene) =>
           scene.zoneId === ownProps.scene.zoneId &&

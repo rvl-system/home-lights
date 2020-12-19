@@ -41,7 +41,7 @@ export interface CreateSceneButtonProps {
   zoneId: number;
   patterns: Pattern[];
   lights: Light[];
-  otherSceneNames: string[];
+  unavailableSceneNames: string[];
 }
 
 export interface CreateSceneButtonDispatch {
@@ -90,7 +90,7 @@ export const CreateSceneButton: FunctionComponent<
       name: 'name',
       description: 'Scene name',
       inputPlaceholder: 'e.g. Party Mode',
-      takenValues: props.otherSceneNames
+      unavailableValues: props.unavailableSceneNames
     }
   ];
   for (const light of props.lights) {

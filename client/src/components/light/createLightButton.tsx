@@ -37,8 +37,8 @@ const useStyles = makeStyles({
 
 export interface CreateLightButtonProps {
   zones: Zone[];
-  otherLightNames: string[];
-  otherRVLChannels: number[];
+  unavailableLightNames: string[];
+  unavailableRVLChannels: number[];
 }
 
 export interface CreateLightButtonDispatch {
@@ -86,7 +86,7 @@ export const CreateLightButton: FunctionComponent<
             name: 'name',
             description: 'Descriptive name for the light',
             inputPlaceholder: 'e.g. Left bedside lamp',
-            takenValues: props.otherLightNames
+            unavailableValues: props.unavailableLightNames
           },
           {
             type: FormSchemaType.Select,
@@ -108,14 +108,14 @@ export const CreateLightButton: FunctionComponent<
               (key, i) => ({
                 value: i.toString(),
                 label: i.toString(),
-                disabled: props.otherRVLChannels.includes(i)
+                disabled: props.unavailableRVLChannels.includes(i)
               })
             ),
             defaultValue: (() => {
               let defaultValue = 0;
               while (
                 defaultValue < NUM_RVL_CHANNELS &&
-                props.otherRVLChannels.includes(defaultValue)
+                props.unavailableRVLChannels.includes(defaultValue)
               ) {
                 defaultValue++;
               }

@@ -27,7 +27,7 @@ import {
 
 export const CreateZoneButtonContainer = createContainer(
   (getState): CreateZoneButtonProps => ({
-    otherZoneNames: getState(SliceName.Zones).map((zone) => zone.name)
+    unavailableZoneNames: getState(SliceName.Zones).map((zone) => zone.name)
   }),
   (dispatch): CreateZoneButtonDispatch => ({
     createZone(name) {

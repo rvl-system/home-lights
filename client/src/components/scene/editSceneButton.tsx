@@ -29,7 +29,7 @@ export interface EditSceneButtonProps {
   scene: Scene;
   patterns: Pattern[];
   lights: Light[];
-  otherSceneNames: string[];
+  unavailableSceneNames: string[];
 }
 
 export interface EditSceneButtonDispatch {
@@ -83,7 +83,7 @@ export const EditSceneButton: FunctionComponent<
       description: 'Scene name',
       inputPlaceholder: 'e.g. Chill',
       defaultValue: props.scene.name,
-      takenValues: props.otherSceneNames
+      unavailableValues: props.unavailableSceneNames
     }
   ];
   for (const lightEntry of props.scene.lights) {
