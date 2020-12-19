@@ -35,7 +35,7 @@ export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | undefined> {
   const rows = await dbAll(`SELECT * FROM ${PHILIPS_HUE_TABLE_NAME}`);
   switch (rows.length) {
     case 0:
-      return undefined;
+      return;
     case 1:
       return rows[0] as PhilipsHueInfo;
     default:

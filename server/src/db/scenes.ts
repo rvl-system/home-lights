@@ -120,7 +120,6 @@ export async function reconcile(
   if (changesMade) {
     await updateCache();
   }
-  console.log(zones, patterns, lights);
 }
 
 export function getScenes(): Scene[] {
