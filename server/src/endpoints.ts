@@ -42,7 +42,7 @@ export function init(): Promise<void> {
     initLights(app);
     initState(app);
 
-    app.listen(port, (err, address) => {
+    app.listen(port, '0.0.0.0', (err, address) => {
       if (err) {
         app.log.error(err);
         process.exit(1);
