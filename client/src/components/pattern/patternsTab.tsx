@@ -17,9 +17,39 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Typography } from '@material-ui/core';
-import React, { FunctionComponent } from 'react';
+import { Divider, List } from '@material-ui/core';
+import React, { Fragment, FunctionComponent } from 'react';
+import { Pattern } from '../../common/types';
+import { useContainerStyles } from '../lib/pageStyles';
+import { PatternComponent } from './patternComponent';
 
-export const PatternsTab: FunctionComponent<null> = () => {
-  return <Typography>Patterns</Typography>;
+export interface PatternsTabProps {
+  patterns: Pattern[];
+}
+
+export const PatternsTab: FunctionComponent<PatternsTabProps> = (props) => {
+  const classes = useContainerStyles();
+  return (
+    <div className={classes.container}>
+      <div className={classes.altHeader}>
+        <CreatePatternButtonContainer />
+      </div>
+      <div className={classes.content}>
+        <div className={classes.innerContent}>
+          <List>
+            {props.patterns.map((pattern) => (
+              <Fragment key={pattern.id}>
+                <Divider />
+                <PatternComponent
+                  key={pattern.id}
+                  light={pattern}
+                  deletePattern={props.deletePattern}
+                />
+              </Fragment>
+            ))}
+            <Divider />
+          </List>
+        </div>
+      </div>
+    </div>
 };
