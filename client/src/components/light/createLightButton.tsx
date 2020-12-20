@@ -37,6 +37,8 @@ const useStyles = makeStyles({
 
 export interface CreateLightButtonProps {
   zones: Zone[];
+  unavailableLightNames: string[];
+  unavailableRVLChannels: number[];
 }
 
 export interface CreateLightButtonDispatch {
@@ -83,7 +85,8 @@ export const CreateLightButton: FunctionComponent<
             type: FormSchemaType.Text,
             name: 'name',
             description: 'Descriptive name for the light',
-            inputPlaceholder: 'e.g. Left bedside lamp'
+            inputPlaceholder: 'e.g. Left bedside lamp',
+            unavailableValues: props.unavailableLightNames
           },
           {
             type: FormSchemaType.Select,
@@ -104,10 +107,24 @@ export const CreateLightButton: FunctionComponent<
             options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
               (key, i) => ({
                 value: i.toString(),
-                label: i.toString()
+                label: i.toString(),
+                disabled: props.unavailableRVLChannels.includes(i)
               })
             ),
-            defaultValue: '0'
+            defaultValue: (() => {
+              let defaultValue = 0;
+              while (
+                defaultValue < NUM_RVL_CHANNELS &&
+                props.unavailableRVLChannels.includes(defaultValue)
+              ) {
+                defaultValue++;
+              }
+              if (defaultValue === NUM_RVL_CHANNELS) {
+                // TODO: show error in UI
+                throw new Error('No available RVL channels');
+              }
+              return defaultValue.toString();
+            })()
           }
         ]}
       />

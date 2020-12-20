@@ -38,7 +38,10 @@ export const CreateSceneButtonContainer = createContainer(
     lights: getState(SliceName.Lights).filter(
       (light) => light.zoneId === ownProps.zoneId
     ),
-    patterns: getState(SliceName.Patterns)
+    patterns: getState(SliceName.Patterns),
+    unavailableSceneNames: getState(SliceName.Scenes)
+      .filter((scene) => scene.zoneId === ownProps.zoneId)
+      .map((scene) => scene.name)
   }),
   (
     dispatch,

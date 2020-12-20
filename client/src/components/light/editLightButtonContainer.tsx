@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { LightType, RVLLight } from '../../common/types';
 import { createContainer } from '../../reduxology';
 import { SliceName, ActionType } from '../../types';
 import {
@@ -33,7 +34,16 @@ export const EditLightButtonContainer = createContainer(
     ownProps: EditLightButtonContainerProps
   ): EditLightButtonProps => ({
     ...ownProps,
-    zones: getState(SliceName.Zones)
+    zones: getState(SliceName.Zones),
+    unavailableLightNames: getState(SliceName.Lights)
+      .map((light) => light.name)
+      .filter((lightName) => lightName !== ownProps.light.name),
+    unavailableRVLChannels: getState(SliceName.Lights)
+      .filter(
+        (light) =>
+          light.type === LightType.RVL && light.id !== ownProps.light.id
+      )
+      .map((light) => (light as RVLLight).channel)
   }),
   (dispatch): EditLightButtonDispatch => ({
     editLight(light) {

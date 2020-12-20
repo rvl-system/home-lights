@@ -17,29 +17,30 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { LightType, RVLLight } from '../../common/types';
 import { createContainer } from '../../reduxology';
 import { SliceName, ActionType } from '../../types';
 import {
-  CreateLightButton,
-  CreateLightButtonProps,
-  CreateLightButtonDispatch
-} from './createLightButton';
+  EditZoneButton,
+  EditZoneButtonProps,
+  EditZoneButtonDispatch
+} from './editZoneButton';
 
-export const CreateLightButtonContainer = createContainer(
-  (getState): CreateLightButtonProps => ({
-    zones: getState(SliceName.Zones),
-    unavailableLightNames: getState(SliceName.Lights).map(
-      (light) => light.name
-    ),
-    unavailableRVLChannels: getState(SliceName.Lights)
-      .filter((light) => light.type === LightType.RVL)
-      .map((light) => (light as RVLLight).channel)
+export type EditZoneButtonContainerProps = Omit<
+  EditZoneButtonProps,
+  'zoneNames'
+>;
+
+export const EditZoneButtonContainer = createContainer(
+  (getState, ownProps: EditZoneButtonContainerProps): EditZoneButtonProps => ({
+    ...ownProps,
+    unavailableZoneNames: getState(SliceName.Zones)
+      .map((zone) => zone.name)
+      .filter((zoneName) => zoneName !== ownProps.zone.name)
   }),
-  (dispatch): CreateLightButtonDispatch => ({
-    createRVLLight(name, channel, zoneId) {
-      dispatch(ActionType.CreateRVLLight, { name, channel, zoneId });
+  (dispatch): EditZoneButtonDispatch => ({
+    editZone(zone) {
+      dispatch(ActionType.EditZone, zone);
     }
   }),
-  CreateLightButton
+  EditZoneButton
 );

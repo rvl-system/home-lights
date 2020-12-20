@@ -29,7 +29,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { Color } from '../../types';
 
 export const useStyles = makeStyles((theme) => ({
@@ -95,6 +95,7 @@ interface TextSchema {
   description: string;
   defaultValue?: string;
   inputPlaceholder?: string;
+  unavailableValues?: string[];
 }
 
 interface SelectSchema {
@@ -105,6 +106,7 @@ interface SelectSchema {
   options: {
     value: string;
     label: string;
+    disabled?: boolean;
   }[];
 }
 
@@ -155,10 +157,31 @@ export function FormInput<
     return null;
   }
 
+  type ErrorStates = Record<
+    string,
+    { error: boolean; showError: boolean; errorReason?: string }
+  >;
+  const [textErrorStates, setTextErrorStates] = useState<ErrorStates>(
+    (() => {
+      const initialStates: ErrorStates = {};
+      for (const entry of props.schema) {
+        if (entry.type === FormSchemaType.Text) {
+          initialStates[entry.name] = {
+            error: !entry.defaultValue,
+            showError: false,
+            errorReason: 'A value is required'
+          };
+        }
+      }
+      return initialStates;
+    })()
+  );
+
   const classes = useStyles();
 
   const inputs: JSX.Element[] = [];
   const defaultValues: T = {} as T;
+  let hasError = false;
   for (let i = 0; i < props.schema.length; i++) {
     const entry = props.schema[i];
     switch (entry.type) {
@@ -188,7 +211,11 @@ export function FormInput<
               }}
             >
               {entry.options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
+                <MenuItem
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}
+                >
                   {option.label}
                 </MenuItem>
               ))}
@@ -199,6 +226,8 @@ export function FormInput<
         break;
       }
       case FormSchemaType.Text: {
+        const { error, showError, errorReason } = textErrorStates[entry.name];
+        hasError = hasError || error;
         inputs.push(
           <div key={i} className={classes.row}>
             {entry.description && <InputLabel>{entry.description}</InputLabel>}
@@ -209,13 +238,38 @@ export function FormInput<
               placeholder={entry.inputPlaceholder}
               fullWidth
               defaultValue={entry.defaultValue}
+              error={showError}
               onChange={(e) => {
+                const newValue = e.currentTarget.value;
+                if (!newValue) {
+                  textErrorStates[entry.name] = {
+                    error: true,
+                    showError: true,
+                    errorReason: 'A value is required'
+                  };
+                } else if (
+                  entry.unavailableValues &&
+                  entry.unavailableValues.includes(newValue)
+                ) {
+                  textErrorStates[entry.name] = {
+                    error: true,
+                    showError: true,
+                    errorReason: `"${newValue}" has already been taken`
+                  };
+                } else {
+                  textErrorStates[entry.name] = {
+                    error: false,
+                    showError: false
+                  };
+                }
                 setValues({
                   ...values,
-                  [entry.name]: e.currentTarget.value
+                  [entry.name]: newValue
                 });
+                setTextErrorStates(textErrorStates);
               }}
             />
+            {showError && <InputLabel error={error}>{errorReason}</InputLabel>}
           </div>
         );
         defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
@@ -276,6 +330,7 @@ export function FormInput<
         <Button
           variant="contained"
           color={props.confirmColor || 'primary'}
+          disabled={hasError}
           onClick={() => {
             props.onConfirm(values);
           }}

@@ -24,7 +24,7 @@ import { Scene, SystemState, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { EditMode } from '../../types';
 import { useContainerStyles } from '../lib/pageStyles';
-import { CreateZoneButton } from './createZoneButton';
+import { CreateZoneButtonContainer } from './createZoneButtonContainer';
 import { ZoneComponent } from './zoneComponent';
 
 export interface ZonesTabProps {
@@ -34,8 +34,6 @@ export interface ZonesTabProps {
 }
 
 export interface ZonesTabDispatch {
-  createZone: (name: string) => void;
-  editZone: (zone: Zone) => void;
   deleteZone: (id: number) => void;
   setZonePower: (id: number, powerState: boolean) => void;
   setZoneBrightness: (id: number, brightness: number) => void;
@@ -50,7 +48,7 @@ export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
     <div className={classes.container}>
       <Fade in={editMode === EditMode.Edit}>
         <div className={classes.altHeader}>
-          <CreateZoneButton createZone={props.createZone} />
+          <CreateZoneButtonContainer />
         </div>
       </Fade>
       <Fade in={editMode === EditMode.Operation} mountOnEnter unmountOnExit>
@@ -85,7 +83,6 @@ export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
                 zone={zone}
                 state={state}
                 editMode={editMode}
-                editZone={props.editZone}
                 deleteZone={props.deleteZone}
                 setZonePower={props.setZonePower}
                 setZoneBrightness={props.setZoneBrightness}

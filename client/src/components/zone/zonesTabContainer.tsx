@@ -29,12 +29,6 @@ export const ZonesTabContainer = createContainer(
     scenes: getState(SliceName.Scenes)
   }),
   (dispatch): ZonesTabDispatch => ({
-    createZone(name) {
-      dispatch(ActionType.CreateZone, name);
-    },
-    editZone(zone) {
-      dispatch(ActionType.EditZone, zone);
-    },
     deleteZone(id) {
       dispatch(ActionType.DeleteZone, id);
     },
