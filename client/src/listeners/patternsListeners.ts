@@ -17,16 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { lightsListeners } from './lightsListeners';
-import { patternsListeners } from './patternsListeners';
-import { sceneListeners } from './scenesListeners';
-import { stateListeners } from './stateListeners';
-import { zonesListeners } from './zonesListeners';
+import { createListener, dispatch } from '../reduxology';
+import { ActionType } from '../types';
+import { del } from '../util/api';
 
-export const listeners = [
-  ...zonesListeners,
-  ...patternsListeners,
-  ...sceneListeners,
-  ...lightsListeners,
-  ...stateListeners
-];
+const deletePatternListener = createListener(
+  ActionType.DeletePattern,
+  async (id) => {
+    const appState = await del(`/api/pattern/${id}`);
+    dispatch(ActionType.AppStateUpdated, appState);
+  }
+);
+
+export const patternsListeners = [deletePatternListener];

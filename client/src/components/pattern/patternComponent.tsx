@@ -1,26 +1,26 @@
 /*
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
-This file is part of Home Patterns.
+This file is part of Home Lights.
 
-Home Patterns is free software: you can redistribute it and/or modify
+Home Lights is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Home Patterns is distributed in the hope that it will be useful,
+Home Lights is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Home Patterns.  If not, see <http://www.gnu.org/licenses/>.
+along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
-import { Pattern, PatternType } from '../../common/types';
+import { Pattern } from '../../common/types';
 import { useContentStyles } from '../lib/pageStyles';
 import {
   DeletePatternButton,
@@ -57,7 +57,7 @@ export const PatternComponent: FunctionComponent<
           {props.pattern.name}
         </Typography>
         <Typography variant="caption" className={classes.caption}>
-          {PatternType[props.pattern.type]}
+          {props.pattern.type}
         </Typography>
       </div>
       <EditPatternButtonContainer

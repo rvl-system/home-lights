@@ -21,13 +21,18 @@ import { Divider, List } from '@material-ui/core';
 import React, { Fragment, FunctionComponent } from 'react';
 import { Pattern } from '../../common/types';
 import { useContainerStyles } from '../lib/pageStyles';
-import { PatternComponent } from './patternComponent';
+import { CreatePatternButtonContainer } from './createPatternButtonContainer';
+import { PatternComponent, PatternComponentDispatch } from './patternComponent';
 
 export interface PatternsTabProps {
   patterns: Pattern[];
 }
 
-export const PatternsTab: FunctionComponent<PatternsTabProps> = (props) => {
+export type PatternsTabDispatch = PatternComponentDispatch;
+
+export const PatternsTab: FunctionComponent<
+  PatternsTabProps & PatternsTabDispatch
+> = (props) => {
   const classes = useContainerStyles();
   return (
     <div className={classes.container}>
@@ -42,7 +47,7 @@ export const PatternsTab: FunctionComponent<PatternsTabProps> = (props) => {
                 <Divider />
                 <PatternComponent
                   key={pattern.id}
-                  light={pattern}
+                  pattern={pattern}
                   deletePattern={props.deletePattern}
                 />
               </Fragment>
@@ -52,4 +57,5 @@ export const PatternsTab: FunctionComponent<PatternsTabProps> = (props) => {
         </div>
       </div>
     </div>
+  );
 };
