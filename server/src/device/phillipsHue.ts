@@ -122,19 +122,19 @@ async function discoverBridge(): Promise<string | undefined> {
     console.log(
       'Failed to search for Philips Hue bridges, calls to set state on Philips Hue lights will be ignored'
     );
-    return undefined;
+    return;
   }
 
   if (bridges.length === 0) {
     console.log(
       'No Philips Hue bridges found, calls to set state on Philips Hue lights will be ignored'
     );
-    return undefined;
+    return;
   } else if (bridges.length > 1) {
     console.log(
       'More than one Philips Hue bridge found. Multiple bridges are not supported by Home Lights'
     );
-    return undefined;
+    return;
   } else {
     return bridges[0].ipaddress;
   }
