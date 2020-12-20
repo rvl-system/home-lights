@@ -18,21 +18,32 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createContainer } from '../../reduxology';
-import { ActionType, SliceName } from '../../types';
+import { SliceName, ActionType } from '../../types';
 import {
-  PatternsTab,
-  PatternsTabProps,
-  PatternsTabDispatch
-} from './patternsTab';
+  EditPatternButton,
+  EditPatternButtonProps,
+  EditPatternButtonDispatch
+} from './editPatternButton';
 
-export const PatternsTabContainer = createContainer(
-  (getSlice): PatternsTabProps => ({
-    patterns: getSlice(SliceName.Patterns)
+export type EditPatternButtonContainerProps = Omit<
+  EditPatternButtonProps,
+  'unavailablePatternNames'
+>;
+
+export const EditPatternButtonContainer = createContainer(
+  (
+    getState,
+    ownProps: EditPatternButtonContainerProps
+  ): EditPatternButtonProps => ({
+    ...ownProps,
+    unavailablePatternNames: getState(SliceName.Patterns)
+      .map((pattern) => pattern.name)
+      .filter((patternName) => patternName !== ownProps.pattern.name)
   }),
-  (dispatch): PatternsTabDispatch => ({
-    deletePattern(id: number) {
-      dispatch(ActionType.DeletePattern, id);
+  (dispatch): EditPatternButtonDispatch => ({
+    editPattern(pattern) {
+      dispatch(ActionType.EditPattern, pattern);
     }
   }),
-  PatternsTab
+  EditPatternButton
 );

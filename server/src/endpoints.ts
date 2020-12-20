@@ -44,8 +44,7 @@ export function init(): Promise<void> {
 
     app.listen(port, (err, address) => {
       if (err) {
-        app.log.error(err);
-        process.exit(1);
+        throw err;
       }
       console.log(`Endpoints initialized at ${address}`);
       resolve();

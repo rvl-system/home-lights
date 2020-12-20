@@ -23,6 +23,6 @@ import { post, put, del } from './endpoint';
 
 export function init(app: FastifyInstance): void {
   app.post('/api/patterns', post(createPattern));
-  app.put('/api/patterns/:id', put(editPattern));
-  app.delete('/api/patterns/:id', del(deletePattern));
+  app.put('/api/pattern/:id', put(editPattern));
+  app.delete('/api/pattern/:id', del(deletePattern));
 }
