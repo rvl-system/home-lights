@@ -19,29 +19,20 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
-import {
-  LIGHTS_SCHEMA,
-  LIGHTS_TABLE_NAME,
-  init as initLights
-} from './db/lights';
-import {
+import initLights, { LIGHTS_SCHEMA, LIGHTS_TABLE_NAME } from './db/lights';
+import initPatterns, {
   PATTERNS_SCHEMA,
   PATTERNS_TABLE_NAME,
   COLORS_SCHEMA,
-  COLORS_TABLE_NAME,
-  init as initPatterns
+  COLORS_TABLE_NAME
 } from './db/patterns';
 import {
   PHILIPS_HUE_INFO_SCHEMA,
   PHILIPS_HUE_TABLE_NAME
 } from './db/philipsHue';
-import {
-  SCENES_SCHEMA,
-  SCENES_TABLE_NAME,
-  init as initScenes
-} from './db/scenes';
-import { ZONES_SCHEMA, ZONES_TABLE_NAME, init as initZones } from './db/zones';
-import { init as initDB, dbRun, dbAll } from './sqlite';
+import initScenes, { SCENES_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
+import initZones, { ZONES_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
+import { init as initDB, dbRun } from './sqlite';
 import { getEnvironmentVariable } from './util';
 
 const DB_FILE = join(
@@ -53,12 +44,12 @@ const DB_FILE = join(
 export async function reset(): Promise<void> {
   console.log('Resetting database...');
   await init();
-  await dbAll(`DROP TABLE ${ZONES_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${SCENES_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${PATTERNS_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${COLORS_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${LIGHTS_TABLE_NAME}`);
-  await dbAll(`DROP TABLE ${PHILIPS_HUE_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${ZONES_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${SCENES_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${PATTERNS_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${COLORS_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${LIGHTS_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${PHILIPS_HUE_TABLE_NAME}`);
   await create();
   console.log('done');
 }

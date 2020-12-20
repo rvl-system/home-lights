@@ -27,8 +27,10 @@ import {
   PhilipsHueLight,
   CreatePhilipsHueLightRequest,
   CreateLIFXLightRequest,
-  LIFXLight
+  LIFXLight,
+  Zone
 } from '../common/types';
+import { hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 
 export const LIGHTS_TABLE_NAME = 'lights';
@@ -46,7 +48,7 @@ CREATE TABLE "${LIGHTS_TABLE_NAME}" (
 
 let lights: Light[] = [];
 
-export async function init(): Promise<void> {
+export default async function updateCache(): Promise<void> {
   const rawResults = await dbAll(`SELECT * FROM ${LIGHTS_TABLE_NAME}`);
   lights = rawResults.map((light) => {
     switch (light.type) {
@@ -97,6 +99,22 @@ export async function init(): Promise<void> {
         throw new Error(`Found unknown light type in database "${light.type}"`);
     }
   });
+}
+
+export async function reconcile(zones: Zone[]): Promise<void> {
+  let changesMade = false;
+  for (const light of getLights()) {
+    if (!hasItem(light.zoneId, zones)) {
+      await dbRun(
+        `UPDATE ${LIGHTS_TABLE_NAME} SET zone_id = null WHERE id = ?`,
+        [light.id]
+      );
+      changesMade = true;
+    }
+  }
+  if (changesMade) {
+    await updateCache();
+  }
 }
 
 export function getLights(): Light[] {
@@ -154,7 +172,7 @@ export async function createLight(
       break;
     }
   }
-  await init();
+  await updateCache();
 }
 
 export async function editLight(light: Light): Promise<void> {
@@ -184,7 +202,7 @@ export async function editLight(light: Light): Promise<void> {
       break;
     }
   }
-  await init();
+  await updateCache();
 }
 
 export async function deleteLight(id: number): Promise<void> {
@@ -192,5 +210,5 @@ export async function deleteLight(id: number): Promise<void> {
     id,
     LightType.RVL
   ]);
-  await init();
+  await updateCache();
 }

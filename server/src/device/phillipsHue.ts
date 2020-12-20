@@ -112,7 +112,7 @@ export async function setLightState({
   await Promise.all(promises);
 }
 
-async function discoverBridge(): Promise<string | null> {
+async function discoverBridge(): Promise<string | undefined> {
   // The Hue API does strange things with types, gotta cast to any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let bridges: any;
@@ -122,19 +122,19 @@ async function discoverBridge(): Promise<string | null> {
     console.log(
       'Failed to search for Philips Hue bridges, calls to set state on Philips Hue lights will be ignored'
     );
-    return null;
+    return;
   }
 
   if (bridges.length === 0) {
     console.log(
       'No Philips Hue bridges found, calls to set state on Philips Hue lights will be ignored'
     );
-    return null;
+    return;
   } else if (bridges.length > 1) {
     console.log(
       'More than one Philips Hue bridge found. Multiple bridges are not supported by Home Lights'
     );
-    return null;
+    return;
   } else {
     return bridges[0].ipaddress;
   }

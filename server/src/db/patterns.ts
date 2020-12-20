@@ -39,7 +39,7 @@ CREATE TABLE "${COLORS_TABLE_NAME}" (
 
 let patterns: Pattern[] = [];
 
-export async function init(): Promise<void> {
+export default async function updateCache(): Promise<void> {
   const results = await dbAll('SELECT * FROM patterns');
   patterns = results.map((result) => ({
     ...result,
@@ -58,7 +58,7 @@ export async function createPattern(
     `INSERT INTO ${PATTERNS_TABLE_NAME} (name, type, data) VALUES (?, ?, ?)`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data)]
   );
-  await init();
+  await updateCache();
 }
 
 export async function editPattern(pattern: Pattern): Promise<void> {
@@ -66,10 +66,10 @@ export async function editPattern(pattern: Pattern): Promise<void> {
     `UPDATE ${PATTERNS_TABLE_NAME} SET name = ?, type = ?, data = ? WHERE id = ?`,
     [pattern.name, pattern.type, JSON.stringify(pattern.data), pattern.id]
   );
-  await init();
+  await updateCache();
 }
 
 export async function deletePattern(id: number): Promise<void> {
   await dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [id]);
-  await init();
+  await updateCache();
 }
