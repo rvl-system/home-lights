@@ -48,7 +48,6 @@ export const LightsTab: FunctionComponent<
               <Fragment key={light.id}>
                 <Divider />
                 <LightComponent
-                  key={light.id}
                   light={light}
                   deleteLight={props.deleteLight}
                   zones={props.zones}

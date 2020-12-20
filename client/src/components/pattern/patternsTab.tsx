@@ -46,7 +46,6 @@ export const PatternsTab: FunctionComponent<
               <Fragment key={pattern.id}>
                 <Divider />
                 <PatternComponent
-                  key={pattern.id}
                   pattern={pattern}
                   deletePattern={props.deletePattern}
                 />
