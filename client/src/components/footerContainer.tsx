@@ -26,9 +26,9 @@ import {
 } from './footerComponent';
 
 export const FooterContainer = createContainer(
-  (getState): FooterComponentProps => {
+  (getSlice): FooterComponentProps => {
     return {
-      activeTab: getState(SliceName.SelectedTab)
+      activeTab: getSlice(SliceName.SelectedTab)
     };
   },
   (dispatch): FooterComponentDispatch => {

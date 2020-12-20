@@ -32,13 +32,13 @@ export interface EditSceneButtonContainerProps {
 
 export const EditSceneButtonContainer = createContainer(
   (
-    getState,
+    getSlice,
     ownProps: EditSceneButtonContainerProps
   ): EditSceneButtonProps => ({
     scene: ownProps.scene,
-    patterns: getState(SliceName.Patterns),
-    lights: getState(SliceName.Lights),
-    unavailableSceneNames: getState(SliceName.Scenes)
+    patterns: getSlice(SliceName.Patterns),
+    lights: getSlice(SliceName.Lights),
+    unavailableSceneNames: getSlice(SliceName.Scenes)
       .filter(
         (scene) =>
           scene.zoneId === ownProps.scene.zoneId &&

@@ -23,10 +23,10 @@ import { SliceName, ActionType } from '../../types';
 import { ZonesTab, ZonesTabProps, ZonesTabDispatch } from './zonesTab';
 
 export const ZonesTabContainer = createContainer(
-  (getState): ZonesTabProps => ({
-    zones: getState(SliceName.Zones),
-    state: getState(SliceName.State),
-    scenes: getState(SliceName.Scenes)
+  (getSlice): ZonesTabProps => ({
+    zones: getSlice(SliceName.Zones),
+    state: getSlice(SliceName.State),
+    scenes: getSlice(SliceName.Scenes)
   }),
   (dispatch): ZonesTabDispatch => ({
     deleteZone(id) {

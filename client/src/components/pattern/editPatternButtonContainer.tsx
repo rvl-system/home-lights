@@ -32,11 +32,11 @@ export type EditPatternButtonContainerProps = Omit<
 
 export const EditPatternButtonContainer = createContainer(
   (
-    getState,
+    getSlice,
     ownProps: EditPatternButtonContainerProps
   ): EditPatternButtonProps => ({
     ...ownProps,
-    unavailablePatternNames: getState(SliceName.Patterns)
+    unavailablePatternNames: getSlice(SliceName.Patterns)
       .map((pattern) => pattern.name)
       .filter((patternName) => patternName !== ownProps.pattern.name)
   }),

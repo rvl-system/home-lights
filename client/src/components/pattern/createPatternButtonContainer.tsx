@@ -26,8 +26,8 @@ import {
 } from './createPatternButton';
 
 export const CreatePatternButtonContainer = createContainer(
-  (getState): CreatePatternButtonProps => ({
-    unavailablePatternNames: getState(SliceName.Patterns).map(
+  (getSlice): CreatePatternButtonProps => ({
+    unavailablePatternNames: getSlice(SliceName.Patterns).map(
       (pattern) => pattern.name
     )
   }),

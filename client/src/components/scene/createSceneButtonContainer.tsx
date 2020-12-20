@@ -31,15 +31,15 @@ export interface CreateSceneButtonContainerProps {
 
 export const CreateSceneButtonContainer = createContainer(
   (
-    getState,
+    getSlice,
     ownProps: CreateSceneButtonContainerProps
   ): CreateSceneButtonProps => ({
     zoneId: ownProps.zoneId,
-    lights: getState(SliceName.Lights).filter(
+    lights: getSlice(SliceName.Lights).filter(
       (light) => light.zoneId === ownProps.zoneId
     ),
-    patterns: getState(SliceName.Patterns),
-    unavailableSceneNames: getState(SliceName.Scenes)
+    patterns: getSlice(SliceName.Patterns),
+    unavailableSceneNames: getSlice(SliceName.Scenes)
       .filter((scene) => scene.zoneId === ownProps.zoneId)
       .map((scene) => scene.name)
   }),

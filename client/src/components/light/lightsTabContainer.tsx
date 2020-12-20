@@ -22,9 +22,9 @@ import { SliceName, ActionType } from '../../types';
 import { LightsTab, LightsTabDispatch, LightsTabProps } from './lightsTab';
 
 export const LightsTabContainer = createContainer(
-  (getState): LightsTabProps => ({
-    lights: getState(SliceName.Lights),
-    zones: getState(SliceName.Zones)
+  (getSlice): LightsTabProps => ({
+    lights: getSlice(SliceName.Lights),
+    zones: getSlice(SliceName.Zones)
   }),
   (dispatch): LightsTabDispatch => ({
     deleteLight(id) {

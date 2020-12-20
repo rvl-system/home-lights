@@ -22,9 +22,9 @@ import { SliceName } from '../types';
 import { AppComponent, AppComponentProps } from './appComponent';
 
 export const AppContainer = createContainer(
-  (getState): AppComponentProps => {
+  (getSlice): AppComponentProps => {
     return {
-      activeTab: getState(SliceName.SelectedTab)
+      activeTab: getSlice(SliceName.SelectedTab)
     };
   },
   () => ({}),
