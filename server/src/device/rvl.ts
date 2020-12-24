@@ -21,15 +21,23 @@ import {
   createManager,
   createWaveParameters,
   createSolidColorWave,
+  createRainbowWave,
+  createPulsingWave,
+  createColorCycleWave,
+  createMovingWave,
   RVLManager,
   RVLController
 } from 'rvl-node';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
+  ColorCyclePattern,
   LightType,
   PatternType,
+  PulsePattern,
+  RainbowPattern,
   RVLLight,
-  SolidPattern
+  SolidPattern,
+  WavePattern
 } from '../common/types';
 import { getItem } from '../common/util';
 import { SetLightStateOptions } from './types';
@@ -71,6 +79,34 @@ export async function setLightState({
       controller.setBrightness(scene.brightness);
       const pattern = getItem(lightEntry.patternId, patterns);
       switch (pattern.type) {
+        case PatternType.ColorCycle: {
+          const { data } = pattern as ColorCyclePattern;
+          controller.setWaveParameters(
+            createWaveParameters(createColorCycleWave(data.rate, 255))
+          );
+          break;
+        }
+        case PatternType.Pulse: {
+          const { data } = pattern as PulsePattern;
+          controller.setWaveParameters(createWaveParameters());
+          controller.setWaveParameters(
+            createWaveParameters(
+              createPulsingWave(
+                data.color.hue,
+                data.color.saturation,
+                data.rate
+              )
+            )
+          );
+          break;
+        }
+        case PatternType.Rainbow: {
+          const { data } = pattern as RainbowPattern;
+          controller.setWaveParameters(
+            createWaveParameters(createRainbowWave(255, data.rate))
+          );
+          break;
+        }
         case PatternType.Solid: {
           const { data } = pattern as SolidPattern;
           controller.setWaveParameters(
@@ -79,6 +115,30 @@ export async function setLightState({
                 Math.round((data.color.hue / 360) * 255),
                 Math.round(data.color.saturation * 255),
                 Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
+              )
+            )
+          );
+          break;
+        }
+        case PatternType.Wave: {
+          const { data } = pattern as WavePattern;
+          controller.setWaveParameters(
+            createWaveParameters(
+              createMovingWave(
+                data.waveColor.hue,
+                data.waveColor.saturation,
+                data.rate,
+                2
+              ),
+              createPulsingWave(
+                data.foregroundColor.hue,
+                data.foregroundColor.saturation,
+                data.rate
+              ),
+              createSolidColorWave(
+                data.backgroundColor.hue,
+                data.backgroundColor.saturation,
+                255
               )
             )
           );
