@@ -26,19 +26,40 @@ const createZoneListener = createListener(
   ActionType.CreateZone,
   async (name) => {
     const createBody: CreateZoneRequest = { name };
-    const appState = await post('/api/zones', createBody);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await post('/api/zones', createBody);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to create zone'
+      });
+    }
   }
 );
 
 const editZoneListener = createListener(ActionType.EditZone, async (zone) => {
-  const appState = await put(`/api/zone/${zone.id}`, zone);
-  dispatch(ActionType.AppStateUpdated, appState);
+  try {
+    const appState = await put(`/api/zone/${zone.id}`, zone);
+    dispatch(ActionType.AppStateUpdated, appState);
+  } catch {
+    dispatch(ActionType.Notify, {
+      severity: 'error',
+      message: 'Failed to edit zone'
+    });
+  }
 });
 
 const deleteZoneListener = createListener(ActionType.DeleteZone, async (id) => {
-  const appState = await del(`/api/zone/${id}`);
-  dispatch(ActionType.AppStateUpdated, appState);
+  try {
+    const appState = await del(`/api/zone/${id}`);
+    dispatch(ActionType.AppStateUpdated, appState);
+  } catch {
+    dispatch(ActionType.Notify, {
+      severity: 'error',
+      message: 'Failed to delete zone'
+    });
+  }
 });
 
 export const zonesListeners = [

@@ -30,24 +30,45 @@ const createScenesListener = createListener(
       zoneId,
       lights
     };
-    const appState = await post('/api/scenes', createBody);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await post('/api/scenes', createBody);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to create scene'
+      });
+    }
   }
 );
 
 const editSceneListener = createListener(
   ActionType.EditScene,
   async (scene) => {
-    const appState = await put(`/api/scene/${scene.id}`, scene);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await put(`/api/scene/${scene.id}`, scene);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to edit scene'
+      });
+    }
   }
 );
 
 const deleteSceneListener = createListener(
   ActionType.DeleteScene,
   async (id) => {
-    const appState = await del(`/api/scene/${id}`);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await del(`/api/scene/${id}`);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to delete scene'
+      });
+    }
   }
 );
 

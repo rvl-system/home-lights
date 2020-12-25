@@ -24,8 +24,15 @@ import { del } from '../util/api';
 const deletePatternListener = createListener(
   ActionType.DeletePattern,
   async (id) => {
-    const appState = await del(`/api/pattern/${id}`);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await del(`/api/pattern/${id}`);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to delete pattern'
+      });
+    }
   }
 );
 
