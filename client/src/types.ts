@@ -34,12 +34,15 @@ export enum SliceName {
   Patterns = 'Patterns',
   Lights = 'Lights',
   Colors = 'Colors',
+  State = 'State',
   SelectedTab = 'SelectedTab',
-  State = 'State'
+  Notification = 'Notification'
 }
 
 export enum ActionType {
   SelectTab = 'SelectTab',
+  Notify = 'Notify',
+  DismissNotification = 'DismissNotification',
 
   AppStateUpdated = 'StateUpdated',
   SetZoneScene = 'SetZoneScene',
@@ -71,13 +74,16 @@ export interface State {
   [SliceName.Zones]: Zone[];
   [SliceName.Scenes]: Scene[];
   [SliceName.Lights]: Light[];
-  [SliceName.SelectedTab]: SelectedTab;
   [SliceName.Patterns]: Pattern[];
   [SliceName.State]: SystemState;
+  [SliceName.SelectedTab]: SelectedTab;
+  [SliceName.Notification]: Notification | null;
 }
 
 export interface Actions {
   [ActionType.SelectTab]: SelectedTab;
+  [ActionType.Notify]: Notification;
+  [ActionType.DismissNotification]: undefined;
 
   [ActionType.AppStateUpdated]: AppState;
 
@@ -112,9 +118,23 @@ export enum SelectedTab {
   Lights = 'Lights'
 }
 
+// Severity is a drop-in value to Material UI's Snackbar severity, which is why
+// we use a set of string values instead of an enum
+export interface Notification {
+  severity: 'error' | 'warning' | 'info' | 'success';
+  message: string;
+}
+
 export enum EditMode {
   Operation = 'Operation',
   Edit = 'Edit'
 }
 
-export type Color = 'inherit' | 'primary' | 'secondary' | 'default' | undefined;
+// Color is a drop-in value to various Material UI components, which is why we
+// use a set of string values instead of an enum
+export type UIColor =
+  | 'inherit'
+  | 'primary'
+  | 'secondary'
+  | 'default'
+  | undefined;

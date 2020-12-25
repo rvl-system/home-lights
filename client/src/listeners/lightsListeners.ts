@@ -31,8 +31,15 @@ const createRVLLightListener = createListener(
       channel,
       zoneId
     };
-    const appState = await post('/api/lights', createBody);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await post('/api/lights', createBody);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to create light'
+      });
+    }
   }
 );
 

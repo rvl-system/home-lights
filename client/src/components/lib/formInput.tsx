@@ -30,7 +30,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import React, { PropsWithChildren, useState } from 'react';
-import { Color } from '../../types';
+import { UIColor } from '../../types';
 
 export const useStyles = makeStyles((theme) => ({
   container: {
@@ -134,7 +134,7 @@ export interface FormInputProps {
   title: string;
   schema: FormSchema[];
   confirmLabel?: string;
-  confirmColor?: Color;
+  confirmColor?: UIColor;
 }
 
 export interface FormInputDispatch<T> {
