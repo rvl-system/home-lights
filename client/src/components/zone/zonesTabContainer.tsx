@@ -18,8 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import debounce from 'debounce';
+import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
-import { SliceName, ActionType } from '../../types';
+import { SliceName } from '../../types';
 import { ZonesTab, ZonesTabProps, ZonesTabDispatch } from './zonesTab';
 
 export const ZonesTabContainer = createContainer(

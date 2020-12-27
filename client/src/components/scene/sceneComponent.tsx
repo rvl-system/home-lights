@@ -26,7 +26,7 @@ import {
   DeleteSceneButton,
   DeleteSceneButtonDispatch
 } from './deleteSceneButton';
-import { EditSceneButtonContainer } from './editSceneContainerButton';
+import { EditSceneButtonContainer } from './editSceneButtonContainer';
 
 export interface SceneComponentProps {
   scene: Scene;

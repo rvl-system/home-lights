@@ -17,44 +17,47 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from './common/actions';
 import {
+  AppState,
   CreatePatternRequest,
   CreateSceneRequest,
   Light,
-  SystemState,
   Pattern,
   Scene,
-  Zone,
-  AppState
-} from './common/types';
+  Zone
+} from './types';
 
-export enum SliceName {
-  Zones = 'Zones',
-  Scenes = 'Scenes',
-  Patterns = 'Patterns',
-  Lights = 'Lights',
-  Colors = 'Colors',
-  State = 'State',
-  SelectedTab = 'SelectedTab',
-  Notification = 'Notification'
-}
+export enum ActionType {
+  SelectTab = 'SelectTab',
+  Notify = 'Notify',
+  DismissNotification = 'DismissNotification',
 
-export interface State {
-  [SliceName.Zones]: Zone[];
-  [SliceName.Scenes]: Scene[];
-  [SliceName.Lights]: Light[];
-  [SliceName.Patterns]: Pattern[];
-  [SliceName.State]: SystemState;
-  [SliceName.SelectedTab]: SelectedTab;
-  [SliceName.Notification]: Notification | null;
+  Hello = 'Hello',
+  AppStateUpdated = 'AppStateUpdated',
+
+  SetZoneScene = 'SetZoneScene',
+  SetZonePower = 'SetZonePower',
+  SetZoneBrightness = 'SetZoneBrightness',
+
+  CreateZone = 'CreateZone',
+  EditZone = 'EditZone',
+  DeleteZone = 'DeleteZone',
+
+  CreateScene = 'CreateScene',
+  EditScene = 'EditScene',
+  DeleteScene = 'DeleteScene',
+
+  CreatePattern = 'CreatePattern',
+  EditPattern = 'EditPattern',
+  DeletePattern = 'DeletePattern',
+
+  CreateRVLLight = 'CreateRVLLight',
+  EditLight = 'EditLight',
+  DeleteLight = 'DeleteLight'
 }
 
 export interface Actions {
-  [ActionType.SelectTab]: SelectedTab;
-  [ActionType.Notify]: Notification;
-  [ActionType.DismissNotification]: undefined;
-
+  [ActionType.Hello]: AppState;
   [ActionType.AppStateUpdated]: AppState;
 
   [ActionType.SetZoneScene]: { zoneId: number; sceneId: number };
@@ -81,30 +84,3 @@ export interface Actions {
   [ActionType.EditLight]: Light;
   [ActionType.DeleteLight]: number;
 }
-
-export enum SelectedTab {
-  Zones = 'Zones',
-  Patterns = 'Patterns',
-  Lights = 'Lights'
-}
-
-// Severity is a drop-in value to Material UI's Snackbar severity, which is why
-// we use a set of string values instead of an enum
-export interface Notification {
-  severity: 'error' | 'warning' | 'info' | 'success';
-  message: string;
-}
-
-export enum EditMode {
-  Operation = 'Operation',
-  Edit = 'Edit'
-}
-
-// Color is a drop-in value to various Material UI components, which is why we
-// use a set of string values instead of an enum
-export type UIColor =
-  | 'inherit'
-  | 'primary'
-  | 'secondary'
-  | 'default'
-  | undefined;

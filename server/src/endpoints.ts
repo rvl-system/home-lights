@@ -20,6 +20,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
+import { Server } from 'ws';
+import { getAppState } from './endpoints/endpoint';
 import { init as initLights } from './endpoints/lights';
 import { init as initPatterns } from './endpoints/patterns';
 import { init as initScenes } from './endpoints/scenes';
@@ -48,6 +50,22 @@ export function init(): Promise<void> {
       }
       console.log(`Endpoints initialized at ${address}`);
       resolve();
+    });
+
+    const server = new Server({
+      server: app.server
+    });
+
+    server.on('connection', (connection) => {
+      connection.on('message', (message) => {
+        console.log('received: %s', message);
+      });
+      connection.send(
+        JSON.stringify({
+          type: 'Hello',
+          data: getAppState()
+        })
+      );
     });
   });
 }

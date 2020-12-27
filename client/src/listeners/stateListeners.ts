@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from '../common/actions';
 import {
   SetZoneBrightnessRequest,
   SetZonePowerRequest,
@@ -24,7 +25,7 @@ import {
 } from '../common/types';
 import { getItem } from '../common/util';
 import { createListener, dispatch } from '../reduxology';
-import { ActionType, SliceName } from '../types';
+import { SliceName } from '../types';
 import { post } from '../util/api';
 
 const setZoneScene = createListener(
