@@ -178,3 +178,23 @@ export type SetZoneBrightnessRequest = {
   zoneId: number;
   brightness: number;
 };
+
+// ---- Miscellaneous ----
+
+export enum SelectedTab {
+  Zones = 'Zones',
+  Patterns = 'Patterns',
+  Lights = 'Lights'
+}
+
+// Severity is a drop-in value to Material UI's Snackbar severity, which is why
+// we use a set of string values instead of an enum
+export interface Notification {
+  severity: 'error' | 'warning' | 'info' | 'success';
+  message: string;
+}
+
+export enum EditMode {
+  Operation = 'Operation',
+  Edit = 'Edit'
+}

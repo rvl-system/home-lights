@@ -17,16 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from './common/actions';
 import {
-  CreatePatternRequest,
-  CreateSceneRequest,
+  SelectedTab,
+  Notification,
   Light,
   SystemState,
   Pattern,
   Scene,
-  Zone,
-  AppState
+  Zone
 } from './common/types';
 
 export enum SliceName {
@@ -48,56 +46,6 @@ export interface State {
   [SliceName.State]: SystemState;
   [SliceName.SelectedTab]: SelectedTab;
   [SliceName.Notification]: Notification | null;
-}
-
-export interface Actions {
-  [ActionType.SelectTab]: SelectedTab;
-  [ActionType.Notify]: Notification;
-  [ActionType.DismissNotification]: undefined;
-
-  [ActionType.AppStateUpdated]: AppState;
-
-  [ActionType.SetZoneScene]: { zoneId: number; sceneId: number };
-  [ActionType.SetZonePower]: { zoneId: number; power: boolean };
-  [ActionType.SetZoneBrightness]: { zoneId: number; brightness: number };
-
-  [ActionType.CreateZone]: string;
-  [ActionType.EditZone]: Zone;
-  [ActionType.DeleteZone]: number;
-
-  [ActionType.CreateScene]: CreateSceneRequest;
-  [ActionType.EditScene]: Scene;
-  [ActionType.DeleteScene]: number;
-
-  [ActionType.CreatePattern]: CreatePatternRequest;
-  [ActionType.EditPattern]: Pattern;
-  [ActionType.DeletePattern]: number;
-
-  [ActionType.CreateRVLLight]: {
-    name: string;
-    channel: number;
-    zoneId?: number;
-  };
-  [ActionType.EditLight]: Light;
-  [ActionType.DeleteLight]: number;
-}
-
-export enum SelectedTab {
-  Zones = 'Zones',
-  Patterns = 'Patterns',
-  Lights = 'Lights'
-}
-
-// Severity is a drop-in value to Material UI's Snackbar severity, which is why
-// we use a set of string values instead of an enum
-export interface Notification {
-  severity: 'error' | 'warning' | 'info' | 'success';
-  message: string;
-}
-
-export enum EditMode {
-  Operation = 'Operation',
-  Edit = 'Edit'
 }
 
 // Color is a drop-in value to various Material UI components, which is why we

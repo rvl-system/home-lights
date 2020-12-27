@@ -20,8 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Fade } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { Scene } from '../../common/types';
-import { EditMode } from '../../types';
+import { EditMode, Scene } from '../../common/types';
 import { ConfirmDialog } from '../lib/confirmDialog';
 
 export interface DeleteSceneButtonProps {

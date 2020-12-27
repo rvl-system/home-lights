@@ -22,8 +22,10 @@ import {
   CreatePatternRequest,
   CreateSceneRequest,
   Light,
+  Notification,
   Pattern,
   Scene,
+  SelectedTab,
   Zone
 } from './types';
 
@@ -57,6 +59,10 @@ export enum ActionType {
 }
 
 export interface Actions {
+  [ActionType.SelectTab]: SelectedTab;
+  [ActionType.Notify]: Notification;
+  [ActionType.DismissNotification]: undefined;
+
   [ActionType.Hello]: AppState;
   [ActionType.AppStateUpdated]: AppState;
 

@@ -18,10 +18,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../../common/actions';
-import { Zone } from '../../common/types';
+import { EditMode, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { createContainer } from '../../reduxology';
-import { SliceName, EditMode } from '../../types';
+import { SliceName } from '../../types';
 import {
   ZoneScenesComponent,
   ZoneScenesComponentProps,

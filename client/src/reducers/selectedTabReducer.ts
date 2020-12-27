@@ -18,8 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
+import { SelectedTab } from '../common/types';
 import { createReducer } from '../reduxology';
-import { SliceName, SelectedTab } from '../types';
+import { SliceName } from '../types';
 
 export const selectedTabReducer = createReducer(
   SliceName.SelectedTab,

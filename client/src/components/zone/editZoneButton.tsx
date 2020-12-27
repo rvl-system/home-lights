@@ -20,8 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { Zone } from '../../common/types';
-import { EditMode } from '../../types';
+import { EditMode, Zone } from '../../common/types';
 import { FormInput, FormSchemaType } from '../lib/formInput';
 
 export interface EditZoneButtonProps {

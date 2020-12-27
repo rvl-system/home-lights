@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import React, { FunctionComponent } from 'react';
-import { Notification } from '../types';
+import { Notification } from '../common/types';
 
 export interface NotificationComponentProps {
   notification: Notification | null;
