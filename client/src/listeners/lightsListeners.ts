@@ -31,24 +31,45 @@ const createRVLLightListener = createListener(
       channel,
       zoneId
     };
-    const appState = await post('/api/lights', createBody);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await post('/api/lights', createBody);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to create light'
+      });
+    }
   }
 );
 
 const editLightListener = createListener(
   ActionType.EditLight,
   async (light) => {
-    const appState = await put(`/api/light/${light.id}`, light);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await put(`/api/light/${light.id}`, light);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to edit light'
+      });
+    }
   }
 );
 
 const deleteLightListener = createListener(
   ActionType.DeleteLight,
   async (id) => {
-    const appState = await del(`/api/light/${id}`);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await del(`/api/light/${id}`);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to delete light'
+      });
+    }
   }
 );
 

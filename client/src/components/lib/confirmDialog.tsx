@@ -27,7 +27,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
-import { Color } from '../../types';
+import { UIColor } from '../../types';
 
 export const useDefaultStyles = makeStyles({
   container: {
@@ -43,9 +43,9 @@ export interface ConfirmDialogProps {
   title: string;
   description?: string;
   confirmLabel?: string;
-  confirmColor?: Color;
+  confirmColor?: UIColor;
   cancelLabel?: string;
-  cancelColor?: Color;
+  cancelColor?: UIColor;
 }
 
 export const ConfirmDialog: FunctionComponent<ConfirmDialogProps> = ({

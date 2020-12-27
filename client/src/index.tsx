@@ -22,6 +22,7 @@ import { AppState } from './common/types';
 import { AppContainer } from './components/appContainer';
 import { listeners } from './listeners/listeners';
 import { createLightsReducers } from './reducers/lightsReducer';
+import { notificationsReducer } from './reducers/notificationsReducer';
 import { createPatternsReducers } from './reducers/patternsReducer';
 import { createScenesReducers } from './reducers/scenesReducer';
 import { selectedTabReducer } from './reducers/selectedTabReducer';
@@ -42,7 +43,8 @@ async function run() {
       createPatternsReducers(appState.patterns),
       createLightsReducers(appState.lights),
       createStateReducers(appState.systemState),
-      selectedTabReducer
+      selectedTabReducer,
+      notificationsReducer
     ]
   });
 

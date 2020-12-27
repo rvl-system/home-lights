@@ -36,8 +36,15 @@ const setZoneScene = createListener(
       await setZonePowerListener({ zoneId, power: true });
     }
     const setZoneSceneBody: SetZoneSceneRequest = { sceneId };
-    const appState = await post('/api/state-scene', setZoneSceneBody);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await post('/api/state-scene', setZoneSceneBody);
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to set scene'
+      });
+    }
   }
 );
 
@@ -48,8 +55,18 @@ const setZoneBrightness = createListener(
       zoneId,
       brightness
     };
-    const appState = await post('/api/state-brightness', setZoneBrightnessBody);
-    dispatch(ActionType.AppStateUpdated, appState);
+    try {
+      const appState = await post(
+        '/api/state-brightness',
+        setZoneBrightnessBody
+      );
+      dispatch(ActionType.AppStateUpdated, appState);
+    } catch {
+      dispatch(ActionType.Notify, {
+        severity: 'error',
+        message: 'Failed to set brightness'
+      });
+    }
   }
 );
 
@@ -61,8 +78,15 @@ async function setZonePowerListener({
   power: boolean;
 }) {
   const setZonePowerBody: SetZonePowerRequest = { zoneId, power };
-  const appState = await post('/api/state-power', setZonePowerBody);
-  dispatch(ActionType.AppStateUpdated, appState);
+  try {
+    const appState = await post('/api/state-power', setZonePowerBody);
+    dispatch(ActionType.AppStateUpdated, appState);
+  } catch {
+    dispatch(ActionType.Notify, {
+      severity: 'error',
+      message: 'Failed to set power state'
+    });
+  }
 }
 
 const setZonePower = createListener(

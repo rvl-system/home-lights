@@ -29,6 +29,7 @@ import React, { FunctionComponent } from 'react';
 import { SelectedTab } from '../types';
 import { FooterContainer } from './footerContainer';
 import { LightsTabContainer } from './light/lightsTabContainer';
+import { NotificationContainer } from './notificationContainer';
 import { PatternsTabContainer } from './pattern/patternsTabContainer';
 import { ZonesTabContainer } from './zone/zonesTabContainer';
 
@@ -84,6 +85,7 @@ export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
           <FooterContainer />
         </div>
       </div>
+      <NotificationContainer />
     </MuiThemeProvider>
   );
 };

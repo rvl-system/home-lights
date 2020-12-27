@@ -17,23 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createListener, dispatch } from '../reduxology';
-import { ActionType } from '../types';
-import { del } from '../util/api';
+import { createReducer } from '../reduxology';
+import { SliceName, ActionType } from '../types';
 
-const deletePatternListener = createListener(
-  ActionType.DeletePattern,
-  async (id) => {
-    try {
-      const appState = await del(`/api/pattern/${id}`);
-      dispatch(ActionType.AppStateUpdated, appState);
-    } catch {
-      dispatch(ActionType.Notify, {
-        severity: 'error',
-        message: 'Failed to delete pattern'
-      });
-    }
-  }
+export const notificationsReducer = createReducer(SliceName.Notification, null);
+
+notificationsReducer.handle(
+  ActionType.Notify,
+  (state, notification) => notification
 );
 
-export const patternsListeners = [deletePatternListener];
+notificationsReducer.handle(ActionType.DismissNotification, () => null);
