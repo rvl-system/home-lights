@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { sendMessage } from '../connection';
-import { createListener } from '../reduxology';
+import { createListener, dispatch } from '../reduxology';
 
 export const listeners = attachActionsToSocket({
   [ActionType.CreateZone]: 'Failed to create zone',
@@ -49,10 +49,17 @@ function attachActionsToSocket(spec: Record<string, string>) {
     listeners.push(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       createListener(action as any, async (data) => {
-        sendMessage({
-          type: action as ActionType,
-          data
-        });
+        try {
+          sendMessage({
+            type: action as ActionType,
+            data
+          });
+        } catch {
+          dispatch(ActionType.Notify, {
+            severity: 'error',
+            message: spec[action]
+          });
+        }
       })
     );
   }

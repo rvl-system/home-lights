@@ -102,3 +102,10 @@ export function deepMap(
     return cb(value);
   }
 }
+
+/**
+ * Delays for `time` milliseconds
+ */
+export async function delay(time: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}

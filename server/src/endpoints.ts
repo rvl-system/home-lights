@@ -22,7 +22,7 @@ import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { Server } from 'ws';
 import { ActionType } from './common/actions';
-import { AppState } from './common/types';
+import { AppState, Notification } from './common/types';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
 import { getScenes } from './db/scenes';
@@ -79,7 +79,17 @@ export function init(): Promise<void> {
       connection.on('message', async (message) => {
         const action = JSON.parse(message.toString());
         if (!handlers[action.type]) {
-          throw new Error(`Received unknown message type ${action.type}`);
+          const data: Notification = {
+            severity: 'error',
+            message: `Invalid message "${action.type}"`
+          };
+          connection.send(
+            JSON.stringify({
+              type: ActionType.Notify,
+              data
+            })
+          );
+          return;
         }
         await handlers[action.type](action.data);
 

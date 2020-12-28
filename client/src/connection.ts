@@ -19,8 +19,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from './common/actions';
 import { AppState } from './common/types';
+import { delay } from './common/util';
 import { dispatch } from './reduxology';
 
+const RETRY_TIMEOUT = 250;
 let socket: WebSocket;
 
 export function connect(): Promise<AppState> {
@@ -41,9 +43,21 @@ export function connect(): Promise<AppState> {
         dispatch(payload.type, payload.data);
       }
     });
+    socket.addEventListener('close', async () => {
+      console.log('Disconnected from server, retrying...');
+      await delay(RETRY_TIMEOUT);
+      await connect();
+      console.log('Reconnected');
+    });
   });
 }
 
-export function sendMessage(data: { type: ActionType; data: unknown }): void {
-  socket.send(JSON.stringify(data));
+export function sendMessage(payload: {
+  type: ActionType;
+  data: unknown;
+}): void {
+  if (socket.readyState !== WebSocket.OPEN) {
+    throw new Error('Not connected to server');
+  }
+  socket.send(JSON.stringify(payload));
 }
