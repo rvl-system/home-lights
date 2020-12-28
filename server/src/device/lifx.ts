@@ -23,7 +23,8 @@ import {
   LightType,
   LIFXLight,
   PatternType,
-  SolidPattern
+  SolidPattern,
+  ColorType
 } from '../common/types';
 import { getItem } from '../common/util';
 import { getLights, createLight, deleteLight } from '../db/lights';
@@ -143,11 +144,16 @@ export async function init(): Promise<void> {
 interface LIFXLightConfig {
   id: string;
   power: 'on' | 'off';
-  color: {
-    hue: number; // 0-360
-    saturation: number; // 0-1
-    brightness: number; // 0-1
-  };
+  color:
+    | {
+        hue: number; // 0-360
+        saturation: number; // 0-1
+        brightness: number; // 0-1
+      }
+    | {
+        temperature: number; // Thousands
+        brightness: number; // 0-1
+      };
 }
 
 async function sendLightStates(token: string, config: LIFXLightConfig[]) {
@@ -185,7 +191,7 @@ export async function setLightState({
       continue;
     }
 
-    const color = {
+    let color: LIFXLightConfig['color'] = {
       hue: 0,
       saturation: 0,
       brightness: 0
@@ -197,11 +203,22 @@ export async function setLightState({
           `Internal Error: pattern type ${pattern.type} cannot be used with LIFX`
         );
       }
-      color.hue = pattern.data.color.hue;
-      color.saturation = pattern.data.color.saturation;
-      color.brightness =
-        (lightEntry.brightness / MAX_BRIGHTNESS) *
-        (scene.brightness / MAX_BRIGHTNESS);
+      if (pattern.data.color.type === ColorType.HSV) {
+        color = {
+          hue: pattern.data.color.hue,
+          saturation: pattern.data.color.saturation,
+          brightness:
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+            (scene.brightness / MAX_BRIGHTNESS)
+        };
+      } else {
+        color = {
+          temperature: pattern.data.color.temperature,
+          brightness:
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+            (scene.brightness / MAX_BRIGHTNESS)
+        };
+      }
     }
     config.push({
       id: (light as LIFXLight).lifxId,

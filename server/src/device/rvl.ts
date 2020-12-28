@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { rgb2hsv } from '@swiftcarrot/color-fns';
+import { colorTemperature2rgb } from 'color-temperature';
 import {
   createManager,
   createWaveParameters,
@@ -30,7 +32,9 @@ import {
 } from 'rvl-node';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
+  Color,
   ColorCyclePattern,
+  ColorType,
   LightType,
   PatternType,
   PulsePattern,
@@ -49,6 +53,15 @@ export async function init(): Promise<void> {
   manager = await createManager();
   // Devices are initialized on a per-channel basis, so we do nothing here
   console.log('RVL devices initialized');
+}
+
+function getColor(color: Color): { hue: number; saturation: number } {
+  if (color.type === ColorType.HSV) {
+    return { hue: color.hue, saturation: color.saturation };
+  }
+  const rgb = colorTemperature2rgb(color.temperature);
+  const hsv = rgb2hsv(rgb.red, rgb.green, rgb.blue);
+  return { hue: hsv.h, saturation: hsv.s / 100 };
 }
 
 export async function setLightState({
@@ -88,14 +101,11 @@ export async function setLightState({
         }
         case PatternType.Pulse: {
           const { data } = pattern as PulsePattern;
+          const color = getColor(data.color);
           controller.setWaveParameters(createWaveParameters());
           controller.setWaveParameters(
             createWaveParameters(
-              createPulsingWave(
-                data.color.hue,
-                data.color.saturation,
-                data.rate
-              )
+              createPulsingWave(color.hue, color.saturation, data.rate)
             )
           );
           break;
@@ -109,11 +119,12 @@ export async function setLightState({
         }
         case PatternType.Solid: {
           const { data } = pattern as SolidPattern;
+          const color = getColor(data.color);
           controller.setWaveParameters(
             createWaveParameters(
               createSolidColorWave(
-                Math.round((data.color.hue / 360) * 255),
-                Math.round(data.color.saturation * 255),
+                Math.round((color.hue / 360) * 255),
+                Math.round(color.saturation * 255),
                 Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
               )
             )
@@ -122,22 +133,25 @@ export async function setLightState({
         }
         case PatternType.Wave: {
           const { data } = pattern as WavePattern;
+          const waveColor = getColor(data.waveColor);
+          const foregroundColor = getColor(data.foregroundColor);
+          const backgroundColor = getColor(data.backgroundColor);
           controller.setWaveParameters(
             createWaveParameters(
               createMovingWave(
-                data.waveColor.hue,
-                data.waveColor.saturation,
+                waveColor.hue,
+                waveColor.saturation,
                 data.rate,
                 2
               ),
               createPulsingWave(
-                data.foregroundColor.hue,
-                data.foregroundColor.saturation,
+                foregroundColor.hue,
+                foregroundColor.saturation,
                 data.rate
               ),
               createSolidColorWave(
-                data.backgroundColor.hue,
-                data.backgroundColor.saturation,
+                backgroundColor.hue,
+                backgroundColor.saturation,
                 255
               )
             )
