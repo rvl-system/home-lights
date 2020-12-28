@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { Server } from 'ws';
+import WebSocket, { Server } from 'ws';
 import { ActionType } from './common/actions';
 import { AppState, Notification } from './common/types';
 import { getLights } from './db/lights';
@@ -95,12 +95,16 @@ export function init(): Promise<void> {
 
         await reconcile();
 
-        connection.send(
-          JSON.stringify({
-            type: ActionType.AppStateUpdated,
-            data: getAppState()
-          })
-        );
+        for (const client of server.clients) {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({
+                type: ActionType.AppStateUpdated,
+                data: getAppState()
+              })
+            );
+          }
+        }
       });
       connection.send(
         JSON.stringify({
