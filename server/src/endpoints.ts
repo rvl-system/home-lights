@@ -22,7 +22,12 @@ import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { Server } from 'ws';
 import { ActionType } from './common/actions';
-import { getAppState } from './endpoints/endpoint';
+import { AppState } from './common/types';
+import { getLights } from './db/lights';
+import { getPatterns } from './db/patterns';
+import { getScenes } from './db/scenes';
+import { getZones } from './db/zones';
+import { getSystemState } from './device';
 import { createLightHandlers } from './endpoints/lights';
 import { createPatternHandlers } from './endpoints/patterns';
 import { createScenesHandlers } from './endpoints/scenes';
@@ -30,6 +35,16 @@ import { createStateHandlers } from './endpoints/state';
 import { createZoneHandlers } from './endpoints/zones';
 import { reconcile } from './reconcile';
 import { getEnvironmentVariable } from './util';
+
+function getAppState(): AppState {
+  return {
+    zones: getZones(),
+    scenes: getScenes(),
+    patterns: getPatterns(),
+    lights: getLights(),
+    systemState: getSystemState()
+  };
+}
 
 export function init(): Promise<void> {
   return new Promise((resolve) => {
