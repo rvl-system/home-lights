@@ -25,6 +25,7 @@ import {
   PHILIPS_HUE_DEVICE_NAME
 } from '../common/config';
 import {
+  ColorType,
   LightType,
   PatternType,
   PhilipsHueLight,
@@ -75,28 +76,40 @@ export async function setLightState({
     }
 
     let lightState: InstanceType<typeof LightState>;
-    if (!zoneState.power) {
+    if (!zoneState.power || lightEntry.patternId === undefined) {
       lightState = new LightState().off();
-    } else if (lightEntry.patternId !== undefined) {
+    } else {
       const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
       if (pattern.type !== PatternType.Solid) {
         throw new Error(
           `Internal Error: pattern type ${pattern.type} cannot be used with Philips Hue`
         );
       }
-      lightState = new LightState()
-        .on(true)
-        .hsb(
-          pattern.data.color.hue,
-          Math.round(pattern.data.color.saturation * 100),
-          Math.round(
-            (lightEntry.brightness / MAX_BRIGHTNESS) *
-              (scene.brightness / MAX_BRIGHTNESS) *
-              100
-          )
-        );
-    } else {
-      lightState = new LightState().off();
+      const { color } = pattern.data;
+      if (color.type === ColorType.HSV) {
+        lightState = new LightState()
+          .on(true)
+          .hsb(
+            color.hue,
+            Math.round(color.saturation * 100),
+            Math.round(
+              (lightEntry.brightness / MAX_BRIGHTNESS) *
+                (scene.brightness / MAX_BRIGHTNESS) *
+                100
+            )
+          );
+      } else {
+        lightState = new LightState()
+          .on(true)
+          .white(
+            Math.round(1000000 / color.temperature),
+            Math.round(
+              (lightEntry.brightness / MAX_BRIGHTNESS) *
+                (scene.brightness / MAX_BRIGHTNESS) *
+                100
+            )
+          );
+      }
     }
 
     promises.push(

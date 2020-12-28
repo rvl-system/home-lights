@@ -25,7 +25,7 @@ export interface ZonePowerSwitchProps {
   zone: Zone;
   editMode: EditMode;
   className: string;
-  defaultChecked: boolean;
+  checked: boolean;
 }
 
 export interface ZonePowerSwitchDispatch {
@@ -47,7 +47,7 @@ export const ZonePowerSwitch: FunctionComponent<
           onChange={(e) =>
             props.setZonePower(props.zone.id, e.currentTarget.checked)
           }
-          checked={props.defaultChecked}
+          checked={props.checked}
         />
       )}
     </React.Fragment>

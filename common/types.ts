@@ -91,10 +91,23 @@ export enum PatternType {
   Wave = 'wave'
 }
 
-export interface Color {
+export enum ColorType {
+  HSV = 'HSV',
+  Temperature = 'Temperature'
+}
+
+export interface HSVColor {
+  type: ColorType.HSV;
   hue: number;
   saturation: number;
 }
+
+export interface TemperatureColor {
+  type: ColorType.Temperature;
+  temperature: number;
+}
+
+export type Color = HSVColor | TemperatureColor;
 
 export interface Pattern {
   id: number;

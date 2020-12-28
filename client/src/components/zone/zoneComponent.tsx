@@ -79,7 +79,7 @@ export const ZoneComponent: FunctionComponent<
                 zone={props.zone}
                 editMode={props.editMode}
                 setZonePower={props.setZonePower}
-                defaultChecked={props.state.power}
+                checked={props.state.power}
               />
               <Typography className={contentClasses.itemTitle}>
                 {props.zone.name}
@@ -92,7 +92,9 @@ export const ZoneComponent: FunctionComponent<
             </div>
             <div>
               <Slider
-                disabled={props.state.currentSceneId === undefined}
+                disabled={
+                  props.state.currentSceneId === undefined || !props.state.power
+                }
                 value={props.currentScene ? props.currentScene.brightness : 0}
                 valueLabelDisplay="auto"
                 step={BRIGHTNESS_STEP}

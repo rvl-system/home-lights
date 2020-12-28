@@ -89,6 +89,10 @@ export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
 ) => {
   const scene = getItem(request.sceneId, await getScenes());
   const zoneState = getItem(scene.zoneId, systemState.zoneStates, 'zoneId');
+  setZonePower({
+    zoneId: scene.zoneId,
+    power: true
+  });
   zoneState.currentSceneId = request.sceneId;
   setLightState(zoneState);
 };
