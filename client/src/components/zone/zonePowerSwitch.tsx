@@ -19,8 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Switch } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
-import { Zone } from '../../common/types';
-import { EditMode } from '../../types';
+import { EditMode, Zone } from '../../common/types';
 
 export interface ZonePowerSwitchProps {
   zone: Zone;

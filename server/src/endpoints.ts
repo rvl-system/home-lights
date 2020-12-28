@@ -20,12 +20,31 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { init as initLights } from './endpoints/lights';
-import { init as initPatterns } from './endpoints/patterns';
-import { init as initScenes } from './endpoints/scenes';
-import { init as initState } from './endpoints/state';
-import { init as initZones } from './endpoints/zones';
+import WebSocket, { Server } from 'ws';
+import { ActionType } from './common/actions';
+import { AppState, Notification } from './common/types';
+import { getLights } from './db/lights';
+import { getPatterns } from './db/patterns';
+import { getScenes } from './db/scenes';
+import { getZones } from './db/zones';
+import { getSystemState } from './device';
+import { createLightHandlers } from './endpoints/lights';
+import { createPatternHandlers } from './endpoints/patterns';
+import { createScenesHandlers } from './endpoints/scenes';
+import { createStateHandlers } from './endpoints/state';
+import { createZoneHandlers } from './endpoints/zones';
+import { reconcile } from './reconcile';
 import { getEnvironmentVariable } from './util';
+
+function getAppState(): AppState {
+  return {
+    zones: getZones(),
+    scenes: getScenes(),
+    patterns: getPatterns(),
+    lights: getLights(),
+    systemState: getSystemState()
+  };
+}
 
 export function init(): Promise<void> {
   return new Promise((resolve) => {
@@ -36,11 +55,13 @@ export function init(): Promise<void> {
       root: join(__dirname, '..', '..', 'public')
     });
 
-    initZones(app);
-    initScenes(app);
-    initPatterns(app);
-    initLights(app);
-    initState(app);
+    const handlers = {
+      ...createZoneHandlers(),
+      ...createScenesHandlers(),
+      ...createPatternHandlers(),
+      ...createLightHandlers(),
+      ...createStateHandlers()
+    };
 
     app.listen(port, '0.0.0.0', (err, address) => {
       if (err) {
@@ -48,6 +69,49 @@ export function init(): Promise<void> {
       }
       console.log(`Endpoints initialized at ${address}`);
       resolve();
+    });
+
+    const server = new Server({
+      server: app.server
+    });
+
+    server.on('connection', (connection) => {
+      connection.on('message', async (message) => {
+        const action = JSON.parse(message.toString());
+        if (!handlers[action.type]) {
+          const data: Notification = {
+            severity: 'error',
+            message: `Invalid message "${action.type}"`
+          };
+          connection.send(
+            JSON.stringify({
+              type: ActionType.Notify,
+              data
+            })
+          );
+          return;
+        }
+        await handlers[action.type](action.data);
+
+        await reconcile();
+
+        for (const client of server.clients) {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({
+                type: ActionType.AppStateUpdated,
+                data: getAppState()
+              })
+            );
+          }
+        }
+      });
+      connection.send(
+        JSON.stringify({
+          type: ActionType.Hello,
+          data: getAppState()
+        })
+      );
     });
   });
 }

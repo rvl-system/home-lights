@@ -24,7 +24,7 @@ import {
   EmojiObjects as EmojiObjectsIcon
 } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { SelectedTab } from '../types';
+import { SelectedTab } from '../common/types';
 
 export interface FooterComponentProps {
   activeTab: SelectedTab;

@@ -22,7 +22,6 @@ import { MAX_BRIGHTNESS } from '../common/config';
 import {
   LightType,
   LIFXLight,
-  CreateLIFXLightRequest,
   PatternType,
   SolidPattern
 } from '../common/types';
@@ -106,7 +105,7 @@ async function updateLights(token: string, location: string): Promise<void> {
       console.log(
         `Found LIFX light "${light.label}" not in database, adding...`
       );
-      const newLight: CreateLIFXLightRequest = {
+      const newLight: Omit<LIFXLight, 'id'> = {
         lifxId: light.id,
         type: LightType.LIFX,
         name: light.label
@@ -124,7 +123,7 @@ async function updateLights(token: string, location: string): Promise<void> {
       console.log(
         `LIFX light "${dbLight.name}" is no longer registered with the LIFX service, deleting...`
       );
-      await deleteLight(dbLight.id);
+      await deleteLight({ id: dbLight.id });
     }
   }
 }

@@ -25,8 +25,8 @@ import {
 } from '@material-ui/core/styles';
 import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent } from 'react';
+import { SelectedTab } from '../common/types';
 
-import { SelectedTab } from '../types';
 import { FooterContainer } from './footerContainer';
 import { LightsTabContainer } from './light/lightsTabContainer';
 import { NotificationContainer } from './notificationContainer';

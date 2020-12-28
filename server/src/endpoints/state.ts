@@ -17,46 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { FastifyInstance } from 'fastify';
-import {
-  SetZoneSceneRequest,
-  SetZoneBrightnessRequest,
-  SetZonePowerRequest
-} from '../common/types';
-import {
-  getSystemState,
-  setZoneScene,
-  setZonePower,
-  setZoneBrightness
-} from '../device';
-import { getAppState, post } from './endpoint';
+import { ActionType } from '../common/actions';
+import { setZoneScene, setZonePower, setZoneBrightness } from '../device';
+import { ActionHandler } from '../types';
 
-export function init(app: FastifyInstance): void {
-  app.get('/api/app-state', async () => getAppState());
-
-  app.get('/api/states', async () => getSystemState());
-
-  app.post(
-    '/api/state-scene',
-    post(async (sceneRequest: SetZoneSceneRequest) => {
-      await setZoneScene(sceneRequest.sceneId);
-    })
-  );
-
-  app.post(
-    '/api/state-power',
-    post(async (powerRequest: SetZonePowerRequest) => {
-      await setZonePower(powerRequest.zoneId, powerRequest.power);
-    })
-  );
-
-  app.post(
-    '/api/state-brightness',
-    post(async (brightnessRequest: SetZoneBrightnessRequest) => {
-      await setZoneBrightness(
-        brightnessRequest.zoneId,
-        brightnessRequest.brightness
-      );
-    })
-  );
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createStateHandlers(): Record<string, ActionHandler<any>> {
+  return {
+    [ActionType.SetZoneScene]: setZoneScene,
+    [ActionType.SetZonePower]: setZonePower,
+    [ActionType.SetZoneBrightness]: setZoneBrightness
+  };
 }

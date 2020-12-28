@@ -1,5 +1,6 @@
 import { Reduxology } from 'reduxology';
-import { Actions, State } from './types';
+import { Actions } from './common/actions';
+import { State } from './types';
 
 const reduxology = new Reduxology<State, Actions>();
 

@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
-import { ActionType, SliceName } from '../../types';
+import { SliceName } from '../../types';
 import {
   PatternsTab,
   PatternsTabProps,
@@ -31,7 +32,7 @@ export const PatternsTabContainer = createContainer(
   }),
   (dispatch): PatternsTabDispatch => ({
     deletePattern(id: number) {
-      dispatch(ActionType.DeletePattern, id);
+      dispatch(ActionType.DeletePattern, { id });
     }
   }),
   PatternsTab

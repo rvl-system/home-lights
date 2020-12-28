@@ -18,8 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { render } from 'react-dom';
-import { AppState } from './common/types';
 import { AppContainer } from './components/appContainer';
+import { connect } from './connection';
 import { listeners } from './listeners/listeners';
 import { createLightsReducers } from './reducers/lightsReducer';
 import { notificationsReducer } from './reducers/notificationsReducer';
@@ -29,10 +29,9 @@ import { selectedTabReducer } from './reducers/selectedTabReducer';
 import { createStateReducers } from './reducers/stateReducer';
 import { createZonesReducers } from './reducers/zonesReducer';
 import { createApp } from './reduxology';
-import { get } from './util/api';
 
 async function run() {
-  const appState = await get<AppState>('/api/app-state');
+  const appState = await connect();
 
   const app = createApp({
     container: AppContainer,

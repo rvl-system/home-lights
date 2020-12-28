@@ -17,16 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from '../common/actions';
 import { MAX_BRIGHTNESS } from '../common/config';
-import {
-  CreateSceneRequest,
-  Light,
-  Pattern,
-  Scene,
-  Zone
-} from '../common/types';
+import { Light, Pattern, Scene, Zone } from '../common/types';
 import { getItem, hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
+import { ActionHandler } from '../types';
 
 export const SCENES_TABLE_NAME = 'scenes';
 export const SCENES_SCHEMA = `
@@ -126,32 +122,32 @@ export function getScenes(): Scene[] {
   return scenes;
 }
 
-export async function createScene(
-  sceneRequest: CreateSceneRequest
-): Promise<void> {
+export const createScene: ActionHandler<ActionType.CreateScene> = async (
+  request
+) => {
   await dbRun(
     `INSERT INTO ${SCENES_TABLE_NAME} (zone_id, name, lights) VALUES (?, ?, ?)`,
-    [
-      sceneRequest.zoneId,
-      sceneRequest.name,
-      JSON.stringify(sceneRequest.lights)
-    ]
+    [request.zoneId, request.name, JSON.stringify(request.lights)]
   );
   await updateCache();
-}
+};
 
-export async function editScene(scene: Scene): Promise<void> {
+export const editScene: ActionHandler<ActionType.EditScene> = async (
+  request
+) => {
   await dbRun(
     `UPDATE ${SCENES_TABLE_NAME} SET name = ?, lights = ? WHERE id = ?`,
-    [scene.name, JSON.stringify(scene.lights), scene.id]
+    [request.name, JSON.stringify(request.lights), request.id]
   );
   await updateCache();
-}
+};
 
-export async function deleteScene(id: number): Promise<void> {
-  await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [id]);
+export const deleteScene: ActionHandler<ActionType.DeleteScene> = async (
+  request
+) => {
+  await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [request.id]);
   await updateCache();
-}
+};
 
 export async function setSceneBrightness(
   id: number,

@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import debounce from 'debounce';
+import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
-import { SliceName, ActionType } from '../../types';
+import { SliceName } from '../../types';
 import { ZonesTab, ZonesTabProps, ZonesTabDispatch } from './zonesTab';
 
 export const ZonesTabContainer = createContainer(
@@ -30,14 +30,14 @@ export const ZonesTabContainer = createContainer(
   }),
   (dispatch): ZonesTabDispatch => ({
     deleteZone(id) {
-      dispatch(ActionType.DeleteZone, id);
+      dispatch(ActionType.DeleteZone, { id });
     },
     setZonePower(zoneId, power) {
       dispatch(ActionType.SetZonePower, { zoneId, power });
     },
-    setZoneBrightness: debounce((zoneId, brightness) => {
+    setZoneBrightness: (zoneId, brightness) => {
       dispatch(ActionType.SetZoneBrightness, { zoneId, brightness });
-    }, 33)
+    }
   }),
   ZonesTab
 );

@@ -17,10 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Zone } from '../../common/types';
+import { ActionType } from '../../common/actions';
+import { EditMode, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { createContainer } from '../../reduxology';
-import { SliceName, ActionType, EditMode } from '../../types';
+import { SliceName } from '../../types';
 import {
   ZoneScenesComponent,
   ZoneScenesComponentProps,
@@ -51,7 +52,7 @@ export const ZoneScenesContainer = createContainer(
   },
   (dispatch): ZoneScenesComponentDispatch => ({
     deleteScene(id) {
-      dispatch(ActionType.DeleteScene, id);
+      dispatch(ActionType.DeleteScene, { id });
     },
     setZoneScene(zoneId, sceneId) {
       dispatch(ActionType.SetZoneScene, { zoneId, sceneId });
