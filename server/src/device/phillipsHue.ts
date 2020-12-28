@@ -102,7 +102,7 @@ export async function setLightState({
         lightState = new LightState()
           .on(true)
           .white(
-            color.temperature,
+            Math.round(1000000 / color.temperature),
             Math.round(
               (lightEntry.brightness / MAX_BRIGHTNESS) *
                 (scene.brightness / MAX_BRIGHTNESS) *
