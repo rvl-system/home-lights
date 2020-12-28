@@ -42,7 +42,7 @@ export const ZoneScenesContainer = createContainer(
     );
     return {
       zone: ownProps.zone,
-      zoneScenes: getSlice(SliceName.Scenes).filter(
+      zoneScenes: getSlice(SliceName.Scenes).scenes.filter(
         (scene) => scene.zoneId === ownProps.zone.id
       ),
       zoneLights: [],

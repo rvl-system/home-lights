@@ -25,6 +25,7 @@ export interface AppState {
   patterns: Pattern[];
   lights: Light[];
   systemState: SystemState;
+  version: number;
 }
 
 // ---- Zone Types ----

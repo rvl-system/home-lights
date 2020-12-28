@@ -24,7 +24,7 @@ import { EditMode, Scene, SystemState, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { useContainerStyles } from '../lib/pageStyles';
 import { CreateZoneButtonContainer } from './createZoneButtonContainer';
-import { ZoneComponent } from './zoneComponent';
+import { ZoneComponent, ZoneComponentDispatch } from './zoneComponent';
 
 export interface ZonesTabProps {
   zones: Zone[];
@@ -32,11 +32,7 @@ export interface ZonesTabProps {
   state: SystemState;
 }
 
-export interface ZonesTabDispatch {
-  deleteZone: (id: number) => void;
-  setZonePower: (id: number, powerState: boolean) => void;
-  setZoneBrightness: (id: number, brightness: number) => void;
-}
+export type ZonesTabDispatch = ZoneComponentDispatch;
 
 export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
   props

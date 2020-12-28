@@ -66,7 +66,11 @@ export interface Actions {
 
   [ActionType.SetZoneScene]: { zoneId: number; sceneId: number };
   [ActionType.SetZonePower]: { zoneId: number; power: boolean };
-  [ActionType.SetZoneBrightness]: { zoneId: number; brightness: number };
+  [ActionType.SetZoneBrightness]: {
+    zoneId: number;
+    sceneId: number;
+    brightness: number;
+  };
 
   [ActionType.CreateZone]: Omit<Zone, 'id'>;
   [ActionType.EditZone]: Zone;

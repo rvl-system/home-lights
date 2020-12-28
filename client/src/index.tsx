@@ -38,7 +38,7 @@ async function run() {
     listeners,
     reducers: [
       createZonesReducers(appState.zones),
-      createScenesReducers(appState.scenes),
+      createScenesReducers(appState.scenes, appState.version),
       createPatternsReducers(appState.patterns),
       createLightsReducers(appState.lights),
       createStateReducers(appState.systemState),

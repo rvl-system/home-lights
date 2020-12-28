@@ -26,7 +26,7 @@ export const ZonesTabContainer = createContainer(
   (getSlice): ZonesTabProps => ({
     zones: getSlice(SliceName.Zones),
     state: getSlice(SliceName.State),
-    scenes: getSlice(SliceName.Scenes)
+    scenes: getSlice(SliceName.Scenes).scenes
   }),
   (dispatch): ZonesTabDispatch => ({
     deleteZone(id) {
@@ -35,8 +35,8 @@ export const ZonesTabContainer = createContainer(
     setZonePower(zoneId, power) {
       dispatch(ActionType.SetZonePower, { zoneId, power });
     },
-    setZoneBrightness: (zoneId, brightness) => {
-      dispatch(ActionType.SetZoneBrightness, { zoneId, brightness });
+    setZoneBrightness: (zoneId, sceneId, brightness) => {
+      dispatch(ActionType.SetZoneBrightness, { zoneId, sceneId, brightness });
     }
   }),
   ZonesTab

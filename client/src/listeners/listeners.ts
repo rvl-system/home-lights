@@ -21,29 +21,35 @@ import { ActionType } from '../common/actions';
 import { sendMessage } from '../connection';
 import { createListener, dispatch } from '../reduxology';
 
-export const listeners = attachActionsToSocket({
-  [ActionType.CreateZone]: 'Failed to create zone',
-  [ActionType.EditZone]: 'Failed to edit zone',
-  [ActionType.DeleteZone]: 'Failed to delete zone',
+const DEBOUNCE_INTERVAL = 33;
 
-  [ActionType.CreateScene]: 'Failed to create scene',
-  [ActionType.EditScene]: 'Failed to edit scene',
-  [ActionType.DeleteScene]: 'Failed to delete scene',
+export const listeners = [
+  ...connectActions({
+    [ActionType.CreateZone]: 'Failed to create zone',
+    [ActionType.EditZone]: 'Failed to edit zone',
+    [ActionType.DeleteZone]: 'Failed to delete zone',
 
-  [ActionType.CreatePattern]: 'Failed to create pattern',
-  [ActionType.EditPattern]: 'Failed to edit pattern',
-  [ActionType.DeletePattern]: 'Failed to delete pattern',
+    [ActionType.CreateScene]: 'Failed to create scene',
+    [ActionType.EditScene]: 'Failed to edit scene',
+    [ActionType.DeleteScene]: 'Failed to delete scene',
 
-  [ActionType.CreateRVLLight]: 'Failed to create light',
-  [ActionType.EditLight]: 'Failed to edit light',
-  [ActionType.DeleteLight]: 'Failed to delete light',
+    [ActionType.CreatePattern]: 'Failed to create pattern',
+    [ActionType.EditPattern]: 'Failed to edit pattern',
+    [ActionType.DeletePattern]: 'Failed to delete pattern',
 
-  [ActionType.SetZoneScene]: 'Failed to set the zone scene',
-  [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness',
-  [ActionType.SetZonePower]: 'Failed to set the zone power'
-});
+    [ActionType.CreateRVLLight]: 'Failed to create light',
+    [ActionType.EditLight]: 'Failed to edit light',
+    [ActionType.DeleteLight]: 'Failed to delete light',
 
-function attachActionsToSocket(spec: Record<string, string>) {
+    [ActionType.SetZoneScene]: 'Failed to set the zone scene',
+    [ActionType.SetZonePower]: 'Failed to set the zone power'
+  }),
+  ...connectDebouncedActions({
+    [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness'
+  })
+];
+
+function connectActions(spec: Record<string, string>) {
   const listeners = [];
   for (const action in spec) {
     listeners.push(
@@ -59,6 +65,41 @@ function attachActionsToSocket(spec: Record<string, string>) {
             severity: 'error',
             message: spec[action]
           });
+        }
+      })
+    );
+  }
+  return listeners;
+}
+
+const debounceMap = new Map<string, unknown>();
+function connectDebouncedActions(spec: Record<string, string>) {
+  const listeners = [];
+  for (const action in spec) {
+    let isSending = false;
+    listeners.push(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      createListener(action as any, async (data) => {
+        function sendAction() {
+          try {
+            sendMessage({
+              type: action as ActionType,
+              data: debounceMap.get(action)
+            });
+          } catch {
+            dispatch(ActionType.Notify, {
+              severity: 'error',
+              message: spec[action]
+            });
+          }
+        }
+        debounceMap.set(action, data);
+        if (!isSending) {
+          isSending = true;
+          setTimeout(() => {
+            isSending = false;
+            sendAction();
+          }, DEBOUNCE_INTERVAL);
         }
       })
     );
