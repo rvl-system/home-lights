@@ -19,17 +19,44 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { Scene } from '../common/types';
+import { getItem } from '../common/util';
 import { createReducer } from '../reduxology';
 import { SliceName } from '../types';
 
 // Typing this return type explicitly is very hard, but can be inferred easily
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function createScenesReducers(initialScenes: Scene[]) {
-  const scenesReducer = createReducer(SliceName.Scenes, initialScenes);
+export function createScenesReducers(
+  initialScenes: Scene[],
+  initialVersion: number
+) {
+  const scenesReducer = createReducer(SliceName.Scenes, {
+    scenes: initialScenes,
+    version: initialVersion
+  });
 
   scenesReducer.handle(
     ActionType.AppStateUpdated,
-    (state, { scenes }) => scenes
+    (state, { scenes, version }) => {
+      if (state.version < version) {
+        return { scenes, version };
+      } else {
+        return {
+          scenes: scenes.map((scene) => ({
+            ...scene,
+            brightness: getItem(scene.id, state.scenes).brightness
+          })),
+          version: state.version
+        };
+      }
+    }
+  );
+
+  scenesReducer.handle(
+    ActionType.SetZoneBrightness,
+    (state, { brightness, sceneId }) => {
+      getItem(sceneId, state.scenes).brightness = brightness;
+      state.version++;
+    }
   );
 
   return scenesReducer;

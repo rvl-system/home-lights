@@ -50,7 +50,11 @@ export interface ZoneComponentProps {
 
 export type ZoneComponentDispatch = DeleteZoneButtonDispatch &
   ZonePowerSwitchDispatch & {
-    setZoneBrightness: (zoneId: number, brightness: number) => void;
+    setZoneBrightness: (
+      zoneId: number,
+      sceneId: number,
+      brightness: number
+    ) => void;
   };
 
 export const ZoneComponent: FunctionComponent<
@@ -100,7 +104,16 @@ export const ZoneComponent: FunctionComponent<
                       'Internal Error: expected number but got number[]'
                     );
                   }
-                  props.setZoneBrightness(props.zone.id, newValue);
+                  if (!props.currentScene) {
+                    throw new Error(
+                      'Internal Error: currentScene is undefined'
+                    );
+                  }
+                  props.setZoneBrightness(
+                    props.zone.id,
+                    props.currentScene.id,
+                    newValue
+                  );
                 }}
               />
             </div>

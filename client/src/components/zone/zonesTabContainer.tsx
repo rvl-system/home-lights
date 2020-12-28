@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { debounce } from '@material-ui/core';
 import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
@@ -27,7 +26,7 @@ export const ZonesTabContainer = createContainer(
   (getSlice): ZonesTabProps => ({
     zones: getSlice(SliceName.Zones),
     state: getSlice(SliceName.State),
-    scenes: getSlice(SliceName.Scenes)
+    scenes: getSlice(SliceName.Scenes).scenes
   }),
   (dispatch): ZonesTabDispatch => ({
     deleteZone(id) {
@@ -36,9 +35,9 @@ export const ZonesTabContainer = createContainer(
     setZonePower(zoneId, power) {
       dispatch(ActionType.SetZonePower, { zoneId, power });
     },
-    setZoneBrightness: debounce((zoneId, brightness) => {
-      dispatch(ActionType.SetZoneBrightness, { zoneId, brightness });
-    }, 33)
+    setZoneBrightness: (zoneId, sceneId, brightness) => {
+      dispatch(ActionType.SetZoneBrightness, { zoneId, sceneId, brightness });
+    }
   }),
   ZonesTab
 );

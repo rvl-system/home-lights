@@ -36,13 +36,16 @@ import { createZoneHandlers } from './endpoints/zones';
 import { reconcile } from './reconcile';
 import { getEnvironmentVariable } from './util';
 
+let version = 1;
+
 function getAppState(): AppState {
   return {
     zones: getZones(),
     scenes: getScenes(),
     patterns: getPatterns(),
     lights: getLights(),
-    systemState: getSystemState()
+    systemState: getSystemState(),
+    version
   };
 }
 
@@ -77,6 +80,7 @@ export function init(): Promise<void> {
 
     server.on('connection', (connection) => {
       connection.on('message', async (message) => {
+        // Handle the action itself
         const action = JSON.parse(message.toString());
         if (!handlers[action.type]) {
           const data: Notification = {
@@ -93,8 +97,11 @@ export function init(): Promise<void> {
         }
         await handlers[action.type](action.data);
 
+        // Reconcile data after the transaction, and increment the version
         await reconcile();
+        version++;
 
+        // Notify all connected clients of the change
         for (const client of server.clients) {
           if (client.readyState === WebSocket.OPEN) {
             client.send(

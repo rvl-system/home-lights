@@ -40,7 +40,7 @@ export enum SliceName {
 
 export interface State {
   [SliceName.Zones]: Zone[];
-  [SliceName.Scenes]: Scene[];
+  [SliceName.Scenes]: { scenes: Scene[]; version: number };
   [SliceName.Lights]: Light[];
   [SliceName.Patterns]: Pattern[];
   [SliceName.State]: SystemState;
