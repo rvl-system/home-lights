@@ -17,12 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { FastifyInstance } from 'fastify';
+import { ActionType } from '../common/actions';
 import { createZone, editZone, deleteZone } from '../db/zones';
-import { post, put, del } from './endpoint';
+import { ActionHandler } from '../types';
 
-export function init(app: FastifyInstance): void {
-  app.post('/api/zones', post(createZone));
-  app.put('/api/zone/:id', put(editZone));
-  app.delete('/api/zone/:id', del(deleteZone));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createZoneHandlers(): Record<string, ActionHandler<any>> {
+  return {
+    [ActionType.CreateZone]: createZone,
+    [ActionType.EditZone]: editZone,
+    [ActionType.DeleteZone]: deleteZone
+  };
 }

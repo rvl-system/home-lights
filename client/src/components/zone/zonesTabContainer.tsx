@@ -31,7 +31,7 @@ export const ZonesTabContainer = createContainer(
   }),
   (dispatch): ZonesTabDispatch => ({
     deleteZone(id) {
-      dispatch(ActionType.DeleteZone, id);
+      dispatch(ActionType.DeleteZone, { id });
     },
     setZonePower(zoneId, power) {
       dispatch(ActionType.SetZonePower, { zoneId, power });

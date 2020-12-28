@@ -22,9 +22,25 @@ import { sendMessage } from '../connection';
 import { createListener } from '../reduxology';
 
 export const listeners = attachActionsToSocket({
+  [ActionType.CreateZone]: 'Failed to create zone',
+  [ActionType.EditZone]: 'Failed to edit zone',
+  [ActionType.DeleteZone]: 'Failed to delete zone',
+
+  [ActionType.CreateScene]: 'Failed to create scene',
+  [ActionType.EditScene]: 'Failed to edit scene',
+  [ActionType.DeleteScene]: 'Failed to delete scene',
+
+  [ActionType.CreatePattern]: 'Failed to create pattern',
+  [ActionType.EditPattern]: 'Failed to edit pattern',
+  [ActionType.DeletePattern]: 'Failed to delete pattern',
+
   [ActionType.CreateRVLLight]: 'Failed to create light',
   [ActionType.EditLight]: 'Failed to edit light',
-  [ActionType.DeleteLight]: 'Failed to delete light'
+  [ActionType.DeleteLight]: 'Failed to delete light',
+
+  [ActionType.SetZoneScene]: 'Failed to set the zone scene',
+  [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness',
+  [ActionType.SetZonePower]: 'Failed to set the zone power'
 });
 
 function attachActionsToSocket(spec: Record<string, string>) {
@@ -34,7 +50,7 @@ function attachActionsToSocket(spec: Record<string, string>) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       createListener(action as any, async (data) => {
         sendMessage({
-          action: action as ActionType,
+          type: action as ActionType,
           data
         });
       })

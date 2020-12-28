@@ -17,12 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Patterns.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { FastifyInstance } from 'fastify';
+import { ActionType } from '../common/actions';
 import { createPattern, editPattern, deletePattern } from '../db/patterns';
-import { post, put, del } from './endpoint';
+import { ActionHandler } from '../types';
 
-export function init(app: FastifyInstance): void {
-  app.post('/api/patterns', post(createPattern));
-  app.put('/api/pattern/:id', put(editPattern));
-  app.delete('/api/pattern/:id', del(deletePattern));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createPatternHandlers(): Record<string, ActionHandler<any>> {
+  return {
+    [ActionType.CreatePattern]: createPattern,
+    [ActionType.EditPattern]: editPattern,
+    [ActionType.DeletePattern]: deletePattern
+  };
 }

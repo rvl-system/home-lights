@@ -44,6 +44,6 @@ export function connect(): Promise<AppState> {
   });
 }
 
-export function sendMessage(data: { action: ActionType; data: unknown }): void {
+export function sendMessage(data: { type: ActionType; data: unknown }): void {
   socket.send(JSON.stringify(data));
 }

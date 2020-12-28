@@ -32,7 +32,7 @@ export const CreateZoneButtonContainer = createContainer(
   }),
   (dispatch): CreateZoneButtonDispatch => ({
     createZone(name) {
-      dispatch(ActionType.CreateZone, name);
+      dispatch(ActionType.CreateZone, { name });
     }
   }),
   CreateZoneButton

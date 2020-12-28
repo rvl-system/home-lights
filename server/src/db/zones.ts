@@ -17,8 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Zone, CreateZoneRequest } from '../common/types';
+import { ActionType } from '../common/actions';
+import { Zone } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
+import { ActionHandler } from '../types';
 
 export const ZONES_TABLE_NAME = 'zones';
 export const ZONES_SCHEMA = `
@@ -37,24 +39,26 @@ export function getZones(): Zone[] {
   return zones;
 }
 
-export async function createZone(
-  zoneRequest: CreateZoneRequest
-): Promise<void> {
+export const createZone: ActionHandler<ActionType.CreateZone> = async (
+  request
+) => {
   await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) VALUES (?)`, [
-    zoneRequest.name
+    request.name
   ]);
   await updateCache();
-}
+};
 
-export async function editZone(zone: Zone): Promise<void> {
+export const editZone: ActionHandler<ActionType.EditZone> = async (request) => {
   await dbRun(`UPDATE ${ZONES_TABLE_NAME} SET name = ? WHERE id = ?`, [
-    zone.name,
-    zone.id
+    request.name,
+    request.id
   ]);
   await updateCache();
-}
+};
 
-export async function deleteZone(id: number): Promise<void> {
-  await dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [id]);
+export const deleteZone: ActionHandler<ActionType.DeleteZone> = async (
+  request
+) => {
+  await dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [request.id]);
   await updateCache();
-}
+};

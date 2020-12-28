@@ -21,12 +21,14 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { Server } from 'ws';
+import { ActionType } from './common/actions';
 import { getAppState } from './endpoints/endpoint';
-import { init as initLights } from './endpoints/lights';
-import { init as initPatterns } from './endpoints/patterns';
-import { init as initScenes } from './endpoints/scenes';
-import { init as initState } from './endpoints/state';
-import { init as initZones } from './endpoints/zones';
+import { createLightHandlers } from './endpoints/lights';
+import { createPatternHandlers } from './endpoints/patterns';
+import { createScenesHandlers } from './endpoints/scenes';
+import { createStateHandlers } from './endpoints/state';
+import { createZoneHandlers } from './endpoints/zones';
+import { reconcile } from './reconcile';
 import { getEnvironmentVariable } from './util';
 
 export function init(): Promise<void> {
@@ -38,11 +40,13 @@ export function init(): Promise<void> {
       root: join(__dirname, '..', '..', 'public')
     });
 
-    initZones(app);
-    initScenes(app);
-    initPatterns(app);
-    initLights(app);
-    initState(app);
+    const handlers = {
+      ...createZoneHandlers(),
+      ...createScenesHandlers(),
+      ...createPatternHandlers(),
+      ...createLightHandlers(),
+      ...createStateHandlers()
+    };
 
     app.listen(port, '0.0.0.0', (err, address) => {
       if (err) {
@@ -57,12 +61,25 @@ export function init(): Promise<void> {
     });
 
     server.on('connection', (connection) => {
-      connection.on('message', (message) => {
-        console.log('received: %s', message);
+      connection.on('message', async (message) => {
+        const action = JSON.parse(message.toString());
+        if (!handlers[action.type]) {
+          throw new Error(`Received unknown message type ${action.type}`);
+        }
+        await handlers[action.type](action.data);
+
+        await reconcile();
+
+        connection.send(
+          JSON.stringify({
+            type: ActionType.AppStateUpdated,
+            data: getAppState()
+          })
+        );
       });
       connection.send(
         JSON.stringify({
-          type: 'Hello',
+          type: ActionType.Hello,
           data: getAppState()
         })
       );

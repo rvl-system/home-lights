@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from './common/actions';
 import { SystemState, Zone, ZoneState } from './common/types';
 import { getItem } from './common/util';
 import { getLights } from './db/lights';
@@ -36,6 +37,7 @@ import {
   setLightState as setPhilipsHueLightState
 } from './device/rvl';
 import { SetLightStateOptions } from './device/types';
+import { ActionHandler } from './types';
 
 const systemState: SystemState = {
   zoneStates: []
@@ -82,33 +84,33 @@ export function getSystemState(): SystemState {
   return systemState;
 }
 
-export async function setZoneScene(sceneId: number): Promise<void> {
-  const scene = getItem(sceneId, await getScenes());
+export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
+  request
+) => {
+  const scene = getItem(request.sceneId, await getScenes());
   const zoneState = getItem(scene.zoneId, systemState.zoneStates, 'zoneId');
-  zoneState.currentSceneId = sceneId;
+  zoneState.currentSceneId = request.sceneId;
   setLightState(zoneState);
-}
+};
 
-export async function setZoneBrightness(
-  zoneId: number,
-  brightness: number
-): Promise<void> {
-  const zoneState = getItem(zoneId, systemState.zoneStates, 'zoneId');
+export const setZoneBrightness: ActionHandler<ActionType.SetZoneBrightness> = async (
+  request
+) => {
+  const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
   if (zoneState.currentSceneId === undefined) {
     return;
   }
-  await setSceneBrightness(zoneState.currentSceneId, brightness);
+  await setSceneBrightness(zoneState.currentSceneId, request.brightness);
   setLightState(zoneState);
-}
+};
 
-export async function setZonePower(
-  zoneId: number,
-  power: boolean
-): Promise<void> {
-  const zoneState = getItem(zoneId, systemState.zoneStates, 'zoneId');
-  zoneState.power = power;
+export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
+  request
+) => {
+  const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
+  zoneState.power = request.power;
   setLightState(zoneState);
-}
+};
 
 async function setLightState(zoneState: ZoneState): Promise<void> {
   if (zoneState.currentSceneId === undefined) {

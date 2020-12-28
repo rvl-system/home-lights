@@ -17,8 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Pattern, CreatePatternRequest } from '../common/types';
+import { ActionType } from '../common/actions';
+import { Pattern } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
+import { ActionHandler } from '../types';
 
 export const PATTERNS_TABLE_NAME = 'patterns';
 export const PATTERNS_SCHEMA = `
@@ -51,25 +53,29 @@ export function getPatterns(): Pattern[] {
   return patterns;
 }
 
-export async function createPattern(
-  pattern: CreatePatternRequest
-): Promise<void> {
+export const createPattern: ActionHandler<ActionType.CreatePattern> = async (
+  request
+) => {
   await dbRun(
     `INSERT INTO ${PATTERNS_TABLE_NAME} (name, type, data) VALUES (?, ?, ?)`,
-    [pattern.name, pattern.type, JSON.stringify(pattern.data)]
+    [request.name, request.type, JSON.stringify(request.data)]
   );
   await updateCache();
-}
+};
 
-export async function editPattern(pattern: Pattern): Promise<void> {
+export const editPattern: ActionHandler<ActionType.EditPattern> = async (
+  request
+) => {
   await dbRun(
     `UPDATE ${PATTERNS_TABLE_NAME} SET name = ?, type = ?, data = ? WHERE id = ?`,
-    [pattern.name, pattern.type, JSON.stringify(pattern.data), pattern.id]
+    [request.name, request.type, JSON.stringify(request.data), request.id]
   );
   await updateCache();
-}
+};
 
-export async function deletePattern(id: number): Promise<void> {
-  await dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [id]);
+export const deletePattern: ActionHandler<ActionType.DeletePattern> = async (
+  request
+) => {
+  await dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [request.id]);
   await updateCache();
-}
+};

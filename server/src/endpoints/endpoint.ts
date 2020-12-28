@@ -17,14 +17,12 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { RouteHandlerMethod } from 'fastify';
 import { AppState } from '../common/types';
 import { getLights } from '../db/lights';
 import { getPatterns } from '../db/patterns';
 import { getScenes } from '../db/scenes';
 import { getZones } from '../db/zones';
 import { getSystemState } from '../device';
-import { reconcile } from '../reconcile';
 
 export function getAppState(): AppState {
   return {
@@ -33,36 +31,5 @@ export function getAppState(): AppState {
     patterns: getPatterns(),
     lights: getLights(),
     systemState: getSystemState()
-  };
-}
-
-export function post<T>(
-  handler: (body: T) => Promise<void>
-): RouteHandlerMethod {
-  return async function (req) {
-    await handler.call(this, req.body as T);
-    await reconcile();
-    return getAppState();
-  };
-}
-
-export function put<T>(
-  handler: (body: T) => Promise<void>
-): RouteHandlerMethod {
-  return async function (req) {
-    await handler.call(this, req.body as T);
-    await reconcile();
-    return getAppState();
-  };
-}
-
-export function del(
-  handler: (id: number) => Promise<void>
-): RouteHandlerMethod {
-  return async function (req) {
-    const { id } = req.params as { id: string };
-    await handler.call(this, parseInt(id));
-    await reconcile();
-    return getAppState();
   };
 }

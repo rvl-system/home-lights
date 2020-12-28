@@ -25,7 +25,6 @@ import {
   PHILIPS_HUE_DEVICE_NAME
 } from '../common/config';
 import {
-  CreatePhilipsHueLightRequest,
   LightType,
   PatternType,
   PhilipsHueLight,
@@ -200,7 +199,7 @@ async function updateLights(): Promise<void> {
       console.log(
         `Found Philips Hue light "${bridgeLight.name}" not in database, adding...`
       );
-      const newLight: CreatePhilipsHueLightRequest = {
+      const newLight: Omit<PhilipsHueLight, 'id'> = {
         philipsHueID: bridgeLight.uniqueid,
         type: LightType.PhilipsHue,
         name: bridgeLight.name
@@ -224,7 +223,7 @@ async function updateLights(): Promise<void> {
       console.log(
         `Philips Hue light "${dbLight.name}" is no longer registered with the bridge, deleting...`
       );
-      await deleteLight(dbLight.id);
+      await deleteLight({ id: dbLight.id });
     }
   }
 }

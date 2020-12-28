@@ -32,7 +32,7 @@ export const PatternsTabContainer = createContainer(
   }),
   (dispatch): PatternsTabDispatch => ({
     deletePattern(id: number) {
-      dispatch(ActionType.DeletePattern, id);
+      dispatch(ActionType.DeletePattern, { id });
     }
   }),
   PatternsTab

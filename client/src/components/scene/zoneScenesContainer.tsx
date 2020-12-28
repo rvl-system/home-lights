@@ -52,7 +52,7 @@ export const ZoneScenesContainer = createContainer(
   },
   (dispatch): ZoneScenesComponentDispatch => ({
     deleteScene(id) {
-      dispatch(ActionType.DeleteScene, id);
+      dispatch(ActionType.DeleteScene, { id });
     },
     setZoneScene(zoneId, sceneId) {
       dispatch(ActionType.SetZoneScene, { zoneId, sceneId });

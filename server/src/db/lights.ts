@@ -17,21 +17,19 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from '../common/actions';
 import { NUM_RVL_CHANNELS } from '../common/config';
 import {
   LightType,
   Light,
-  CreateLightRequest,
   RVLLight,
-  CreateRVLLightRequest,
   PhilipsHueLight,
-  CreatePhilipsHueLightRequest,
-  CreateLIFXLightRequest,
   LIFXLight,
   Zone
 } from '../common/types';
 import { hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
+import { ActionHandler } from '../types';
 
 export const LIGHTS_TABLE_NAME = 'lights';
 export const LIGHTS_SCHEMA = `
@@ -121,12 +119,21 @@ export function getLights(): Light[] {
   return lights;
 }
 
+export const createRVLLight: ActionHandler<ActionType.CreateRVLLight> = async (
+  request
+) => {
+  await createLight({
+    ...request,
+    type: LightType.RVL
+  });
+};
+
 export async function createLight(
-  createLightRequest: CreateLightRequest
+  createLightRequest: Omit<Light, 'id'>
 ): Promise<void> {
   switch (createLightRequest.type) {
     case LightType.RVL: {
-      const rvlLightRequest: CreateRVLLightRequest = createLightRequest as CreateRVLLightRequest;
+      const rvlLightRequest = createLightRequest as Omit<RVLLight, 'id'>;
       if (
         !Number.isInteger(rvlLightRequest.channel) ||
         rvlLightRequest.channel < 0 ||
@@ -146,7 +153,10 @@ export async function createLight(
       break;
     }
     case LightType.PhilipsHue: {
-      const philipsHueLightRequest: CreatePhilipsHueLightRequest = createLightRequest as CreatePhilipsHueLightRequest;
+      const philipsHueLightRequest = createLightRequest as Omit<
+        PhilipsHueLight,
+        'id'
+      >;
       await dbRun(
         `INSERT INTO ${LIGHTS_TABLE_NAME} (name, type, philips_hue_id, zone_id) VALUES (?, ?, ?, ?)`,
         [
@@ -159,7 +169,7 @@ export async function createLight(
       break;
     }
     case LightType.LIFX: {
-      const lifxLightRequest: CreateLIFXLightRequest = createLightRequest as CreateLIFXLightRequest;
+      const lifxLightRequest = createLightRequest as Omit<LIFXLight, 'id'>;
       await dbRun(
         `INSERT INTO ${LIGHTS_TABLE_NAME} (name, type, lifx_id, zone_id) VALUES (?, ?, ?, ?)`,
         [
@@ -175,10 +185,12 @@ export async function createLight(
   await updateCache();
 }
 
-export async function editLight(light: Light): Promise<void> {
-  switch (light.type) {
+export const editLight: ActionHandler<ActionType.EditLight> = async (
+  request
+) => {
+  switch (request.type) {
     case LightType.RVL: {
-      const rvlLight: RVLLight = light as RVLLight;
+      const rvlLight: RVLLight = request as RVLLight;
       await dbRun(
         `UPDATE ${LIGHTS_TABLE_NAME} SET name = ?, channel = ?, zone_id = ? WHERE id = ?`,
         [rvlLight.name, rvlLight.channel, rvlLight.zoneId, rvlLight.id]
@@ -186,7 +198,7 @@ export async function editLight(light: Light): Promise<void> {
       break;
     }
     case LightType.PhilipsHue: {
-      const hueLight: PhilipsHueLight = light as PhilipsHueLight;
+      const hueLight: PhilipsHueLight = request as PhilipsHueLight;
       await dbRun(
         `UPDATE ${LIGHTS_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
         [hueLight.name, hueLight.zoneId, hueLight.id]
@@ -194,7 +206,7 @@ export async function editLight(light: Light): Promise<void> {
       break;
     }
     case LightType.LIFX: {
-      const lifxLight: LIFXLight = light as LIFXLight;
+      const lifxLight: LIFXLight = request as LIFXLight;
       await dbRun(
         `UPDATE ${LIGHTS_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
         [lifxLight.name, lifxLight.zoneId, lifxLight.id]
@@ -203,12 +215,14 @@ export async function editLight(light: Light): Promise<void> {
     }
   }
   await updateCache();
-}
+};
 
-export async function deleteLight(id: number): Promise<void> {
+export const deleteLight: ActionHandler<ActionType.DeleteLight> = async (
+  request
+) => {
   await dbRun(`DELETE FROM ${LIGHTS_TABLE_NAME} WHERE id = ? AND type = ?`, [
-    id,
+    request.id,
     LightType.RVL
   ]);
   await updateCache();
-}
+};

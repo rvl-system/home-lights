@@ -19,8 +19,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import {
   AppState,
-  CreatePatternRequest,
-  CreateSceneRequest,
   Light,
   Notification,
   Pattern,
@@ -70,17 +68,17 @@ export interface Actions {
   [ActionType.SetZonePower]: { zoneId: number; power: boolean };
   [ActionType.SetZoneBrightness]: { zoneId: number; brightness: number };
 
-  [ActionType.CreateZone]: string;
+  [ActionType.CreateZone]: Omit<Zone, 'id'>;
   [ActionType.EditZone]: Zone;
-  [ActionType.DeleteZone]: number;
+  [ActionType.DeleteZone]: { id: number };
 
-  [ActionType.CreateScene]: CreateSceneRequest;
+  [ActionType.CreateScene]: Omit<Scene, 'id' | 'brightness'>;
   [ActionType.EditScene]: Scene;
-  [ActionType.DeleteScene]: number;
+  [ActionType.DeleteScene]: { id: number };
 
-  [ActionType.CreatePattern]: CreatePatternRequest;
+  [ActionType.CreatePattern]: Omit<Pattern, 'id'>;
   [ActionType.EditPattern]: Pattern;
-  [ActionType.DeletePattern]: number;
+  [ActionType.DeletePattern]: { id: number };
 
   [ActionType.CreateRVLLight]: {
     name: string;
@@ -88,5 +86,5 @@ export interface Actions {
     zoneId?: number;
   };
   [ActionType.EditLight]: Light;
-  [ActionType.DeleteLight]: number;
+  [ActionType.DeleteLight]: { id: number };
 }

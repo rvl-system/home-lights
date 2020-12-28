@@ -29,7 +29,7 @@ export const LightsTabContainer = createContainer(
   }),
   (dispatch): LightsTabDispatch => ({
     deleteLight(id) {
-      dispatch(ActionType.DeleteLight, id);
+      dispatch(ActionType.DeleteLight, { id });
     }
   }),
   LightsTab

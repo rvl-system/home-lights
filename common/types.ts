@@ -33,7 +33,6 @@ export interface Zone {
   id: number;
   name: string;
 }
-export type CreateZoneRequest = Omit<Zone, 'id'>;
 
 // ---- Light Types ----
 
@@ -49,25 +48,21 @@ export interface Light {
   name: string;
   zoneId?: number;
 }
-export type CreateLightRequest = Omit<Light, 'id'>;
 
 export interface RVLLight extends Light {
   type: LightType.RVL;
   channel: number;
 }
-export type CreateRVLLightRequest = Omit<RVLLight, 'id'>;
 
 export interface PhilipsHueLight extends Light {
   type: LightType.PhilipsHue;
   philipsHueID: string;
 }
-export type CreatePhilipsHueLightRequest = Omit<PhilipsHueLight, 'id'>;
 
 export interface LIFXLight extends Light {
   type: LightType.LIFX;
   lifxId: string;
 }
-export type CreateLIFXLightRequest = Omit<LIFXLight, 'id'>;
 
 // ---- Scene Types ----
 
@@ -84,7 +79,6 @@ export interface Scene {
   brightness: number;
   lights: SceneLightEntry[];
 }
-export type CreateSceneRequest = Omit<Scene, 'id' | 'brightness'>;
 
 // ---- Pattern Types ----
 
@@ -107,7 +101,6 @@ export interface Pattern {
   type: PatternType;
   data: Record<string, unknown>;
 }
-export type CreatePatternRequest = Omit<Pattern, 'id'>;
 
 export interface SolidPattern extends Pattern {
   type: PatternType.Solid;
