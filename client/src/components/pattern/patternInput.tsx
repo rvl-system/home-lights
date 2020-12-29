@@ -64,7 +64,8 @@ export const PatternInput: FunctionComponent<
       name: 'name',
       description: 'Descriptive name for the pattern',
       inputPlaceholder: 'e.g. Purple Rainbow',
-      unavailableValues: props.unavailablePatternNames
+      unavailableValues: props.unavailablePatternNames,
+      defaultValue: props.name
     },
     {
       type: FormSchemaType.Select,
