@@ -62,7 +62,6 @@ export const CreatePatternButton: FunctionComponent<
         <AddIcon />
       </Button>
       <PatternInput
-        name=""
         type={PatternType.Solid}
         data={{ color: { type: ColorType.HSV, hue: 0, saturation: 1 } }}
         title="Create Pattern"

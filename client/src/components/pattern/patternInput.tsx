@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 });
 
 export interface PatternInputProps {
-  name: string;
+  name?: string;
   type: PatternType;
   data: Record<string, unknown>;
   title: string;
@@ -81,6 +81,13 @@ export const PatternInput: FunctionComponent<
       defaultValue: props.type
     }
   ];
+
+  // TODO: replace with actual logic in https://github.com/rvl-system/home-lights/issues/51
+  schema.push({
+    type: FormSchemaType.Color,
+    name: 'color',
+    description: 'Color'
+  });
 
   const classes = useStyles();
   return (

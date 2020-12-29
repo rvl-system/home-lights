@@ -17,20 +17,18 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {
-  Button,
-  Divider as DividerSchema,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-  TextField,
-  Typography
-} from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import React, { PropsWithChildren, useState } from 'react';
 import { UIColor } from '../../types';
+import { ColorInput, getDefaultColorValue } from './formInputs/colorInput';
+import { getDefaultRangeValue, RangeInput } from './formInputs/rangeInput';
+import { FormSchema, FormSchemaType } from './formInputs/schema';
+import { getDefaultSelectValue, SelectInput } from './formInputs/selectInput';
+import { TextInput, getDefaultTextValue } from './formInputs/textInput';
+
+export { FormSchemaType, FormSchema } from './formInputs/schema';
 
 export const useStyles = makeStyles((theme) => ({
   container: {
@@ -74,61 +72,6 @@ export const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export enum FormSchemaType {
-  Text = 'text',
-  Select = 'select',
-  Range = 'range',
-  Label = 'label',
-  Divider = 'divider'
-}
-
-export type FormSchema =
-  | TextSchema
-  | SelectSchema
-  | RangeSchema
-  | LabelSchema
-  | DividerSchema;
-
-interface TextSchema {
-  type: FormSchemaType.Text;
-  name: string;
-  description: string;
-  defaultValue?: string;
-  inputPlaceholder?: string;
-  unavailableValues?: string[];
-}
-
-interface SelectSchema {
-  type: FormSchemaType.Select;
-  name: string;
-  description: string;
-  defaultValue: string;
-  options: {
-    value: string;
-    label: string;
-    disabled?: boolean;
-  }[];
-}
-
-interface RangeSchema {
-  type: FormSchemaType.Range;
-  name: string;
-  description: string;
-  defaultValue?: number;
-  min?: number;
-  max?: number;
-  step?: number;
-}
-
-interface LabelSchema {
-  type: FormSchemaType.Label;
-  label: string;
-}
-
-interface DividerSchema {
-  type: FormSchemaType.Divider;
-}
-
 export interface FormInputProps {
   open: boolean;
   title: string;
@@ -147,48 +90,40 @@ export interface FormInputDispatch<T> {
 // pass the type generic around if we did, so we have to use a function
 // declaration instead
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export function FormInput<
-  T extends Record<string, string | number>,
-  K extends keyof T
->(
+export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   props: PropsWithChildren<FormInputProps & FormInputDispatch<T>>
 ): JSX.Element | null {
   if (!props.open) {
     return null;
   }
 
-  type ErrorStates = Record<
-    string,
-    { error: boolean; showError: boolean; errorReason?: string }
-  >;
-  const [textErrorStates, setTextErrorStates] = useState<ErrorStates>(
-    (() => {
-      const initialStates: ErrorStates = {};
-      for (const entry of props.schema) {
-        if (entry.type === FormSchemaType.Text) {
-          initialStates[entry.name] = {
-            error: !entry.defaultValue,
-            showError: false,
-            errorReason: 'A value is required'
-          };
-        }
-      }
-      return initialStates;
-    })()
-  );
-
   const classes = useStyles();
+
+  function onEntryChange(name: string, value: unknown) {
+    setValues({
+      ...values,
+      [name]: value
+    });
+  }
+
+  function onErrorChange(name: string, error: boolean) {
+    errorMap.states[name] = error;
+    let hasError = false;
+    for (const entry in errorMap.states) {
+      hasError = hasError || errorMap.states[entry];
+    }
+    setErrorMap({
+      hasError,
+      states: errorMap.states
+    });
+  }
 
   const inputs: JSX.Element[] = [];
   const defaultValues: T = {} as T;
-  let hasError = false;
+  const initialErrorStates: Record<string, boolean> = {};
   for (let i = 0; i < props.schema.length; i++) {
     const entry = props.schema[i];
     switch (entry.type) {
-      case FormSchemaType.Divider: {
-        inputs.push(<DividerSchema key={i} />);
-        break;
-      }
       case FormSchemaType.Label: {
         inputs.push(
           <Typography key={i} className={classes.label} variant="h5">
@@ -197,114 +132,75 @@ export function FormInput<
         );
         break;
       }
+
       case FormSchemaType.Select: {
         inputs.push(
           <div key={i} className={classes.row}>
-            {entry.description && <InputLabel>{entry.description}</InputLabel>}
-            <Select
-              defaultValue={entry.defaultValue}
-              onChange={(e) => {
-                setValues({
-                  ...values,
-                  [entry.name]: e.target.value
-                });
-              }}
-            >
-              {entry.options.map((option) => (
-                <MenuItem
-                  key={option.value}
-                  value={option.value}
-                  disabled={option.disabled}
-                >
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
+            <SelectInput
+              {...entry}
+              onChange={(value) => onEntryChange(entry.name, value)}
+            />
           </div>
         );
-        defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
+        defaultValues[entry.name as K] = getDefaultSelectValue(entry) as T[K];
         break;
       }
+
       case FormSchemaType.Text: {
-        const { error, showError, errorReason } = textErrorStates[entry.name];
-        hasError = hasError || error;
+        initialErrorStates[entry.name] = entry.defaultValue === undefined;
         inputs.push(
           <div key={i} className={classes.row}>
-            {entry.description && <InputLabel>{entry.description}</InputLabel>}
-            <TextField
-              autoFocus
-              margin="dense"
-              type="text"
-              placeholder={entry.inputPlaceholder}
-              fullWidth
-              defaultValue={entry.defaultValue}
-              error={showError}
-              onChange={(e) => {
-                const newValue = e.currentTarget.value;
-                if (!newValue) {
-                  textErrorStates[entry.name] = {
-                    error: true,
-                    showError: true,
-                    errorReason: 'A value is required'
-                  };
-                } else if (
-                  entry.unavailableValues &&
-                  entry.unavailableValues.includes(newValue)
-                ) {
-                  textErrorStates[entry.name] = {
-                    error: true,
-                    showError: true,
-                    errorReason: `"${newValue}" has already been taken`
-                  };
-                } else {
-                  textErrorStates[entry.name] = {
-                    error: false,
-                    showError: false
-                  };
-                }
-                setValues({
-                  ...values,
-                  [entry.name]: newValue
-                });
-                setTextErrorStates(textErrorStates);
+            <TextInput
+              {...entry}
+              onChange={(value, error) => {
+                onErrorChange(entry.name, error);
+                onEntryChange(entry.name, value);
               }}
             />
-            {showError && <InputLabel error={error}>{errorReason}</InputLabel>}
           </div>
         );
-        defaultValues[entry.name as K] = (entry.defaultValue || '') as T[K];
+        defaultValues[entry.name as K] = getDefaultTextValue(entry) as T[K];
         break;
       }
+
       case FormSchemaType.Range: {
-        const min = typeof entry.min === 'number' ? entry.min : 0;
-        const max = typeof entry.max === 'number' ? entry.max : 100;
-        const defaultValue =
-          typeof entry.defaultValue === 'number' ? entry.defaultValue : max;
         inputs.push(
           <div key={i} className={classes.row}>
-            {entry.description && <InputLabel>{entry.description}</InputLabel>}
-            <Slider
-              defaultValue={defaultValue}
-              valueLabelDisplay="auto"
-              step={entry.step || 1}
-              min={min}
-              max={max}
-              onChange={(e, newValue) => {
-                setValues({
-                  ...values,
-                  [entry.name]: newValue
-                });
-              }}
+            <RangeInput
+              {...entry}
+              onChange={(value) => onEntryChange(entry.name, value)}
             />
           </div>
         );
-        defaultValues[entry.name as K] = (entry.defaultValue || 0) as T[K];
+        defaultValues[entry.name as K] = getDefaultRangeValue(entry) as T[K];
+        break;
+      }
+
+      case FormSchemaType.Color: {
+        inputs.push(
+          <div key={i} className={classes.row}>
+            <ColorInput
+              {...entry}
+              onChange={(value) => onEntryChange(entry.name, value)}
+            />
+          </div>
+        );
+        defaultValues[entry.name as K] = getDefaultColorValue(entry) as T[K];
         break;
       }
     }
   }
 
   const [values, setValues] = React.useState(defaultValues);
+
+  let initialHasError = false;
+  for (const entry in initialErrorStates) {
+    initialHasError = initialHasError || initialErrorStates[entry];
+  }
+  const [errorMap, setErrorMap] = useState<{
+    states: Record<string, boolean>;
+    hasError: boolean;
+  }>({ hasError: initialHasError, states: initialErrorStates });
 
   return (
     <div className={classes.container} onClick={(e) => e.stopPropagation()}>
@@ -330,7 +226,7 @@ export function FormInput<
         <Button
           variant="contained"
           color={props.confirmColor || 'primary'}
-          disabled={hasError}
+          disabled={errorMap.hasError}
           onClick={() => {
             props.onConfirm(values);
           }}
