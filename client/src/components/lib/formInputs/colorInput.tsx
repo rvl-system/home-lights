@@ -19,14 +19,25 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, InputLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import {
+  ExpandLess as ExpandLessIcon,
+  ExpandMore as ExpandMoreIcon
+} from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
 import { Color, ColorType } from '../../../common/types';
 import { ColorSchema } from './schema';
 
 export const useStyles = makeStyles({
-  colorButton: {
+  expandButton: {
     width: '5em',
-    height: '2em'
+    height: '2em',
+    marginRight: '1em'
+  },
+  expandContainer: {
+    marginTop: '7px'
+  },
+  contentContainer: {
+    marginTop: '5px'
   }
 });
 
@@ -52,16 +63,22 @@ export const ColorInput: FunctionComponent<
   const classes = useStyles();
 
   const [color, setColor] = useState(getDefaultColorValue(props));
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
-      <Button variant="outlined">
-        <div
-          className={classes.colorButton}
-          style={{ backgroundColor: `hsl(${0}, ${100}%, 50%)` }}
-        ></div>
-      </Button>
+      <div>
+        <Button variant="outlined" className={classes.expandContainer}>
+          <span
+            className={classes.expandButton}
+            style={{ backgroundColor: `hsl(${0}, ${100}%, 50%)` }}
+            onClick={() => setExpanded(!expanded)}
+          ></span>
+          {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </Button>
+      </div>
+      {expanded && <div className={classes.contentContainer}>Hi</div>}
     </>
   );
 };
