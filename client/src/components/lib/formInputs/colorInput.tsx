@@ -23,6 +23,8 @@ import {
   ExpandLess as ExpandLessIcon,
   ExpandMore as ExpandMoreIcon
 } from '@material-ui/icons';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent, useState } from 'react';
 import { Color, ColorType } from '../../../common/types';
 import { ColorSchema } from './schema';
@@ -37,7 +39,14 @@ export const useStyles = makeStyles({
     marginTop: '7px'
   },
   contentContainer: {
-    marginTop: '5px'
+    marginTop: '10px'
+  },
+  inputTypeContainer: {
+    width: '100%',
+    display: 'flex'
+  },
+  inputTypeButton: {
+    flexGrow: 1
   }
 });
 
@@ -57,28 +66,105 @@ export function getDefaultColorValue(props: ColorInputProps): Color {
   );
 }
 
+enum SelectedTab {
+  Color = 'Color',
+  White = 'White',
+  History = 'History'
+}
+
 export const ColorInput: FunctionComponent<
   ColorInputProps & ColorInputDispatch
 > = (props) => {
   const classes = useStyles();
 
-  const [color, setColor] = useState(getDefaultColorValue(props));
+  const defaultColor = getDefaultColorValue(props);
   const [expanded, setExpanded] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(
+    defaultColor.type === ColorType.HSV ? SelectedTab.Color : SelectedTab.White
+  );
 
   return (
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
       <div>
-        <Button variant="outlined" className={classes.expandContainer}>
+        <Button
+          variant="outlined"
+          className={classes.expandContainer}
+          onClick={() => setExpanded(!expanded)}
+        >
           <span
             className={classes.expandButton}
             style={{ backgroundColor: `hsl(${0}, ${100}%, 50%)` }}
-            onClick={() => setExpanded(!expanded)}
           ></span>
           {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </Button>
       </div>
-      {expanded && <div className={classes.contentContainer}>Hi</div>}
+      {expanded && (
+        <div className={classes.contentContainer}>
+          <ToggleButtonGroup
+            value={selectedTab}
+            exclusive
+            onChange={(e, value) => setSelectedTab(value)}
+            className={classes.inputTypeContainer}
+          >
+            <ToggleButton
+              value={SelectedTab.Color}
+              className={classes.inputTypeButton}
+            >
+              Color
+            </ToggleButton>
+            <ToggleButton
+              value={SelectedTab.White}
+              className={classes.inputTypeButton}
+            >
+              White
+            </ToggleButton>
+            <ToggleButton
+              value={SelectedTab.History}
+              className={classes.inputTypeButton}
+            >
+              History
+            </ToggleButton>
+          </ToggleButtonGroup>
+          {reduce(selectedTab, {
+            [SelectedTab.Color]: () => (
+              <ColorSelect
+                defaultColor={defaultColor}
+                onChange={props.onChange}
+              />
+            ),
+            [SelectedTab.White]: () => (
+              <WhiteSelect
+                defaultColor={defaultColor}
+                onChange={props.onChange}
+              />
+            ),
+            [SelectedTab.History]: () => (
+              <HistorySelect
+                defaultColor={defaultColor}
+                onChange={props.onChange}
+              />
+            )
+          })}
+        </div>
+      )}
     </>
   );
+};
+
+interface SelectProps {
+  defaultColor: Color;
+  onChange: (color: Color) => void;
+}
+
+const ColorSelect: FunctionComponent<SelectProps> = (props) => {
+  return <div>Color</div>;
+};
+
+const WhiteSelect: FunctionComponent<SelectProps> = (props) => {
+  return <div>White</div>;
+};
+
+const HistorySelect: FunctionComponent<SelectProps> = (props) => {
+  return <div>History</div>;
 };
