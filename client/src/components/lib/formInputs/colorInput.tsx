@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, InputLabel } from '@material-ui/core';
+import { Button, InputLabel, Slider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   ExpandLess as ExpandLessIcon,
@@ -26,7 +26,13 @@ import {
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent, useState } from 'react';
-import { Color, ColorType } from '../../../common/types';
+import {
+  Color,
+  ColorType,
+  HSVColor,
+  TemperatureColor
+} from '../../../common/types';
+import { getHSVColor } from '../../../common/util';
 import { ColorSchema } from './schema';
 
 export const useStyles = makeStyles({
@@ -47,6 +53,9 @@ export const useStyles = makeStyles({
   },
   inputTypeButton: {
     flexGrow: 1
+  },
+  inputContainer: {
+    marginTop: '10px'
   }
 });
 
@@ -68,8 +77,7 @@ export function getDefaultColorValue(props: ColorInputProps): Color {
 
 enum SelectedTab {
   Color = 'Color',
-  White = 'White',
-  History = 'History'
+  White = 'White'
 }
 
 export const ColorInput: FunctionComponent<
@@ -82,6 +90,18 @@ export const ColorInput: FunctionComponent<
   const [selectedTab, setSelectedTab] = useState(
     defaultColor.type === ColorType.HSV ? SelectedTab.Color : SelectedTab.White
   );
+  const [colors, setColors] = useState<Record<SelectedTab, Color>>({
+    [SelectedTab.Color]:
+      defaultColor.type === ColorType.HSV
+        ? defaultColor
+        : { type: ColorType.HSV, hue: 0, saturation: 1 },
+    [SelectedTab.White]:
+      defaultColor.type === ColorType.Temperature
+        ? defaultColor
+        : { type: ColorType.Temperature, temperature: 3000 }
+  });
+
+  const currentColor = getHSVColor(colors[selectedTab]);
 
   return (
     <>
@@ -94,7 +114,11 @@ export const ColorInput: FunctionComponent<
         >
           <span
             className={classes.expandButton}
-            style={{ backgroundColor: `hsl(${0}, ${100}%, 50%)` }}
+            style={{
+              backgroundColor: `hsl(${currentColor.hue}, ${Math.round(
+                currentColor.saturation * 100
+              )}%, 50%)`
+            }}
           ></span>
           {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </Button>
@@ -104,7 +128,10 @@ export const ColorInput: FunctionComponent<
           <ToggleButtonGroup
             value={selectedTab}
             exclusive
-            onChange={(e, value) => setSelectedTab(value)}
+            onChange={(e, value) => {
+              setSelectedTab(value);
+              props.onChange(colors[value as SelectedTab]);
+            }}
             className={classes.inputTypeContainer}
           >
             <ToggleButton
@@ -119,52 +146,83 @@ export const ColorInput: FunctionComponent<
             >
               White
             </ToggleButton>
-            <ToggleButton
-              value={SelectedTab.History}
-              className={classes.inputTypeButton}
-            >
-              History
-            </ToggleButton>
           </ToggleButtonGroup>
-          {reduce(selectedTab, {
-            [SelectedTab.Color]: () => (
-              <ColorSelect
-                defaultColor={defaultColor}
-                onChange={props.onChange}
-              />
-            ),
-            [SelectedTab.White]: () => (
-              <WhiteSelect
-                defaultColor={defaultColor}
-                onChange={props.onChange}
-              />
-            ),
-            [SelectedTab.History]: () => (
-              <HistorySelect
-                defaultColor={defaultColor}
-                onChange={props.onChange}
-              />
-            )
-          })}
+          <div className={classes.inputContainer}>
+            {reduce(selectedTab, {
+              [SelectedTab.Color]: () => (
+                <ColorSelect
+                  color={colors[SelectedTab.Color] as HSVColor}
+                  onChange={(color) => {
+                    colors[SelectedTab.Color] = color;
+                    setColors(colors);
+                    props.onChange(color);
+                  }}
+                />
+              ),
+              [SelectedTab.White]: () => (
+                <WhiteSelect
+                  color={colors[SelectedTab.White] as TemperatureColor}
+                  onChange={(color) => {
+                    colors[SelectedTab.White] = color;
+                    setColors(colors);
+                    props.onChange(color);
+                  }}
+                />
+              )
+            })}
+          </div>
         </div>
       )}
     </>
   );
 };
 
-interface SelectProps {
-  defaultColor: Color;
-  onChange: (color: Color) => void;
+interface ColorSelectProps {
+  color: HSVColor;
+  onChange: (color: HSVColor) => void;
 }
 
-const ColorSelect: FunctionComponent<SelectProps> = (props) => {
-  return <div>Color</div>;
+const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
+  return <div>{JSON.stringify(props.color)}</div>;
 };
 
-const WhiteSelect: FunctionComponent<SelectProps> = (props) => {
-  return <div>White</div>;
-};
+interface WhiteSelectProps {
+  color: TemperatureColor;
+  onChange: (color: TemperatureColor) => void;
+}
 
-const HistorySelect: FunctionComponent<SelectProps> = (props) => {
-  return <div>History</div>;
+const WhiteSelect: FunctionComponent<WhiteSelectProps> = (props) => {
+  const marks = [
+    {
+      value: 3000,
+      label: 'Warm'
+    },
+    {
+      value: 4000,
+      label: 'Neutral'
+    },
+    {
+      value: 5000,
+      label: 'Cool'
+    }
+  ];
+  return (
+    <>
+      <InputLabel>Temperature</InputLabel>
+      <Slider
+        min={2000}
+        max={6000}
+        step={100}
+        marks={marks}
+        valueLabelDisplay="auto"
+        value={props.color.temperature}
+        onChange={(e, newValue) =>
+          props.onChange({
+            type: ColorType.Temperature,
+            temperature: newValue as number
+          })
+        }
+      />
+    </>
+  );
 };
