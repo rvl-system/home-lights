@@ -57,7 +57,7 @@ export const EditLightButton: FunctionComponent<
       case LightType.RVL: {
         const newLight: RVLLight = {
           ...(props.light as RVLLight),
-          name: values.name as string,
+          name: values.name,
           channel: parseInt(values.channel),
           zoneId: values.zone !== OFF ? parseInt(values.zoneId) : undefined
         };

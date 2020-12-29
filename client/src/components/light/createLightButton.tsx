@@ -56,7 +56,7 @@ export const CreateLightButton: FunctionComponent<
 
   function handleConfirm(values: Record<string, string>) {
     props.createRVLLight(
-      values.name as string,
+      values.name,
       parseInt(values.channel),
       values.zone !== OFF ? parseInt(values.zone) : undefined
     );
