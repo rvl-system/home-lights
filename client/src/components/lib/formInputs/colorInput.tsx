@@ -238,7 +238,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     for (let x = -radius; x < radius; x++) {
       for (let y = -radius; y < radius; y++) {
         const theta = Math.atan2(y, x);
-        const hue = (theta * 360) / (2 * Math.PI) + 180;
+        const hue = (theta * 180) / Math.PI + 180;
         const saturation = Math.sqrt(x * x + y * y) / radius;
         const { r, g, b } = hsv2rgb(hue, saturation * 100, 100);
         if (saturation < 1) {
@@ -267,6 +267,13 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     const y = Math.round(e.targetTouches[0].clientY - rect.top);
     const { data } = context.getImageData(x, y, 1, 1);
     if (data[3] !== 255) {
+      const radius = Math.round(context.canvas.width / 2);
+      const hue = (Math.atan2(y - radius, x - radius) * 180) / Math.PI + 180;
+      props.onChange({
+        type: ColorType.HSV,
+        hue,
+        saturation: 1
+      });
       return;
     }
     const { h: hue, s: saturation } = rgb2hsv(data[0], data[1], data[2]);
