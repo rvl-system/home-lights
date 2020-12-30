@@ -18,8 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { makeStyles } from '@material-ui/core/styles';
-import React, { FunctionComponent } from 'react';
-import { PatternType } from '../../common/types';
+import React, { FunctionComponent, useState } from 'react';
+import { Pattern, PatternType, SolidPattern } from '../../common/types';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
@@ -31,9 +31,7 @@ const useStyles = makeStyles({
 });
 
 export interface PatternInputProps {
-  name?: string;
-  type: PatternType;
-  data: Record<string, unknown>;
+  pattern: Omit<Pattern, 'id' | 'name'> & { name?: string };
   title: string;
   confirmLabel: string;
   open: boolean;
@@ -58,6 +56,8 @@ export const PatternInput: FunctionComponent<
     props.onClose();
   }
 
+  const [patternType, setPatternType] = useState(props.pattern.type);
+
   const schema: FormSchema[] = [
     {
       type: FormSchemaType.Text,
@@ -65,7 +65,7 @@ export const PatternInput: FunctionComponent<
       description: 'Descriptive name for the pattern',
       inputPlaceholder: 'e.g. Purple Rainbow',
       unavailableValues: props.unavailablePatternNames,
-      defaultValue: props.name
+      defaultValue: props.pattern.name
     },
     {
       type: FormSchemaType.Select,
@@ -78,16 +78,39 @@ export const PatternInput: FunctionComponent<
         { value: PatternType.Pulse, label: PatternType.Pulse },
         { value: PatternType.Rainbow, label: PatternType.Rainbow }
       ],
-      defaultValue: props.type
+      defaultValue: patternType
     }
   ];
+  switch (patternType) {
+    case PatternType.Solid: {
+      const pattern = props.pattern as SolidPattern;
+      schema.push({
+        type: FormSchemaType.Color,
+        name: 'color',
+        description: 'Color',
+        defaultValue: pattern.data.color
+      });
+      break;
+    }
+    case PatternType.Wave: {
+      break;
+    }
+    case PatternType.ColorCycle: {
+      break;
+    }
+    case PatternType.Pulse: {
+      break;
+    }
+    case PatternType.Wave: {
+      break;
+    }
+  }
 
-  // TODO: replace with actual logic in https://github.com/rvl-system/home-lights/issues/51
-  schema.push({
-    type: FormSchemaType.Color,
-    name: 'color',
-    description: 'Color'
-  });
+  function onChange(updatedPattern: Pattern) {
+    if (updatedPattern.type !== patternType) {
+      setPatternType(updatedPattern.type);
+    }
+  }
 
   const classes = useStyles();
   return (
@@ -95,6 +118,8 @@ export const PatternInput: FunctionComponent<
       <FormInput
         onConfirm={handleConfirm}
         onCancel={props.onClose}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onChange={onChange as any}
         open={props.open}
         title={props.title}
         confirmLabel={props.confirmLabel}

@@ -38,7 +38,7 @@ export const SelectInput: FunctionComponent<
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
       <Select
-        defaultValue={props.defaultValue}
+        value={props.defaultValue}
         onChange={(e) => props.onChange(e.target.value as string)}
       >
         {props.options.map((option) => (

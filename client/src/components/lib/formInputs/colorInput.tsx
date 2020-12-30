@@ -271,7 +271,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
       const hue = (Math.atan2(y - radius, x - radius) * 180) / Math.PI + 180;
       props.onChange({
         type: ColorType.HSV,
-        hue,
+        hue: Math.round(hue),
         saturation: 1
       });
       return;
@@ -279,7 +279,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     const { h: hue, s: saturation } = rgb2hsv(data[0], data[1], data[2]);
     props.onChange({
       type: ColorType.HSV,
-      hue,
+      hue: Math.round(hue),
       saturation: saturation / 100
     });
   });
