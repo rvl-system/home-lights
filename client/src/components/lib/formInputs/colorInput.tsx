@@ -130,7 +130,7 @@ export const ColorInput: FunctionComponent<
     if (expanded) {
       ref.current?.scrollIntoView(true);
     }
-  }, [expanded]);
+  }, [expanded, selectedTab]);
 
   const ref = useRef<HTMLDivElement>(null);
   return (

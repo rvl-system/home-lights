@@ -53,7 +53,14 @@ export const EditPatternButton: FunctionComponent<
         unavailablePatternNames={props.unavailablePatternNames}
         open={openDialog}
         onClose={handleClose}
-        onConfirm={(scene) => console.log(scene)}
+        onConfirm={(name, type, data) =>
+          props.editPattern({
+            id: props.pattern.id,
+            name,
+            type,
+            data
+          })
+        }
       />
     </React.Fragment>
   );

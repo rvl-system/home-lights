@@ -51,8 +51,12 @@ export const PatternInput: FunctionComponent<
   PatternInputProps & PatternInputDispatch
 > = (props) => {
   function handleConfirm(values: Record<string, string>) {
-    console.log(values);
-    // props.onConfirm(values.name);
+    switch (values.type) {
+      case PatternType.Solid: {
+        props.onConfirm(values.name, values.type, { color: values.color });
+        break;
+      }
+    }
     props.onClose();
   }
 
