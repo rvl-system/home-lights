@@ -118,12 +118,19 @@ export const ColorInput: FunctionComponent<
   });
 
   const currentColor = getHSVColor(colors[selectedTab]);
-
   const hsl = hsv2hsl(
     currentColor.hue,
     Math.round(currentColor.saturation * 100),
     100
   );
+
+  useEffect(() => {
+    if (expanded) {
+      ref.current?.scrollIntoView(true);
+    }
+  }, [expanded]);
+
+  const ref = useRef<HTMLDivElement>(null);
   return (
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
@@ -143,7 +150,7 @@ export const ColorInput: FunctionComponent<
         </Button>
       </div>
       {expanded && (
-        <div className={classes.contentContainer}>
+        <div className={classes.contentContainer} ref={ref}>
           <ToggleButtonGroup
             value={selectedTab}
             exclusive
