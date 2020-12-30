@@ -21,7 +21,8 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { PatternType } from '../../common/types';
+import { ColorType, PatternType } from '../../common/types';
+import { PatternInput } from './patternInput';
 
 const useStyles = makeStyles({
   container: {
@@ -45,17 +46,31 @@ export interface CreatePatternButtonDispatch {
 
 export const CreatePatternButton: FunctionComponent<
   CreatePatternButtonProps & CreatePatternButtonDispatch
-> = () => {
+> = (props) => {
+  const [openDialog, setOpenDialog] = React.useState(false);
+  function handleClose() {
+    setOpenDialog(false);
+  }
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <Button
         variant="outlined"
         color="primary"
-        onClick={() => console.log('create pattern')}
+        onClick={() => setOpenDialog(true)}
       >
         <AddIcon />
       </Button>
+      <PatternInput
+        type={PatternType.Solid}
+        data={{ color: { type: ColorType.HSV, hue: 0, saturation: 1 } }}
+        title="Create Pattern"
+        confirmLabel="Create Pattern"
+        unavailablePatternNames={props.unavailablePatternNames}
+        open={openDialog}
+        onClose={handleClose}
+        onConfirm={(scene) => console.log(scene)}
+      />
     </div>
   );
 };

@@ -17,6 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { rgb2hsv } from '@swiftcarrot/color-fns';
+import { colorTemperature2rgb } from 'color-temperature';
+import { Color, ColorType, HSVColor } from './types';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function lookupItem<K, T extends Record<string, any>>(
   id: K,
@@ -108,4 +112,16 @@ export function deepMap(
  */
 export async function delay(time: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+/**
+ * Get a color in HSV format, regardless of input format
+ */
+export function getHSVColor(color: Color): HSVColor {
+  if (color.type === ColorType.HSV) {
+    return color;
+  }
+  const rgb = colorTemperature2rgb(color.temperature);
+  const hsv = rgb2hsv(rgb.red, rgb.green, rgb.blue);
+  return { type: ColorType.HSV, hue: hsv.h, saturation: hsv.s / 100 };
 }
