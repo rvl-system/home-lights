@@ -21,12 +21,14 @@ import { Button, InputLabel, Slider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   ExpandLess as ExpandLessIcon,
-  ExpandMore as ExpandMoreIcon
+  ExpandMore as ExpandMoreIcon,
+  Adjust as AdjustIcon
 } from '@material-ui/icons';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { hsv2hsl, hsv2rgb, rgb2hsv } from '@swiftcarrot/color-fns';
 import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { throttle } from 'throttle-debounce';
 import {
   Color,
   ColorType,
@@ -63,7 +65,13 @@ export const useStyles = makeStyles({
   wheelContainer: {
     display: 'flex',
     justifyContent: 'center',
-    touchAction: 'none'
+    touchAction: 'none',
+    position: 'relative'
+  },
+  wheelPin: {
+    position: 'absolute',
+    color: 'black',
+    fontSize: '48px'
   }
 });
 
@@ -197,6 +205,13 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
   const classes = useStyles();
   const wheelRef = useRef<HTMLCanvasElement>(null);
 
+  const s = (props.color.saturation * WHEEL_DIAMETER) / 2;
+  const t = (props.color.hue * 2 * Math.PI) / 360;
+  const colorCoordinates = {
+    left: -s * Math.sin(t) + WHEEL_DIAMETER / 2 - 6,
+    top: -s * Math.cos(t) + WHEEL_DIAMETER / 2 - 24
+  };
+
   useEffect(() => {
     const canvas = wheelRef.current;
     if (!canvas) {
@@ -226,22 +241,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     context.putImageData(imageData, 0, 0);
   }, []);
 
-  const [bufferedColor, setBufferedColor] = useState({
-    hue: props.color.hue,
-    saturation: props.color.saturation
-  });
-  const [isDebouncing, setIsDebouncing] = useState(false);
-
-  function updateColor() {
-    setIsDebouncing(false);
-    props.onChange({
-      type: ColorType.HSV,
-      hue: bufferedColor.hue,
-      saturation: bufferedColor.saturation / 100
-    });
-  }
-
-  function handleMove(e: React.TouchEvent<HTMLCanvasElement>) {
+  const handleMove = throttle(33, (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.stopPropagation();
     const canvas = wheelRef.current;
     if (!canvas) {
@@ -259,12 +259,12 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
       return;
     }
     const { h: hue, s: saturation } = rgb2hsv(data[0], data[1], data[2]);
-    setBufferedColor({ hue, saturation });
-    if (!isDebouncing) {
-      setIsDebouncing(true);
-      setTimeout(updateColor, 33);
-    }
-  }
+    props.onChange({
+      type: ColorType.HSV,
+      hue,
+      saturation: saturation / 100
+    });
+  });
 
   return (
     <>
@@ -276,6 +276,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
           onTouchMove={handleMove}
           onTouchStart={handleMove}
         />
+        <AdjustIcon className={classes.wheelPin} style={colorCoordinates} />
       </div>
       <InputLabel>Hue</InputLabel>
       <Slider
