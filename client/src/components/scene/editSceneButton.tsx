@@ -20,7 +20,14 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { Light, Pattern, Scene, SceneLightEntry } from '../../common/types';
+import {
+  Light,
+  LightType,
+  Pattern,
+  PatternType,
+  Scene,
+  SceneLightEntry
+} from '../../common/types';
 import { getItem } from '../../common/util';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 import { useContentStyles } from '../lib/pageStyles';
@@ -101,10 +108,16 @@ export const EditSceneButton: FunctionComponent<
       name: `pattern-${light.id}`,
       description: 'Pattern',
       options: [{ value: 'off', label: 'Off' }].concat(
-        props.patterns.map((pattern) => ({
-          value: pattern.id.toString(),
-          label: pattern.name
-        }))
+        props.patterns
+          .filter((pattern) =>
+            light.type === LightType.RVL
+              ? true
+              : pattern.type === PatternType.Solid
+          )
+          .map((pattern) => ({
+            value: pattern.id.toString(),
+            label: pattern.name
+          }))
       ),
       defaultValue: pattern ? pattern.id.toString() : 'off'
     });
