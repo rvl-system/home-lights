@@ -24,8 +24,9 @@ import {
   ExpandMore as ExpandMoreIcon
 } from '@material-ui/icons';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { hsv2hsl, hsv2rgb, rgb2hsv } from '@swiftcarrot/color-fns';
 import { reduce } from 'conditional-reduce';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import {
   Color,
   ColorType,
@@ -34,6 +35,8 @@ import {
 } from '../../../common/types';
 import { getHSVColor } from '../../../common/util';
 import { ColorSchema } from './schema';
+
+const WHEEL_DIAMETER = 300;
 
 export const useStyles = makeStyles({
   expandButton: {
@@ -56,6 +59,11 @@ export const useStyles = makeStyles({
   },
   inputContainer: {
     marginTop: '10px'
+  },
+  wheelContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    touchAction: 'none'
   }
 });
 
@@ -103,6 +111,11 @@ export const ColorInput: FunctionComponent<
 
   const currentColor = getHSVColor(colors[selectedTab]);
 
+  const hsl = hsv2hsl(
+    currentColor.hue,
+    Math.round(currentColor.saturation * 100),
+    100
+  );
   return (
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
@@ -115,9 +128,7 @@ export const ColorInput: FunctionComponent<
           <span
             className={classes.expandButton}
             style={{
-              backgroundColor: `hsl(${currentColor.hue}, ${Math.round(
-                currentColor.saturation * 100
-              )}%, 50%)`
+              backgroundColor: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`
             }}
           ></span>
           {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -183,7 +194,121 @@ interface ColorSelectProps {
 }
 
 const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
-  return <div>{JSON.stringify(props.color)}</div>;
+  const classes = useStyles();
+  const wheelRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = wheelRef.current;
+    if (!canvas) {
+      throw new Error('Internal Error: canvas ref is unexpectedly null');
+    }
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error('Internal Error: canvas context is unexpectedly null');
+    }
+    const radius = Math.floor(context.canvas.width / 2);
+    const { width, height } = context.canvas;
+    const imageData = context.createImageData(width, height);
+    for (let x = -radius; x < radius; x++) {
+      for (let y = -radius; y < radius; y++) {
+        const theta = Math.atan2(x, y);
+        const hue = (theta * 360) / (2 * Math.PI) + 180;
+        const saturation = Math.sqrt(x * x + y * y) / radius;
+        const { r, g, b } = hsv2rgb(hue, saturation * 100, 100);
+        if (saturation < 1) {
+          imageData.data[(y + radius) * width * 4 + (x + radius) * 4] = r;
+          imageData.data[(y + radius) * width * 4 + (x + radius) * 4 + 1] = g;
+          imageData.data[(y + radius) * width * 4 + (x + radius) * 4 + 2] = b;
+          imageData.data[(y + radius) * width * 4 + (x + radius) * 4 + 3] = 255;
+        }
+      }
+    }
+    context.putImageData(imageData, 0, 0);
+  }, []);
+
+  const [bufferedColor, setBufferedColor] = useState({
+    hue: props.color.hue,
+    saturation: props.color.saturation
+  });
+  const [isDebouncing, setIsDebouncing] = useState(false);
+
+  function updateColor() {
+    setIsDebouncing(false);
+    props.onChange({
+      type: ColorType.HSV,
+      hue: bufferedColor.hue,
+      saturation: bufferedColor.saturation / 100
+    });
+  }
+
+  function handleMove(e: React.TouchEvent<HTMLCanvasElement>) {
+    e.stopPropagation();
+    const canvas = wheelRef.current;
+    if (!canvas) {
+      throw new Error('Internal Error: canvas ref is unexpectedly null');
+    }
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error('Internal Error: canvas context is unexpectedly null');
+    }
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.round(e.targetTouches[0].clientX - rect.left);
+    const y = Math.round(e.targetTouches[0].clientY - rect.top);
+    const { data } = context.getImageData(x, y, 1, 1);
+    if (data[3] !== 255) {
+      return;
+    }
+    const { h: hue, s: saturation } = rgb2hsv(data[0], data[1], data[2]);
+    setBufferedColor({ hue, saturation });
+    if (!isDebouncing) {
+      setIsDebouncing(true);
+      setTimeout(updateColor, 33);
+    }
+  }
+
+  return (
+    <>
+      <div className={classes.wheelContainer}>
+        <canvas
+          ref={wheelRef}
+          width={WHEEL_DIAMETER}
+          height={WHEEL_DIAMETER}
+          onTouchMove={handleMove}
+          onTouchStart={handleMove}
+        />
+      </div>
+      <InputLabel>Hue</InputLabel>
+      <Slider
+        min={0}
+        max={360}
+        step={1}
+        valueLabelDisplay="auto"
+        value={props.color.hue}
+        onChange={(e, newValue) =>
+          props.onChange({
+            type: ColorType.HSV,
+            hue: newValue as number,
+            saturation: props.color.saturation
+          })
+        }
+      />
+      <InputLabel>Saturation</InputLabel>
+      <Slider
+        min={0}
+        max={1}
+        step={0.01}
+        valueLabelDisplay="auto"
+        value={props.color.saturation}
+        onChange={(e, newValue) =>
+          props.onChange({
+            type: ColorType.HSV,
+            hue: props.color.hue,
+            saturation: newValue as number
+          })
+        }
+      />
+    </>
+  );
 };
 
 interface WhiteSelectProps {
