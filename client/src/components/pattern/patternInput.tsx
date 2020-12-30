@@ -18,8 +18,18 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { makeStyles } from '@material-ui/core/styles';
-import React, { FunctionComponent, useState } from 'react';
-import { Pattern, PatternType, SolidPattern } from '../../common/types';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import {
+  Color,
+  ColorCyclePattern,
+  ColorType,
+  Pattern,
+  PatternType,
+  PulsePattern,
+  RainbowPattern,
+  SolidPattern,
+  WavePattern
+} from '../../common/types';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
@@ -50,17 +60,62 @@ export interface PatternInputDispatch {
 export const PatternInput: FunctionComponent<
   PatternInputProps & PatternInputDispatch
 > = (props) => {
-  function handleConfirm(values: Record<string, string>) {
+  const [pattern, setPattern] = useState(props.pattern);
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    setPattern(props.pattern);
+  }, [props.pattern]);
+
+  function handleConfirm(values: Record<string, unknown>) {
+    let data: Record<string, unknown>;
     switch (values.type) {
       case PatternType.Solid: {
-        props.onConfirm(values.name, values.type, { color: values.color });
+        const patternData: SolidPattern['data'] = {
+          color: values.color as Color
+        };
+        data = patternData;
         break;
       }
+      case PatternType.Wave: {
+        const patternData: WavePattern['data'] = {
+          rate: values.rate as number,
+          waveColor: values.waveColor as Color,
+          foregroundColor: values.foregroundColor as Color,
+          backgroundColor: values.backgroundColor as Color
+        };
+        data = patternData;
+        break;
+      }
+      case PatternType.ColorCycle: {
+        const patternData: ColorCyclePattern['data'] = {
+          rate: values.rate as number
+        };
+        data = patternData;
+        break;
+      }
+      case PatternType.Pulse: {
+        const patternData: PulsePattern['data'] = {
+          rate: values.rate as number,
+          color: values.color as Color
+        };
+        data = patternData;
+        break;
+      }
+      case PatternType.Rainbow: {
+        const patternData: RainbowPattern['data'] = {
+          rate: values.rate as number
+        };
+        data = patternData;
+        break;
+      }
+      default: {
+        throw new Error(`Internal Error: unknown pattern type ${values.type}`);
+      }
     }
+    props.onConfirm(values.name as string, values.type as PatternType, data);
     props.onClose();
   }
-
-  const [patternType, setPatternType] = useState(props.pattern.type);
 
   const schema: FormSchema[] = [
     {
@@ -82,37 +137,96 @@ export const PatternInput: FunctionComponent<
         { value: PatternType.Pulse, label: PatternType.Pulse },
         { value: PatternType.Rainbow, label: PatternType.Rainbow }
       ],
-      defaultValue: patternType
+      defaultValue: pattern.type
     }
   ];
-  switch (patternType) {
+
+  switch (pattern.type) {
     case PatternType.Solid: {
-      const pattern = props.pattern as SolidPattern;
+      const solidPattern = pattern as SolidPattern;
       schema.push({
         type: FormSchemaType.Color,
         name: 'color',
         description: 'Color',
-        defaultValue: pattern.data.color
+        defaultValue: solidPattern.data.color
       });
       break;
     }
     case PatternType.Wave: {
+      const wavePattern = pattern as WavePattern;
+      schema.push({
+        type: FormSchemaType.Range,
+        name: 'rate',
+        description: 'Rate',
+        defaultValue: wavePattern.data.rate,
+        min: 0,
+        max: 32,
+        step: 1
+      });
+      schema.push({
+        type: FormSchemaType.Color,
+        name: 'waveColor',
+        description: 'Wave Color',
+        defaultValue: wavePattern.data.waveColor
+      });
+      schema.push({
+        type: FormSchemaType.Color,
+        name: 'foregroundColor',
+        description: 'Foreground Color',
+        defaultValue: wavePattern.data.foregroundColor
+      });
+      schema.push({
+        type: FormSchemaType.Color,
+        name: 'backgroundColor',
+        description: 'Background Color',
+        defaultValue: wavePattern.data.backgroundColor
+      });
       break;
     }
     case PatternType.ColorCycle: {
+      const colorCyclePattern = pattern as ColorCyclePattern;
+      schema.push({
+        type: FormSchemaType.Range,
+        name: 'rate',
+        description: 'Rate',
+        defaultValue: colorCyclePattern.data.rate,
+        min: 0,
+        max: 32,
+        step: 1
+      });
       break;
     }
     case PatternType.Pulse: {
+      const pulsePattern = pattern as PulsePattern;
+      schema.push({
+        type: FormSchemaType.Range,
+        name: 'rate',
+        description: 'Rate',
+        defaultValue: pulsePattern.data.rate,
+        min: 0,
+        max: 32,
+        step: 1
+      });
+      schema.push({
+        type: FormSchemaType.Color,
+        name: 'color',
+        description: 'Color',
+        defaultValue: pulsePattern.data.color
+      });
       break;
     }
-    case PatternType.Wave: {
+    case PatternType.Rainbow: {
+      const rainbowPattern = pattern as RainbowPattern;
+      schema.push({
+        type: FormSchemaType.Range,
+        name: 'rate',
+        description: 'Rate',
+        defaultValue: rainbowPattern.data.rate,
+        min: 0,
+        max: 32,
+        step: 1
+      });
       break;
-    }
-  }
-
-  function onChange(updatedPattern: Pattern) {
-    if (updatedPattern.type !== patternType) {
-      setPatternType(updatedPattern.type);
     }
   }
 
@@ -120,10 +234,91 @@ export const PatternInput: FunctionComponent<
   return (
     <div className={classes.container}>
       <FormInput
+        key={key}
         onConfirm={handleConfirm}
         onCancel={props.onClose}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onChange={onChange as any}
+        onChange={(updatedPattern) => {
+          const updatedPatternType = updatedPattern.type as PatternType;
+          if (updatedPatternType !== pattern.type) {
+            setKey(key + 1); // Force a complete re-render of the form input by changing the key
+            switch (updatedPatternType) {
+              case PatternType.Solid: {
+                const updatedPattern: Omit<SolidPattern, 'id' | 'name'> = {
+                  type: PatternType.Solid,
+                  data: {
+                    color: {
+                      type: ColorType.HSV,
+                      hue: 0,
+                      saturation: 1
+                    }
+                  }
+                };
+                setPattern(updatedPattern);
+                break;
+              }
+              case PatternType.Wave: {
+                const updatedPattern: Omit<WavePattern, 'id' | 'name'> = {
+                  type: PatternType.Wave,
+                  data: {
+                    rate: 4,
+                    waveColor: {
+                      type: ColorType.HSV,
+                      hue: 0,
+                      saturation: 1
+                    },
+                    foregroundColor: {
+                      type: ColorType.HSV,
+                      hue: 120,
+                      saturation: 1
+                    },
+                    backgroundColor: {
+                      type: ColorType.HSV,
+                      hue: 240,
+                      saturation: 1
+                    }
+                  }
+                };
+                setPattern(updatedPattern);
+                break;
+              }
+              case PatternType.ColorCycle: {
+                const updatedPattern: Omit<ColorCyclePattern, 'id' | 'name'> = {
+                  type: PatternType.ColorCycle,
+                  data: {
+                    rate: 4
+                  }
+                };
+                setPattern(updatedPattern);
+                break;
+              }
+              case PatternType.Pulse: {
+                const updatedPattern: Omit<PulsePattern, 'id' | 'name'> = {
+                  type: PatternType.Pulse,
+                  data: {
+                    rate: 4,
+                    color: {
+                      type: ColorType.HSV,
+                      hue: 0,
+                      saturation: 1
+                    }
+                  }
+                };
+                setPattern(updatedPattern);
+                break;
+              }
+              case PatternType.Rainbow: {
+                const updatedPattern: Omit<RainbowPattern, 'id' | 'name'> = {
+                  type: PatternType.Rainbow,
+                  data: {
+                    rate: 4
+                  }
+                };
+                setPattern(updatedPattern);
+                break;
+              }
+            }
+          }
+        }}
         open={props.open}
         title={props.title}
         confirmLabel={props.confirmLabel}

@@ -134,7 +134,7 @@ export const ColorInput: FunctionComponent<
 
   const ref = useRef<HTMLDivElement>(null);
   return (
-    <>
+    <div ref={ref}>
       {props.description && <InputLabel>{props.description}</InputLabel>}
       <div>
         <Button
@@ -152,7 +152,7 @@ export const ColorInput: FunctionComponent<
         </Button>
       </div>
       {expanded && (
-        <div className={classes.contentContainer} ref={ref}>
+        <div className={classes.contentContainer}>
           <ToggleButtonGroup
             value={selectedTab}
             exclusive
@@ -203,7 +203,7 @@ export const ColorInput: FunctionComponent<
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
