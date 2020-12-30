@@ -78,6 +78,16 @@ export function reconcile(zones: Zone[]): void {
       systemState.zoneStates.splice(i, 1);
     }
   }
+
+  // Update any patterns currently being displayed
+  for (const zone of systemState.zoneStates) {
+    if (zone.currentSceneId) {
+      setZoneScene({
+        zoneId: zone.zoneId,
+        sceneId: zone.currentSceneId
+      });
+    }
+  }
 }
 
 export function getSystemState(): SystemState {
@@ -89,12 +99,14 @@ export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
 ) => {
   const scene = getItem(request.sceneId, await getScenes());
   const zoneState = getItem(scene.zoneId, systemState.zoneStates, 'zoneId');
-  setZonePower({
-    zoneId: scene.zoneId,
-    power: true
-  });
+  if (zoneState.currentSceneId !== request.sceneId && !zoneState.power) {
+    await setZonePower({
+      zoneId: scene.zoneId,
+      power: true
+    });
+  }
   zoneState.currentSceneId = request.sceneId;
-  setLightState(zoneState);
+  await setLightState(zoneState);
 };
 
 export const setZoneBrightness: ActionHandler<ActionType.SetZoneBrightness> = async (

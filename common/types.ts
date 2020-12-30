@@ -150,7 +150,7 @@ export interface ColorCyclePattern extends Pattern {
 export type CreateColorCyclePatternRequest = Omit<ColorCyclePattern, 'id'>;
 
 export interface WavePattern extends Pattern {
-  type: PatternType.ColorCycle;
+  type: PatternType.Wave;
   data: {
     rate: number;
     waveColor: Color;

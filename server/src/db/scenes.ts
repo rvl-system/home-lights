@@ -19,7 +19,14 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { MAX_BRIGHTNESS } from '../common/config';
-import { Light, Pattern, Scene, Zone } from '../common/types';
+import {
+  Light,
+  LightType,
+  Pattern,
+  PatternType,
+  Scene,
+  Zone
+} from '../common/types';
 import { getItem, hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
@@ -99,6 +106,24 @@ export async function reconcile(
           brightness: MAX_BRIGHTNESS
         });
         sceneUpdated = true;
+      }
+    }
+
+    // Check if any pattern types were changed that makes them no longer valid
+    // for light types that only support solid patterns
+    for (const scene of scenes) {
+      for (const lightEntry of scene.lights) {
+        const light = getItem(lightEntry.lightId, lights);
+        if (typeof lightEntry.patternId === 'number') {
+          const pattern = getItem(lightEntry.patternId, patterns);
+          if (
+            light.type !== LightType.RVL &&
+            pattern.type !== PatternType.Solid
+          ) {
+            lightEntry.patternId = undefined;
+            sceneUpdated = true;
+          }
+        }
       }
     }
 

@@ -100,10 +100,14 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   const classes = useStyles();
 
   function onEntryChange(name: string, value: unknown) {
-    setValues({
+    const newValue: T = {
       ...values,
       [name]: value
-    });
+    };
+    setValues(newValue);
+    if (props.onChange) {
+      props.onChange(newValue);
+    }
   }
 
   function onErrorChange(name: string, error: boolean) {

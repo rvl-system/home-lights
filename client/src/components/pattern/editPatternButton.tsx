@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
-import { ColorType, Pattern } from '../../common/types';
+import { Pattern } from '../../common/types';
 import { PatternInput } from './patternInput';
 
 export interface EditPatternButtonProps {
@@ -47,15 +47,20 @@ export const EditPatternButton: FunctionComponent<
       </Button>
 
       <PatternInput
-        name={props.pattern.name}
-        type={props.pattern.type}
-        data={{ color: { type: ColorType.HSV, hue: 0, saturation: 1 } }}
+        pattern={props.pattern}
         title={`Edit "${props.pattern.name}"`}
         confirmLabel="Save pattern"
         unavailablePatternNames={props.unavailablePatternNames}
         open={openDialog}
         onClose={handleClose}
-        onConfirm={(scene) => console.log(scene)}
+        onConfirm={(name, type, data) =>
+          props.editPattern({
+            id: props.pattern.id,
+            name,
+            type,
+            data
+          })
+        }
       />
     </React.Fragment>
   );

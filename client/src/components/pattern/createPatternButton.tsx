@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { ColorType, PatternType } from '../../common/types';
 import { PatternInput } from './patternInput';
 
@@ -47,10 +47,7 @@ export interface CreatePatternButtonDispatch {
 export const CreatePatternButton: FunctionComponent<
   CreatePatternButtonProps & CreatePatternButtonDispatch
 > = (props) => {
-  const [openDialog, setOpenDialog] = React.useState(false);
-  function handleClose() {
-    setOpenDialog(false);
-  }
+  const [openDialog, setOpenDialog] = useState(false);
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -62,14 +59,16 @@ export const CreatePatternButton: FunctionComponent<
         <AddIcon />
       </Button>
       <PatternInput
-        type={PatternType.Solid}
-        data={{ color: { type: ColorType.HSV, hue: 0, saturation: 1 } }}
+        pattern={{
+          type: PatternType.Solid,
+          data: { color: { type: ColorType.HSV, hue: 0, saturation: 1 } }
+        }}
         title="Create Pattern"
         confirmLabel="Create Pattern"
         unavailablePatternNames={props.unavailablePatternNames}
         open={openDialog}
-        onClose={handleClose}
-        onConfirm={(scene) => console.log(scene)}
+        onClose={() => setOpenDialog(false)}
+        onConfirm={props.createPattern}
       />
     </div>
   );

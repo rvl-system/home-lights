@@ -130,11 +130,11 @@ export const ColorInput: FunctionComponent<
     if (expanded) {
       ref.current?.scrollIntoView(true);
     }
-  }, [expanded]);
+  }, [expanded, selectedTab]);
 
   const ref = useRef<HTMLDivElement>(null);
   return (
-    <>
+    <div ref={ref}>
       {props.description && <InputLabel>{props.description}</InputLabel>}
       <div>
         <Button
@@ -152,7 +152,7 @@ export const ColorInput: FunctionComponent<
         </Button>
       </div>
       {expanded && (
-        <div className={classes.contentContainer} ref={ref}>
+        <div className={classes.contentContainer}>
           <ToggleButtonGroup
             value={selectedTab}
             exclusive
@@ -203,7 +203,7 @@ export const ColorInput: FunctionComponent<
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -271,7 +271,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
       const hue = (Math.atan2(y - radius, x - radius) * 180) / Math.PI + 180;
       props.onChange({
         type: ColorType.HSV,
-        hue,
+        hue: Math.round(hue),
         saturation: 1
       });
       return;
@@ -279,7 +279,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     const { h: hue, s: saturation } = rgb2hsv(data[0], data[1], data[2]);
     props.onChange({
       type: ColorType.HSV,
-      hue,
+      hue: Math.round(hue),
       saturation: saturation / 100
     });
   });
