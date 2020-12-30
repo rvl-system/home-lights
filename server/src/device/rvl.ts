@@ -57,11 +57,17 @@ export async function init(): Promise<void> {
 
 function getColor(color: Color): { hue: number; saturation: number } {
   if (color.type === ColorType.HSV) {
-    return { hue: color.hue, saturation: color.saturation };
+    return {
+      hue: Math.round((color.hue * 255) / 360),
+      saturation: Math.round(color.saturation * 255)
+    };
   }
   const rgb = colorTemperature2rgb(color.temperature);
   const hsv = rgb2hsv(rgb.red, rgb.green, rgb.blue);
-  return { hue: hsv.h, saturation: hsv.s / 100 };
+  return {
+    hue: Math.round((hsv.h * 255) / 360),
+    saturation: Math.round(hsv.s * 255)
+  };
 }
 
 export async function setLightState({
@@ -123,8 +129,8 @@ export async function setLightState({
           controller.setWaveParameters(
             createWaveParameters(
               createSolidColorWave(
-                Math.round((color.hue / 360) * 255),
-                Math.round(color.saturation * 255),
+                color.hue,
+                color.saturation,
                 Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
               )
             )

@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { SelectSchema } from './schema';
 
 export type SelectInputProps = Omit<SelectSchema, 'type'>;
@@ -34,12 +34,19 @@ export function getDefaultSelectValue(props: SelectInputProps): string {
 export const SelectInput: FunctionComponent<
   SelectInputProps & SelectInputDispatch
 > = (props) => {
+  const [value, setValue] = useState(props.defaultValue);
+  useEffect(() => {
+    setValue(props.defaultValue);
+  }, [props.defaultValue]);
   return (
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
       <Select
-        value={props.defaultValue}
-        onChange={(e) => props.onChange(e.target.value as string)}
+        value={value}
+        onChange={(e) => {
+          props.onChange(e.target.value as string);
+          setValue(e.target.value as string);
+        }}
       >
         {props.options.map((option) => (
           <MenuItem
