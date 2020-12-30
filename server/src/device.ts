@@ -99,7 +99,7 @@ export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
 ) => {
   const scene = getItem(request.sceneId, await getScenes());
   const zoneState = getItem(scene.zoneId, systemState.zoneStates, 'zoneId');
-  if (!zoneState.power) {
+  if (zoneState.currentSceneId !== request.sceneId && !zoneState.power) {
     await setZonePower({
       zoneId: scene.zoneId,
       power: true
