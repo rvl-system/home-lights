@@ -148,8 +148,10 @@ export const ColorInput: FunctionComponent<
             value={selectedTab}
             exclusive
             onChange={(e, value) => {
-              setSelectedTab(value);
-              props.onChange(colors[value as SelectedTab]);
+              if (value !== null) {
+                setSelectedTab(value);
+                props.onChange(colors[value as SelectedTab]);
+              }
             }}
             className={classes.inputTypeContainer}
           >
