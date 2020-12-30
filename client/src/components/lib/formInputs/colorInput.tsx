@@ -66,7 +66,9 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     touchAction: 'none',
-    position: 'relative'
+    position: 'relative',
+    marginTop: '25px',
+    marginBottom: '10px'
   },
   wheelPin: {
     position: 'absolute',
@@ -217,8 +219,8 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
   const s = (props.color.saturation * WHEEL_DIAMETER) / 2;
   const t = (props.color.hue * 2 * Math.PI) / 360;
   const colorCoordinates = {
-    left: -s * Math.sin(t) + WHEEL_DIAMETER / 2 - 6,
-    top: -s * Math.cos(t) + WHEEL_DIAMETER / 2 - 24
+    left: -s * Math.cos(t) + WHEEL_DIAMETER / 2 - 6,
+    top: -s * Math.sin(t) + WHEEL_DIAMETER / 2 - 24
   };
 
   useEffect(() => {
@@ -235,7 +237,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     const imageData = context.createImageData(width, height);
     for (let x = -radius; x < radius; x++) {
       for (let y = -radius; y < radius; y++) {
-        const theta = Math.atan2(x, y);
+        const theta = Math.atan2(y, x);
         const hue = (theta * 360) / (2 * Math.PI) + 180;
         const saturation = Math.sqrt(x * x + y * y) / radius;
         const { r, g, b } = hsv2rgb(hue, saturation * 100, 100);
