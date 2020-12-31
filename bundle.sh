@@ -16,17 +16,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
+startTime="$(date +%s)"
+
 # Build the server
+echo "Building the server..."
 cd server
 npm run build
 cd ..
 
 # Build the client
+echo "Building the client..."
 cd client
 npm run build
 cd ..
 
 # Copy the articfacts over
+echo ""
+echo "Bundling the build artifacts..."
 rm -rf bundle
 mkdir -p bundle/server/
 cp -r server/dist bundle/server/
@@ -34,3 +40,8 @@ cp -r server/bin bundle/server/
 cp -r production-package.json bundle/package.json
 cp -r public bundle/
 cp -r LICENSE README.md CHANGELOG.md bundle/
+
+elapsedTime="$(($(date +%s)-startTime))"
+
+echo ""
+echo "Completed in ${elapsedTime} seconds"
