@@ -1,8 +1,23 @@
 # Home Lights
 
-Control system for my home lighting system.
+Control system for multi-vendor home lighting systems.
 
-## Setting up the WiFi AP:
+Currently supported vendors:
+- [Philips Hue](https://www.philips-hue.com/)
+- [LIFX](https://www.lifx.com/)
+- [RVL](https://github.com/rvl-system/) (My custom animation lighting system)
+
+A Raspberry Pi makes an ideal system for running Home Lights, and all instructions below are written assuming a Raspberry Pi. Home lights will run just fine on other systems, but the instructions below may not work without modification.
+
+## Installation
+
+```
+npm install -g home-lights
+```
+
+Note: you will need to run `sudo chown -R pi:pi /usr/lib/node_modules` to make this directory writeable, if you haven't done so already. `npm install` can't be run with `sudo` either because, super tl;dr, the SQLite build will fail if you do.
+
+## Setting up a WiFi AP on a Raspberry Pi:
 
 Follow instructions [here](http://www.raspberryconnect.com/network/item/333-raspberry-pi-hotspot-access-point-dhcpcd-method).
 
@@ -14,9 +29,9 @@ sudo systemctl enable hostapd
 sudo systemctl start hostapd
 ```
 
-## Setting up the Systemd service:
+## Running on system startup
 
-Create a file at `/etc/systemd/system/home-lights.service`. Inside this file, add the following:
+We'll use systemd to manage the process. Create a file at `/etc/systemd/system/home-lights.service`. Inside this file, add the following:
 
 ```
 [Unit]
@@ -25,7 +40,7 @@ After=systemd-networkd.socket
 
 [Service]
 ExecStartPre=/lib/systemd/systemd-networkd-wait-online --interface=wlan0
-ExecStart=/usr/bin/node /home/pi/home-lights/server/dist/index.js
+ExecStart=home-lights
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
@@ -38,6 +53,8 @@ Group=root
 WantedBy=multi-user.target
 ```
 
+If your server won't be listening on `wlan0`, change it to the appropriate interface.
+
 Then, run these commands:
 
 ```
@@ -47,7 +64,7 @@ sudo systemctl enable home-lights
 
 Next time your reboot your application, it should be running! You can check the status of your service by running `systemctl status home-lights`, check the console output of your service by running `journalctl -u home-lights`, and restart your service by running `sudo systemctl restart home-lights`.
 
-# License
+## License
 
 Copyright (c) Bryan Hughes <bryan@nebri.us>
 
