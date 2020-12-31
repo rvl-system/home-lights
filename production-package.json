@@ -1,29 +1,19 @@
 {
   "name": "home-lights-server",
   "version": "1.0.0",
-  "description": "Server for Home Lights",
+  "description": "Web application for controlling programmable lights",
+  "keywords": ["Philips Hue", "LIFX", "Programmable Lighting", "Home Automation"],
   "engines": {
     "node": ">= 14.15.0"
   },
   "bin": {
-    "home-lights": "./bin/server.js"
+    "home-lights": "./server/bin/server.js"
   },
   "scripts": {
-    "prebuild": "eslint -c ../.eslintrc.js src/",
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "start": "node ./bin/server.js",
-    "reset-db": "node ./bin/resetdb.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server/bin/server.js"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
-  "devDependencies": {
-    "@types/node": "^14.14.17",
-    "@types/sqlite3": "^3.1.6",
-    "@types/ws": "^7.4.0",
-    "typescript": "^4.1.3"
-  },
   "dependencies": {
     "@swiftcarrot/color-fns": "^3.2.0",
     "@types/node-fetch": "^2.5.7",
