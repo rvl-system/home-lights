@@ -75,7 +75,8 @@ const useStyles = makeStyles({
     position: 'absolute',
     color: 'black',
     fontSize: '48px',
-    userSelect: 'none'
+    userSelect: 'none',
+    pointerEvents: 'none'
   }
 });
 
