@@ -82,7 +82,6 @@ export const TextInput: FunctionComponent<
     <>
       {props.description && <InputLabel>{props.description}</InputLabel>}
       <TextField
-        autoFocus
         margin="dense"
         type="text"
         placeholder={props.inputPlaceholder}
