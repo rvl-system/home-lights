@@ -1,6 +1,6 @@
 {
   "name": "home-lights",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Web application for controlling programmable lights",
   "keywords": ["Philips Hue", "LIFX", "Programmable Lighting", "Home Automation"],
   "engines": {
