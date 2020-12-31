@@ -68,12 +68,14 @@ export const useStyles = makeStyles({
     touchAction: 'none',
     position: 'relative',
     marginTop: '25px',
-    marginBottom: '10px'
+    marginBottom: '10px',
+    userSelect: 'none'
   },
   wheelPin: {
     position: 'absolute',
     color: 'black',
-    fontSize: '48px'
+    fontSize: '48px',
+    userSelect: 'none'
   }
 });
 
