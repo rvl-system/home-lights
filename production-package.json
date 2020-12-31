@@ -1,5 +1,5 @@
 {
-  "name": "home-lights-server",
+  "name": "home-lights",
   "version": "1.0.0",
   "description": "Web application for controlling programmable lights",
   "keywords": ["Philips Hue", "LIFX", "Programmable Lighting", "Home Automation"],
