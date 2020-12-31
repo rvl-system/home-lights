@@ -40,7 +40,11 @@ const useStyles = makeStyles((theme) => ({
     'background-color': theme.palette.background.default,
     'z-index': 1,
     display: 'flex',
-    'flex-direction': 'column'
+    'flex-direction': 'column',
+
+    // I wonder why the TypeScript definitions don't recognize "standalone"?
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    paddingBottom: (window.navigator as any).standalone ? '20px' : 'inherit'
   },
   header: {
     display: 'flex',
@@ -56,7 +60,8 @@ const useStyles = makeStyles((theme) => ({
   content: {
     'flex-grow': 1,
     padding: '20px',
-    overflow: 'scroll'
+    overflowY: 'scroll',
+    overflowX: 'hidden'
   },
   label: {
     'padding-bottom': '20px'
@@ -68,7 +73,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     'justify-content': 'center',
     'padding-top': '20px',
-    'padding-bottom': '20px'
+    'padding-bottom': '20px',
+    minHeight: '75px'
   }
 }));
 
