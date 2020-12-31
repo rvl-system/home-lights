@@ -40,7 +40,7 @@ import { ColorSchema } from './schema';
 
 const WHEEL_DIAMETER = 300;
 
-export const useStyles = makeStyles({
+const useStyles = makeStyles({
   expandButton: {
     width: '5em',
     height: '2em',

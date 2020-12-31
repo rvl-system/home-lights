@@ -17,7 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  makeStyles
+} from '@material-ui/core';
 import {
   Home as HomeIcon,
   BlurLinear as BlurLinearIcon,
@@ -34,30 +38,45 @@ export interface FooterComponentDispatch {
   selectTab(newTab: SelectedTab): void;
 }
 
+// So this stuff is kinda funny. In iOS in standalone mode, the web page overlaps
+// with the bottom menu bar, making tabs difficult to use, so we add extra
+// padding to account for this, but not in non-standalone mode
+const useStyles = makeStyles((theme) => ({
+  container: {
+    // I wonder why the TypeScript definitions don't recognize "standalone"?
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    paddingBottom: (window.navigator as any).standalone ? '20px' : 'inherit',
+    backgroundColor: theme.palette.background.paper
+  }
+}));
+
 export const FooterComponent: FunctionComponent<
   FooterComponentProps & FooterComponentDispatch
 > = (props) => {
+  const classes = useStyles();
   return (
-    <BottomNavigation
-      value={props.activeTab}
-      onChange={(event, newValue) => props.selectTab(newValue)}
-      showLabels
-    >
-      <BottomNavigationAction
-        label={SelectedTab.Zones}
-        value={SelectedTab.Zones}
-        icon={<HomeIcon />}
-      />
-      <BottomNavigationAction
-        label={SelectedTab.Patterns}
-        value={SelectedTab.Patterns}
-        icon={<BlurLinearIcon />}
-      />
-      <BottomNavigationAction
-        label={SelectedTab.Lights}
-        value={SelectedTab.Lights}
-        icon={<EmojiObjectsIcon />}
-      />
-    </BottomNavigation>
+    <div className={classes.container}>
+      <BottomNavigation
+        value={props.activeTab}
+        onChange={(event, newValue) => props.selectTab(newValue)}
+        showLabels
+      >
+        <BottomNavigationAction
+          label={SelectedTab.Zones}
+          value={SelectedTab.Zones}
+          icon={<HomeIcon />}
+        />
+        <BottomNavigationAction
+          label={SelectedTab.Patterns}
+          value={SelectedTab.Patterns}
+          icon={<BlurLinearIcon />}
+        />
+        <BottomNavigationAction
+          label={SelectedTab.Lights}
+          value={SelectedTab.Lights}
+          icon={<EmojiObjectsIcon />}
+        />
+      </BottomNavigation>
+    </div>
   );
 };

@@ -30,7 +30,7 @@ import { TextInput, getDefaultTextValue } from './formInputs/textInput';
 
 export { FormSchemaType, FormSchema } from './formInputs/schema';
 
-export const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     position: 'fixed',
     left: 0,
