@@ -33,4 +33,4 @@ cp -r server/dist bundle/server/
 cp -r server/bin bundle/server/
 cp -r production-package.json bundle/package.json
 cp -r public bundle/
-cp -r LICENSE README.md bundle/
+cp -r LICENSE README.md CHANGELOG.md bundle/
