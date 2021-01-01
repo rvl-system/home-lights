@@ -19,13 +19,16 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { createScene, editScene, deleteScene } from '../db/scenes';
-import { ActionHandler } from '../types';
+import { ActionHandlerEntry } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createScenesHandlers(): Record<string, ActionHandler<any>> {
+export function createScenesHandlers(): Record<
+  string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ActionHandlerEntry<any>
+> {
   return {
-    [ActionType.CreateScene]: createScene,
-    [ActionType.EditScene]: editScene,
-    [ActionType.DeleteScene]: deleteScene
+    [ActionType.CreateScene]: { handler: createScene, reconcile: true },
+    [ActionType.EditScene]: { handler: editScene, reconcile: true },
+    [ActionType.DeleteScene]: { handler: deleteScene, reconcile: true }
   };
 }

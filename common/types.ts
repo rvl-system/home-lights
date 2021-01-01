@@ -21,6 +21,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 export interface AppState {
   zones: Zone[];
+  schedules: Schedule[];
   scenes: Scene[];
   patterns: Pattern[];
   lights: Light[];
@@ -159,6 +160,20 @@ export interface WavePattern extends Pattern {
   };
 }
 export type CreateWavePatternRequest = Omit<WavePattern, 'id'>;
+
+// ---- Schedule Types ----
+
+export interface ScheduleEntry {
+  sceneId: number | undefined;
+  hour: number;
+  minute: number;
+}
+
+export interface Schedule {
+  id: number;
+  zoneId: number;
+  entries: ScheduleEntry[];
+}
 
 // ---- System State ----
 

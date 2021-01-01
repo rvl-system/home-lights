@@ -31,6 +31,10 @@ import {
   PHILIPS_HUE_TABLE_NAME
 } from './db/philipsHue';
 import initScenes, { SCENES_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
+import initSchedules, {
+  SCHEDULE_SCHEMA,
+  SCHEDULE_TABLE_NAME
+} from './db/schedule';
 import initZones, { ZONES_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
 import { init as initDB, dbRun } from './sqlite';
 import { getEnvironmentVariable } from './util';
@@ -45,6 +49,7 @@ export async function reset(): Promise<void> {
   console.log('Resetting database...');
   await init();
   await dbRun(`DROP TABLE ${ZONES_TABLE_NAME}`);
+  await dbRun(`DROP TABLE ${SCHEDULE_TABLE_NAME}`);
   await dbRun(`DROP TABLE ${SCENES_TABLE_NAME}`);
   await dbRun(`DROP TABLE ${PATTERNS_TABLE_NAME}`);
   await dbRun(`DROP TABLE ${COLORS_TABLE_NAME}`);
@@ -57,6 +62,7 @@ export async function reset(): Promise<void> {
 async function create(): Promise<void> {
   console.log('Creating database tables...');
   await dbRun(ZONES_SCHEMA);
+  await dbRun(SCHEDULE_SCHEMA);
   await dbRun(SCENES_SCHEMA);
   await dbRun(PATTERNS_SCHEMA);
   await dbRun(COLORS_SCHEMA);
@@ -80,7 +86,13 @@ export async function init(): Promise<void> {
     await create();
   }
 
-  await Promise.all([initZones(), initScenes(), initPatterns(), initLights()]);
+  await Promise.all([
+    initZones(),
+    initSchedules(),
+    initScenes(),
+    initPatterns(),
+    initLights()
+  ]);
 
   console.log('Database initialized');
 }

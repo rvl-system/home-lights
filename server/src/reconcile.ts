@@ -19,7 +19,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { getLights, reconcile as reconcileLights } from './db/lights';
 import { getPatterns } from './db/patterns';
-import { reconcile as reconcileScenes } from './db/scenes';
+import { getScenes, reconcile as reconcileScenes } from './db/scenes';
+import { reconcile as reconcileSchedule } from './db/schedule';
 import { getZones } from './db/zones';
 import { reconcile as reconcileDevice } from './device';
 
@@ -33,6 +34,10 @@ export async function reconcile(): Promise<void> {
   const patterns = getPatterns();
   const lights = getLights();
   await reconcileScenes(zones, patterns, lights);
+
+  // Reconcile schedules
+  const scenes = getScenes();
+  await reconcileSchedule(zones, scenes);
 
   // Reconcile device state
   await reconcileDevice(zones);

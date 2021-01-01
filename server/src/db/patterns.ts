@@ -42,7 +42,7 @@ CREATE TABLE "${COLORS_TABLE_NAME}" (
 let patterns: Pattern[] = [];
 
 export default async function updateCache(): Promise<void> {
-  const results = await dbAll('SELECT * FROM patterns');
+  const results = await dbAll(`SELECT * FROM ${PATTERNS_TABLE_NAME}`);
   patterns = results.map((result) => ({
     ...result,
     data: JSON.parse((result.data as unknown) as string)

@@ -24,3 +24,8 @@ import { Actions, ActionType } from './common/actions';
 export type ActionHandler<T extends ActionType> = (
   data: Actions[T]
 ) => Promise<void>;
+
+export interface ActionHandlerEntry<T extends ActionType> {
+  handler: ActionHandler<T>;
+  reconcile: boolean;
+}

@@ -23,6 +23,8 @@ import {
   Notification,
   Pattern,
   Scene,
+  Schedule,
+  ScheduleEntry,
   SelectedTab,
   Zone
 } from './types';
@@ -42,6 +44,9 @@ export enum ActionType {
   CreateZone = 'CreateZone',
   EditZone = 'EditZone',
   DeleteZone = 'DeleteZone',
+
+  CreateSchedule = 'CreateSchedule',
+  EditSchedule = 'EditSchedule',
 
   CreateScene = 'CreateScene',
   EditScene = 'EditScene',
@@ -75,6 +80,9 @@ export interface Actions {
   [ActionType.CreateZone]: Omit<Zone, 'id'>;
   [ActionType.EditZone]: Zone;
   [ActionType.DeleteZone]: { id: number };
+
+  [ActionType.CreateSchedule]: { zoneId: number; entries: ScheduleEntry[] };
+  [ActionType.EditSchedule]: Schedule;
 
   [ActionType.CreateScene]: Omit<Scene, 'id' | 'brightness'>;
   [ActionType.EditScene]: Scene;
