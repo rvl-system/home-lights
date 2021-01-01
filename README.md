@@ -12,10 +12,14 @@ A Raspberry Pi makes an ideal system for running Home Lights, and all instructio
 ## Installation
 
 ```
+sudo mkdir /app
+sudo chown -R pi:pi /app
+sudo npm config set prefix /app
 npm install -g home-lights
+sudo ln -s /app/bin/home-lights /usr/bin/home-lights
 ```
 
-Note: you will need to run `sudo chown -R pi:pi /usr/lib/node_modules` to make this directory writeable, if you haven't done so already. `npm install` can't be run with `sudo` either because, super tl;dr, the SQLite build will fail if you do.
+Yeah, this is a lot. Super tl;dr, creating the symlink that npm does by default and building the SQLite binary required conflicting sets of permissions when trying to install to /usr/lib/node_modules and /usr/. This workaround avoids the conflict, which I developed after I managed to brick a Pi.
 
 ## Setting up a WiFi AP on a Raspberry Pi:
 
@@ -46,6 +50,7 @@ StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=home-lights
 Environment=NODE_ENV=production
+Environment=PORT=80
 User=root
 Group=root
 
