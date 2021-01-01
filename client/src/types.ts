@@ -24,11 +24,13 @@ import {
   SystemState,
   Pattern,
   Scene,
-  Zone
+  Zone,
+  Schedule
 } from './common/types';
 
 export enum SliceName {
   Zones = 'Zones',
+  Schedules = 'Schedules',
   Scenes = 'Scenes',
   Patterns = 'Patterns',
   Lights = 'Lights',
@@ -40,6 +42,7 @@ export enum SliceName {
 
 export interface State {
   [SliceName.Zones]: Zone[];
+  [SliceName.Schedules]: Schedule[];
   [SliceName.Scenes]: { scenes: Scene[]; version: number };
   [SliceName.Lights]: Light[];
   [SliceName.Patterns]: Pattern[];

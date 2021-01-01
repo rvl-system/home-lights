@@ -25,6 +25,7 @@ import { createLightsReducers } from './reducers/lightsReducer';
 import { notificationsReducer } from './reducers/notificationsReducer';
 import { createPatternsReducers } from './reducers/patternsReducer';
 import { createScenesReducers } from './reducers/scenesReducer';
+import { createSchedulesReducers } from './reducers/scheduleReducer';
 import { selectedTabReducer } from './reducers/selectedTabReducer';
 import { createStateReducers } from './reducers/stateReducer';
 import { createZonesReducers } from './reducers/zonesReducer';
@@ -38,6 +39,7 @@ async function run() {
     listeners,
     reducers: [
       createZonesReducers(appState.zones),
+      createSchedulesReducers(appState.schedules),
       createScenesReducers(appState.scenes, appState.version),
       createPatternsReducers(appState.patterns),
       createLightsReducers(appState.lights),
