@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
-import React, { Fragment, PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { UIColor } from '../../types';
 import { ColorInput, getDefaultColorValue } from './formInputs/colorInput';
 import { getDefaultRangeValue, RangeInput } from './formInputs/rangeInput';
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: (window.navigator as any).standalone ? '20px' : 'inherit'
   },
   groupContainer: {
-    paddingLeft: '10px'
+    paddingLeft: '15px'
   },
   header: {
     display: 'flex',
@@ -227,7 +227,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
           groupEntryName,
           groupEntry
         );
-        inputs.push(input);
+        groupInputs.push(input);
         if (!defaultValues[entry.name]) {
           defaultValues[entry.name as K] = {} as T[K];
         }
@@ -237,12 +237,12 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
       }
       key++;
       inputs.push(
-        <Fragment key={key}>
+        <div key={key}>
           <Typography className={classes.label} variant="h5">
             {entry.label}
           </Typography>
           <div className={classes.groupContainer}>{groupInputs}</div>
-        </Fragment>
+        </div>
       );
     } else {
       key++;

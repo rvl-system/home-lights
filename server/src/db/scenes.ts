@@ -111,18 +111,16 @@ export async function reconcile(
 
     // Check if any pattern types were changed that makes them no longer valid
     // for light types that only support solid patterns
-    for (const scene of scenes) {
-      for (const lightEntry of scene.lights) {
-        const light = getItem(lightEntry.lightId, lights);
-        if (typeof lightEntry.patternId === 'number') {
-          const pattern = getItem(lightEntry.patternId, patterns);
-          if (
-            light.type !== LightType.RVL &&
-            pattern.type !== PatternType.Solid
-          ) {
-            lightEntry.patternId = undefined;
-            sceneUpdated = true;
-          }
+    for (const lightEntry of scene.lights) {
+      const light = getItem(lightEntry.lightId, lights);
+      if (typeof lightEntry.patternId === 'number') {
+        const pattern = getItem(lightEntry.patternId, patterns);
+        if (
+          light.type !== LightType.RVL &&
+          pattern.type !== PatternType.Solid
+        ) {
+          lightEntry.patternId = undefined;
+          sceneUpdated = true;
         }
       }
     }
