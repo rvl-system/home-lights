@@ -87,18 +87,20 @@ export const EditLightButton: FunctionComponent<
     setEditDialogOpen(false);
   }
 
-  const spec: FormSchema = {};
+  const spec: FormSchema[] = [];
   if (props.canChangeName) {
-    spec.name = {
+    spec.push({
       type: FormSchemaType.Text,
+      name: 'name',
       label: 'Name',
       inputPlaceholder: 'e.g. Left bedside lamp',
       defaultValue: props.light.name,
       unavailableValues: props.unavailableLightNames
-    };
+    });
   }
-  spec.zoneId = {
+  spec.push({
     type: FormSchemaType.Select,
+    name: 'zoneId',
     label: 'Zone',
     options: [{ value: OFF, label: 'Unassigned' }].concat(
       props.zones.map((zone) => ({
@@ -110,10 +112,11 @@ export const EditLightButton: FunctionComponent<
       typeof props.light.zoneId === 'number'
         ? props.light.zoneId.toString()
         : OFF
-  };
+  });
   if (props.light.type === LightType.RVL) {
-    spec.channel = {
+    spec.push({
       type: FormSchemaType.Select,
+      name: 'channel',
       label: 'Channel',
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
         value: i.toString(),
@@ -121,7 +124,7 @@ export const EditLightButton: FunctionComponent<
         disabled: props.unavailableRVLChannels.includes(i)
       })),
       defaultValue: (props.light as RVLLight).channel.toString()
-    };
+    });
   }
 
   return (

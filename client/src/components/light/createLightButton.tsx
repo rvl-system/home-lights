@@ -63,15 +63,17 @@ export const CreateLightButton: FunctionComponent<
     handleClose();
   }
 
-  const schema: FormSchema = {
-    name: {
+  const schema: FormSchema[] = [
+    {
       type: FormSchemaType.Text,
+      name: 'name',
       label: 'Descriptive name for the light',
       inputPlaceholder: 'e.g. Left bedside lamp',
       unavailableValues: props.unavailableLightNames
     },
-    zone: {
+    {
       type: FormSchemaType.Select,
+      name: 'zone',
       label: 'Zone',
       options: [{ value: OFF, label: 'Unassigned' }].concat(
         props.zones.map((zone) => ({
@@ -81,8 +83,9 @@ export const CreateLightButton: FunctionComponent<
       ),
       defaultValue: OFF
     },
-    channel: {
+    {
       type: FormSchemaType.Select,
+      name: 'channel',
       label: 'Channel',
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
         value: i.toString(),
@@ -104,7 +107,7 @@ export const CreateLightButton: FunctionComponent<
         return defaultValue.toString();
       })()
     }
-  };
+  ];
 
   const classes = useStyles();
   return (

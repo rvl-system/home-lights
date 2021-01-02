@@ -83,27 +83,30 @@ export const EditSceneButton: FunctionComponent<
     });
   }
 
-  const spec: FormSchema = {
-    name: {
+  const spec: FormSchema[] = [
+    {
       type: FormSchemaType.Text,
+      name: 'name',
       label: 'Scene name',
       inputPlaceholder: 'e.g. Chill',
       defaultValue: props.scene.name,
       unavailableValues: props.unavailableSceneNames
     }
-  };
+  ];
   for (const lightEntry of props.scene.lights) {
     const light = getItem(lightEntry.lightId, props.lights);
     let pattern: Pattern | undefined;
     if (lightEntry.patternId !== undefined) {
       pattern = getItem(lightEntry.patternId, props.patterns);
     }
-    spec[light.id] = {
+    spec.push({
       type: FormSchemaType.Group,
+      name: light.id.toString(),
       label: light.name,
-      entries: {
-        pattern: {
+      entries: [
+        {
           type: FormSchemaType.Select,
+          name: 'pattern',
           label: 'Pattern',
           options: [{ value: 'off', label: 'Off' }].concat(
             props.patterns
@@ -119,15 +122,16 @@ export const EditSceneButton: FunctionComponent<
           ),
           defaultValue: pattern ? pattern.id.toString() : 'off'
         },
-        brightness: {
+        {
           type: FormSchemaType.Range,
+          name: 'brightness',
           label: 'Brightness',
           min: 0,
           max: 255,
           defaultValue: lightEntry.brightness
         }
-      }
-    };
+      ]
+    });
   }
 
   const classes = useContentStyles();

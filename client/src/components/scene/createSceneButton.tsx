@@ -84,21 +84,24 @@ export const CreateSceneButton: FunctionComponent<
     props.createScene(values.name, lights);
   }
 
-  const spec: FormSchema = {
-    name: {
+  const spec: FormSchema[] = [
+    {
       type: FormSchemaType.Text,
+      name: 'name',
       label: 'Scene name',
       inputPlaceholder: 'e.g. Party Mode',
       unavailableValues: props.unavailableSceneNames
     }
-  };
+  ];
   for (const light of props.lights) {
-    spec[light.id] = {
+    spec.push({
       type: FormSchemaType.Group,
+      name: light.id.toString(),
       label: light.name,
-      entries: {
-        pattern: {
+      entries: [
+        {
           type: FormSchemaType.Select,
+          name: 'pattern',
           label: 'Pattern',
           options: [{ value: 'off', label: 'Off' }].concat(
             props.patterns.map((pattern) => ({
@@ -108,16 +111,17 @@ export const CreateSceneButton: FunctionComponent<
           ),
           defaultValue: 'off'
         },
-        brightness: {
+        {
           type: FormSchemaType.Range,
+          name: 'brightness',
           label: 'Brightness',
           min: 0,
           max: MAX_BRIGHTNESS,
           step: BRIGHTNESS_STEP,
           defaultValue: MAX_BRIGHTNESS
         }
-      }
-    };
+      ]
+    });
   }
 
   const classes = useStyles();

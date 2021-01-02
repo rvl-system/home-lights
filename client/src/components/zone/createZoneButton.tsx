@@ -67,14 +67,15 @@ export const CreateZoneButton: FunctionComponent<
         open={openDialog}
         title="Create zone"
         confirmLabel="Create zone"
-        schema={{
-          name: {
+        schema={[
+          {
             type: FormSchemaType.Text,
+            name: 'name',
             label: 'Descriptive name for the room or area',
             inputPlaceholder: 'e.g. Kitchen',
             unavailableValues: props.unavailableZoneNames
           }
-        }}
+        ]}
       />
     </div>
   );

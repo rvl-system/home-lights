@@ -71,15 +71,16 @@ export const EditZoneButton: FunctionComponent<
         open={editDialogOpen}
         title={`Edit ${props.zone.name}`}
         confirmLabel="Save zone"
-        schema={{
-          name: {
+        schema={[
+          {
             type: FormSchemaType.Text,
+            name: 'name',
             label: 'Name',
             inputPlaceholder: 'e.g. Kitchen',
             defaultValue: props.zone.name,
             unavailableValues: props.unavailableZoneNames
           }
-        }}
+        ]}
       />
     </React.Fragment>
   );
