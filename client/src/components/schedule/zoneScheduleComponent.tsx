@@ -21,6 +21,7 @@ import { ListItem, makeStyles, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { EditMode, Scene, Schedule } from '../../common/types';
 import { useContentStyles } from '../lib/pageStyles';
+import { EditScheduleButtonContainer } from './editScheduleButtonContainer';
 
 const useStyles = makeStyles({
   caption: {
@@ -35,21 +36,45 @@ export interface ZoneScheduleComponentProps {
   editMode: EditMode;
 }
 
-export const ZoneScheduleComponent: FunctionComponent<ZoneScheduleComponentProps> = (
+interface InternalProps {
+  schedule: Schedule;
+  selected: boolean;
+  currentlyActiveScene: Scene | undefined;
+}
+
+const Subtitle: FunctionComponent<InternalProps> = (props) => {
+  if (props.schedule.entries.length === 0) {
+    return <em>No schedule created</em>;
+  } else if (!props.selected) {
+    return <em>Schedule not running</em>;
+  } else if (props.currentlyActiveScene) {
+    return <>{props.currentlyActiveScene.name}</>;
+  } else {
+    return <>Off</>;
+  }
+};
+
+const EditZoneScheduleComponent: FunctionComponent<InternalProps> = (props) => {
+  const classes = useStyles();
+  const contentClasses = useContentStyles();
+  return (
+    <ListItem className={contentClasses.listItem}>
+      <div>
+        <Typography className={contentClasses.itemTitle}>Schedule</Typography>
+        <Typography variant="caption" className={classes.caption}>
+          <Subtitle {...props} />
+        </Typography>
+      </div>
+      <EditScheduleButtonContainer schedule={props.schedule} />
+    </ListItem>
+  );
+};
+
+const OperationZoneScheduleComponent: FunctionComponent<InternalProps> = (
   props
 ) => {
   const classes = useStyles();
   const contentClasses = useContentStyles();
-  let status: JSX.Element;
-  if (props.schedule.entries.length === 0) {
-    status = <em>No schedule created</em>;
-  } else if (!props.selected) {
-    status = <em>Schedule not running</em>;
-  } else if (props.currentlyActiveScene) {
-    status = <>{props.currentlyActiveScene.name}</>;
-  } else {
-    status = <>Off</>;
-  }
   return (
     <ListItem
       className={contentClasses.listItem}
@@ -59,9 +84,27 @@ export const ZoneScheduleComponent: FunctionComponent<ZoneScheduleComponentProps
       <div>
         <Typography className={contentClasses.itemTitle}>Schedule</Typography>
         <Typography variant="caption" className={classes.caption}>
-          {status}
+          <Subtitle {...props} />
         </Typography>
       </div>
     </ListItem>
+  );
+};
+
+export const ZoneScheduleComponent: FunctionComponent<ZoneScheduleComponentProps> = (
+  props
+) => {
+  return props.editMode === EditMode.Edit ? (
+    <EditZoneScheduleComponent
+      schedule={props.schedule}
+      selected={props.selected}
+      currentlyActiveScene={props.currentlyActiveScene}
+    />
+  ) : (
+    <OperationZoneScheduleComponent
+      schedule={props.schedule}
+      selected={props.selected}
+      currentlyActiveScene={props.currentlyActiveScene}
+    />
   );
 };
