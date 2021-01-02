@@ -16,18 +16,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-// ---- General Configuration ----
-
-export const MAX_BRIGHTNESS = 255;
-export const BRIGHTNESS_STEP = 1;
-
-// ---- RVL Configuration ----
-export const NUM_RVL_CHANNELS = 8;
-
-// ---- Philips Hue Configuration ----
-export const PHILIPS_HUE_APP_NAME = 'Home Lights';
-export const PHILIPS_HUE_DEVICE_NAME = 'home-lights-user';
-
-// ---- Schedule ----
-export const SCHEDULE_SCENE_ID = -1;

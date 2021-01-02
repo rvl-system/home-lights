@@ -47,6 +47,17 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
   let changesMade = false;
   const schedules = getSchedules();
 
+  // Check if a zone was added, and create the schedule for it
+  for (const zone of zones) {
+    if (!hasItem(zone.id, schedules, 'zoneId')) {
+      await dbRun(
+        `INSERT INTO ${SCHEDULE_TABLE_NAME} (zone_id, entries) VALUES (?, ?)`,
+        [zone.id, JSON.stringify([])]
+      );
+      changesMade = true;
+    }
+  }
+
   // Check if the zone a schedule uses was deleted, and delete it if so
   for (let i = schedules.length - 1; i >= 0; i--) {
     const schedule = schedules[i];
@@ -89,16 +100,6 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
 export function getSchedules(): Schedule[] {
   return schedules;
 }
-
-export const createSchedule: ActionHandler<ActionType.CreateSchedule> = async (
-  request
-) => {
-  await dbRun(
-    `INSERT INTO ${SCHEDULE_TABLE_NAME} (zone_id, entries) VALUES (?, ?)`,
-    [request.zoneId, JSON.stringify(request.entries)]
-  );
-  await updateCache();
-};
 
 export const editSchedule: ActionHandler<ActionType.EditSchedule> = async (
   request

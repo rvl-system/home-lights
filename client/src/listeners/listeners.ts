@@ -29,7 +29,6 @@ export const listeners = [
     [ActionType.EditZone]: 'Failed to edit zone',
     [ActionType.DeleteZone]: 'Failed to delete zone',
 
-    [ActionType.CreateSchedule]: 'Failed to create schedule',
     [ActionType.EditSchedule]: 'Failed to edit schedule',
 
     [ActionType.CreateScene]: 'Failed to create scene',
