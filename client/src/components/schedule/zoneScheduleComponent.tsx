@@ -36,6 +36,10 @@ export interface ZoneScheduleComponentProps {
   editMode: EditMode;
 }
 
+export interface ZoneScheduleComponentDispatch {
+  enableSchedule: (zoneId: number) => void;
+}
+
 interface InternalProps {
   schedule: Schedule;
   selected: boolean;
@@ -70,9 +74,9 @@ const EditZoneScheduleComponent: FunctionComponent<InternalProps> = (props) => {
   );
 };
 
-const OperationZoneScheduleComponent: FunctionComponent<InternalProps> = (
-  props
-) => {
+const OperationZoneScheduleComponent: FunctionComponent<
+  InternalProps & ZoneScheduleComponentDispatch
+> = (props) => {
   const classes = useStyles();
   const contentClasses = useContentStyles();
   return (
@@ -80,6 +84,7 @@ const OperationZoneScheduleComponent: FunctionComponent<InternalProps> = (
       className={contentClasses.listItem}
       button
       selected={props.selected}
+      onClick={() => props.enableSchedule(props.schedule.zoneId)}
     >
       <div>
         <Typography className={contentClasses.itemTitle}>Schedule</Typography>
@@ -91,9 +96,9 @@ const OperationZoneScheduleComponent: FunctionComponent<InternalProps> = (
   );
 };
 
-export const ZoneScheduleComponent: FunctionComponent<ZoneScheduleComponentProps> = (
-  props
-) => {
+export const ZoneScheduleComponent: FunctionComponent<
+  ZoneScheduleComponentProps & ZoneScheduleComponentDispatch
+> = (props) => {
   return props.editMode === EditMode.Edit ? (
     <EditZoneScheduleComponent
       schedule={props.schedule}
@@ -105,6 +110,7 @@ export const ZoneScheduleComponent: FunctionComponent<ZoneScheduleComponentProps
       schedule={props.schedule}
       selected={props.selected}
       currentlyActiveScene={props.currentlyActiveScene}
+      enableSchedule={props.enableSchedule}
     />
   );
 };

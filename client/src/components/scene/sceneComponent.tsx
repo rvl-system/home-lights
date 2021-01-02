@@ -60,13 +60,13 @@ const OperationSceneComponent: FunctionComponent<
 > = (props) => {
   const classes = useContentStyles();
   return (
-    <ListItem className={classes.listItem} button selected={props.selected}>
-      <Typography
-        className={classes.itemTitle}
-        onClick={() => props.setZoneScene(props.scene.zoneId, props.scene.id)}
-      >
-        {props.scene.name}
-      </Typography>
+    <ListItem
+      className={classes.listItem}
+      button
+      selected={props.selected}
+      onClick={() => props.setZoneScene(props.scene.zoneId, props.scene.id)}
+    >
+      <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
     </ListItem>
   );
 };
