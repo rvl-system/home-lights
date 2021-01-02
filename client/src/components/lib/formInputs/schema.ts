@@ -20,25 +20,28 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Color } from '../../../common/types';
 
 export enum FormSchemaType {
+  Group = 'Group',
   Text = 'text',
   Select = 'select',
   Range = 'range',
   Color = 'color',
-  Label = 'label',
   Divider = 'divider'
 }
 
-export type FormSchema =
-  | TextSchema
-  | SelectSchema
-  | RangeSchema
-  | ColorSchema
-  | LabelSchema;
+type LeafSchema = TextSchema | SelectSchema | RangeSchema | ColorSchema;
+export type FormSchema = LeafSchema | GroupSchema;
+
+export interface GroupSchema {
+  type: FormSchemaType.Group;
+  name: string;
+  label: string;
+  entries: LeafSchema[];
+}
 
 export interface TextSchema {
   type: FormSchemaType.Text;
   name: string;
-  description: string;
+  label: string;
   defaultValue?: string;
   inputPlaceholder?: string;
   unavailableValues?: string[];
@@ -47,7 +50,7 @@ export interface TextSchema {
 export interface SelectSchema {
   type: FormSchemaType.Select;
   name: string;
-  description: string;
+  label: string;
   defaultValue: string;
   options: {
     value: string;
@@ -59,7 +62,7 @@ export interface SelectSchema {
 export interface RangeSchema {
   type: FormSchemaType.Range;
   name: string;
-  description: string;
+  label: string;
   defaultValue?: number;
   min?: number;
   max?: number;
@@ -69,11 +72,6 @@ export interface RangeSchema {
 export interface ColorSchema {
   type: FormSchemaType.Color;
   name: string;
-  description: string;
-  defaultValue?: Color;
-}
-
-export interface LabelSchema {
-  type: FormSchemaType.Label;
   label: string;
+  defaultValue?: Color;
 }

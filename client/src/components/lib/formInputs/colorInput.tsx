@@ -138,7 +138,7 @@ export const ColorInput: FunctionComponent<
   const ref = useRef<HTMLDivElement>(null);
   return (
     <div ref={ref}>
-      {props.description && <InputLabel>{props.description}</InputLabel>}
+      {props.label && <InputLabel>{props.label}</InputLabel>}
       <div>
         <Button
           variant="outlined"

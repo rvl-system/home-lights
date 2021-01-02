@@ -92,7 +92,7 @@ export const EditLightButton: FunctionComponent<
     spec.push({
       type: FormSchemaType.Text,
       name: 'name',
-      description: 'Name',
+      label: 'Name',
       inputPlaceholder: 'e.g. Left bedside lamp',
       defaultValue: props.light.name,
       unavailableValues: props.unavailableLightNames
@@ -101,7 +101,7 @@ export const EditLightButton: FunctionComponent<
   spec.push({
     type: FormSchemaType.Select,
     name: 'zoneId',
-    description: 'Zone',
+    label: 'Zone',
     options: [{ value: OFF, label: 'Unassigned' }].concat(
       props.zones.map((zone) => ({
         value: zone.id.toString(),
@@ -117,7 +117,7 @@ export const EditLightButton: FunctionComponent<
     spec.push({
       type: FormSchemaType.Select,
       name: 'channel',
-      description: 'Channel',
+      label: 'Channel',
       options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
         value: i.toString(),
         label: i.toString(),

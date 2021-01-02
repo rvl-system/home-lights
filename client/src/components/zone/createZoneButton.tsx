@@ -71,7 +71,7 @@ export const CreateZoneButton: FunctionComponent<
           {
             type: FormSchemaType.Text,
             name: 'name',
-            description: 'Descriptive name for the room or area',
+            label: 'Descriptive name for the room or area',
             inputPlaceholder: 'e.g. Kitchen',
             unavailableValues: props.unavailableZoneNames
           }

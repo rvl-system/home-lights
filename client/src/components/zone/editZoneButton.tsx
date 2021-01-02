@@ -75,7 +75,7 @@ export const EditZoneButton: FunctionComponent<
           {
             type: FormSchemaType.Text,
             name: 'name',
-            description: 'Name',
+            label: 'Name',
             inputPlaceholder: 'e.g. Kitchen',
             defaultValue: props.zone.name,
             unavailableValues: props.unavailableZoneNames

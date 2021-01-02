@@ -52,33 +52,33 @@ export const EditSceneButton: FunctionComponent<
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: Record<string, string>) {
+  function handleConfirm(
+    values: Record<string, string | Record<string, string>>
+  ) {
     handleClose();
     const lights: SceneLightEntry[] = [];
     for (const value in values) {
-      const match = /^pattern-([0-9]*)$/.exec(value);
-      if (match) {
-        lights.push({
-          lightId: parseInt(match[1]),
-          patternId:
-            values[value] === 'off' ? undefined : parseInt(values[value]),
-          brightness: 0
-        });
+      if (value === 'name') {
+        continue;
       }
-    }
-
-    for (const value in values) {
-      const match = /^brightness-([0-9]*)$/.exec(value);
-      if (match) {
-        const lightId = parseInt(match[1]);
-        const light = getItem(lightId, lights, 'lightId');
-        light.brightness = parseInt(values[value]);
-      }
+      const lightId = parseInt(value);
+      const lightEntry: Record<string, string> = values[value] as Record<
+        string,
+        string
+      >;
+      lights.push({
+        lightId,
+        patternId:
+          lightEntry.pattern === 'off'
+            ? undefined
+            : parseInt(lightEntry.pattern),
+        brightness: parseInt(lightEntry.brightness)
+      });
     }
 
     props.editScene({
       ...props.scene,
-      name: values.name,
+      name: values.name as string,
       lights
     });
   }
@@ -87,7 +87,7 @@ export const EditSceneButton: FunctionComponent<
     {
       type: FormSchemaType.Text,
       name: 'name',
-      description: 'Scene name',
+      label: 'Scene name',
       inputPlaceholder: 'e.g. Chill',
       defaultValue: props.scene.name,
       unavailableValues: props.unavailableSceneNames
@@ -100,34 +100,37 @@ export const EditSceneButton: FunctionComponent<
       pattern = getItem(lightEntry.patternId, props.patterns);
     }
     spec.push({
-      type: FormSchemaType.Label,
-      label: light.name
-    });
-    spec.push({
-      type: FormSchemaType.Select,
-      name: `pattern-${light.id}`,
-      description: 'Pattern',
-      options: [{ value: 'off', label: 'Off' }].concat(
-        props.patterns
-          .filter((pattern) =>
-            light.type === LightType.RVL
-              ? true
-              : pattern.type === PatternType.Solid
-          )
-          .map((pattern) => ({
-            value: pattern.id.toString(),
-            label: pattern.name
-          }))
-      ),
-      defaultValue: pattern ? pattern.id.toString() : 'off'
-    });
-    spec.push({
-      type: FormSchemaType.Range,
-      name: `brightness-${light.id}`,
-      description: 'Brightness',
-      min: 0,
-      max: 255,
-      defaultValue: lightEntry.brightness
+      type: FormSchemaType.Group,
+      name: light.id.toString(),
+      label: light.name,
+      entries: [
+        {
+          type: FormSchemaType.Select,
+          name: 'pattern',
+          label: 'Pattern',
+          options: [{ value: 'off', label: 'Off' }].concat(
+            props.patterns
+              .filter((pattern) =>
+                light.type === LightType.RVL
+                  ? true
+                  : pattern.type === PatternType.Solid
+              )
+              .map((pattern) => ({
+                value: pattern.id.toString(),
+                label: pattern.name
+              }))
+          ),
+          defaultValue: pattern ? pattern.id.toString() : 'off'
+        },
+        {
+          type: FormSchemaType.Range,
+          name: 'brightness',
+          label: 'Brightness',
+          min: 0,
+          max: 255,
+          defaultValue: lightEntry.brightness
+        }
+      ]
     });
   }
 

@@ -23,7 +23,6 @@ import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { MAX_BRIGHTNESS, BRIGHTNESS_STEP } from '../../common/config';
 import { Light, Pattern, SceneLightEntry } from '../../common/types';
-import { getItem } from '../../common/util';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
@@ -57,67 +56,70 @@ export const CreateSceneButton: FunctionComponent<
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: Record<string, string>) {
+  function handleConfirm(
+    values: Record<string, string | Record<string, string>>
+  ) {
     handleClose();
     const lights: SceneLightEntry[] = [];
     for (const value in values) {
-      const match = /^pattern-([0-9]*)$/.exec(value);
-      if (match) {
-        lights.push({
-          lightId: parseInt(match[1]),
-          patternId:
-            values[value] === 'off' ? undefined : parseInt(values[value]),
-          brightness: 0
-        });
+      if (value === 'name') {
+        continue;
       }
+      const lightId = parseInt(value);
+      const lightEntry: Record<string, string> = values[value] as Record<
+        string,
+        string
+      >;
+      lights.push({
+        lightId,
+        patternId:
+          lightEntry.pattern === 'off'
+            ? undefined
+            : parseInt(lightEntry.pattern),
+        brightness: parseInt(lightEntry.brightness)
+      });
     }
 
-    for (const value in values) {
-      const match = /^brightness-([0-9]*)$/.exec(value);
-      if (match) {
-        const lightId = parseInt(match[1]);
-        const light = getItem(lightId, lights, 'lightId');
-        light.brightness = parseInt(values[value]);
-      }
-    }
-
-    props.createScene(values.name, lights);
+    props.createScene(values.name as string, lights);
   }
 
   const spec: FormSchema[] = [
     {
       type: FormSchemaType.Text,
       name: 'name',
-      description: 'Scene name',
+      label: 'Scene name',
       inputPlaceholder: 'e.g. Party Mode',
       unavailableValues: props.unavailableSceneNames
     }
   ];
   for (const light of props.lights) {
     spec.push({
-      type: FormSchemaType.Label,
-      label: light.name
-    });
-    spec.push({
-      type: FormSchemaType.Select,
-      name: `pattern-${light.id}`,
-      description: 'Pattern',
-      options: [{ value: 'off', label: 'Off' }].concat(
-        props.patterns.map((pattern) => ({
-          value: pattern.id.toString(),
-          label: pattern.name
-        }))
-      ),
-      defaultValue: 'off'
-    });
-    spec.push({
-      type: FormSchemaType.Range,
-      name: `brightness-${light.id}`,
-      description: 'Brightness',
-      min: 0,
-      max: MAX_BRIGHTNESS,
-      step: BRIGHTNESS_STEP,
-      defaultValue: MAX_BRIGHTNESS
+      type: FormSchemaType.Group,
+      name: light.id.toString(),
+      label: light.name,
+      entries: [
+        {
+          type: FormSchemaType.Select,
+          name: 'pattern',
+          label: 'Pattern',
+          options: [{ value: 'off', label: 'Off' }].concat(
+            props.patterns.map((pattern) => ({
+              value: pattern.id.toString(),
+              label: pattern.name
+            }))
+          ),
+          defaultValue: 'off'
+        },
+        {
+          type: FormSchemaType.Range,
+          name: 'brightness',
+          label: 'Brightness',
+          min: 0,
+          max: MAX_BRIGHTNESS,
+          step: BRIGHTNESS_STEP,
+          defaultValue: MAX_BRIGHTNESS
+        }
+      ]
     });
   }
 
