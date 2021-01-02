@@ -17,9 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import React, { PropsWithChildren, useState } from 'react';
 import { UIColor } from '../../types';
 import { ColorInput, getDefaultColorValue } from './formInputs/colorInput';
@@ -27,59 +26,21 @@ import { getDefaultRangeValue, RangeInput } from './formInputs/rangeInput';
 import { FormSchema, FormSchemaType } from './formInputs/schema';
 import { getDefaultSelectValue, SelectInput } from './formInputs/selectInput';
 import { TextInput, getDefaultTextValue } from './formInputs/textInput';
+import { Modal } from './modal';
 
 export { FormSchemaType, FormSchema } from './formInputs/schema';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: 'fixed',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: theme.palette.background.default,
-    zIndex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-
-    // I wonder why the TypeScript definitions don't recognize "standalone"?
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    paddingBottom: (window.navigator as any).standalone ? '20px' : 'inherit'
-  },
+const useStyles = makeStyles({
   groupContainer: {
     paddingLeft: '15px'
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingTop: '20px',
-    paddingBottom: '20px'
-  },
-  backButton: {},
-  title: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  content: {
-    flexGrow: 1,
-    padding: '20px',
-    overflowY: 'scroll',
-    overflowX: 'hidden'
   },
   label: {
     paddingBottom: '20px'
   },
   row: {
     paddingBottom: '30px'
-  },
-  footer: {
-    display: 'flex',
-    justifyContent: 'center',
-    paddingTop: '20px',
-    paddingBottom: '20px',
-    minHeight: '75px'
   }
-}));
+});
 
 export interface FormInputProps {
   open: boolean;
@@ -264,37 +225,20 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   }>({ hasError: initialHasError, states: initialErrorStates });
 
   return (
-    <div className={classes.container} onClick={(e) => e.stopPropagation()}>
-      <div className={classes.header}>
-        <div className={classes.backButton}>
-          <Button
-            color="default"
-            onClick={() => {
-              if (props.onCancel) {
-                props.onCancel();
-              }
-            }}
-          >
-            <ArrowBackIcon />
-          </Button>
-        </div>
-        <div className={classes.title}>
-          {props.title && <Typography>{props.title}</Typography>}
-        </div>
-      </div>
-      <div className={classes.content}>{inputs}</div>
-      <div className={classes.footer}>
-        <Button
-          variant="contained"
-          color={props.confirmColor || 'primary'}
-          disabled={errorMap.hasError}
-          onClick={() => {
-            props.onConfirm(values);
-          }}
-        >
-          {props.confirmLabel || 'Confirm'}
-        </Button>
-      </div>
-    </div>
+    <Modal
+      open={props.open}
+      title={props.title}
+      confirmColor={props.confirmColor}
+      confirmLabel={props.confirmLabel}
+      canConfirm={!errorMap.hasError}
+      onConfirm={() => props.onConfirm(values)}
+      onCancel={() => {
+        if (props.onCancel) {
+          props.onCancel();
+        }
+      }}
+    >
+      {inputs}
+    </Modal>
   );
 }

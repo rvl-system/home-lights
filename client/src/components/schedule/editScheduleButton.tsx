@@ -21,7 +21,7 @@ import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Schedule, Zone } from '../../common/types';
-import { FormInput, FormSchema } from '../lib/formInput';
+import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
 
 export interface EditScheduleButtonProps {
@@ -37,24 +37,21 @@ export const EditSceneButton: FunctionComponent<
   EditScheduleButtonProps & EditScheduleButtonDispatch
 > = (props) => {
   const [openDialog, setOpenDialog] = React.useState(false);
-  const classes = useContentStyles();
+  const contentClasses = useContentStyles();
+
   function handleClose() {
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: Record<string, string>) {
+  function handleConfirm() {
     handleClose();
-    console.log(values);
-    // TODO
   }
-
-  const spec: FormSchema[] = [];
 
   return (
     <React.Fragment>
       <Fade in={true} mountOnEnter unmountOnExit>
         <Button
-          className={classes.rightAccordionButton}
+          className={contentClasses.rightAccordionButton}
           onClick={(e) => {
             e.stopPropagation();
             setOpenDialog(true);
@@ -64,14 +61,14 @@ export const EditSceneButton: FunctionComponent<
         </Button>
       </Fade>
 
-      <FormInput
+      <Modal
+        canConfirm={true}
         onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
         title={`Edit "${props.zone.name}" schedule`}
         confirmLabel="Save schedule"
-        schema={[]}
-      />
+      ></Modal>
     </React.Fragment>
   );
 };
