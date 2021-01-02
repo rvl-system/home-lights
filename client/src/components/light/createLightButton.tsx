@@ -23,7 +23,7 @@ import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 import { Zone } from '../../common/types';
-import { FormInput, FormSchemaType } from '../lib/formInput';
+import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const OFF = 'off';
 
@@ -63,6 +63,52 @@ export const CreateLightButton: FunctionComponent<
     handleClose();
   }
 
+  const schema: FormSchema[] = [
+    {
+      type: FormSchemaType.Text,
+      name: 'name',
+      label: 'Descriptive name for the light',
+      inputPlaceholder: 'e.g. Left bedside lamp',
+      unavailableValues: props.unavailableLightNames
+    },
+    {
+      type: FormSchemaType.Select,
+      name: 'zone',
+      label: 'Zone',
+      options: [{ value: OFF, label: 'Unassigned' }].concat(
+        props.zones.map((zone) => ({
+          value: zone.id.toString(),
+          label: zone.name
+        }))
+      ),
+      defaultValue: OFF
+    },
+    {
+      type: FormSchemaType.Select,
+      name: 'channel',
+      label: 'Channel',
+      options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
+        value: i.toString(),
+        label: i.toString(),
+        disabled: props.unavailableRVLChannels.includes(i)
+      })),
+      defaultValue: (() => {
+        let defaultValue = 0;
+        while (
+          defaultValue < NUM_RVL_CHANNELS &&
+          props.unavailableRVLChannels.includes(defaultValue)
+        ) {
+          defaultValue++;
+        }
+        if (defaultValue === NUM_RVL_CHANNELS) {
+          // TODO: show error in UI
+          throw new Error('No available RVL channels');
+        }
+        return defaultValue.toString();
+      })()
+    }
+  ];
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -80,53 +126,7 @@ export const CreateLightButton: FunctionComponent<
         open={openDialog}
         title="Create light"
         confirmLabel="Create light"
-        schema={[
-          {
-            type: FormSchemaType.Text,
-            name: 'name',
-            description: 'Descriptive name for the light',
-            inputPlaceholder: 'e.g. Left bedside lamp',
-            unavailableValues: props.unavailableLightNames
-          },
-          {
-            type: FormSchemaType.Select,
-            name: 'zone',
-            description: 'Zone',
-            options: [{ value: OFF, label: 'Unassigned' }].concat(
-              props.zones.map((zone) => ({
-                value: zone.id.toString(),
-                label: zone.name
-              }))
-            ),
-            defaultValue: OFF
-          },
-          {
-            type: FormSchemaType.Select,
-            name: 'channel',
-            description: 'Channel',
-            options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map(
-              (key, i) => ({
-                value: i.toString(),
-                label: i.toString(),
-                disabled: props.unavailableRVLChannels.includes(i)
-              })
-            ),
-            defaultValue: (() => {
-              let defaultValue = 0;
-              while (
-                defaultValue < NUM_RVL_CHANNELS &&
-                props.unavailableRVLChannels.includes(defaultValue)
-              ) {
-                defaultValue++;
-              }
-              if (defaultValue === NUM_RVL_CHANNELS) {
-                // TODO: show error in UI
-                throw new Error('No available RVL channels');
-              }
-              return defaultValue.toString();
-            })()
-          }
-        ]}
+        schema={schema}
       />
     </div>
   );

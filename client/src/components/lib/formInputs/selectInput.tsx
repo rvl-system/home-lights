@@ -40,7 +40,7 @@ export const SelectInput: FunctionComponent<
   }, [props.defaultValue]);
   return (
     <>
-      {props.description && <InputLabel>{props.description}</InputLabel>}
+      {props.label && <InputLabel>{props.label}</InputLabel>}
       <Select
         value={value}
         onChange={(e) => {

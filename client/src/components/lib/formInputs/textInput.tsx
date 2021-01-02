@@ -80,7 +80,7 @@ export const TextInput: FunctionComponent<
   const { error, showError, errorReason } = textErrorState;
   return (
     <>
-      {props.description && <InputLabel>{props.description}</InputLabel>}
+      {props.label && <InputLabel>{props.label}</InputLabel>}
       <TextField
         margin="dense"
         type="text"

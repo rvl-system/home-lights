@@ -37,43 +37,46 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     top: 0,
     bottom: 0,
-    'background-color': theme.palette.background.default,
-    'z-index': 1,
+    backgroundColor: theme.palette.background.default,
+    zIndex: 1,
     display: 'flex',
-    'flex-direction': 'column',
+    flexDirection: 'column',
 
     // I wonder why the TypeScript definitions don't recognize "standalone"?
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     paddingBottom: (window.navigator as any).standalone ? '20px' : 'inherit'
   },
+  groupContainer: {
+    paddingLeft: '15px'
+  },
   header: {
     display: 'flex',
-    'flex-direction': 'row',
-    'padding-top': '20px',
-    'padding-bottom': '20px'
+    flexDirection: 'row',
+    paddingTop: '20px',
+    paddingBottom: '20px'
   },
   backButton: {},
   title: {
     display: 'flex',
-    'align-items': 'center'
+    alignItems: 'center'
   },
   content: {
-    'flex-grow': 1,
+    flexGrow: 1,
     padding: '20px',
     overflowY: 'scroll',
     overflowX: 'hidden'
   },
   label: {
-    'padding-bottom': '20px'
+    paddingBottom: '20px'
   },
   row: {
-    'padding-bottom': '30px'
+    paddingBottom: '30px'
   },
   footer: {
     display: 'flex',
-    'justify-content': 'center',
-    'padding-top': '20px',
-    'padding-bottom': '20px',
+    justifyContent: 'center',
+    paddingTop: '20px',
+    paddingBottom: '20px',
     minHeight: '75px'
   }
 }));
@@ -106,13 +109,28 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   const classes = useStyles();
 
   function onEntryChange(name: string, value: unknown) {
-    const newValue: T = {
-      ...values,
-      [name]: value
-    };
-    setValues(newValue);
-    if (props.onChange) {
-      props.onChange(newValue);
+    if (name.includes(':')) {
+      const [groupName, entryName] = name.split(':');
+      const newValue: T = {
+        ...values,
+        [groupName]: {
+          ...(values[groupName] as Record<string, unknown>),
+          [entryName]: value
+        }
+      };
+      setValues(newValue);
+      if (props.onChange) {
+        props.onChange(newValue);
+      }
+    } else {
+      const newValue: T = {
+        ...values,
+        [name]: value
+      };
+      setValues(newValue);
+      if (props.onChange) {
+        props.onChange(newValue);
+      }
     }
   }
 
@@ -128,76 +146,109 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
     });
   }
 
-  const inputs: JSX.Element[] = [];
-  const defaultValues: T = {} as T;
-  const initialErrorStates: Record<string, boolean> = {};
-  for (let i = 0; i < props.schema.length; i++) {
-    const entry = props.schema[i];
+  function createEntry(
+    key: number,
+    entryName: string,
+    entry: FormSchema
+  ): [input: JSX.Element, defaultValue: T[K]] {
     switch (entry.type) {
-      case FormSchemaType.Label: {
-        inputs.push(
-          <Typography key={i} className={classes.label} variant="h5">
-            {entry.label}
-          </Typography>
-        );
-        break;
-      }
-
       case FormSchemaType.Select: {
-        inputs.push(
-          <div key={i} className={classes.row}>
+        return [
+          <div key={key} className={classes.row}>
             <SelectInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
-          </div>
-        );
-        defaultValues[entry.name as K] = getDefaultSelectValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultSelectValue(entry) as T[K]
+        ];
       }
 
       case FormSchemaType.Text: {
-        initialErrorStates[entry.name] = entry.defaultValue === undefined;
-        inputs.push(
-          <div key={i} className={classes.row}>
+        initialErrorStates[entryName] = entry.defaultValue === undefined;
+        return [
+          <div key={key} className={classes.row}>
             <TextInput
               {...entry}
               onChange={(value, error) => {
-                onErrorChange(entry.name, error);
-                onEntryChange(entry.name, value);
+                onErrorChange(entryName, error);
+                onEntryChange(entryName, value);
               }}
             />
-          </div>
-        );
-        defaultValues[entry.name as K] = getDefaultTextValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultTextValue(entry) as T[K]
+        ];
       }
 
       case FormSchemaType.Range: {
-        inputs.push(
-          <div key={i} className={classes.row}>
+        return [
+          <div key={key} className={classes.row}>
             <RangeInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
-          </div>
-        );
-        defaultValues[entry.name as K] = getDefaultRangeValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultRangeValue(entry) as T[K]
+        ];
       }
 
       case FormSchemaType.Color: {
-        inputs.push(
-          <div key={i} className={classes.row}>
+        return [
+          <div key={key} className={classes.row}>
             <ColorInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
-          </div>
-        );
-        defaultValues[entry.name as K] = getDefaultColorValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultColorValue(entry) as T[K]
+        ];
       }
+
+      default: {
+        throw new Error(`Internal Error: unknown schema type ${entryName}`);
+      }
+    }
+  }
+
+  const inputs: JSX.Element[] = [];
+  const defaultValues: T = {} as T;
+  const initialErrorStates: Record<string, boolean> = {};
+  let key = 0;
+  for (let i = 0; i < props.schema.length; i++) {
+    const entry = props.schema[i];
+    if (entry.type === FormSchemaType.Group) {
+      const groupInputs: JSX.Element[] = [];
+      for (let j = 0; j < entry.entries.length; j++) {
+        key++;
+        const groupEntry = entry.entries[j];
+        const groupEntryName = `${entry.name}:${groupEntry.name}`;
+        const [input, defaultValue] = createEntry(
+          key,
+          groupEntryName,
+          groupEntry
+        );
+        groupInputs.push(input);
+        if (!defaultValues[entry.name]) {
+          defaultValues[entry.name as K] = {} as T[K];
+        }
+        (defaultValues[entry.name as K] as Record<string, unknown>)[
+          groupEntry.name
+        ] = defaultValue;
+      }
+      key++;
+      inputs.push(
+        <div key={key}>
+          <Typography className={classes.label} variant="h5">
+            {entry.label}
+          </Typography>
+          <div className={classes.groupContainer}>{groupInputs}</div>
+        </div>
+      );
+    } else {
+      key++;
+      const [input, defaultValue] = createEntry(key, entry.name, entry);
+      inputs.push(input);
+      defaultValues[entry.name as K] = defaultValue;
     }
   }
 
