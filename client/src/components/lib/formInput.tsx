@@ -132,6 +132,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   const defaultValues: T = {} as T;
   const initialErrorStates: Record<string, boolean> = {};
   let i = 0;
+  // TODO: Add support for groups
   for (const entryName in props.schema) {
     i++;
     const entry = props.schema[entryName];

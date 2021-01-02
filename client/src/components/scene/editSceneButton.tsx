@@ -83,52 +83,51 @@ export const EditSceneButton: FunctionComponent<
     });
   }
 
-  const spec: FormSchema[] = [
-    {
+  const spec: FormSchema = {
+    name: {
       type: FormSchemaType.Text,
-      name: 'name',
-      description: 'Scene name',
+      label: 'Scene name',
       inputPlaceholder: 'e.g. Chill',
       defaultValue: props.scene.name,
       unavailableValues: props.unavailableSceneNames
     }
-  ];
+  };
   for (const lightEntry of props.scene.lights) {
     const light = getItem(lightEntry.lightId, props.lights);
     let pattern: Pattern | undefined;
     if (lightEntry.patternId !== undefined) {
       pattern = getItem(lightEntry.patternId, props.patterns);
     }
-    spec.push({
-      type: FormSchemaType.Label,
-      label: light.name
-    });
-    spec.push({
-      type: FormSchemaType.Select,
-      name: `pattern-${light.id}`,
-      description: 'Pattern',
-      options: [{ value: 'off', label: 'Off' }].concat(
-        props.patterns
-          .filter((pattern) =>
-            light.type === LightType.RVL
-              ? true
-              : pattern.type === PatternType.Solid
-          )
-          .map((pattern) => ({
-            value: pattern.id.toString(),
-            label: pattern.name
-          }))
-      ),
-      defaultValue: pattern ? pattern.id.toString() : 'off'
-    });
-    spec.push({
-      type: FormSchemaType.Range,
-      name: `brightness-${light.id}`,
-      description: 'Brightness',
-      min: 0,
-      max: 255,
-      defaultValue: lightEntry.brightness
-    });
+    spec[light.id] = {
+      type: FormSchemaType.Group,
+      label: light.name,
+      entries: {
+        pattern: {
+          type: FormSchemaType.Select,
+          label: 'Pattern',
+          options: [{ value: 'off', label: 'Off' }].concat(
+            props.patterns
+              .filter((pattern) =>
+                light.type === LightType.RVL
+                  ? true
+                  : pattern.type === PatternType.Solid
+              )
+              .map((pattern) => ({
+                value: pattern.id.toString(),
+                label: pattern.name
+              }))
+          ),
+          defaultValue: pattern ? pattern.id.toString() : 'off'
+        },
+        brightness: {
+          type: FormSchemaType.Range,
+          label: 'Brightness',
+          min: 0,
+          max: 255,
+          defaultValue: lightEntry.brightness
+        }
+      }
+    };
   }
 
   const classes = useContentStyles();

@@ -117,19 +117,17 @@ export const PatternInput: FunctionComponent<
     props.onClose();
   }
 
-  const schema: FormSchema[] = [
-    {
+  const schema: FormSchema = {
+    name: {
       type: FormSchemaType.Text,
-      name: 'name',
-      description: 'Descriptive name for the pattern',
+      label: 'Descriptive name for the pattern',
       inputPlaceholder: 'e.g. Purple Rainbow',
       unavailableValues: props.unavailablePatternNames,
       defaultValue: props.pattern.name
     },
-    {
+    type: {
       type: FormSchemaType.Select,
-      name: 'type',
-      description: 'Pattern type',
+      label: 'Pattern type',
       options: [
         { value: PatternType.Solid, label: PatternType.Solid },
         { value: PatternType.Wave, label: PatternType.Wave },
@@ -139,93 +137,84 @@ export const PatternInput: FunctionComponent<
       ],
       defaultValue: pattern.type
     }
-  ];
+  };
 
   switch (pattern.type) {
     case PatternType.Solid: {
       const solidPattern = pattern as SolidPattern;
-      schema.push({
+      schema.color = {
         type: FormSchemaType.Color,
-        name: 'color',
-        description: 'Color',
+        label: 'Color',
         defaultValue: solidPattern.data.color
-      });
+      };
       break;
     }
     case PatternType.Wave: {
       const wavePattern = pattern as WavePattern;
-      schema.push({
+      schema.rate = {
         type: FormSchemaType.Range,
-        name: 'rate',
-        description: 'Rate',
+        label: 'Rate',
         defaultValue: wavePattern.data.rate,
         min: 0,
         max: 32,
         step: 1
-      });
-      schema.push({
+      };
+      schema.waveColor = {
         type: FormSchemaType.Color,
-        name: 'waveColor',
-        description: 'Wave Color',
+        label: 'Wave Color',
         defaultValue: wavePattern.data.waveColor
-      });
-      schema.push({
+      };
+      schema.foregroundColor = {
         type: FormSchemaType.Color,
-        name: 'foregroundColor',
-        description: 'Foreground Color',
+        label: 'Foreground Color',
         defaultValue: wavePattern.data.foregroundColor
-      });
-      schema.push({
+      };
+      schema.backgroundColor = {
         type: FormSchemaType.Color,
-        name: 'backgroundColor',
-        description: 'Background Color',
+        label: 'Background Color',
         defaultValue: wavePattern.data.backgroundColor
-      });
+      };
       break;
     }
     case PatternType.ColorCycle: {
       const colorCyclePattern = pattern as ColorCyclePattern;
-      schema.push({
+      schema.rate = {
         type: FormSchemaType.Range,
-        name: 'rate',
-        description: 'Rate',
+        label: 'Rate',
         defaultValue: colorCyclePattern.data.rate,
         min: 0,
         max: 32,
         step: 1
-      });
+      };
       break;
     }
     case PatternType.Pulse: {
       const pulsePattern = pattern as PulsePattern;
-      schema.push({
+      schema.rate = {
         type: FormSchemaType.Range,
-        name: 'rate',
-        description: 'Rate',
+        label: 'Rate',
         defaultValue: pulsePattern.data.rate,
         min: 0,
         max: 32,
         step: 1
-      });
-      schema.push({
+      };
+      schema.color = {
         type: FormSchemaType.Color,
-        name: 'color',
-        description: 'Color',
+        label: 'Color',
         defaultValue: pulsePattern.data.color
-      });
+      };
       break;
     }
     case PatternType.Rainbow: {
       const rainbowPattern = pattern as RainbowPattern;
-      schema.push({
+      schema.rate = {
         type: FormSchemaType.Range,
-        name: 'rate',
-        description: 'Rate',
+        label: 'Rate',
         defaultValue: rainbowPattern.data.rate,
         min: 0,
         max: 32,
         step: 1
-      });
+      };
       break;
     }
   }
