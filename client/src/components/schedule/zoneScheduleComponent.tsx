@@ -51,7 +51,11 @@ export const ZoneScheduleComponent: FunctionComponent<ZoneScheduleComponentProps
     status = <>Off</>;
   }
   return (
-    <ListItem className={contentClasses.listItem}>
+    <ListItem
+      className={contentClasses.listItem}
+      button
+      selected={props.selected}
+    >
       <div>
         <Typography className={contentClasses.itemTitle}>Schedule</Typography>
         <Typography variant="caption" className={classes.caption}>
