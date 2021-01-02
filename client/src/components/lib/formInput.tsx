@@ -37,10 +37,10 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     top: 0,
     bottom: 0,
-    'background-color': theme.palette.background.default,
-    'z-index': 1,
+    backgroundColor: theme.palette.background.default,
+    zIndex: 1,
     display: 'flex',
-    'flex-direction': 'column',
+    flexDirection: 'column',
 
     // I wonder why the TypeScript definitions don't recognize "standalone"?
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,32 +51,32 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     display: 'flex',
-    'flex-direction': 'row',
-    'padding-top': '20px',
-    'padding-bottom': '20px'
+    flexDirection: 'row',
+    paddingTop: '20px',
+    paddingBottom: '20px'
   },
   backButton: {},
   title: {
     display: 'flex',
-    'align-items': 'center'
+    alignItems: 'center'
   },
   content: {
-    'flex-grow': 1,
+    flexGrow: 1,
     padding: '20px',
     overflowY: 'scroll',
     overflowX: 'hidden'
   },
   label: {
-    'padding-bottom': '20px'
+    paddingBottom: '20px'
   },
   row: {
-    'padding-bottom': '30px'
+    paddingBottom: '30px'
   },
   footer: {
     display: 'flex',
-    'justify-content': 'center',
-    'padding-top': '20px',
-    'padding-bottom': '20px',
+    justifyContent: 'center',
+    paddingTop: '20px',
+    paddingBottom: '20px',
     minHeight: '75px'
   }
 }));
