@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, Fade } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { EditMode, Zone } from '../../common/types';
 import { ConfirmDialog } from '../lib/confirmDialog';
 
@@ -36,14 +36,14 @@ export interface DeleteZoneButtonDispatch {
 export const DeleteZoneButton: FunctionComponent<
   DeleteZoneButtonDispatch & DeleteZoneButtonProps
 > = (props) => {
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   function handleDeleteClose() {
     setDeleteDialogOpen(false);
   }
 
   return (
-    <React.Fragment>
+    <>
       <Fade in={props.editMode === EditMode.Edit} mountOnEnter unmountOnExit>
         <Button
           className={props.className}
@@ -69,6 +69,6 @@ export const DeleteZoneButton: FunctionComponent<
         confirmLabel="Delete zone"
         confirmColor="secondary"
       />
-    </React.Fragment>
+    </>
   );
 };

@@ -25,7 +25,7 @@ import { EditScheduleButtonContainer } from './editScheduleButtonContainer';
 
 const useStyles = makeStyles({
   caption: {
-    'padding-left': '15px'
+    paddingLeft: '15px'
   }
 });
 

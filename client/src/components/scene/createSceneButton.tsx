@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { MAX_BRIGHTNESS, BRIGHTNESS_STEP } from '../../common/config';
 import { Light, Pattern, SceneLightEntry } from '../../common/types';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
@@ -50,7 +50,7 @@ export interface CreateSceneButtonDispatch {
 export const CreateSceneButton: FunctionComponent<
   CreateSceneButtonProps & CreateSceneButtonDispatch
 > = (props) => {
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   function handleClose() {
     setOpenDialog(false);

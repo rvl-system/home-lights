@@ -35,8 +35,8 @@ import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    'justify-content': 'center',
-    'align-items': 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

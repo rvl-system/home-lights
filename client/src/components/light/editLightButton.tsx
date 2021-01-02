@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { NUM_RVL_CHANNELS } from '../../common/config';
 import {
   Light,
@@ -49,7 +49,7 @@ export interface EditLightButtonDispatch {
 export const EditLightButton: FunctionComponent<
   EditLightButtonProps & EditLightButtonDispatch
 > = (props) => {
-  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   function handleConfirm(values: Record<string, string>) {
     handleEditClose();
@@ -128,7 +128,7 @@ export const EditLightButton: FunctionComponent<
   }
 
   return (
-    <React.Fragment>
+    <>
       <Button
         className={props.className}
         onClick={(e) => {
@@ -147,6 +147,6 @@ export const EditLightButton: FunctionComponent<
         confirmLabel="Save light"
         schema={spec}
       />
-    </React.Fragment>
+    </>
   );
 };

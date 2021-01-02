@@ -17,12 +17,18 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, Fade } from '@material-ui/core';
-import { Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import { Button, Fade, makeStyles } from '@material-ui/core';
+import { Edit as EditIcon, Add as AddIcon } from '@material-ui/icons';
+import React, { FunctionComponent, useState } from 'react';
 import { Schedule, Zone } from '../../common/types';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
+
+const useStyles = makeStyles({
+  button: {
+    width: '100%'
+  }
+});
 
 export interface EditScheduleButtonProps {
   schedule: Schedule;
@@ -36,7 +42,8 @@ export interface EditScheduleButtonDispatch {
 export const EditSceneButton: FunctionComponent<
   EditScheduleButtonProps & EditScheduleButtonDispatch
 > = (props) => {
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openEntryDialog, setOpenEntryDialog] = useState(false);
   const contentClasses = useContentStyles();
 
   function handleClose() {
@@ -47,8 +54,9 @@ export const EditSceneButton: FunctionComponent<
     handleClose();
   }
 
+  const classes = useStyles();
   return (
-    <React.Fragment>
+    <>
       <Fade in={true} mountOnEnter unmountOnExit>
         <Button
           className={contentClasses.rightAccordionButton}
@@ -68,7 +76,16 @@ export const EditSceneButton: FunctionComponent<
         open={openDialog}
         title={`Edit "${props.zone.name}" schedule`}
         confirmLabel="Save schedule"
-      ></Modal>
-    </React.Fragment>
+      >
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => setOpenDialog(true)}
+          className={classes.button}
+        >
+          <AddIcon />
+        </Button>
+      </Modal>
+    </>
   );
 };

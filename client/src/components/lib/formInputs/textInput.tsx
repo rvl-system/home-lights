@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { InputLabel, TextField } from '@material-ui/core';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, ChangeEvent, useState } from 'react';
 import { TextSchema } from './schema';
 
 export type TextInputProps = Omit<TextSchema, 'type'>;
@@ -46,9 +46,7 @@ export const TextInput: FunctionComponent<
     errorReason: 'A value is required'
   });
 
-  function onChange(
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) {
+  function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     const newValue = e.currentTarget.value;
     let error = false;
     if (!newValue) {

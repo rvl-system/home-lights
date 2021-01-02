@@ -30,7 +30,7 @@ import { EditPatternButtonContainer } from './editPatternButtonContainer';
 
 const styles = makeStyles({
   caption: {
-    'padding-left': '15px'
+    paddingLeft: '15px'
   }
 });
 

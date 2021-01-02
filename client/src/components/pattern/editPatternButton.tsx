@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { Pattern } from '../../common/types';
 import { PatternInput } from './patternInput';
 
@@ -36,12 +36,12 @@ export interface EditPatternButtonDispatch {
 export const EditPatternButton: FunctionComponent<
   EditPatternButtonProps & EditPatternButtonDispatch
 > = (props) => {
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   function handleClose() {
     setOpenDialog(false);
   }
   return (
-    <React.Fragment>
+    <>
       <Button className={props.className} onClick={() => setOpenDialog(true)}>
         <EditIcon />
       </Button>
@@ -62,6 +62,6 @@ export const EditPatternButton: FunctionComponent<
           })
         }
       />
-    </React.Fragment>
+    </>
   );
 };

@@ -38,7 +38,7 @@ export type ZoneScenesComponentDispatch = SceneComponentDispatch;
 
 const useStyles = makeStyles(() => ({
   container: {
-    'padding-right': '20px'
+    paddingRight: '20px'
   },
   root: {
     width: '100%'

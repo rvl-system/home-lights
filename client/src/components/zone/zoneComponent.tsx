@@ -63,7 +63,7 @@ export const ZoneComponent: FunctionComponent<
   const classes = useStyles();
   const contentClasses = useContentStyles();
   return (
-    <React.Fragment>
+    <>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel1a-header">
           <div className={classes.container}>
@@ -125,6 +125,6 @@ export const ZoneComponent: FunctionComponent<
           <ZoneScenesContainer zone={props.zone} editMode={props.editMode} />
         </AccordionDetails>
       </Accordion>
-    </React.Fragment>
+    </>
   );
 };

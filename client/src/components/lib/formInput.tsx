@@ -213,7 +213,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
     }
   }
 
-  const [values, setValues] = React.useState(defaultValues);
+  const [values, setValues] = useState(defaultValues);
 
   let initialHasError = false;
   for (const entry in initialErrorStates) {
