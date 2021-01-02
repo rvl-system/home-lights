@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 export interface FormInputProps {
   open: boolean;
   title: string;
-  schema: FormSchema[];
+  schema: FormSchema;
   confirmLabel?: string;
   confirmColor?: UIColor;
 }
@@ -131,45 +131,38 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   const inputs: JSX.Element[] = [];
   const defaultValues: T = {} as T;
   const initialErrorStates: Record<string, boolean> = {};
-  for (let i = 0; i < props.schema.length; i++) {
-    const entry = props.schema[i];
+  let i = 0;
+  for (const entryName in props.schema) {
+    i++;
+    const entry = props.schema[entryName];
     switch (entry.type) {
-      case FormSchemaType.Label: {
-        inputs.push(
-          <Typography key={i} className={classes.label} variant="h5">
-            {entry.label}
-          </Typography>
-        );
-        break;
-      }
-
       case FormSchemaType.Select: {
         inputs.push(
           <div key={i} className={classes.row}>
             <SelectInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
           </div>
         );
-        defaultValues[entry.name as K] = getDefaultSelectValue(entry) as T[K];
+        defaultValues[entryName as K] = getDefaultSelectValue(entry) as T[K];
         break;
       }
 
       case FormSchemaType.Text: {
-        initialErrorStates[entry.name] = entry.defaultValue === undefined;
+        initialErrorStates[entryName] = entry.defaultValue === undefined;
         inputs.push(
           <div key={i} className={classes.row}>
             <TextInput
               {...entry}
               onChange={(value, error) => {
-                onErrorChange(entry.name, error);
-                onEntryChange(entry.name, value);
+                onErrorChange(entryName, error);
+                onEntryChange(entryName, value);
               }}
             />
           </div>
         );
-        defaultValues[entry.name as K] = getDefaultTextValue(entry) as T[K];
+        defaultValues[entryName as K] = getDefaultTextValue(entry) as T[K];
         break;
       }
 
@@ -178,11 +171,11 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
           <div key={i} className={classes.row}>
             <RangeInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
           </div>
         );
-        defaultValues[entry.name as K] = getDefaultRangeValue(entry) as T[K];
+        defaultValues[entryName as K] = getDefaultRangeValue(entry) as T[K];
         break;
       }
 
@@ -191,11 +184,11 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
           <div key={i} className={classes.row}>
             <ColorInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
           </div>
         );
-        defaultValues[entry.name as K] = getDefaultColorValue(entry) as T[K];
+        defaultValues[entryName as K] = getDefaultColorValue(entry) as T[K];
         break;
       }
     }

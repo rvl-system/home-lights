@@ -40,7 +40,7 @@ export const RangeInput: FunctionComponent<
   const defaultValue = getDefaultRangeValue(props);
   return (
     <>
-      {props.description && <InputLabel>{props.description}</InputLabel>}
+      {props.label && <InputLabel>{props.label}</InputLabel>}
       <Slider
         defaultValue={defaultValue}
         valueLabelDisplay="auto"
