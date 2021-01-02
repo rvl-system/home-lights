@@ -52,33 +52,33 @@ export const EditSceneButton: FunctionComponent<
     setOpenDialog(false);
   }
 
-  function handleConfirm(values: Record<string, string>) {
+  function handleConfirm(
+    values: Record<string, string | Record<string, string>>
+  ) {
     handleClose();
     const lights: SceneLightEntry[] = [];
     for (const value in values) {
-      const match = /^pattern-([0-9]*)$/.exec(value);
-      if (match) {
-        lights.push({
-          lightId: parseInt(match[1]),
-          patternId:
-            values[value] === 'off' ? undefined : parseInt(values[value]),
-          brightness: 0
-        });
+      if (value === 'name') {
+        continue;
       }
-    }
-
-    for (const value in values) {
-      const match = /^brightness-([0-9]*)$/.exec(value);
-      if (match) {
-        const lightId = parseInt(match[1]);
-        const light = getItem(lightId, lights, 'lightId');
-        light.brightness = parseInt(values[value]);
-      }
+      const lightId = parseInt(value);
+      const lightEntry: Record<string, string> = values[value] as Record<
+        string,
+        string
+      >;
+      lights.push({
+        lightId,
+        patternId:
+          lightEntry.pattern === 'off'
+            ? undefined
+            : parseInt(lightEntry.pattern),
+        brightness: parseInt(lightEntry.brightness)
+      });
     }
 
     props.editScene({
       ...props.scene,
-      name: values.name,
+      name: values.name as string,
       lights
     });
   }

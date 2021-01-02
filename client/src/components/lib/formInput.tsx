@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
-import React, { PropsWithChildren, useState } from 'react';
+import React, { Fragment, PropsWithChildren, useState } from 'react';
 import { UIColor } from '../../types';
 import { ColorInput, getDefaultColorValue } from './formInputs/colorInput';
 import { getDefaultRangeValue, RangeInput } from './formInputs/rangeInput';
@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
     // I wonder why the TypeScript definitions don't recognize "standalone"?
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     paddingBottom: (window.navigator as any).standalone ? '20px' : 'inherit'
+  },
+  groupContainer: {
+    paddingLeft: '10px'
   },
   header: {
     display: 'flex',
@@ -106,13 +109,28 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   const classes = useStyles();
 
   function onEntryChange(name: string, value: unknown) {
-    const newValue: T = {
-      ...values,
-      [name]: value
-    };
-    setValues(newValue);
-    if (props.onChange) {
-      props.onChange(newValue);
+    if (name.includes(':')) {
+      const [groupName, entryName] = name.split(':');
+      const newValue: T = {
+        ...values,
+        [groupName]: {
+          ...(values[groupName] as Record<string, unknown>),
+          [entryName]: value
+        }
+      };
+      setValues(newValue);
+      if (props.onChange) {
+        props.onChange(newValue);
+      }
+    } else {
+      const newValue: T = {
+        ...values,
+        [name]: value
+      };
+      setValues(newValue);
+      if (props.onChange) {
+        props.onChange(newValue);
+      }
     }
   }
 
@@ -130,6 +148,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
 
   function createEntry(
     key: number,
+    entryName: string,
     entry: FormSchema
   ): [input: JSX.Element, defaultValue: T[K]] {
     switch (entry.type) {
@@ -138,7 +157,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
           <div key={key} className={classes.row}>
             <SelectInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
           </div>,
           getDefaultSelectValue(entry) as T[K]
@@ -146,14 +165,14 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
       }
 
       case FormSchemaType.Text: {
-        initialErrorStates[entry.name] = entry.defaultValue === undefined;
+        initialErrorStates[entryName] = entry.defaultValue === undefined;
         return [
           <div key={key} className={classes.row}>
             <TextInput
               {...entry}
               onChange={(value, error) => {
-                onErrorChange(entry.name, error);
-                onEntryChange(entry.name, value);
+                onErrorChange(entryName, error);
+                onEntryChange(entryName, value);
               }}
             />
           </div>,
@@ -166,7 +185,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
           <div key={key} className={classes.row}>
             <RangeInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
           </div>,
           getDefaultRangeValue(entry) as T[K]
@@ -178,7 +197,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
           <div key={key} className={classes.row}>
             <ColorInput
               {...entry}
-              onChange={(value) => onEntryChange(entry.name, value)}
+              onChange={(value) => onEntryChange(entryName, value)}
             />
           </div>,
           getDefaultColorValue(entry) as T[K]
@@ -186,7 +205,7 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
       }
 
       default: {
-        throw new Error(`Internal Error: unknown schema type ${entry.name}`);
+        throw new Error(`Internal Error: unknown schema type ${entryName}`);
       }
     }
   }
@@ -196,23 +215,38 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
   const initialErrorStates: Record<string, boolean> = {};
   let key = 0;
   for (let i = 0; i < props.schema.length; i++) {
-    key++;
     const entry = props.schema[i];
     if (entry.type === FormSchemaType.Group) {
-      inputs.push(
-        <Typography key={i} className={classes.label} variant="h5">
-          {entry.label}
-        </Typography>
-      );
+      const groupInputs: JSX.Element[] = [];
       for (let j = 0; j < entry.entries.length; j++) {
         key++;
         const groupEntry = entry.entries[j];
-        const [input, defaultValue] = createEntry(key, groupEntry);
+        const groupEntryName = `${entry.name}:${groupEntry.name}`;
+        const [input, defaultValue] = createEntry(
+          key,
+          groupEntryName,
+          groupEntry
+        );
         inputs.push(input);
-        defaultValues[`${entry.name}:${groupEntry}` as K] = defaultValue;
+        if (!defaultValues[entry.name]) {
+          defaultValues[entry.name as K] = {} as T[K];
+        }
+        (defaultValues[entry.name as K] as Record<string, unknown>)[
+          groupEntry.name
+        ] = defaultValue;
       }
+      key++;
+      inputs.push(
+        <Fragment key={key}>
+          <Typography className={classes.label} variant="h5">
+            {entry.label}
+          </Typography>
+          <div className={classes.groupContainer}>{groupInputs}</div>
+        </Fragment>
+      );
     } else {
-      const [input, defaultValue] = createEntry(key, entry);
+      key++;
+      const [input, defaultValue] = createEntry(key, entry.name, entry);
       inputs.push(input);
       defaultValues[entry.name as K] = defaultValue;
     }
