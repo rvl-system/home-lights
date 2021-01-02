@@ -21,6 +21,7 @@ import { Button, Fade, makeStyles } from '@material-ui/core';
 import { Edit as EditIcon, Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
 import { Schedule, Zone } from '../../common/types';
+import { FormInput } from '../lib/formInput';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
 
@@ -54,6 +55,15 @@ export const EditSceneButton: FunctionComponent<
     handleClose();
   }
 
+  function handleEntryClose() {
+    setOpenEntryDialog(false);
+  }
+
+  function handleEntryConfirm(values: Record<string, unknown>) {
+    handleEntryClose();
+    console.log(values);
+  }
+
   const classes = useStyles();
   return (
     <>
@@ -74,17 +84,26 @@ export const EditSceneButton: FunctionComponent<
         onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
-        title={`Edit "${props.zone.name}" schedule`}
+        title={`Create "${props.zone.name}" schedule entry`}
         confirmLabel="Save schedule"
       >
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => setOpenDialog(true)}
+          onClick={() => setOpenEntryDialog(true)}
           className={classes.button}
         >
           <AddIcon />
         </Button>
+
+        <FormInput
+          onConfirm={handleEntryConfirm}
+          onCancel={handleEntryClose}
+          open={openEntryDialog}
+          title={'Edit schedule entry'}
+          confirmLabel="Save light"
+          schema={[]}
+        />
       </Modal>
     </>
   );
