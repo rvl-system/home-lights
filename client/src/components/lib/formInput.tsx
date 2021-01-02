@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 export interface FormInputProps {
   open: boolean;
   title: string;
-  schema: FormSchema;
+  schema: FormSchema[];
   confirmLabel?: string;
   confirmColor?: UIColor;
 }
@@ -128,70 +128,93 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
     });
   }
 
-  const inputs: JSX.Element[] = [];
-  const defaultValues: T = {} as T;
-  const initialErrorStates: Record<string, boolean> = {};
-  let i = 0;
-  // TODO: Add support for groups
-  for (const entryName in props.schema) {
-    i++;
-    const entry = props.schema[entryName];
+  function createEntry(
+    key: number,
+    entry: FormSchema
+  ): [input: JSX.Element, defaultValue: T[K]] {
     switch (entry.type) {
       case FormSchemaType.Select: {
-        inputs.push(
-          <div key={i} className={classes.row}>
+        return [
+          <div key={key} className={classes.row}>
             <SelectInput
               {...entry}
-              onChange={(value) => onEntryChange(entryName, value)}
+              onChange={(value) => onEntryChange(entry.name, value)}
             />
-          </div>
-        );
-        defaultValues[entryName as K] = getDefaultSelectValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultSelectValue(entry) as T[K]
+        ];
       }
 
       case FormSchemaType.Text: {
-        initialErrorStates[entryName] = entry.defaultValue === undefined;
-        inputs.push(
-          <div key={i} className={classes.row}>
+        initialErrorStates[entry.name] = entry.defaultValue === undefined;
+        return [
+          <div key={key} className={classes.row}>
             <TextInput
               {...entry}
               onChange={(value, error) => {
-                onErrorChange(entryName, error);
-                onEntryChange(entryName, value);
+                onErrorChange(entry.name, error);
+                onEntryChange(entry.name, value);
               }}
             />
-          </div>
-        );
-        defaultValues[entryName as K] = getDefaultTextValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultTextValue(entry) as T[K]
+        ];
       }
 
       case FormSchemaType.Range: {
-        inputs.push(
-          <div key={i} className={classes.row}>
+        return [
+          <div key={key} className={classes.row}>
             <RangeInput
               {...entry}
-              onChange={(value) => onEntryChange(entryName, value)}
+              onChange={(value) => onEntryChange(entry.name, value)}
             />
-          </div>
-        );
-        defaultValues[entryName as K] = getDefaultRangeValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultRangeValue(entry) as T[K]
+        ];
       }
 
       case FormSchemaType.Color: {
-        inputs.push(
-          <div key={i} className={classes.row}>
+        return [
+          <div key={key} className={classes.row}>
             <ColorInput
               {...entry}
-              onChange={(value) => onEntryChange(entryName, value)}
+              onChange={(value) => onEntryChange(entry.name, value)}
             />
-          </div>
-        );
-        defaultValues[entryName as K] = getDefaultColorValue(entry) as T[K];
-        break;
+          </div>,
+          getDefaultColorValue(entry) as T[K]
+        ];
       }
+
+      default: {
+        throw new Error(`Internal Error: unknown schema type ${entry.name}`);
+      }
+    }
+  }
+
+  const inputs: JSX.Element[] = [];
+  const defaultValues: T = {} as T;
+  const initialErrorStates: Record<string, boolean> = {};
+  let key = 0;
+  for (let i = 0; i < props.schema.length; i++) {
+    key++;
+    const entry = props.schema[i];
+    if (entry.type === FormSchemaType.Group) {
+      inputs.push(
+        <Typography key={i} className={classes.label} variant="h5">
+          {entry.label}
+        </Typography>
+      );
+      for (let j = 0; j < entry.entries.length; j++) {
+        key++;
+        const groupEntry = entry.entries[j];
+        const [input, defaultValue] = createEntry(key, groupEntry);
+        inputs.push(input);
+        defaultValues[`${entry.name}:${groupEntry}` as K] = defaultValue;
+      }
+    } else {
+      const [input, defaultValue] = createEntry(key, entry);
+      inputs.push(input);
+      defaultValues[entry.name as K] = defaultValue;
     }
   }
 

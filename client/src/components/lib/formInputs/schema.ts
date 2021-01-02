@@ -29,19 +29,18 @@ export enum FormSchemaType {
 }
 
 type LeafSchema = TextSchema | SelectSchema | RangeSchema | ColorSchema;
-export type FormSchema = Record<
-  string,
-  TextSchema | SelectSchema | RangeSchema | ColorSchema | GroupSchema
->;
+export type FormSchema = LeafSchema | GroupSchema;
 
 export interface GroupSchema {
   type: FormSchemaType.Group;
+  name: string;
   label: string;
-  entries: Record<string, LeafSchema>;
+  entries: LeafSchema[];
 }
 
 export interface TextSchema {
   type: FormSchemaType.Text;
+  name: string;
   label: string;
   defaultValue?: string;
   inputPlaceholder?: string;
@@ -50,6 +49,7 @@ export interface TextSchema {
 
 export interface SelectSchema {
   type: FormSchemaType.Select;
+  name: string;
   label: string;
   defaultValue: string;
   options: {
@@ -61,6 +61,7 @@ export interface SelectSchema {
 
 export interface RangeSchema {
   type: FormSchemaType.Range;
+  name: string;
   label: string;
   defaultValue?: number;
   min?: number;
@@ -70,6 +71,7 @@ export interface RangeSchema {
 
 export interface ColorSchema {
   type: FormSchemaType.Color;
+  name: string;
   label: string;
   defaultValue?: Color;
 }
