@@ -21,7 +21,7 @@ import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { Schedule, Zone } from '../../common/types';
-import { FormInput } from '../lib/formInput';
+import { FormInput, FormSchema } from '../lib/formInput';
 import { useContentStyles } from '../lib/pageStyles';
 
 export interface EditScheduleButtonProps {
@@ -47,6 +47,8 @@ export const EditSceneButton: FunctionComponent<
     console.log(values);
     // TODO
   }
+
+  const spec: FormSchema[] = [];
 
   return (
     <React.Fragment>
