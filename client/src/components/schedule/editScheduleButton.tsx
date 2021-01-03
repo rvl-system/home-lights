@@ -17,13 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, Fade } from '@material-ui/core';
+import { Button, Fade, List } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { Scene, Schedule, Zone } from '../../common/types';
+import { Scene, Schedule, ScheduleEntry, Zone } from '../../common/types';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
 import { CreateScheduleEntryButton } from './createScheduleEntryButton';
+import { ScheduleEntryComponent } from './scheduleEntryComponent.tsx';
 
 export interface EditScheduleButtonProps {
   schedule: Schedule;
@@ -38,7 +39,14 @@ export interface EditScheduleButtonDispatch {
 export const EditSceneButton: FunctionComponent<
   EditScheduleButtonProps & EditScheduleButtonDispatch
 > = (props) => {
+  function entriesSorter(a: ScheduleEntry, b: ScheduleEntry) {
+    return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
+  }
+
   const [openDialog, setOpenDialog] = useState(false);
+  const [entries, setEntries] = useState(
+    props.schedule.entries.sort(entriesSorter)
+  );
   const contentClasses = useContentStyles();
 
   function handleClose() {
@@ -47,6 +55,19 @@ export const EditSceneButton: FunctionComponent<
 
   function handleConfirm() {
     handleClose();
+  }
+
+  function handleCreateEntry(scheduleEntry: ScheduleEntry) {
+    setEntries([...entries, scheduleEntry].sort(entriesSorter));
+  }
+
+  function handleEditEntry(scheduleEntry: ScheduleEntry) {
+    console.log('Edit entry');
+    console.log(scheduleEntry);
+  }
+
+  function handleDeleteEntry() {
+    console.log('Delete entry');
   }
 
   return (
@@ -73,8 +94,19 @@ export const EditSceneButton: FunctionComponent<
       >
         <CreateScheduleEntryButton
           scenes={props.scenes}
-          onConfirm={(entry) => console.log(entry)}
+          onConfirm={handleCreateEntry}
         />
+        <List>
+          {entries.map((entry) => (
+            <ScheduleEntryComponent
+              key={entry.hour * 60 + entry.minute}
+              scenes={props.scenes}
+              scheduleEntry={entry}
+              onEdit={handleEditEntry}
+              onDelete={handleDeleteEntry}
+            />
+          ))}
+        </List>
       </Modal>
     </>
   );

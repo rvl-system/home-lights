@@ -21,7 +21,7 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { Scene } from '../../common/types';
+import { Scene, ScheduleEntry } from '../../common/types';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
@@ -40,11 +40,7 @@ export interface CreateScheduleEntryButtonProps {
 }
 
 export interface CreateScheduleEntryButtonDispatch {
-  onConfirm: (
-    sceneId: number | undefined,
-    hour: number,
-    minute: number
-  ) => void;
+  onConfirm: (scheduleEntry: ScheduleEntry) => void;
 }
 
 export const CreateScheduleEntryButton: FunctionComponent<
@@ -58,11 +54,11 @@ export const CreateScheduleEntryButton: FunctionComponent<
 
   function handleConfirm(values: Record<string, string>) {
     handleClose();
-    props.onConfirm(
-      values.sceneId === 'off' ? undefined : parseInt(values.sceneId),
-      parseInt(values.hour),
-      parseInt(values.minute)
-    );
+    props.onConfirm({
+      sceneId: values.sceneId === 'off' ? undefined : parseInt(values.sceneId),
+      hour: parseInt(values.hour),
+      minute: parseInt(values.minute)
+    });
   }
 
   const schema: FormSchema[] = [
