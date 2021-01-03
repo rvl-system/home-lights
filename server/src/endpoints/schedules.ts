@@ -19,6 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { editSchedule } from '../db/schedule';
+import { enableZoneSchedule } from '../device';
 import { ActionHandlerEntry } from '../types';
 
 export function createScheduleHandlers(): Record<
@@ -27,6 +28,10 @@ export function createScheduleHandlers(): Record<
   ActionHandlerEntry<any>
 > {
   return {
-    [ActionType.EditSchedule]: { handler: editSchedule, reconcile: true }
+    [ActionType.EditSchedule]: { handler: editSchedule, reconcile: true },
+    [ActionType.EnableSchedule]: {
+      handler: enableZoneSchedule,
+      reconcile: false
+    }
   };
 }

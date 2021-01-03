@@ -55,6 +55,10 @@ export const EditSceneButton: FunctionComponent<
 
   function handleConfirm() {
     handleClose();
+    props.editSchedule({
+      ...props.schedule,
+      entries
+    });
   }
 
   function handleCreateEntry(scheduleEntry: ScheduleEntry) {

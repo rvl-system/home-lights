@@ -35,12 +35,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from '../../common/actions';
 import { EditMode, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 import {
   ZoneScheduleComponent,
+  ZoneScheduleComponentDispatch,
   ZoneScheduleComponentProps
 } from './zoneScheduleComponent';
 
@@ -67,6 +69,13 @@ export const ZoneScheduleContainer = createContainer(
       schedule
     };
   },
-  () => ({}),
+  (
+    dispatch,
+    ownProps: ZoneScheduleContainerProps
+  ): ZoneScheduleComponentDispatch => ({
+    enableSchedule() {
+      dispatch(ActionType.EnableSchedule, { zoneId: ownProps.zone.id });
+    }
+  }),
   ZoneScheduleComponent
 );

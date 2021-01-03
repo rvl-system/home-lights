@@ -94,6 +94,13 @@ export function getSystemState(): SystemState {
   return systemState;
 }
 
+export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = async (
+  request
+) => {
+  console.log(request);
+  // TODO
+};
+
 export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
   request
 ) => {

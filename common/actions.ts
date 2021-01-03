@@ -45,6 +45,7 @@ export enum ActionType {
   DeleteZone = 'DeleteZone',
 
   EditSchedule = 'EditSchedule',
+  EnableSchedule = 'EnableSchedule',
 
   CreateScene = 'CreateScene',
   EditScene = 'EditScene',
@@ -80,6 +81,7 @@ export interface Actions {
   [ActionType.DeleteZone]: { id: number };
 
   [ActionType.EditSchedule]: Schedule;
+  [ActionType.EnableSchedule]: { zoneId: number };
 
   [ActionType.CreateScene]: Omit<Scene, 'id' | 'brightness'>;
   [ActionType.EditScene]: Scene;
