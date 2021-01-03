@@ -164,6 +164,7 @@ export type CreateWavePatternRequest = Omit<WavePattern, 'id'>;
 // ---- Schedule Types ----
 
 export interface ScheduleEntry {
+  id: number;
   sceneId: number | undefined;
   hour: number;
   minute: number;

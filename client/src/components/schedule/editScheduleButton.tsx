@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, Fade, List } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent, useState } from 'react';
+import React, { Fragment, FunctionComponent, useState } from 'react';
 import { Scene, Schedule, ScheduleEntry, Zone } from '../../common/types';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
@@ -43,6 +43,9 @@ export const EditSceneButton: FunctionComponent<
     return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
   }
 
+  // I don't know why, but setEntries isn't triggering a re-render, so we add a
+  // key to the element to force it
+  const [key, setKey] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [entries, setEntries] = useState(
     props.schedule.entries.sort(entriesSorter)
@@ -59,19 +62,31 @@ export const EditSceneButton: FunctionComponent<
 
   function handleCreateEntry(scheduleEntry: ScheduleEntry) {
     setEntries([...entries, scheduleEntry].sort(entriesSorter));
+    setKey(key + 1);
   }
 
   function handleEditEntry(scheduleEntry: ScheduleEntry) {
-    console.log('Edit entry');
-    console.log(scheduleEntry);
+    for (let i = entries.length - 1; i >= 0; i--) {
+      if (entries[i].id === scheduleEntry.id) {
+        entries[i] = scheduleEntry;
+      }
+    }
+    setEntries(entries.sort(entriesSorter));
+    setKey(key + 1);
   }
 
-  function handleDeleteEntry() {
-    console.log('Delete entry');
+  function handleDeleteEntry(scheduleEntry: ScheduleEntry) {
+    for (let i = entries.length - 1; i >= 0; i--) {
+      if (entries[i].id === scheduleEntry.id) {
+        entries.splice(i, 1);
+      }
+    }
+    setEntries(entries.sort(entriesSorter));
+    setKey(key + 1);
   }
 
   return (
-    <>
+    <Fragment key={key}>
       <Fade in={true} mountOnEnter unmountOnExit>
         <Button
           className={contentClasses.rightAccordionButton}
@@ -93,6 +108,15 @@ export const EditSceneButton: FunctionComponent<
         confirmLabel="Save schedule"
       >
         <CreateScheduleEntryButton
+          newId={(() => {
+            let newId = 0;
+            for (const entry of entries) {
+              if (entry.id >= newId) {
+                newId = entry.id + 1;
+              }
+            }
+            return newId;
+          })()}
           scenes={props.scenes}
           onConfirm={handleCreateEntry}
         />
@@ -108,6 +132,6 @@ export const EditSceneButton: FunctionComponent<
           ))}
         </List>
       </Modal>
-    </>
+    </Fragment>
   );
 };

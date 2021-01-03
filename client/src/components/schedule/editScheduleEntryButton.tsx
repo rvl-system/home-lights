@@ -54,6 +54,7 @@ export const EditScheduleEntryButton: FunctionComponent<
   function handleConfirm(values: Record<string, string>) {
     handleClose();
     props.onEdit({
+      id: props.scheduleEntry.id,
       sceneId: values.sceneId === 'off' ? undefined : parseInt(values.sceneId),
       hour: parseInt(values.hour),
       minute: parseInt(values.minute)

@@ -37,6 +37,7 @@ const useStyles = makeStyles({
 
 export interface CreateScheduleEntryButtonProps {
   scenes: Scene[];
+  newId: number;
 }
 
 export interface CreateScheduleEntryButtonDispatch {
@@ -55,6 +56,7 @@ export const CreateScheduleEntryButton: FunctionComponent<
   function handleConfirm(values: Record<string, string>) {
     handleClose();
     props.onConfirm({
+      id: props.newId,
       sceneId: values.sceneId === 'off' ? undefined : parseInt(values.sceneId),
       hour: parseInt(values.hour),
       minute: parseInt(values.minute)

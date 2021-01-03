@@ -30,7 +30,7 @@ export interface DeleteScheduleEntryButtonProps {
 }
 
 export interface DeleteScheduleEntryButtonDispatch {
-  onDelete: () => void;
+  onDelete: (scheduleEntry: ScheduleEntry) => void;
 }
 
 export const DeleteScheduleEntryButton: FunctionComponent<
@@ -58,7 +58,7 @@ export const DeleteScheduleEntryButton: FunctionComponent<
       <ConfirmDialog
         onConfirm={() => {
           handleDeleteClose();
-          props.onDelete();
+          props.onDelete(props.scheduleEntry);
         }}
         onCancel={handleDeleteClose}
         open={deleteDialogOpen}
