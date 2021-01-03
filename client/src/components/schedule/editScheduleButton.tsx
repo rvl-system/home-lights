@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, Fade, List } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React, { Fragment, FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { Scene, Schedule, ScheduleEntry, Zone } from '../../common/types';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
@@ -43,9 +43,6 @@ export const EditSceneButton: FunctionComponent<
     return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
   }
 
-  // I don't know why, but setEntries isn't triggering a re-render, so we add a
-  // key to the element to force it
-  const [key, setKey] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [entries, setEntries] = useState(
     props.schedule.entries.sort(entriesSorter)
@@ -62,7 +59,6 @@ export const EditSceneButton: FunctionComponent<
 
   function handleCreateEntry(scheduleEntry: ScheduleEntry) {
     setEntries([...entries, scheduleEntry].sort(entriesSorter));
-    setKey(key + 1);
   }
 
   function handleEditEntry(scheduleEntry: ScheduleEntry) {
@@ -71,8 +67,7 @@ export const EditSceneButton: FunctionComponent<
         entries[i] = scheduleEntry;
       }
     }
-    setEntries(entries.sort(entriesSorter));
-    setKey(key + 1);
+    setEntries([...entries.sort(entriesSorter)]);
   }
 
   function handleDeleteEntry(scheduleEntry: ScheduleEntry) {
@@ -81,12 +76,11 @@ export const EditSceneButton: FunctionComponent<
         entries.splice(i, 1);
       }
     }
-    setEntries(entries.sort(entriesSorter));
-    setKey(key + 1);
+    setEntries([...entries.sort(entriesSorter)]);
   }
 
   return (
-    <Fragment key={key}>
+    <>
       <Fade in={true} mountOnEnter unmountOnExit>
         <Button
           className={contentClasses.rightAccordionButton}
@@ -132,6 +126,6 @@ export const EditSceneButton: FunctionComponent<
           ))}
         </List>
       </Modal>
-    </Fragment>
+    </>
   );
 };
