@@ -17,22 +17,17 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, Fade, makeStyles } from '@material-ui/core';
-import { Edit as EditIcon, Add as AddIcon } from '@material-ui/icons';
+import { Button, Fade } from '@material-ui/core';
+import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { Schedule, Zone } from '../../common/types';
-import { FormInput } from '../lib/formInput';
+import { Scene, Schedule, Zone } from '../../common/types';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
-
-const useStyles = makeStyles({
-  button: {
-    width: '100%'
-  }
-});
+import { CreateScheduleEntryButton } from './createScheduleEntryButton';
 
 export interface EditScheduleButtonProps {
   schedule: Schedule;
+  scenes: Scene[];
   zone: Zone;
 }
 
@@ -44,7 +39,6 @@ export const EditSceneButton: FunctionComponent<
   EditScheduleButtonProps & EditScheduleButtonDispatch
 > = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [openEntryDialog, setOpenEntryDialog] = useState(false);
   const contentClasses = useContentStyles();
 
   function handleClose() {
@@ -55,16 +49,6 @@ export const EditSceneButton: FunctionComponent<
     handleClose();
   }
 
-  function handleEntryClose() {
-    setOpenEntryDialog(false);
-  }
-
-  function handleEntryConfirm(values: Record<string, unknown>) {
-    handleEntryClose();
-    console.log(values);
-  }
-
-  const classes = useStyles();
   return (
     <>
       <Fade in={true} mountOnEnter unmountOnExit>
@@ -87,22 +71,9 @@ export const EditSceneButton: FunctionComponent<
         title={`Create "${props.zone.name}" schedule entry`}
         confirmLabel="Save schedule"
       >
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => setOpenEntryDialog(true)}
-          className={classes.button}
-        >
-          <AddIcon />
-        </Button>
-
-        <FormInput
-          onConfirm={handleEntryConfirm}
-          onCancel={handleEntryClose}
-          open={openEntryDialog}
-          title={'Edit schedule entry'}
-          confirmLabel="Save light"
-          schema={[]}
+        <CreateScheduleEntryButton
+          scenes={props.scenes}
+          onConfirm={(entry) => console.log(entry)}
         />
       </Modal>
     </>

@@ -35,6 +35,9 @@ export interface EditScheduleButtonContainerProps {
 export const EditScheduleButtonContainer = createContainer(
   (getSlice, ownProps: EditScheduleButtonProps): EditScheduleButtonProps => ({
     schedule: ownProps.schedule,
+    scenes: getSlice(SliceName.Scenes).scenes.filter(
+      (scene) => scene.zoneId === ownProps.schedule.zoneId
+    ),
     zone: getItem(ownProps.schedule.zoneId, getSlice(SliceName.Zones))
   }),
   (dispatch): EditScheduleButtonDispatch => ({
