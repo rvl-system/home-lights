@@ -78,9 +78,4 @@ export const ScheduleEntryComponent: FunctionComponent<
       />
     </ListItem>
   );
-  return (
-    <div>
-      {`${props.scheduleEntry.sceneId} ${props.scheduleEntry.hour} ${props.scheduleEntry.minute}`}
-    </div>
-  );
 };

@@ -112,8 +112,8 @@ export const CreateScheduleEntryButton: FunctionComponent<
         onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
-        title={'Create schedule entry'}
-        confirmLabel="Save schedule entry"
+        title={'Create entry'}
+        confirmLabel="Save entry"
         schema={schema}
       />
     </div>

@@ -62,12 +62,12 @@ export const DeleteScheduleEntryButton: FunctionComponent<
         }}
         onCancel={handleDeleteClose}
         open={deleteDialogOpen}
-        title={`Delete schedule entry at ${formatTime(
+        title={`Delete ${formatTime(
           props.scheduleEntry.hour,
           props.scheduleEntry.minute
         )}?`}
         description="This operation cannot be undone"
-        confirmLabel="Delete schedule entry"
+        confirmLabel="Delete entry"
         confirmColor="secondary"
       />
     </>
