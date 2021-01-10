@@ -21,7 +21,7 @@ import { Light, Pattern, Scene, ZoneState } from '../common/types';
 
 export interface SetLightStateOptions {
   zoneState: ZoneState;
-  scene: Scene;
+  scene?: Scene;
   lights: Light[];
   patterns: Pattern[];
 }

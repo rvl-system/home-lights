@@ -62,54 +62,75 @@ export async function setLightState({
   lights,
   patterns
 }: SetLightStateOptions): Promise<void> {
-  if (
-    zoneState.currentSceneId === undefined ||
-    authenticatedApi === undefined
-  ) {
+  if (authenticatedApi === undefined) {
     return;
   }
   const promises: Promise<void>[] = [];
-  for (const lightEntry of scene.lights) {
-    const light = getItem(lightEntry.lightId, lights);
+  const zoneLights = lights.filter(
+    (light) => light.zoneId === zoneState.zoneId
+  );
+  for (const light of zoneLights) {
     if (light.type !== LightType.PhilipsHue) {
       continue;
     }
 
+    // Handle the case of the light being turned off first and short circuit
+    if (scene === undefined || !zoneState.power) {
+      promises.push(
+        authenticatedApi.lights.setLightState(
+          idMap.get((light as PhilipsHueLight).philipsHueID),
+          new LightState().off()
+          // The Hue API does strange things with types, gotta cast to any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ) as any
+      );
+      continue;
+    }
+
+    const lightEntry = getItem(light.id, scene.lights, 'lightId');
+    if (lightEntry.patternId === undefined) {
+      promises.push(
+        authenticatedApi.lights.setLightState(
+          idMap.get((light as PhilipsHueLight).philipsHueID),
+          new LightState().off()
+          // The Hue API does strange things with types, gotta cast to any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ) as any
+      );
+      continue;
+    }
+
     let lightState: InstanceType<typeof LightState>;
-    if (!zoneState.power || lightEntry.patternId === undefined) {
-      lightState = new LightState().off();
-    } else {
-      const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
-      if (pattern.type !== PatternType.Solid) {
-        throw new Error(
-          `Internal Error: pattern type ${pattern.type} cannot be used with Philips Hue`
+    const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
+    if (pattern.type !== PatternType.Solid) {
+      throw new Error(
+        `Internal Error: pattern type ${pattern.type} cannot be used with Philips Hue`
+      );
+    }
+    const { color } = pattern.data;
+    if (color.type === ColorType.HSV) {
+      lightState = new LightState()
+        .on(true)
+        .hsb(
+          color.hue,
+          Math.round(color.saturation * 100),
+          Math.round(
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+              (scene.brightness / MAX_BRIGHTNESS) *
+              100
+          )
         );
-      }
-      const { color } = pattern.data;
-      if (color.type === ColorType.HSV) {
-        lightState = new LightState()
-          .on(true)
-          .hsb(
-            color.hue,
-            Math.round(color.saturation * 100),
-            Math.round(
-              (lightEntry.brightness / MAX_BRIGHTNESS) *
-                (scene.brightness / MAX_BRIGHTNESS) *
-                100
-            )
-          );
-      } else {
-        lightState = new LightState()
-          .on(true)
-          .white(
-            Math.round(1000000 / color.temperature),
-            Math.round(
-              (lightEntry.brightness / MAX_BRIGHTNESS) *
-                (scene.brightness / MAX_BRIGHTNESS) *
-                100
-            )
-          );
-      }
+    } else {
+      lightState = new LightState()
+        .on(true)
+        .white(
+          Math.round(1000000 / color.temperature),
+          Math.round(
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+              (scene.brightness / MAX_BRIGHTNESS) *
+              100
+          )
+        );
     }
 
     promises.push(

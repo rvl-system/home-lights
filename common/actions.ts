@@ -81,7 +81,7 @@ export interface Actions {
   [ActionType.DeleteZone]: { id: number };
 
   [ActionType.EditSchedule]: Schedule;
-  [ActionType.EnableSchedule]: { zoneId: number };
+  [ActionType.EnableSchedule]: Schedule;
 
   [ActionType.CreateScene]: Omit<Scene, 'id' | 'brightness'>;
   [ActionType.EditScene]: Scene;

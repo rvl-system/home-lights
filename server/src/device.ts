@@ -17,8 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { DateTime } from 'luxon';
 import { ActionType } from './common/actions';
-import { SystemState, Zone, ZoneState } from './common/types';
+import {
+  Schedule,
+  ScheduleEntry,
+  SystemState,
+  Zone,
+  ZoneState
+} from './common/types';
 import { getItem } from './common/util';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
@@ -94,11 +101,92 @@ export function getSystemState(): SystemState {
   return systemState;
 }
 
+function createDateTime(now: DateTime, scheduleEntry: ScheduleEntry) {
+  return DateTime.local(
+    now.year,
+    now.month,
+    now.day,
+    scheduleEntry.hour,
+    scheduleEntry.minute
+  );
+}
+
+const zoneTimeouts = new Map<number, NodeJS.Timeout>();
+
+function scheduleTick(schedule: Schedule) {
+  const now = DateTime.local();
+  let currentScheduleEntry: ScheduleEntry | undefined;
+  let nextScheduleEntry: ScheduleEntry | undefined;
+
+  // First, check if the time is before the first schedule of the day
+  if (now < createDateTime(now, schedule.entries[0])) {
+    currentScheduleEntry = schedule.entries[schedule.entries.length - 1];
+    nextScheduleEntry = schedule.entries[0];
+  } else {
+    // Otherwise it's equal to or after the first entry, so search through and
+    // find out which entry is currently active by finding where one entry is
+    // equal to or after one entry, and before the next entry
+    for (let i = 0; i < schedule.entries.length - 1; i++) {
+      if (
+        now >= createDateTime(now, schedule.entries[i]) &&
+        now < createDateTime(now, schedule.entries[i + 1])
+      ) {
+        currentScheduleEntry = schedule.entries[i];
+        nextScheduleEntry = schedule.entries[i + 1];
+        break;
+      }
+    }
+
+    // If we didn't find a schedule entry, that means it's the last entry of the day
+    if (!currentScheduleEntry || !nextScheduleEntry) {
+      currentScheduleEntry = schedule.entries[schedule.entries.length - 1];
+      nextScheduleEntry = schedule.entries[0];
+    }
+  }
+
+  // Calculate the time of the next transition
+  let nextScheduleEntryStart = createDateTime(now, nextScheduleEntry);
+
+  // Handle the case where the next event is the start of the schedule, which is
+  // signified by being in the past
+  if (nextScheduleEntryStart < now) {
+    nextScheduleEntryStart = nextScheduleEntryStart.plus({ days: 1 });
+  }
+  nextScheduleEntryStart = nextScheduleEntryStart.plus({ seconds: 15 });
+
+  // Schedule the next transition
+  console.log(
+    `Schedule next transition for ${nextScheduleEntryStart.toLocaleString(
+      DateTime.DATETIME_FULL
+    )}`
+  );
+  setTimeout(
+    () => scheduleTick(schedule),
+    nextScheduleEntryStart.valueOf() - now.valueOf()
+  );
+
+  // If we're in the off state, signified by a missing scene ID, then turn everything off
+  if (currentScheduleEntry.sceneId === undefined) {
+    setZonePower({
+      zoneId: schedule.zoneId,
+      power: false
+    });
+  } else {
+    setLightState({
+      zoneId: schedule.zoneId,
+      power: true,
+      currentSceneId: currentScheduleEntry.sceneId
+    });
+  }
+}
+
 export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = async (
   request
 ) => {
-  console.log(request);
-  // TODO
+  if (zoneTimeouts.has(request.zoneId)) {
+    return;
+  }
+  scheduleTick(request);
 };
 
 export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
@@ -132,23 +220,18 @@ export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
 ) => {
   const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
   zoneState.power = request.power;
-  setLightState(zoneState);
+  await setLightState(zoneState);
 };
 
 async function setLightState(zoneState: ZoneState): Promise<void> {
-  if (zoneState.currentSceneId === undefined) {
-    return;
-  }
-  const [scene, lights, patterns] = await Promise.all([
-    getItem(zoneState.currentSceneId, await getScenes()),
-    getLights(),
-    getPatterns()
-  ]);
   const options: SetLightStateOptions = {
     zoneState,
-    scene,
-    lights,
-    patterns
+    scene:
+      zoneState.currentSceneId !== undefined
+        ? getItem(zoneState.currentSceneId, getScenes())
+        : undefined,
+    lights: getLights(),
+    patterns: getPatterns()
   };
   await Promise.allSettled([
     setRVLLightState(options),

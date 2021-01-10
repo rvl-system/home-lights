@@ -21,7 +21,7 @@ import { Button, makeStyles } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
 import { Scene, ScheduleEntry } from '../../common/types';
-import { formatTime, getItem } from '../../common/util';
+import { formatTime } from '../../common/util';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
 
 const useStyles = makeStyles({
@@ -75,7 +75,7 @@ export const EditScheduleEntryButton: FunctionComponent<
       defaultValue:
         props.scheduleEntry.sceneId === undefined
           ? 'off'
-          : getItem(props.scheduleEntry.sceneId, props.scenes).name
+          : props.scheduleEntry.sceneId.toString()
     },
     {
       type: FormSchemaType.Select,

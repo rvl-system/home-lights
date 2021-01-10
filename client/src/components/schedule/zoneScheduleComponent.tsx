@@ -37,7 +37,7 @@ export interface ZoneScheduleComponentProps {
 }
 
 export interface ZoneScheduleComponentDispatch {
-  enableSchedule: () => void;
+  enableSchedule: (schedule: Schedule) => void;
 }
 
 interface InternalProps {
@@ -84,7 +84,7 @@ const OperationZoneScheduleComponent: FunctionComponent<
       className={contentClasses.listItem}
       button
       selected={props.selected}
-      onClick={() => props.enableSchedule()}
+      onClick={() => props.enableSchedule(props.schedule)}
     >
       <div>
         <Typography className={contentClasses.itemTitle}>Schedule</Typography>

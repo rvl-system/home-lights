@@ -144,7 +144,7 @@ export async function init(): Promise<void> {
 interface LIFXLightConfig {
   id: string;
   power: 'on' | 'off';
-  color:
+  color?:
     | {
         hue: number; // 0-360
         saturation: number; // 0-1
@@ -181,13 +181,33 @@ export async function setLightState({
   lights,
   patterns
 }: SetLightStateOptions): Promise<void> {
-  if (!TOKEN || !LOCATION || zoneState.currentSceneId === undefined) {
+  if (!TOKEN || !LOCATION) {
     return;
   }
   const config: LIFXLightConfig[] = [];
-  for (const lightEntry of scene.lights) {
-    const light = getItem(lightEntry.lightId, lights);
+  const zoneLights = lights.filter(
+    (light) => light.zoneId === zoneState.zoneId
+  );
+  for (const light of zoneLights) {
     if (light.type !== LightType.LIFX) {
+      continue;
+    }
+
+    // Handle the case of the light being turned off first and short circuit
+    if (scene === undefined || !zoneState.power) {
+      config.push({
+        id: (light as LIFXLight).lifxId,
+        power: 'off'
+      });
+      continue;
+    }
+
+    const lightEntry = getItem(light.id, scene.lights, 'lightId');
+    if (lightEntry.patternId === undefined) {
+      config.push({
+        id: (light as LIFXLight).lifxId,
+        power: 'off'
+      });
       continue;
     }
 
@@ -222,7 +242,7 @@ export async function setLightState({
     }
     config.push({
       id: (light as LIFXLight).lifxId,
-      power: zoneState.power ? 'on' : 'off',
+      power: 'on',
       color
     });
   }

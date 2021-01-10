@@ -69,12 +69,9 @@ export const ZoneScheduleContainer = createContainer(
       schedule
     };
   },
-  (
-    dispatch,
-    ownProps: ZoneScheduleContainerProps
-  ): ZoneScheduleComponentDispatch => ({
-    enableSchedule() {
-      dispatch(ActionType.EnableSchedule, { zoneId: ownProps.zone.id });
+  (dispatch): ZoneScheduleComponentDispatch => ({
+    enableSchedule(schedule) {
+      dispatch(ActionType.EnableSchedule, schedule);
     }
   }),
   ZoneScheduleComponent
