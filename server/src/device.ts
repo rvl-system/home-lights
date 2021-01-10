@@ -19,6 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { DateTime } from 'luxon';
 import { ActionType } from './common/actions';
+import { SCHEDULE_SCENE_ID } from './common/config';
 import {
   Schedule,
   ScheduleEntry,
@@ -186,6 +187,8 @@ export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = asyn
   if (zoneTimeouts.has(request.zoneId)) {
     return;
   }
+  const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
+  zoneState.currentSceneId = SCHEDULE_SCENE_ID;
   scheduleTick(request);
 };
 
@@ -220,6 +223,11 @@ export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
 ) => {
   const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
   zoneState.power = request.power;
+
+  // If we're in schedule mode, we hide that from the underlying setLightState implementation
+  if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
+    zoneState.currentSceneId = undefined;
+  }
   await setLightState(zoneState);
 };
 
