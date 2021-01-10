@@ -21,6 +21,7 @@ import { Button, Fade, List } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
 import { Scene, Schedule, ScheduleEntry, Zone } from '../../common/types';
+import { scheduleEntriesSorter } from '../../utils';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
 import { CreateScheduleEntryButton } from './createScheduleEntryButton';
@@ -39,14 +40,8 @@ export interface EditScheduleButtonDispatch {
 export const EditSceneButton: FunctionComponent<
   EditScheduleButtonProps & EditScheduleButtonDispatch
 > = (props) => {
-  function entriesSorter(a: ScheduleEntry, b: ScheduleEntry) {
-    return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
-  }
-
   const [openDialog, setOpenDialog] = useState(false);
-  const [entries, setEntries] = useState(
-    props.schedule.entries.sort(entriesSorter)
-  );
+  const [entries, setEntries] = useState(props.schedule.entries);
   const contentClasses = useContentStyles();
 
   function handleClose() {
@@ -62,7 +57,7 @@ export const EditSceneButton: FunctionComponent<
   }
 
   function handleCreateEntry(scheduleEntry: ScheduleEntry) {
-    setEntries([...entries, scheduleEntry].sort(entriesSorter));
+    setEntries([...entries, scheduleEntry].sort(scheduleEntriesSorter));
   }
 
   function handleEditEntry(scheduleEntry: ScheduleEntry) {
@@ -71,7 +66,7 @@ export const EditSceneButton: FunctionComponent<
         entries[i] = scheduleEntry;
       }
     }
-    setEntries([...entries.sort(entriesSorter)]);
+    setEntries([...entries.sort(scheduleEntriesSorter)]);
   }
 
   function handleDeleteEntry(scheduleEntry: ScheduleEntry) {
@@ -80,7 +75,7 @@ export const EditSceneButton: FunctionComponent<
         entries.splice(i, 1);
       }
     }
-    setEntries([...entries.sort(entriesSorter)]);
+    setEntries([...entries.sort(scheduleEntriesSorter)]);
   }
 
   return (

@@ -21,15 +21,18 @@ import { ActionType } from '../common/actions';
 import { Schedule } from '../common/types';
 import { createReducer } from '../reduxology';
 import { SliceName } from '../types';
+import { scheduleEntriesSorter } from '../utils';
 
 // Typing this return type explicitly is very hard, but can be inferred easily
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createSchedulesReducers(initialSchedules: Schedule[]) {
   const schedulesReducer = createReducer(SliceName.Schedules, initialSchedules);
 
-  schedulesReducer.handle(
-    ActionType.AppStateUpdated,
-    (state, { schedules }) => schedules
+  schedulesReducer.handle(ActionType.AppStateUpdated, (state, { schedules }) =>
+    schedules.map((schedule) => ({
+      ...schedule,
+      entries: schedule.entries.sort(scheduleEntriesSorter)
+    }))
   );
 
   return schedulesReducer;
