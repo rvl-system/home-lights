@@ -21,6 +21,7 @@ import { DateTime } from 'luxon';
 import { ActionType } from './common/actions';
 import { SCHEDULE_SCENE_ID } from './common/config';
 import {
+  Scene,
   Schedule,
   ScheduleEntry,
   SystemState,
@@ -31,6 +32,7 @@ import { getItem } from './common/util';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
 import { getScenes, setSceneBrightness } from './db/scenes';
+import { getSchedules } from './db/schedule';
 import { getZones } from './db/zones';
 import {
   init as initLIFX,
@@ -88,11 +90,14 @@ export function reconcile(zones: Zone[]): void {
   }
 
   // Update any patterns currently being displayed
-  for (const zone of systemState.zoneStates) {
-    if (zone.currentSceneId) {
+  for (const zoneState of systemState.zoneStates) {
+    if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
+      const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
+      enableZoneSchedule(schedule);
+    } else if (zoneState.currentSceneId !== undefined) {
       setZoneScene({
-        zoneId: zone.zoneId,
-        sceneId: zone.currentSceneId
+        zoneId: zoneState.zoneId,
+        sceneId: zoneState.currentSceneId
       });
     }
   }
@@ -114,7 +119,7 @@ function createDateTime(now: DateTime, scheduleEntry: ScheduleEntry) {
 
 const zoneTimeouts = new Map<number, NodeJS.Timeout>();
 
-function scheduleTick(schedule: Schedule) {
+function getCurrentScheduleState(schedule: Schedule) {
   const now = DateTime.local();
   let currentScheduleEntry: ScheduleEntry | undefined;
   let nextScheduleEntry: ScheduleEntry | undefined;
@@ -155,6 +160,16 @@ function scheduleTick(schedule: Schedule) {
   }
   nextScheduleEntryStart = nextScheduleEntryStart.plus({ seconds: 15 });
 
+  return {
+    currentScheduleEntry,
+    nextScheduleEntryStart
+  };
+}
+
+function scheduleTick(schedule: Schedule) {
+  const now = DateTime.local();
+  const { nextScheduleEntryStart } = getCurrentScheduleState(schedule);
+
   // Schedule the next transition
   console.log(
     `Schedule next transition for ${nextScheduleEntryStart.toLocaleString(
@@ -166,19 +181,8 @@ function scheduleTick(schedule: Schedule) {
     nextScheduleEntryStart.valueOf() - now.valueOf()
   );
 
-  // If we're in the off state, signified by a missing scene ID, then turn everything off
-  if (currentScheduleEntry.sceneId === undefined) {
-    setZonePower({
-      zoneId: schedule.zoneId,
-      power: false
-    });
-  } else {
-    setLightState({
-      zoneId: schedule.zoneId,
-      power: true,
-      currentSceneId: currentScheduleEntry.sceneId
-    });
-  }
+  const zoneState = getItem(schedule.zoneId, systemState.zoneStates, 'zoneId');
+  setLightState(zoneState);
 }
 
 export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = async (
@@ -197,13 +201,8 @@ export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
 ) => {
   const scene = getItem(request.sceneId, await getScenes());
   const zoneState = getItem(scene.zoneId, systemState.zoneStates, 'zoneId');
-  if (zoneState.currentSceneId !== request.sceneId && !zoneState.power) {
-    await setZonePower({
-      zoneId: scene.zoneId,
-      power: true
-    });
-  }
   zoneState.currentSceneId = request.sceneId;
+  zoneState.power = true;
   await setLightState(zoneState);
 };
 
@@ -223,23 +222,23 @@ export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
 ) => {
   const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
   zoneState.power = request.power;
-  await setLightState({
-    ...zoneState,
-    // If we're in schedule mode, we hide that from the underlying setLightState implementation
-    currentSceneId:
-      zoneState.currentSceneId === SCHEDULE_SCENE_ID
-        ? undefined
-        : zoneState.currentSceneId
-  });
+  await setLightState(zoneState);
 };
 
 async function setLightState(zoneState: ZoneState): Promise<void> {
+  let scene: Scene | undefined;
+  if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
+    const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
+    const { sceneId } = getCurrentScheduleState(schedule).currentScheduleEntry;
+    if (sceneId !== undefined) {
+      scene = getItem(sceneId, getScenes());
+    }
+  } else if (zoneState.currentSceneId !== undefined) {
+    scene = getItem(zoneState.currentSceneId, getScenes());
+  }
   const options: SetLightStateOptions = {
     zoneState,
-    scene:
-      zoneState.currentSceneId !== undefined
-        ? getItem(zoneState.currentSceneId, getScenes())
-        : undefined,
+    scene,
     lights: getLights(),
     patterns: getPatterns()
   };
