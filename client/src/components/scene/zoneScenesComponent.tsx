@@ -20,7 +20,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Divider, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, FunctionComponent } from 'react';
+import { SCHEDULE_SCENE_ID } from '../../common/config';
 import { EditMode, Light, Scene, Zone, ZoneState } from '../../common/types';
+import { ZoneScheduleContainer } from '../schedule/zoneScheduleContainer';
 import { CreateSceneButtonContainer } from './createSceneButtonContainer';
 import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
@@ -36,7 +38,7 @@ export type ZoneScenesComponentDispatch = SceneComponentDispatch;
 
 const useStyles = makeStyles(() => ({
   container: {
-    'padding-right': '20px'
+    paddingRight: '20px'
   },
   root: {
     width: '100%'
@@ -50,6 +52,11 @@ export const ZoneScenesComponent: FunctionComponent<
   return (
     <div className={classes.container}>
       <List className={classes.root}>
+        <ZoneScheduleContainer
+          zone={props.zone}
+          editMode={props.editMode}
+          selected={props.state.currentSceneId === SCHEDULE_SCENE_ID}
+        />
         {props.zoneScenes.map((scene) => (
           <Fragment key={scene.id}>
             <Divider />

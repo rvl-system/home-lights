@@ -18,14 +18,20 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
-import { createZone, editZone, deleteZone } from '../db/zones';
+import { editSchedule } from '../db/schedule';
+import { enableZoneSchedule } from '../device';
 import { ActionHandlerEntry } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createZoneHandlers(): Record<string, ActionHandlerEntry<any>> {
+export function createScheduleHandlers(): Record<
+  string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ActionHandlerEntry<any>
+> {
   return {
-    [ActionType.CreateZone]: { handler: createZone, reconcile: true },
-    [ActionType.EditZone]: { handler: editZone, reconcile: true },
-    [ActionType.DeleteZone]: { handler: deleteZone, reconcile: true }
+    [ActionType.EditSchedule]: { handler: editSchedule, reconcile: true },
+    [ActionType.EnableSchedule]: {
+      handler: enableZoneSchedule,
+      reconcile: false
+    }
   };
 }

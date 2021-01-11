@@ -35,7 +35,7 @@ import { EditLightButtonContainer } from './editLightButtonContainer';
 
 const styles = makeStyles({
   caption: {
-    'padding-left': '15px'
+    paddingLeft: '15px'
   }
 });
 

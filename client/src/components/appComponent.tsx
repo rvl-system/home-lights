@@ -24,7 +24,7 @@ import {
   MuiThemeProvider
 } from '@material-ui/core/styles';
 import { reduce } from 'conditional-reduce';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import { SelectedTab } from '../common/types';
 
 import { FooterContainer } from './footerContainer';
@@ -45,22 +45,22 @@ const useStyles = makeStyles({
     top: 0,
     bottom: 0,
     display: 'flex',
-    'flex-direction': 'column'
+    flexDirection: 'column'
   },
   content: {
-    'flex-grow': 1,
-    'flex-shrink': 0,
-    'flex-basis': 0,
-    'padding-bottom': '2px'
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: 0,
+    paddingBottom: '2px'
   },
   footer: {
-    'flex-shrink': 0
+    flexShrink: 0
   }
 });
 
 export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = React.useMemo(
+  const theme = useMemo(
     () =>
       createMuiTheme({
         palette: {

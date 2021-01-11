@@ -19,13 +19,16 @@ along with Home Patterns.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { createPattern, editPattern, deletePattern } from '../db/patterns';
-import { ActionHandler } from '../types';
+import { ActionHandlerEntry } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createPatternHandlers(): Record<string, ActionHandler<any>> {
+export function createPatternHandlers(): Record<
+  string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ActionHandlerEntry<any>
+> {
   return {
-    [ActionType.CreatePattern]: createPattern,
-    [ActionType.EditPattern]: editPattern,
-    [ActionType.DeletePattern]: deletePattern
+    [ActionType.CreatePattern]: { handler: createPattern, reconcile: true },
+    [ActionType.EditPattern]: { handler: editPattern, reconcile: true },
+    [ActionType.DeletePattern]: { handler: deletePattern, reconcile: true }
   };
 }

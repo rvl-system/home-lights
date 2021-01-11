@@ -17,15 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { createZone, editZone, deleteZone } from '../db/zones';
-import { ActionHandlerEntry } from '../types';
+import { ScheduleEntry } from './common/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createZoneHandlers(): Record<string, ActionHandlerEntry<any>> {
-  return {
-    [ActionType.CreateZone]: { handler: createZone, reconcile: true },
-    [ActionType.EditZone]: { handler: editZone, reconcile: true },
-    [ActionType.DeleteZone]: { handler: deleteZone, reconcile: true }
-  };
+export function scheduleEntriesSorter(
+  a: ScheduleEntry,
+  b: ScheduleEntry
+): number {
+  return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
 }

@@ -22,34 +22,34 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useContainerStyles = makeStyles({
   container: {
     height: '100%',
-    'max-height': '100%',
+    maxHeight: '100%',
     display: 'grid',
-    'grid-template-rows':
+    gridTemplateRows:
       '[header-start] auto [content-start] minmax(0, 1fr) [end]',
-    'grid-template-columns':
+    gridTemplateColumns:
       '[left-start] auto [center-start] 1fr [right-start] auto [end]'
   },
   header: {
-    'grid-column-start': 'right-start',
-    'grid-column-end': 'end',
-    'grid-row-start': 'header-start',
-    'grid-row-end': 'content-start',
+    gridColumnStart: 'right-start',
+    gridColumnEnd: 'end',
+    gridRowStart: 'header-start',
+    gridRowEnd: 'content-start',
     margin: '1em'
   },
   altHeader: {
-    'grid-column-start': 'left-start',
-    'grid-column-end': 'center-start',
-    'grid-row-start': 'header-start',
-    'grid-row-end': 'content-start',
+    gridColumnStart: 'left-start',
+    gridColumnEnd: 'center-start',
+    gridRowStart: 'header-start',
+    gridRowEnd: 'content-start',
     padding: '1em'
   },
   content: {
-    'grid-column-start': 'left-start',
-    'grid-column-end': 'end',
-    'grid-row-start': 'content-start',
-    'grid-row-end': 'end',
+    gridColumnStart: 'left-start',
+    gridColumnEnd: 'end',
+    gridRowStart: 'content-start',
+    gridRowEnd: 'end',
     position: 'relative',
-    'overflow-y': 'scroll'
+    overflowY: 'scroll'
   },
   innerContent: {
     position: 'absolute',
@@ -63,60 +63,60 @@ export const useContentStyles = makeStyles((theme) => ({
   },
   detailContainer: {
     display: 'flex',
-    'flex-direction': 'column'
+    flexDirection: 'column'
   },
   itemHeading: {
     display: 'grid',
-    'grid-template-columns':
+    gridTemplateColumns:
       '[left-icon-start] auto [title-start] 1fr [right-icon-start] auto [end]',
-    'grid-template-rows': 'auto',
+    gridTemplateRows: 'auto',
     width: '100%',
     height: '50px',
-    'align-items': 'center'
+    alignItems: 'center'
   },
   listItem: {
     display: 'grid',
-    'grid-template-columns':
+    gridTemplateColumns:
       '[left-icon-start] auto [title-start] 1fr [right-icon-start] auto [end]',
-    'grid-template-rows': 'auto',
+    gridTemplateRows: 'auto',
     width: '100%',
     height: '65px',
-    'padding-left': '10px',
-    'padding-right': '10px',
-    'align-items': 'center'
+    paddingLeft: '10px',
+    paddingRight: '10px',
+    alignItems: 'center'
   },
   leftButton: {
-    'min-width': '4em',
+    minWidth: '4em',
     width: '4em',
-    'grid-column-start': 'left-icon-start',
-    'grid-column-end': 'title-start',
-    'grid-row-start': 1,
-    'grid-row-end': 1
+    gridColumnStart: 'left-icon-start',
+    gridColumnEnd: 'title-start',
+    gridRowStart: 1,
+    gridRowEnd: 1
   },
   itemTitle: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
-    'padding-left': '1em',
-    'grid-column-start': 'title-start',
-    'grid-column-end': 'right-icon-start',
-    'grid-row-start': 1,
-    'grid-row-end': 1
+    paddingLeft: '1em',
+    gridColumnStart: 'title-start',
+    gridColumnEnd: 'right-icon-start',
+    gridRowStart: 1,
+    gridRowEnd: 1
   },
   rightButton: {
-    'min-width': '2em',
+    minWidth: '2em',
     width: '2em',
-    'grid-column-start': 'right-icon-start',
-    'grid-column-end': 'end',
-    'grid-row-start': 1,
-    'grid-row-end': 1,
-    'margin-right': '12px'
+    gridColumnStart: 'right-icon-start',
+    gridColumnEnd: 'end',
+    gridRowStart: 1,
+    gridRowEnd: 1,
+    marginRight: '12px'
   },
   rightAccordionButton: {
-    'min-width': '2em',
+    minWidth: '2em',
     width: '2em',
-    'grid-column-start': 'right-icon-start',
-    'grid-column-end': 'end',
-    'grid-row-start': 1,
-    'grid-row-end': 1
+    gridColumnStart: 'right-icon-start',
+    gridColumnEnd: 'end',
+    gridRowStart: 1,
+    gridRowEnd: 1
   }
 }));

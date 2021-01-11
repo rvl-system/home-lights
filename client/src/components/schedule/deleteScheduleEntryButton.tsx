@@ -17,24 +17,24 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Button, Fade } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { EditMode, Zone } from '../../common/types';
+import { ScheduleEntry } from '../../common/types';
+import { formatTime } from '../../common/util';
 import { ConfirmDialog } from '../lib/confirmDialog';
 
-export interface DeleteZoneButtonProps {
-  zone: Zone;
-  editMode: EditMode;
+export interface DeleteScheduleEntryButtonProps {
+  scheduleEntry: ScheduleEntry;
   className: string;
 }
 
-export interface DeleteZoneButtonDispatch {
-  deleteZone: (id: number) => void;
+export interface DeleteScheduleEntryButtonDispatch {
+  onDelete: (scheduleEntry: ScheduleEntry) => void;
 }
 
-export const DeleteZoneButton: FunctionComponent<
-  DeleteZoneButtonDispatch & DeleteZoneButtonProps
+export const DeleteScheduleEntryButton: FunctionComponent<
+  DeleteScheduleEntryButtonProps & DeleteScheduleEntryButtonDispatch
 > = (props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -44,29 +44,30 @@ export const DeleteZoneButton: FunctionComponent<
 
   return (
     <>
-      <Fade in={props.editMode === EditMode.Edit} mountOnEnter unmountOnExit>
-        <Button
-          className={props.className}
-          color="secondary"
-          onClick={(e) => {
-            e.stopPropagation();
-            setDeleteDialogOpen(true);
-          }}
-        >
-          <DeleteIcon />
-        </Button>
-      </Fade>
+      <Button
+        className={props.className}
+        color="secondary"
+        onClick={(e) => {
+          e.stopPropagation();
+          setDeleteDialogOpen(true);
+        }}
+      >
+        <DeleteIcon />
+      </Button>
 
       <ConfirmDialog
         onConfirm={() => {
           handleDeleteClose();
-          props.deleteZone(props.zone.id);
+          props.onDelete(props.scheduleEntry);
         }}
         onCancel={handleDeleteClose}
         open={deleteDialogOpen}
-        title={`Delete "${props.zone.name}"?`}
+        title={`Delete ${formatTime(
+          props.scheduleEntry.hour,
+          props.scheduleEntry.minute
+        )}?`}
         description="This operation cannot be undone"
-        confirmLabel="Delete zone"
+        confirmLabel="Delete entry"
         confirmColor="secondary"
       />
     </>

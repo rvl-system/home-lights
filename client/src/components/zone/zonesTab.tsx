@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { EditMode, Scene, SystemState, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { useContainerStyles } from '../lib/pageStyles';
@@ -37,7 +37,7 @@ export type ZonesTabDispatch = ZoneComponentDispatch;
 export const ZonesTab: FunctionComponent<ZonesTabProps & ZonesTabDispatch> = (
   props
 ) => {
-  const [editMode, setEditMode] = React.useState(EditMode.Operation);
+  const [editMode, setEditMode] = useState(EditMode.Operation);
   const classes = useContainerStyles();
   return (
     <div className={classes.container}>

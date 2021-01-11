@@ -26,13 +26,13 @@ import {
   DialogContentText
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, MouseEvent } from 'react';
 import { UIColor } from '../../types';
 
 export const useDefaultStyles = makeStyles({
   container: {
-    'margin-top': '2em',
-    'margin-bottom': '2em'
+    marginTop: '2em',
+    marginBottom: '2em'
   }
 });
 
@@ -59,14 +59,14 @@ export const ConfirmDialog: FunctionComponent<ConfirmDialogProps> = ({
   cancelLabel = 'Cancel',
   cancelColor = 'default'
 }) => {
-  function handleOnCancel(e: React.MouseEvent) {
+  function handleOnCancel(e: MouseEvent) {
     e.stopPropagation();
     if (onCancel) {
       onCancel();
     }
   }
 
-  function handleOnConfirm(e: React.MouseEvent) {
+  function handleOnConfirm(e: MouseEvent) {
     e.stopPropagation();
     if (onConfirm) {
       onConfirm();
@@ -74,7 +74,7 @@ export const ConfirmDialog: FunctionComponent<ConfirmDialogProps> = ({
   }
 
   return (
-    <React.Fragment>
+    <>
       <MaterialDialog
         open={open}
         onClose={onCancel}
@@ -97,6 +97,6 @@ export const ConfirmDialog: FunctionComponent<ConfirmDialogProps> = ({
           </Button>
         </DialogActions>
       </MaterialDialog>
-    </React.Fragment>
+    </>
   );
 };

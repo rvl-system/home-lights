@@ -18,14 +18,22 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
-import { createZone, editZone, deleteZone } from '../db/zones';
-import { ActionHandlerEntry } from '../types';
+import { Schedule } from '../common/types';
+import { createReducer } from '../reduxology';
+import { SliceName } from '../types';
+import { scheduleEntriesSorter } from '../utils';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createZoneHandlers(): Record<string, ActionHandlerEntry<any>> {
-  return {
-    [ActionType.CreateZone]: { handler: createZone, reconcile: true },
-    [ActionType.EditZone]: { handler: editZone, reconcile: true },
-    [ActionType.DeleteZone]: { handler: deleteZone, reconcile: true }
-  };
+// Typing this return type explicitly is very hard, but can be inferred easily
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function createSchedulesReducers(initialSchedules: Schedule[]) {
+  const schedulesReducer = createReducer(SliceName.Schedules, initialSchedules);
+
+  schedulesReducer.handle(ActionType.AppStateUpdated, (state, { schedules }) =>
+    schedules.map((schedule) => ({
+      ...schedule,
+      entries: schedule.entries.sort(scheduleEntriesSorter)
+    }))
+  );
+
+  return schedulesReducer;
 }

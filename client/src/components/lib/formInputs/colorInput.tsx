@@ -27,7 +27,13 @@ import {
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { hsv2hsl, hsv2rgb, rgb2hsv } from '@swiftcarrot/color-fns';
 import { reduce } from 'conditional-reduce';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import React, {
+  FunctionComponent,
+  TouchEvent,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { throttle } from 'throttle-debounce';
 import {
   Color,
@@ -255,7 +261,7 @@ const ColorSelect: FunctionComponent<ColorSelectProps> = (props) => {
     context.putImageData(imageData, 0, 0);
   }, []);
 
-  const handleMove = throttle(33, (e: React.TouchEvent<HTMLCanvasElement>) => {
+  const handleMove = throttle(33, (e: TouchEvent<HTMLCanvasElement>) => {
     e.stopPropagation();
     const canvas = wheelRef.current;
     if (!canvas) {

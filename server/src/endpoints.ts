@@ -26,11 +26,13 @@ import { AppState, Notification } from './common/types';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
 import { getScenes } from './db/scenes';
+import { getSchedules } from './db/schedule';
 import { getZones } from './db/zones';
 import { getSystemState } from './device';
 import { createLightHandlers } from './endpoints/lights';
 import { createPatternHandlers } from './endpoints/patterns';
 import { createScenesHandlers } from './endpoints/scenes';
+import { createScheduleHandlers } from './endpoints/schedules';
 import { createStateHandlers } from './endpoints/state';
 import { createZoneHandlers } from './endpoints/zones';
 import { reconcile } from './reconcile';
@@ -41,6 +43,7 @@ let version = 1;
 function getAppState(): AppState {
   return {
     zones: getZones(),
+    schedules: getSchedules(),
     scenes: getScenes(),
     patterns: getPatterns(),
     lights: getLights(),
@@ -60,6 +63,7 @@ export function init(): Promise<void> {
 
     const handlers = {
       ...createZoneHandlers(),
+      ...createScheduleHandlers(),
       ...createScenesHandlers(),
       ...createPatternHandlers(),
       ...createLightHandlers(),
@@ -95,10 +99,12 @@ export function init(): Promise<void> {
           );
           return;
         }
-        await handlers[action.type](action.data);
+        await handlers[action.type].handler(action.data);
 
         // Reconcile data after the transaction, and increment the version
-        await reconcile();
+        if (handlers[action.type].reconcile) {
+          await reconcile();
+        }
         version++;
 
         // Notify all connected clients of the change

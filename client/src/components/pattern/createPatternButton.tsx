@@ -27,8 +27,8 @@ import { PatternInput } from './patternInput';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    'justify-content': 'center',
-    'align-items': 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

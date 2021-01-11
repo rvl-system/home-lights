@@ -21,32 +21,31 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { NUM_RVL_CHANNELS } from '../../common/config';
-import { Zone } from '../../common/types';
+import { Scene, ScheduleEntry } from '../../common/types';
 import { FormInput, FormSchema, FormSchemaType } from '../lib/formInput';
-
-const OFF = 'off';
 
 const useStyles = makeStyles({
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  button: {
+    width: '100%'
   }
 });
 
-export interface CreateLightButtonProps {
-  zones: Zone[];
-  unavailableLightNames: string[];
-  unavailableRVLChannels: number[];
+export interface CreateScheduleEntryButtonProps {
+  scenes: Scene[];
+  newId: number;
 }
 
-export interface CreateLightButtonDispatch {
-  createRVLLight: (name: string, channel: number, zone?: number) => void;
+export interface CreateScheduleEntryButtonDispatch {
+  onConfirm: (scheduleEntry: ScheduleEntry) => void;
 }
 
-export const CreateLightButton: FunctionComponent<
-  CreateLightButtonProps & CreateLightButtonDispatch
+export const CreateScheduleEntryButton: FunctionComponent<
+  CreateScheduleEntryButtonProps & CreateScheduleEntryButtonDispatch
 > = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -55,57 +54,47 @@ export const CreateLightButton: FunctionComponent<
   }
 
   function handleConfirm(values: Record<string, string>) {
-    props.createRVLLight(
-      values.name,
-      parseInt(values.channel),
-      values.zone !== OFF ? parseInt(values.zone) : undefined
-    );
     handleClose();
+    props.onConfirm({
+      id: props.newId,
+      sceneId: values.sceneId === 'off' ? undefined : parseInt(values.sceneId),
+      hour: parseInt(values.hour),
+      minute: parseInt(values.minute)
+    });
   }
 
   const schema: FormSchema[] = [
     {
-      type: FormSchemaType.Text,
-      name: 'name',
-      label: 'Descriptive name for the light',
-      inputPlaceholder: 'e.g. Left bedside lamp',
-      unavailableValues: props.unavailableLightNames
-    },
-    {
       type: FormSchemaType.Select,
-      name: 'zone',
-      label: 'Zone',
-      options: [{ value: OFF, label: 'Unassigned' }].concat(
-        props.zones.map((zone) => ({
-          value: zone.id.toString(),
-          label: zone.name
+      name: 'sceneId',
+      label: 'Scene',
+      options: [{ value: 'off', label: 'Off' }].concat(
+        props.scenes.map((scene) => ({
+          value: scene.id.toString(),
+          label: scene.name
         }))
       ),
-      defaultValue: OFF
+      defaultValue: 'off'
     },
     {
       type: FormSchemaType.Select,
-      name: 'channel',
-      label: 'Channel',
-      options: Array.from(Array(NUM_RVL_CHANNELS).keys()).map((key, i) => ({
+      name: 'hour',
+      label: 'Hour',
+      options: Array.from(Array(24).keys()).map((key, i) => ({
         value: i.toString(),
-        label: i.toString(),
-        disabled: props.unavailableRVLChannels.includes(i)
+        label: i.toString()
       })),
-      defaultValue: (() => {
-        let defaultValue = 0;
-        while (
-          defaultValue < NUM_RVL_CHANNELS &&
-          props.unavailableRVLChannels.includes(defaultValue)
-        ) {
-          defaultValue++;
-        }
-        if (defaultValue === NUM_RVL_CHANNELS) {
-          // TODO: show error in UI
-          throw new Error('No available RVL channels');
-        }
-        return defaultValue.toString();
-      })()
+      defaultValue: '0'
+    },
+    {
+      type: FormSchemaType.Select,
+      name: 'minute',
+      label: 'Minute',
+      options: Array.from(Array(12).keys()).map((key, i) => ({
+        value: (i * 5).toString(),
+        label: (i * 5).toString()
+      })),
+      defaultValue: '0'
     }
   ];
 
@@ -116,6 +105,7 @@ export const CreateLightButton: FunctionComponent<
         variant="outlined"
         color="primary"
         onClick={() => setOpenDialog(true)}
+        className={classes.button}
       >
         <AddIcon />
       </Button>
@@ -124,8 +114,8 @@ export const CreateLightButton: FunctionComponent<
         onConfirm={handleConfirm}
         onCancel={handleClose}
         open={openDialog}
-        title="Create light"
-        confirmLabel="Create light"
+        title={'Create entry'}
+        confirmLabel="Save entry"
         schema={schema}
       />
     </div>

@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { EditMode, Zone } from '../../common/types';
 import { FormInput, FormSchemaType } from '../lib/formInput';
 
@@ -37,7 +37,7 @@ export interface EditZoneButtonDispatch {
 export const EditZoneButton: FunctionComponent<
   EditZoneButtonProps & EditZoneButtonDispatch
 > = (props) => {
-  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   function handleEditConfirm(options: Record<string, string | number>) {
     handleEditClose();
@@ -52,7 +52,7 @@ export const EditZoneButton: FunctionComponent<
   }
 
   return (
-    <React.Fragment>
+    <>
       <Fade in={props.editMode === EditMode.Edit} mountOnEnter unmountOnExit>
         <Button
           className={props.className}
@@ -82,6 +82,6 @@ export const EditZoneButton: FunctionComponent<
           }
         ]}
       />
-    </React.Fragment>
+    </>
   );
 };

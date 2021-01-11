@@ -19,13 +19,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { createRVLLight, editLight, deleteLight } from '../db/lights';
-import { ActionHandler } from '../types';
+import { ActionHandlerEntry } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createLightHandlers(): Record<string, ActionHandler<any>> {
+export function createLightHandlers(): Record<string, ActionHandlerEntry<any>> {
   return {
-    [ActionType.CreateRVLLight]: createRVLLight,
-    [ActionType.EditLight]: editLight,
-    [ActionType.DeleteLight]: deleteLight
+    [ActionType.CreateRVLLight]: { handler: createRVLLight, reconcile: true },
+    [ActionType.EditLight]: { handler: editLight, reconcile: true },
+    [ActionType.DeleteLight]: { handler: deleteLight, reconcile: true }
   };
 }

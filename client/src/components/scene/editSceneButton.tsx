@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   Light,
   LightType,
@@ -46,7 +46,7 @@ export interface EditSceneButtonDispatch {
 export const EditSceneButton: FunctionComponent<
   EditSceneButtonProps & EditSceneButtonDispatch
 > = (props) => {
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   function handleClose() {
     setOpenDialog(false);
@@ -136,7 +136,7 @@ export const EditSceneButton: FunctionComponent<
 
   const classes = useContentStyles();
   return (
-    <React.Fragment>
+    <>
       <Fade in={true} mountOnEnter unmountOnExit>
         <Button
           className={classes.rightAccordionButton}
@@ -157,6 +157,6 @@ export const EditSceneButton: FunctionComponent<
         confirmLabel="Save scene"
         schema={spec}
       />
-    </React.Fragment>
+    </>
   );
 };

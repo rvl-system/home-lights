@@ -28,7 +28,8 @@ import {
   createColorCycleWave,
   createMovingWave,
   RVLManager,
-  RVLController
+  RVLController,
+  LogLevel
 } from 'rvl-node';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
@@ -76,97 +77,100 @@ export async function setLightState({
   lights,
   patterns
 }: SetLightStateOptions): Promise<void> {
-  if (zoneState.currentSceneId === undefined) {
-    return;
-  }
-
-  for (const lightEntry of scene.lights) {
-    const light = getItem(lightEntry.lightId, lights) as RVLLight;
-    if (light.type !== LightType.RVL) {
+  const zoneLights = lights.filter(
+    (light) => light.zoneId === zoneState.zoneId
+  );
+  for (const rawLight of zoneLights) {
+    if (rawLight.type !== LightType.RVL) {
       continue;
     }
+
+    const light = rawLight as RVLLight;
     let controller = controllers.get(light.channel);
     if (!controller) {
       controller = await manager.createController({
-        channel: light.channel
+        channel: light.channel,
+        logLevel: LogLevel.Info
       });
       controllers.set(light.channel, controller);
     }
 
-    if (zoneState.power && lightEntry.patternId !== undefined) {
-      controller.setPowerState(true);
-      controller.setBrightness(scene.brightness);
-      const pattern = getItem(lightEntry.patternId, patterns);
-      switch (pattern.type) {
-        case PatternType.ColorCycle: {
-          const { data } = pattern as ColorCyclePattern;
-          controller.setWaveParameters(
-            createWaveParameters(createColorCycleWave(data.rate, 255))
-          );
-          break;
-        }
-        case PatternType.Pulse: {
-          const { data } = pattern as PulsePattern;
-          const color = getColor(data.color);
-          controller.setWaveParameters(createWaveParameters());
-          controller.setWaveParameters(
-            createWaveParameters(
-              createPulsingWave(color.hue, color.saturation, data.rate)
-            )
-          );
-          break;
-        }
-        case PatternType.Rainbow: {
-          const { data } = pattern as RainbowPattern;
-          controller.setWaveParameters(
-            createWaveParameters(createRainbowWave(255, data.rate))
-          );
-          break;
-        }
-        case PatternType.Solid: {
-          const { data } = pattern as SolidPattern;
-          const color = getColor(data.color);
-          controller.setWaveParameters(
-            createWaveParameters(
-              createSolidColorWave(
-                color.hue,
-                color.saturation,
-                Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
-              )
-            )
-          );
-          break;
-        }
-        case PatternType.Wave: {
-          const { data } = pattern as WavePattern;
-          const waveColor = getColor(data.waveColor);
-          const foregroundColor = getColor(data.foregroundColor);
-          const backgroundColor = getColor(data.backgroundColor);
-          controller.setWaveParameters(
-            createWaveParameters(
-              createMovingWave(
-                waveColor.hue,
-                waveColor.saturation,
-                data.rate,
-                2
-              ),
-              createPulsingWave(
-                foregroundColor.hue,
-                foregroundColor.saturation,
-                data.rate
-              ),
-              createSolidColorWave(
-                backgroundColor.hue,
-                backgroundColor.saturation,
-                255
-              )
-            )
-          );
-          break;
-        }
-      }
-    } else {
+    if (scene === undefined || !zoneState.power) {
       controller.setPowerState(false);
+      continue;
+    }
+
+    const lightEntry = getItem(light.id, scene.lights, 'lightId');
+    if (lightEntry.patternId === undefined) {
+      controller.setPowerState(false);
+      continue;
+    }
+
+    controller.setPowerState(true);
+    controller.setBrightness(scene.brightness);
+    const pattern = getItem(lightEntry.patternId, patterns);
+    switch (pattern.type) {
+      case PatternType.ColorCycle: {
+        const { data } = pattern as ColorCyclePattern;
+        controller.setWaveParameters(
+          createWaveParameters(createColorCycleWave(data.rate, 255))
+        );
+        break;
+      }
+      case PatternType.Pulse: {
+        const { data } = pattern as PulsePattern;
+        const color = getColor(data.color);
+        controller.setWaveParameters(createWaveParameters());
+        controller.setWaveParameters(
+          createWaveParameters(
+            createPulsingWave(color.hue, color.saturation, data.rate)
+          )
+        );
+        break;
+      }
+      case PatternType.Rainbow: {
+        const { data } = pattern as RainbowPattern;
+        controller.setWaveParameters(
+          createWaveParameters(createRainbowWave(255, data.rate))
+        );
+        break;
+      }
+      case PatternType.Solid: {
+        const { data } = pattern as SolidPattern;
+        const color = getColor(data.color);
+        controller.setWaveParameters(
+          createWaveParameters(
+            createSolidColorWave(
+              color.hue,
+              color.saturation,
+              Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
+            )
+          )
+        );
+        break;
+      }
+      case PatternType.Wave: {
+        const { data } = pattern as WavePattern;
+        const waveColor = getColor(data.waveColor);
+        const foregroundColor = getColor(data.foregroundColor);
+        const backgroundColor = getColor(data.backgroundColor);
+        controller.setWaveParameters(
+          createWaveParameters(
+            createMovingWave(waveColor.hue, waveColor.saturation, data.rate, 2),
+            createPulsingWave(
+              foregroundColor.hue,
+              foregroundColor.saturation,
+              data.rate
+            ),
+            createSolidColorWave(
+              backgroundColor.hue,
+              backgroundColor.saturation,
+              255
+            )
+          )
+        );
+        break;
+      }
     }
   }
 }

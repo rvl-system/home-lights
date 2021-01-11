@@ -28,9 +28,9 @@ import {
 } from './deletePatternButton';
 import { EditPatternButtonContainer } from './editPatternButtonContainer';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
   caption: {
-    'padding-left': '15px'
+    paddingLeft: '15px'
   }
 });
 
@@ -43,7 +43,7 @@ export type PatternComponentDispatch = DeletePatternButtonDispatch;
 export const PatternComponent: FunctionComponent<
   PatternComponentProps & PatternComponentDispatch
 > = (props) => {
-  const classes = styles();
+  const classes = useStyles();
   const contentClasses = useContentStyles();
   return (
     <ListItem className={contentClasses.listItem}>

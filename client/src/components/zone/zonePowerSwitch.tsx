@@ -36,7 +36,7 @@ export const ZonePowerSwitch: FunctionComponent<
   ZonePowerSwitchProps & ZonePowerSwitchDispatch
 > = (props) => {
   return (
-    <React.Fragment>
+    <>
       {props.editMode === EditMode.Operation && (
         <Switch
           className={props.className}
@@ -50,6 +50,6 @@ export const ZonePowerSwitch: FunctionComponent<
           checked={props.checked}
         />
       )}
-    </React.Fragment>
+    </>
   );
 };

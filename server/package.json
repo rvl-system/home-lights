@@ -19,6 +19,7 @@
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@types/luxon": "^1.25.0",
     "@types/node": "^14.14.17",
     "@types/sqlite3": "^3.1.6",
     "@types/ws": "^7.4.0",
@@ -31,6 +32,7 @@
     "eslint": "^7.16.0",
     "fastify": "^3.9.2",
     "fastify-static": "^3.3.0",
+    "luxon": "^1.25.0",
     "node-fetch": "^2.6.1",
     "node-hue-api": "^4.0.9",
     "rvl-node": "^6.1.1",
