@@ -1,3 +1,7 @@
+## 1.1.2 (2021-01-10)
+
+- Fixed a bug with enabling the schedule when no schedule has been created
+
 ## 1.1.1 (2021-01-10)
 
 - Added support for schedules

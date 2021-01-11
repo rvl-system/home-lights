@@ -190,7 +190,8 @@ function scheduleTick(schedule: Schedule) {
 export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = async (
   request
 ) => {
-  if (zoneTimeouts.has(request.zoneId)) {
+  // Bail early if the schedule is already running or there is no schedule set
+  if (zoneTimeouts.has(request.zoneId) || request.entries.length === 0) {
     return;
   }
   const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
