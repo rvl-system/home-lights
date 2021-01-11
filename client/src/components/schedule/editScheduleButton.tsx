@@ -41,7 +41,9 @@ export const EditSceneButton: FunctionComponent<
   EditScheduleButtonProps & EditScheduleButtonDispatch
 > = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [entries, setEntries] = useState(props.schedule.entries);
+  // Due to Immer stuff, entries has `writable` set to false, so we have to
+  // clone it to make it writable by setEntries
+  const [entries, setEntries] = useState([...props.schedule.entries]);
   const contentClasses = useContentStyles();
 
   function handleClose() {
