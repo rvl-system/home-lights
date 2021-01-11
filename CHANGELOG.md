@@ -1,3 +1,7 @@
+## 1.1.0 (2021-01-10)
+
+- Added support for schedules
+
 ## 1.0.1 (2020-12-31)
 
 - Handful of small bug fixes and UI polish
