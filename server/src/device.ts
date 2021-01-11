@@ -223,12 +223,14 @@ export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
 ) => {
   const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
   zoneState.power = request.power;
-
-  // If we're in schedule mode, we hide that from the underlying setLightState implementation
-  if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
-    zoneState.currentSceneId = undefined;
-  }
-  await setLightState(zoneState);
+  await setLightState({
+    ...zoneState,
+    // If we're in schedule mode, we hide that from the underlying setLightState implementation
+    currentSceneId:
+      zoneState.currentSceneId === SCHEDULE_SCENE_ID
+        ? undefined
+        : zoneState.currentSceneId
+  });
 };
 
 async function setLightState(zoneState: ZoneState): Promise<void> {
