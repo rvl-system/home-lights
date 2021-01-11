@@ -182,6 +182,7 @@ export interface ZoneState {
   zoneId: number;
   power: boolean;
   currentSceneId: number | undefined;
+  currentScheduleSceneId: number | undefined;
 }
 
 export interface SystemState {

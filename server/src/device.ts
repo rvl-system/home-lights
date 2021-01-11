@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { DateTime } from 'luxon';
+import { updateClients } from './clients';
 import { ActionType } from './common/actions';
 import { SCHEDULE_SCENE_ID } from './common/config';
 import {
@@ -62,6 +63,7 @@ export async function init(): Promise<void> {
     systemState.zoneStates.push({
       zoneId: zone.id,
       currentSceneId: undefined,
+      currentScheduleSceneId: undefined,
       power: false
     });
   }
@@ -76,6 +78,7 @@ export function reconcile(zones: Zone[]): void {
       systemState.zoneStates.push({
         zoneId: zone.id,
         currentSceneId: undefined,
+        currentScheduleSceneId: undefined,
         power: false
       });
     }
@@ -168,9 +171,12 @@ function getCurrentScheduleState(schedule: Schedule) {
   };
 }
 
-function scheduleTick(schedule: Schedule) {
+async function scheduleTick(schedule: Schedule) {
   const now = DateTime.local();
-  const { nextScheduleEntryStart } = getCurrentScheduleState(schedule);
+  const {
+    currentScheduleEntry,
+    nextScheduleEntryStart
+  } = getCurrentScheduleState(schedule);
 
   // Schedule the next transition
   console.log(
@@ -183,8 +189,13 @@ function scheduleTick(schedule: Schedule) {
     nextScheduleEntryStart.valueOf() - now.valueOf()
   );
 
+  // Update zone state
   const zoneState = getItem(schedule.zoneId, systemState.zoneStates, 'zoneId');
-  setLightState(zoneState);
+  await setLightState(zoneState);
+  zoneState.currentScheduleSceneId = currentScheduleEntry.sceneId;
+
+  // Notify all connected clients of the change
+  updateClients();
 }
 
 export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = async (
@@ -196,7 +207,8 @@ export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = asyn
   }
   const zoneState = getItem(request.zoneId, systemState.zoneStates, 'zoneId');
   zoneState.currentSceneId = SCHEDULE_SCENE_ID;
-  scheduleTick(request);
+  zoneState.power = true;
+  await scheduleTick(request);
 };
 
 export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (

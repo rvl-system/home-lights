@@ -62,10 +62,19 @@ export const ZoneScheduleContainer = createContainer(
       getSlice(SliceName.Schedules),
       'zoneId'
     );
+    const { currentScheduleSceneId } = getItem(
+      ownProps.zone.id,
+      getSlice(SliceName.State).zoneStates,
+      'zoneId'
+    );
+    const currentlyActiveScene =
+      currentScheduleSceneId === undefined
+        ? undefined
+        : getItem(currentScheduleSceneId, getSlice(SliceName.Scenes).scenes);
     return {
       editMode: ownProps.editMode,
       selected: ownProps.selected,
-      currentlyActiveScene: undefined,
+      currentlyActiveScene,
       schedule
     };
   },

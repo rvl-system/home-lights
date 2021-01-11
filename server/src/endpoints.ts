@@ -21,6 +21,7 @@ import { join } from 'path';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import WebSocket, { Server } from 'ws';
+import { setUpdateListener, updateClients } from './clients';
 import { ActionType } from './common/actions';
 import { AppState, Notification } from './common/types';
 import { getLights } from './db/lights';
@@ -82,6 +83,19 @@ export function init(): Promise<void> {
       server: app.server
     });
 
+    setUpdateListener(() => {
+      for (const client of server.clients) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(
+            JSON.stringify({
+              type: ActionType.AppStateUpdated,
+              data: getAppState()
+            })
+          );
+        }
+      }
+    });
+
     server.on('connection', (connection) => {
       connection.on('message', async (message) => {
         // Handle the action itself
@@ -108,16 +122,7 @@ export function init(): Promise<void> {
         version++;
 
         // Notify all connected clients of the change
-        for (const client of server.clients) {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(
-              JSON.stringify({
-                type: ActionType.AppStateUpdated,
-                data: getAppState()
-              })
-            );
-          }
-        }
+        updateClients();
       });
       connection.send(
         JSON.stringify({
