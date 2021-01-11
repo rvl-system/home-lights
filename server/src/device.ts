@@ -158,7 +158,9 @@ function getCurrentScheduleState(schedule: Schedule) {
   if (nextScheduleEntryStart < now) {
     nextScheduleEntryStart = nextScheduleEntryStart.plus({ days: 1 });
   }
-  nextScheduleEntryStart = nextScheduleEntryStart.plus({ seconds: 15 });
+
+  // Add a 5 second delay just to make sure all the date math aligns correctly
+  nextScheduleEntryStart = nextScheduleEntryStart.plus({ seconds: 5 });
 
   return {
     currentScheduleEntry,
