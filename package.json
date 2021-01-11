@@ -4,6 +4,7 @@
   "description": "Dev infrastructure for Home Lights",
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
+  "private": true,
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.10.0",
     "@typescript-eslint/parser": "^3.10.0",

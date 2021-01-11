@@ -21,6 +21,12 @@ sudo ln -s /app/bin/home-lights /usr/bin/home-lights
 
 Yeah, this is a lot. Super tl;dr, creating the symlink that npm does by default and building the SQLite binary required conflicting sets of permissions when trying to install to /usr/lib/node_modules and /usr/. This workaround avoids the conflict, which I developed after I managed to brick a Pi.
 
+Once this is done, you can update Home Lights by running:
+
+```
+npm install -g home-lights
+```
+
 ## Setting up a WiFi AP on a Raspberry Pi:
 
 Follow instructions [here](http://www.raspberryconnect.com/network/item/333-raspberry-pi-hotspot-access-point-dhcpcd-method).
