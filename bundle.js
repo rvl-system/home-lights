@@ -42,6 +42,7 @@ execSync('npm run build', {
 console.log('\nBundling the build artifacts...');
 rmSync(join(__dirname, 'bundle'), { recursive: true, force: true });
 mkdirSync(join(__dirname, 'bundle'));
+mkdirSync(join(__dirname, 'bundle', 'server'));
 execSync('cp -r server/dist bundle/server/', { cwd: __dirname });
 execSync('cp -r server/bin bundle/server/', { cwd: __dirname });
 execSync('cp -r public bundle/', { cwd: __dirname });

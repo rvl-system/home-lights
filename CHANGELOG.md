@@ -1,6 +1,8 @@
-## 1.1.0 (2021-01-10)
+## 1.1.1 (2021-01-10)
 
 - Added support for schedules
+
+_note_: Version 1.1.0 was a botched publish and had to be unpublished
 
 ## 1.0.1 (2020-12-31)
 
