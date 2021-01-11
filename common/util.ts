@@ -126,6 +126,9 @@ export function getHSVColor(color: Color): HSVColor {
   return { type: ColorType.HSV, hue: hsv.h, saturation: hsv.s / 100 };
 }
 
+/**
+ * Formats an hour/minute pair into a string of the format XX:XX
+ */
 export function formatTime(hour: number, minute: number): string {
   return `${hour.toString().padStart(2, '0')}:${minute
     .toString()
