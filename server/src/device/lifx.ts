@@ -17,22 +17,30 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { discover, Device } from 'node-lifx-lan';
-import { LIFXLight, LightType } from '../common/types';
+import { discover, Device, LifxLanColorHSB } from 'node-lifx-lan';
+import { MAX_BRIGHTNESS } from '../common/config';
+import {
+  ColorType,
+  LIFXLight,
+  LightType,
+  PatternType,
+  SolidPattern
+} from '../common/types';
+import { getItem } from '../common/util';
 import { createLight, deleteLight, getLights } from '../db/lights';
 import { SetLightStateOptions } from './types';
 
-const lights: Device[] = [];
+const devices: Device[] = [];
 
 export async function init(): Promise<void> {
   console.log('Searching for LIFX lights...');
-  lights.push(...(await discover()));
+  devices.push(...(await discover()));
 
   console.log('Reconciling registered LIFX lights vs database');
   const dbLights = await getLights();
 
   // Add lights from LIFX that are not in the DB
-  for (const light of lights) {
+  for (const light of devices) {
     if (
       !dbLights.find(
         (dbLight) =>
@@ -57,7 +65,7 @@ export async function init(): Promise<void> {
     if (dbLight.type !== LightType.LIFX) {
       continue;
     }
-    if (!lights.find((light) => light.mac === (dbLight as LIFXLight).lifxId)) {
+    if (!devices.find((light) => light.mac === (dbLight as LIFXLight).lifxId)) {
       console.log(
         `LIFX light "${dbLight.name}" is no longer registered with the LIFX service, deleting...`
       );
@@ -72,13 +80,72 @@ export async function setLightState({
   lights,
   patterns
 }: SetLightStateOptions): Promise<void> {
-  // How to set white light
-  // devices[0].lightSetColor({
-  //   color: {
-  //     hue: 0,
-  //     saturation: 0,
-  //     brightness: 1,
-  //     kelvin: 2700
-  //   }
-  // });
+  const zoneLights = lights.filter(
+    (light) => light.zoneId === zoneState.zoneId
+  );
+  const promises: Promise<void>[] = [];
+  for (const light of zoneLights) {
+    if (light.type !== LightType.LIFX) {
+      continue;
+    }
+
+    const device = getItem(
+      (light as LIFXLight).lifxId,
+      devices,
+      (device) => device.mac === (light as LIFXLight).lifxId
+    );
+
+    // Handle the case of the light being turned off first and short circuit
+    if (scene === undefined || !zoneState.power) {
+      promises.push(
+        device.turnOff({
+          duration: 250
+        })
+      );
+      continue;
+    }
+    const lightEntry = getItem(light.id, scene.lights, 'lightId');
+    if (lightEntry.patternId === undefined) {
+      promises.push(
+        device.turnOff({
+          duration: 250
+        })
+      );
+      continue;
+    }
+
+    let color: LifxLanColorHSB = {
+      hue: 0,
+      saturation: 0,
+      brightness: 0
+    };
+    if (lightEntry.patternId !== undefined) {
+      const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
+      if (pattern.type !== PatternType.Solid) {
+        throw new Error(
+          `Internal Error: pattern type ${pattern.type} cannot be used with LIFX`
+        );
+      }
+      if (pattern.data.color.type === ColorType.HSV) {
+        color = {
+          hue: pattern.data.color.hue / 360,
+          saturation: pattern.data.color.saturation,
+          brightness:
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+            (scene.brightness / MAX_BRIGHTNESS)
+        };
+      } else {
+        color = {
+          hue: 0,
+          saturation: 0,
+          kelvin: pattern.data.color.temperature,
+          brightness:
+            (lightEntry.brightness / MAX_BRIGHTNESS) *
+            (scene.brightness / MAX_BRIGHTNESS)
+        };
+      }
+    }
+    promises.push(device.turnOn({ color, duration: 250 }));
+  }
+  await Promise.all(promises);
 }

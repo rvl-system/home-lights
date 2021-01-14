@@ -48,9 +48,11 @@ declare module 'node-lifx-lan' {
       };
     };
 
-    public async lightSetColor(opts: {
+    public async turnOff(opts: { duration: number }): Promise<void>;
+
+    public async turnOn(opts: {
       color: LifxLanColorHSB;
-      duration?: number;
+      duration: number;
     }): Promise<void>;
   }
 
@@ -60,6 +62,6 @@ declare module 'node-lifx-lan' {
     hue: number; // 0-1
     saturation: number; // 0-1
     brightness: number; // 0-1
-    kelvin: number; // 1500 to 9000.
+    kelvin?: number; // 1500 to 9000.
   }
 }
