@@ -1,3 +1,8 @@
+## 1.2.0 (2021-01-13)
+
+- Converted LIFX to use the lan protocol
+- Schedules no longer show in operation mode when there is no schedule
+
 ## 1.1.3 (2021-01-10)
 
 - Fixed a bug with the UI not showing the currently enabled schedule
