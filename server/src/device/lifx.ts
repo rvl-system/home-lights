@@ -17,81 +17,18 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import fetch from 'node-fetch';
-import { MAX_BRIGHTNESS } from '../common/config';
-import {
-  LightType,
-  LIFXLight,
-  PatternType,
-  SolidPattern,
-  ColorType
-} from '../common/types';
-import { getItem } from '../common/util';
-import { getLights, createLight, deleteLight } from '../db/lights';
+import { discover, Device } from 'node-lifx-lan';
+import { LIFXLight, LightType } from '../common/types';
+import { createLight, deleteLight, getLights } from '../db/lights';
 import { SetLightStateOptions } from './types';
 
-const LIFX_URL = 'https://api.lifx.com/v1/lights';
-const TOKEN = process.env['LIFX_TOKEN'];
-const LOCATION = process.env['LIFX_LOCATION'];
+const lights: Device[] = [];
 
-// We're matching the LIFX API here, which uses snake_case, so disable the linter rule
-/* eslint-disable @typescript-eslint/naming-convention */
-interface LIFXBulbDescriptor {
-  id: string;
-  uuid: string;
-  label: string;
-  connected: boolean;
-  power: 'on' | 'off';
-  color: {
-    hue: number;
-    saturation: number;
-    kelvin: number;
-  };
-  brightness: number;
-  group: {
-    id: string;
-    name: string;
-  };
-  location: {
-    id: string;
-    name: string;
-  };
-  product: {
-    name: string;
-    identifier: string;
-    company: string;
-    vendor_id: number;
-    product_id: number;
-    capabilities: {
-      has_color: boolean;
-      has_variable_color_temp: boolean;
-      has_ir: boolean;
-      has_chain: boolean;
-      has_multizone: boolean;
-      min_kelvin: number;
-      max_kelvin: number;
-    };
-  };
-  last_seen: string;
-  seconds_since_seen: number;
-}
-/* eslint-enable @typescript-eslint/naming-convention */
+export async function init(): Promise<void> {
+  console.log('Searching for LIFX lights...');
+  lights.push(...(await discover()));
 
-async function getLIFXLights(
-  token: string,
-  location: string
-): Promise<LIFXBulbDescriptor[]> {
-  const response = await fetch(`${LIFX_URL}/location:${location}`, {
-    headers: {
-      authorization: `Bearer ${token}`
-    }
-  });
-  return await response.json();
-}
-
-async function updateLights(token: string, location: string): Promise<void> {
   console.log('Reconciling registered LIFX lights vs database');
-  const lights = await getLIFXLights(token, location);
   const dbLights = await getLights();
 
   // Add lights from LIFX that are not in the DB
@@ -100,16 +37,16 @@ async function updateLights(token: string, location: string): Promise<void> {
       !dbLights.find(
         (dbLight) =>
           dbLight.type === LightType.LIFX &&
-          (dbLight as LIFXLight).lifxId === light.id
+          (dbLight as LIFXLight).lifxId === light.mac
       )
     ) {
       console.log(
-        `Found LIFX light "${light.label}" not in database, adding...`
+        `Found LIFX light "${light.deviceInfo.label}" not in database, adding...`
       );
       const newLight: Omit<LIFXLight, 'id'> = {
-        lifxId: light.id,
+        lifxId: light.mac,
         type: LightType.LIFX,
-        name: light.label
+        name: light.deviceInfo.label
       };
       await createLight(newLight);
     }
@@ -120,7 +57,7 @@ async function updateLights(token: string, location: string): Promise<void> {
     if (dbLight.type !== LightType.LIFX) {
       continue;
     }
-    if (!lights.find((light) => light.id === (dbLight as LIFXLight).lifxId)) {
+    if (!lights.find((light) => light.mac === (dbLight as LIFXLight).lifxId)) {
       console.log(
         `LIFX light "${dbLight.name}" is no longer registered with the LIFX service, deleting...`
       );
@@ -129,123 +66,19 @@ async function updateLights(token: string, location: string): Promise<void> {
   }
 }
 
-export async function init(): Promise<void> {
-  if (!TOKEN) {
-    console.log('No LIFX token found, disabling LIFX support');
-    return;
-  }
-  if (!LOCATION) {
-    throw new Error('LIFX_LOCATION environment variable is required');
-  }
-  console.log('Discovering LIFX lights');
-  await updateLights(TOKEN, LOCATION);
-}
-
-interface LIFXLightConfig {
-  id: string;
-  power: 'on' | 'off';
-  color?:
-    | {
-        hue: number; // 0-360
-        saturation: number; // 0-1
-        brightness: number; // 0-1
-      }
-    | {
-        temperature: number; // Thousands
-        brightness: number; // 0-1
-      };
-}
-
-async function sendLightStates(token: string, config: LIFXLightConfig[]) {
-  const response = await fetch(`${LIFX_URL}/states`, {
-    method: 'PUT',
-    headers: {
-      authorization: `Bearer ${token}`,
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      states: config.map((entry) => ({
-        selector: `id:${entry.id}`,
-        power: entry.power,
-        color: entry.color,
-        fast: true
-      }))
-    })
-  });
-  return await response.json();
-}
-
 export async function setLightState({
   zoneState,
   scene,
   lights,
   patterns
 }: SetLightStateOptions): Promise<void> {
-  if (!TOKEN || !LOCATION) {
-    return;
-  }
-  const config: LIFXLightConfig[] = [];
-  const zoneLights = lights.filter(
-    (light) => light.zoneId === zoneState.zoneId
-  );
-  for (const light of zoneLights) {
-    if (light.type !== LightType.LIFX) {
-      continue;
-    }
-
-    // Handle the case of the light being turned off first and short circuit
-    if (scene === undefined || !zoneState.power) {
-      config.push({
-        id: (light as LIFXLight).lifxId,
-        power: 'off'
-      });
-      continue;
-    }
-
-    const lightEntry = getItem(light.id, scene.lights, 'lightId');
-    if (lightEntry.patternId === undefined) {
-      config.push({
-        id: (light as LIFXLight).lifxId,
-        power: 'off'
-      });
-      continue;
-    }
-
-    let color: LIFXLightConfig['color'] = {
-      hue: 0,
-      saturation: 0,
-      brightness: 0
-    };
-    if (lightEntry.patternId !== undefined) {
-      const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
-      if (pattern.type !== PatternType.Solid) {
-        throw new Error(
-          `Internal Error: pattern type ${pattern.type} cannot be used with LIFX`
-        );
-      }
-      if (pattern.data.color.type === ColorType.HSV) {
-        color = {
-          hue: pattern.data.color.hue,
-          saturation: pattern.data.color.saturation,
-          brightness:
-            (lightEntry.brightness / MAX_BRIGHTNESS) *
-            (scene.brightness / MAX_BRIGHTNESS)
-        };
-      } else {
-        color = {
-          temperature: pattern.data.color.temperature,
-          brightness:
-            (lightEntry.brightness / MAX_BRIGHTNESS) *
-            (scene.brightness / MAX_BRIGHTNESS)
-        };
-      }
-    }
-    config.push({
-      id: (light as LIFXLight).lifxId,
-      power: 'on',
-      color
-    });
-  }
-
-  await sendLightStates(TOKEN, config);
+  // How to set white light
+  // devices[0].lightSetColor({
+  //   color: {
+  //     hue: 0,
+  //     saturation: 0,
+  //     brightness: 1,
+  //     kelvin: 2700
+  //   }
+  // });
 }
