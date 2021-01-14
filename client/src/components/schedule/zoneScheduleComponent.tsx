@@ -77,6 +77,9 @@ const EditZoneScheduleComponent: FunctionComponent<InternalProps> = (props) => {
 const OperationZoneScheduleComponent: FunctionComponent<
   InternalProps & ZoneScheduleComponentDispatch
 > = (props) => {
+  if (props.schedule.entries.length === 0) {
+    return null;
+  }
   const classes = useStyles();
   const contentClasses = useContentStyles();
   return (
