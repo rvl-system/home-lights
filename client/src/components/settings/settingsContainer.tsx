@@ -17,9 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
-import { settingsComponent, SettingsComponentProps } from './settingsComponent';
+import {
+  settingsComponent,
+  SettingsComponentDispatch,
+  SettingsComponentProps
+} from './settingsComponent';
 
 export const SettingsContainer = createContainer(
   (getSlice): SettingsComponentProps => {
@@ -27,6 +32,10 @@ export const SettingsContainer = createContainer(
       theme: getSlice(SliceName.Settings).theme
     };
   },
-  () => ({}),
+  (dispatch): SettingsComponentDispatch => ({
+    setTheme(theme) {
+      dispatch(ActionType.SetTheme, theme);
+    }
+  }),
   settingsComponent
 );
