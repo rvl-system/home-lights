@@ -37,3 +37,7 @@ CREATE TABLE IF NOT EXISTS "philips_hue_info" (
   username TEXT NOT NULL UNIQUE,
   key TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS "migrations" (
+  migration INTEGER NOT NULL,
+  date TEXT DEFAULT CURRENT_TIMESTAMP
+);

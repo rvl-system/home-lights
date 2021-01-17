@@ -21,6 +21,11 @@ import { init as initDB } from './db';
 import { init as initDevice } from './device';
 import { init as initEndpoints } from './endpoints';
 
+process.on('unhandledRejection', (reason) => {
+  console.error(reason);
+  process.exit(-1);
+});
+
 export async function run(): Promise<void> {
   await initDB();
   await initDevice();
