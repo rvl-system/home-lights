@@ -32,17 +32,6 @@ import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
 export const LIGHTS_TABLE_NAME = 'lights';
-export const LIGHTS_SCHEMA = `
-CREATE TABLE "${LIGHTS_TABLE_NAME}" (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  type TEXT NOT NULL,
-  channel INTEGER UNIQUE,
-  philips_hue_id TEXT UNIQUE,
-  lifx_id TEXT UNIQUE,
-  zone_id INTEGER,
-  FOREIGN KEY (zone_id) REFERENCES zones(id)
-)`;
 
 let lights: Light[] = [];
 

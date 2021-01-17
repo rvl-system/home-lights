@@ -23,21 +23,6 @@ import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
 export const PATTERNS_TABLE_NAME = 'patterns';
-export const PATTERNS_SCHEMA = `
-CREATE TABLE "${PATTERNS_TABLE_NAME}" (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  type TEXT NOT NULL,
-  data TEXT NOT NULL
-)`;
-
-export const COLORS_TABLE_NAME = 'colors';
-export const COLORS_SCHEMA = `
-CREATE TABLE "${COLORS_TABLE_NAME}" (
-  hue INTEGER NOT NULL,
-  saturation INTEGER NOT NULL,
-  PRIMARY KEY (hue, saturation)
-)`;
 
 let patterns: Pattern[] = [];
 

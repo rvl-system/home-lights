@@ -23,11 +23,6 @@ import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
 export const ZONES_TABLE_NAME = 'zones';
-export const ZONES_SCHEMA = `
-CREATE TABLE "${ZONES_TABLE_NAME}" (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE
-)`;
 
 let zones: Zone[] = [];
 

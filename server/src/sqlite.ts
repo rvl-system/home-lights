@@ -79,3 +79,21 @@ export async function dbAll(
     });
   });
 }
+
+/**
+ * Runs all queries, and can include multiple statements
+ */
+export async function dbExec(queries: string): Promise<void> {
+  if (!db) {
+    throw createInternalError('dbExec called before database initialized');
+  }
+  return new Promise((resolve, reject) => {
+    db.exec(queries, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
