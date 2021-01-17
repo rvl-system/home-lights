@@ -34,6 +34,7 @@ import { createLightHandlers } from './endpoints/lights';
 import { createPatternHandlers } from './endpoints/patterns';
 import { createScenesHandlers } from './endpoints/scenes';
 import { createScheduleHandlers } from './endpoints/schedules';
+import { createSettingsHandlers } from './endpoints/settings';
 import { createStateHandlers } from './endpoints/state';
 import { createZoneHandlers } from './endpoints/zones';
 import { reconcile } from './reconcile';
@@ -69,7 +70,8 @@ export function init(): Promise<void> {
       ...createScenesHandlers(),
       ...createPatternHandlers(),
       ...createLightHandlers(),
-      ...createStateHandlers()
+      ...createStateHandlers(),
+      ...createSettingsHandlers()
     };
 
     app.listen(port, '0.0.0.0', (err, address) => {

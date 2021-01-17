@@ -17,16 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { setTheme } from '../db/settings';
-import { ActionHandlerEntry } from '../types';
+import { Theme } from '../common/types';
 
-export function createSettingsHandlers(): Record<
-  string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ActionHandlerEntry<any>
-> {
-  return {
-    [ActionType.SetTheme]: { handler: setTheme, reconcile: false }
-  };
+export async function setTheme(theme: Theme): Promise<void> {
+  console.log(`Changing theme to ${theme}`);
 }
