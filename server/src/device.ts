@@ -56,9 +56,7 @@ const systemState: SystemState = {
 
 export async function init(): Promise<void> {
   await initRVL();
-  if (false) {
-    await initPhilipsHue();
-  }
+  await initPhilipsHue();
   await initLIFX();
   const zones = await getZones();
   for (const zone of zones) {
