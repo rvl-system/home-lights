@@ -22,7 +22,7 @@ import { Pattern } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
-export const PATTERNS_TABLE_NAME = 'patterns';
+const PATTERNS_TABLE_NAME = 'patterns';
 
 let patterns: Pattern[] = [];
 

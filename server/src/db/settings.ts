@@ -17,8 +17,26 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Theme } from '../common/types';
+import { Settings, Theme } from '../common/types';
+import { dbAll, dbRun } from '../sqlite';
+
+const SETTINGS_TABLE_NAME = 'settings';
+
+let settings: Settings = {
+  theme: Theme.Auto
+};
+
+export default async function updateCache(): Promise<void> {
+  settings = (
+    await dbAll(`SELECT * FROM ${SETTINGS_TABLE_NAME}`)
+  )[0] as Settings;
+}
+
+export function getSettings(): Settings {
+  return settings;
+}
 
 export async function setTheme(theme: Theme): Promise<void> {
-  console.log(`Changing theme to ${theme}`);
+  await dbRun(`UPDATE ${SETTINGS_TABLE_NAME} SET theme=?`, [theme]);
+  await updateCache();
 }

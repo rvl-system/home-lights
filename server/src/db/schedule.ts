@@ -23,7 +23,7 @@ import { hasItem } from '../common/util';
 import { dbAll, dbRun } from '../sqlite';
 import { ActionHandler } from '../types';
 
-export const SCHEDULE_TABLE_NAME = 'schedule';
+const SCHEDULE_TABLE_NAME = 'schedule';
 
 let schedules: Schedule[] = [];
 

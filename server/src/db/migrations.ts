@@ -22,7 +22,7 @@ import { dirname, join } from 'path';
 import { dbAll, dbExec, init as initDB } from '../sqlite';
 import { getEnvironmentVariable } from '../util';
 
-export const DB_FILE = join(
+const DB_FILE = join(
   getEnvironmentVariable('HOME'),
   '.homelights',
   'db.sqlite3'

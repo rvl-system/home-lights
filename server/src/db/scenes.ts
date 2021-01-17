@@ -31,7 +31,7 @@ import { getItem, hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
-export const SCENES_TABLE_NAME = 'scenes';
+const SCENES_TABLE_NAME = 'scenes';
 
 let scenes: Scene[] = [];
 
