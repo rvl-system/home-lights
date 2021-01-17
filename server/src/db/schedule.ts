@@ -24,13 +24,6 @@ import { dbAll, dbRun } from '../sqlite';
 import { ActionHandler } from '../types';
 
 export const SCHEDULE_TABLE_NAME = 'schedule';
-export const SCHEDULE_SCHEMA = `
-CREATE TABLE "${SCHEDULE_TABLE_NAME}" (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  zone_id INTEGER NOT NULL,
-  entries TEXT NOT NULL,
-  FOREIGN KEY (zone_id) REFERENCES zones(id)
-)`;
 
 let schedules: Schedule[] = [];
 

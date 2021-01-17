@@ -20,11 +20,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { dbRun, dbAll } from '../sqlite';
 
 export const PHILIPS_HUE_TABLE_NAME = 'philips_hue_info';
-export const PHILIPS_HUE_INFO_SCHEMA = `
-CREATE TABLE "${PHILIPS_HUE_TABLE_NAME}" (
-  username TEXT NOT NULL UNIQUE,
-  key TEXT NOT NULL
-)`;
 
 export interface PhilipsHueInfo {
   username: string;

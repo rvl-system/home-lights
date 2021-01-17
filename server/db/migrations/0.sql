@@ -1,0 +1,4 @@
+CREATE TABLE "migrations" (
+  migration INTEGER NOT NULL,
+  date TEXT DEFAULT CURRENT_TIMESTAMP
+);

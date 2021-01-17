@@ -17,75 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { existsSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
-import initLights, { LIGHTS_SCHEMA, LIGHTS_TABLE_NAME } from './db/lights';
-import initPatterns, {
-  PATTERNS_SCHEMA,
-  PATTERNS_TABLE_NAME,
-  COLORS_SCHEMA,
-  COLORS_TABLE_NAME
-} from './db/patterns';
-import {
-  PHILIPS_HUE_INFO_SCHEMA,
-  PHILIPS_HUE_TABLE_NAME
-} from './db/philipsHue';
-import initScenes, { SCENES_SCHEMA, SCENES_TABLE_NAME } from './db/scenes';
-import initSchedules, {
-  SCHEDULE_SCHEMA,
-  SCHEDULE_TABLE_NAME
-} from './db/schedule';
-import initZones, { ZONES_SCHEMA, ZONES_TABLE_NAME } from './db/zones';
-import { init as initDB, dbRun } from './sqlite';
-import { getEnvironmentVariable } from './util';
-
-const DB_FILE = join(
-  getEnvironmentVariable('HOME'),
-  '.homelights',
-  'db.sqlite3'
-);
-
-export async function reset(): Promise<void> {
-  console.log('Resetting database...');
-  await init();
-  await dbRun(`DROP TABLE ${ZONES_TABLE_NAME}`);
-  await dbRun(`DROP TABLE ${SCHEDULE_TABLE_NAME}`);
-  await dbRun(`DROP TABLE ${SCENES_TABLE_NAME}`);
-  await dbRun(`DROP TABLE ${PATTERNS_TABLE_NAME}`);
-  await dbRun(`DROP TABLE ${COLORS_TABLE_NAME}`);
-  await dbRun(`DROP TABLE ${LIGHTS_TABLE_NAME}`);
-  await dbRun(`DROP TABLE ${PHILIPS_HUE_TABLE_NAME}`);
-  await create();
-  console.log('done');
-}
-
-async function create(): Promise<void> {
-  console.log('Creating database tables...');
-  await dbRun(ZONES_SCHEMA);
-  await dbRun(SCHEDULE_SCHEMA);
-  await dbRun(SCENES_SCHEMA);
-  await dbRun(PATTERNS_SCHEMA);
-  await dbRun(COLORS_SCHEMA);
-  await dbRun(LIGHTS_SCHEMA);
-  await dbRun(PHILIPS_HUE_INFO_SCHEMA);
-}
+import initLights from './db/lights';
+import initMigrations from './db/migrations';
+import initPatterns from './db/patterns';
+import initScenes from './db/scenes';
+import initSchedules from './db/schedule';
+import initZones from './db/zones';
 
 export async function init(): Promise<void> {
-  const isNewDB = !existsSync(DB_FILE);
-  if (isNewDB) {
-    mkdirSync(dirname(DB_FILE), {
-      recursive: true
-    });
-    console.log(`Creating database at ${DB_FILE}`);
-  } else {
-    console.log(`Loading database from ${DB_FILE}`);
-  }
-  await initDB(DB_FILE);
-
-  if (isNewDB) {
-    await create();
-  }
-
+  await initMigrations();
   await Promise.all([
     initZones(),
     initSchedules(),
