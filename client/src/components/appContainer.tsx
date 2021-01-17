@@ -24,7 +24,8 @@ import { AppComponent, AppComponentProps } from './appComponent';
 export const AppContainer = createContainer(
   (getSlice): AppComponentProps => {
     return {
-      activeTab: getSlice(SliceName.SelectedTab)
+      activeTab: getSlice(SliceName.SelectedTab),
+      theme: getSlice(SliceName.Settings).theme
     };
   },
   () => ({}),
