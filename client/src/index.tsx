@@ -27,6 +27,7 @@ import { createPatternsReducers } from './reducers/patternsReducer';
 import { createScenesReducers } from './reducers/scenesReducer';
 import { createSchedulesReducers } from './reducers/scheduleReducer';
 import { selectedTabReducer } from './reducers/selectedTabReducer';
+import { createSettingsReducers } from './reducers/settingsReducer';
 import { createStateReducers } from './reducers/stateReducer';
 import { createZonesReducers } from './reducers/zonesReducer';
 import { createApp } from './reduxology';
@@ -44,6 +45,7 @@ async function run() {
       createPatternsReducers(appState.patterns),
       createLightsReducers(appState.lights),
       createStateReducers(appState.systemState),
+      createSettingsReducers(appState.settings),
       selectedTabReducer,
       notificationsReducer
     ]

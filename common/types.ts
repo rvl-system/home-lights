@@ -26,6 +26,7 @@ export interface AppState {
   patterns: Pattern[];
   lights: Light[];
   systemState: SystemState;
+  settings: Settings;
   version: number;
 }
 
@@ -208,7 +209,18 @@ export type SetZoneBrightnessRequest = {
 export enum SelectedTab {
   Zones = 'Zones',
   Patterns = 'Patterns',
-  Lights = 'Lights'
+  Lights = 'Lights',
+  Settings = 'Settings'
+}
+
+export enum Theme {
+  Auto = 'Auto',
+  Light = 'Light',
+  Dark = 'Dark'
+}
+
+export interface Settings {
+  theme: Theme;
 }
 
 // Severity is a drop-in value to Material UI's Snackbar severity, which is why

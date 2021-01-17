@@ -23,7 +23,7 @@ import fastifyStatic from 'fastify-static';
 import WebSocket, { Server } from 'ws';
 import { setUpdateListener, updateClients } from './clients';
 import { ActionType } from './common/actions';
-import { AppState, Notification } from './common/types';
+import { AppState, Notification, Theme } from './common/types';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
 import { getScenes } from './db/scenes';
@@ -49,6 +49,7 @@ function getAppState(): AppState {
     patterns: getPatterns(),
     lights: getLights(),
     systemState: getSystemState(),
+    settings: { theme: Theme.Auto },
     version
   };
 }

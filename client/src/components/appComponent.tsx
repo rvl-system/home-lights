@@ -26,11 +26,11 @@ import {
 import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent, useMemo } from 'react';
 import { SelectedTab } from '../common/types';
-
 import { FooterContainer } from './footerContainer';
 import { LightsTabContainer } from './light/lightsTabContainer';
 import { NotificationContainer } from './notificationContainer';
 import { PatternsTabContainer } from './pattern/patternsTabContainer';
+import { SettingsContainer } from './settings/settingsContainer';
 import { ZonesTabContainer } from './zone/zonesTabContainer';
 
 export interface AppComponentProps {
@@ -78,7 +78,8 @@ export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
           {reduce(props.activeTab, {
             [SelectedTab.Zones]: () => <ZonesTabContainer />,
             [SelectedTab.Patterns]: () => <PatternsTabContainer />,
-            [SelectedTab.Lights]: () => <LightsTabContainer />
+            [SelectedTab.Lights]: () => <LightsTabContainer />,
+            [SelectedTab.Settings]: () => <SettingsContainer />
           })}
         </div>
         <div className={classes.footer}>

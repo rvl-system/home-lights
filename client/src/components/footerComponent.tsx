@@ -25,7 +25,8 @@ import {
 import {
   Home as HomeIcon,
   BlurLinear as BlurLinearIcon,
-  EmojiObjects as EmojiObjectsIcon
+  EmojiObjects as EmojiObjectsIcon,
+  Settings as SettingsIcon
 } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { SelectedTab } from '../common/types';
@@ -75,6 +76,11 @@ export const FooterComponent: FunctionComponent<
           label={SelectedTab.Lights}
           value={SelectedTab.Lights}
           icon={<EmojiObjectsIcon />}
+        />
+        <BottomNavigationAction
+          label={SelectedTab.Settings}
+          value={SelectedTab.Settings}
+          icon={<SettingsIcon />}
         />
       </BottomNavigation>
     </div>
