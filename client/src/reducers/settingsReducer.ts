@@ -25,12 +25,12 @@ import { SliceName } from '../types';
 // Typing this return type explicitly is very hard, but can be inferred easily
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createSettingsReducers(initialSettings: Settings) {
-  const stateReducer = createReducer(SliceName.Settings, initialSettings);
+  const settingsReducer = createReducer(SliceName.Settings, initialSettings);
 
-  stateReducer.handle(
+  settingsReducer.handle(
     ActionType.AppStateUpdated,
-    (state, { systemState }) => systemState
+    (state, { settings }) => settings
   );
 
-  return stateReducer;
+  return settingsReducer;
 }
