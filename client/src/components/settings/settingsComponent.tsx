@@ -67,7 +67,7 @@ export const settingsComponent: FunctionComponent<
                 label: Theme.Dark
               }
             ]}
-            onChange={(value) => console.log(value)}
+            onChange={(value) => props.setTheme(value as Theme)}
           />
         </div>
       </div>
