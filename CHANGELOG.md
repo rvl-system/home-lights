@@ -1,3 +1,8 @@
+## 1.3.0 (2021-01-17)
+
+- Added automatic db migrations to make upgrading _way_ easier
+- Added ability to change the U Itheme manually
+
 ## 1.2.0 (2021-01-13)
 
 - Converted LIFX to use the lan protocol
