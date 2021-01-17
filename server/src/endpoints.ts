@@ -28,12 +28,14 @@ import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
 import { getScenes } from './db/scenes';
 import { getSchedules } from './db/schedule';
+import { getSettings } from './db/settings';
 import { getZones } from './db/zones';
 import { getSystemState } from './device';
 import { createLightHandlers } from './endpoints/lights';
 import { createPatternHandlers } from './endpoints/patterns';
 import { createScenesHandlers } from './endpoints/scenes';
 import { createScheduleHandlers } from './endpoints/schedules';
+import { createSettingsHandlers } from './endpoints/settings';
 import { createStateHandlers } from './endpoints/state';
 import { createZoneHandlers } from './endpoints/zones';
 import { reconcile } from './reconcile';
@@ -49,6 +51,7 @@ function getAppState(): AppState {
     patterns: getPatterns(),
     lights: getLights(),
     systemState: getSystemState(),
+    settings: getSettings(),
     version
   };
 }
@@ -68,7 +71,8 @@ export function init(): Promise<void> {
       ...createScenesHandlers(),
       ...createPatternHandlers(),
       ...createLightHandlers(),
-      ...createStateHandlers()
+      ...createStateHandlers(),
+      ...createSettingsHandlers()
     };
 
     app.listen(port, '0.0.0.0', (err, address) => {

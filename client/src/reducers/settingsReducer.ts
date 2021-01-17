@@ -17,17 +17,20 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
+import { ActionType } from '../common/actions';
+import { Settings } from '../common/types';
+import { createReducer } from '../reduxology';
 import { SliceName } from '../types';
-import { AppComponent, AppComponentProps } from './appComponent';
 
-export const AppContainer = createContainer(
-  (getSlice): AppComponentProps => {
-    return {
-      activeTab: getSlice(SliceName.SelectedTab),
-      theme: getSlice(SliceName.Settings).theme
-    };
-  },
-  () => ({}),
-  AppComponent
-);
+// Typing this return type explicitly is very hard, but can be inferred easily
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function createSettingsReducers(initialSettings: Settings) {
+  const settingsReducer = createReducer(SliceName.Settings, initialSettings);
+
+  settingsReducer.handle(
+    ActionType.AppStateUpdated,
+    (state, { settings }) => settings
+  );
+
+  return settingsReducer;
+}

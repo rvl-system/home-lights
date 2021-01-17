@@ -25,7 +25,8 @@ import {
   Pattern,
   Scene,
   Zone,
-  Schedule
+  Schedule,
+  Settings
 } from './common/types';
 
 export enum SliceName {
@@ -37,7 +38,8 @@ export enum SliceName {
   Colors = 'Colors',
   State = 'State',
   SelectedTab = 'SelectedTab',
-  Notification = 'Notification'
+  Notification = 'Notification',
+  Settings = 'Settings'
 }
 
 export interface State {
@@ -49,6 +51,7 @@ export interface State {
   [SliceName.State]: SystemState;
   [SliceName.SelectedTab]: SelectedTab;
   [SliceName.Notification]: Notification | null;
+  [SliceName.Settings]: Settings;
 }
 
 // Color is a drop-in value to various Material UI components, which is why we

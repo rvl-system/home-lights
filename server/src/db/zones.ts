@@ -22,7 +22,7 @@ import { Zone } from '../common/types';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
-export const ZONES_TABLE_NAME = 'zones';
+const ZONES_TABLE_NAME = 'zones';
 
 let zones: Zone[] = [];
 

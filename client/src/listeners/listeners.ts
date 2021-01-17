@@ -45,7 +45,9 @@ export const listeners = [
     [ActionType.DeleteLight]: 'Failed to delete light',
 
     [ActionType.SetZoneScene]: 'Failed to set the zone scene',
-    [ActionType.SetZonePower]: 'Failed to set the zone power'
+    [ActionType.SetZonePower]: 'Failed to set the zone power',
+
+    [ActionType.SetTheme]: 'Failed to set the theme'
   }),
   ...connectDebouncedActions({
     [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness'

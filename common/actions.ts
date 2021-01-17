@@ -25,6 +25,7 @@ import {
   Scene,
   Schedule,
   SelectedTab,
+  Theme,
   Zone
 } from './types';
 
@@ -57,7 +58,9 @@ export enum ActionType {
 
   CreateRVLLight = 'CreateRVLLight',
   EditLight = 'EditLight',
-  DeleteLight = 'DeleteLight'
+  DeleteLight = 'DeleteLight',
+
+  SetTheme = 'SetTheme'
 }
 
 export interface Actions {
@@ -98,4 +101,6 @@ export interface Actions {
   };
   [ActionType.EditLight]: Light;
   [ActionType.DeleteLight]: { id: number };
+
+  [ActionType.SetTheme]: Theme;
 }

@@ -17,17 +17,26 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
-import { SliceName } from '../types';
-import { AppComponent, AppComponentProps } from './appComponent';
+import { Settings, Theme } from '../common/types';
+import { dbAll, dbRun } from '../sqlite';
 
-export const AppContainer = createContainer(
-  (getSlice): AppComponentProps => {
-    return {
-      activeTab: getSlice(SliceName.SelectedTab),
-      theme: getSlice(SliceName.Settings).theme
-    };
-  },
-  () => ({}),
-  AppComponent
-);
+const SETTINGS_TABLE_NAME = 'settings';
+
+let settings: Settings = {
+  theme: Theme.Auto
+};
+
+export default async function updateCache(): Promise<void> {
+  settings = (
+    await dbAll(`SELECT * FROM ${SETTINGS_TABLE_NAME}`)
+  )[0] as Settings;
+}
+
+export function getSettings(): Settings {
+  return settings;
+}
+
+export async function setTheme(theme: Theme): Promise<void> {
+  await dbRun(`UPDATE ${SETTINGS_TABLE_NAME} SET theme=?`, [theme]);
+  await updateCache();
+}

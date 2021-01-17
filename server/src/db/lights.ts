@@ -31,7 +31,7 @@ import { hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
-export const LIGHTS_TABLE_NAME = 'lights';
+const LIGHTS_TABLE_NAME = 'lights';
 
 let lights: Light[] = [];
 

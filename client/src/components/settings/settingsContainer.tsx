@@ -17,17 +17,25 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { createContainer } from '../reduxology';
-import { SliceName } from '../types';
-import { AppComponent, AppComponentProps } from './appComponent';
+import { ActionType } from '../../common/actions';
+import { createContainer } from '../../reduxology';
+import { SliceName } from '../../types';
+import {
+  settingsComponent,
+  SettingsComponentDispatch,
+  SettingsComponentProps
+} from './settingsComponent';
 
-export const AppContainer = createContainer(
-  (getSlice): AppComponentProps => {
+export const SettingsContainer = createContainer(
+  (getSlice): SettingsComponentProps => {
     return {
-      activeTab: getSlice(SliceName.SelectedTab),
       theme: getSlice(SliceName.Settings).theme
     };
   },
-  () => ({}),
-  AppComponent
+  (dispatch): SettingsComponentDispatch => ({
+    setTheme(theme) {
+      dispatch(ActionType.SetTheme, theme);
+    }
+  }),
+  settingsComponent
 );

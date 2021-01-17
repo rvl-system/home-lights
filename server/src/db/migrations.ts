@@ -19,10 +19,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { existsSync, mkdirSync, readFileSync, readdirSync } from 'fs';
 import { dirname, join } from 'path';
-import { dbAll, dbExec, dbRun, init as initDB } from '../sqlite';
+import { dbAll, dbExec, init as initDB } from '../sqlite';
 import { getEnvironmentVariable } from '../util';
 
-export const DB_FILE = join(
+const DB_FILE = join(
   getEnvironmentVariable('HOME'),
   '.homelights',
   'db.sqlite3'
