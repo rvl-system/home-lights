@@ -18,26 +18,22 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
-import { createContainer } from '../reduxology';
+import { SelectedTab } from '../common/types';
+import { createReducer } from '../reduxology';
 import { SliceName } from '../types';
-import {
-  FooterComponent,
-  FooterComponentProps,
-  FooterComponentDispatch
-} from './footerComponent';
 
-export const FooterContainer = createContainer(
-  (getSlice): FooterComponentProps => {
-    return {
-      selectedTab: getSlice(SliceName.LocalState).selectedTab
-    };
-  },
-  (dispatch): FooterComponentDispatch => {
-    return {
-      selectTab(newTab) {
-        dispatch(ActionType.SelectTab, newTab);
-      }
-    };
-  },
-  FooterComponent
+export const localStateReducer = createReducer(SliceName.LocalState, {
+  selectedTab: SelectedTab.Zones,
+  connected: true
+});
+
+localStateReducer.handle(ActionType.SelectTab, (state, updatedTab) => {
+  state.selectedTab = updatedTab;
+});
+
+localStateReducer.handle(
+  ActionType.ConnectionStateChanged,
+  (state, { connected }) => {
+    state.connected = connected;
+  }
 );

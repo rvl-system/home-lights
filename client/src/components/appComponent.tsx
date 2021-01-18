@@ -34,7 +34,8 @@ import { SettingsContainer } from './settings/settingsContainer';
 import { ZonesTabContainer } from './zone/zonesTabContainer';
 
 export interface AppComponentProps {
-  activeTab: SelectedTab;
+  selectedTab: SelectedTab;
+  connected: boolean;
   theme: Theme;
 }
 
@@ -56,6 +57,19 @@ const useStyles = makeStyles({
   },
   footer: {
     flexShrink: 0
+  },
+  connecting: {
+    position: 'fixed',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: '#000',
+    opacity: 0.7,
+    zIndex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
@@ -80,13 +94,17 @@ export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
       }),
     [prefersDarkMode]
   );
+
   const classes = useStyles();
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
+      {!props.connected && (
+        <div className={classes.connecting}>Connecting to server...</div>
+      )}
       <div className={classes.root}>
         <div className={classes.content}>
-          {reduce(props.activeTab, {
+          {reduce(props.selectedTab, {
             [SelectedTab.Zones]: () => <ZonesTabContainer />,
             [SelectedTab.Patterns]: () => <PatternsTabContainer />,
             [SelectedTab.Lights]: () => <LightsTabContainer />,

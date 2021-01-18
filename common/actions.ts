@@ -60,7 +60,9 @@ export enum ActionType {
   EditLight = 'EditLight',
   DeleteLight = 'DeleteLight',
 
-  SetTheme = 'SetTheme'
+  SetTheme = 'SetTheme',
+
+  ConnectionStateChanged = 'ConnectionStateChanged'
 }
 
 export interface Actions {
@@ -103,4 +105,5 @@ export interface Actions {
   [ActionType.DeleteLight]: { id: number };
 
   [ActionType.SetTheme]: Theme;
+  [ActionType.ConnectionStateChanged]: { connected: boolean };
 }

@@ -22,11 +22,11 @@ import { AppContainer } from './components/appContainer';
 import { connect } from './connection';
 import { listeners } from './listeners/listeners';
 import { createLightsReducers } from './reducers/lightsReducer';
+import { localStateReducer } from './reducers/localStateReducer';
 import { notificationsReducer } from './reducers/notificationsReducer';
 import { createPatternsReducers } from './reducers/patternsReducer';
 import { createScenesReducers } from './reducers/scenesReducer';
 import { createSchedulesReducers } from './reducers/scheduleReducer';
-import { selectedTabReducer } from './reducers/selectedTabReducer';
 import { createSettingsReducers } from './reducers/settingsReducer';
 import { createStateReducers } from './reducers/stateReducer';
 import { createZonesReducers } from './reducers/zonesReducer';
@@ -46,7 +46,7 @@ async function run() {
       createLightsReducers(appState.lights),
       createStateReducers(appState.systemState),
       createSettingsReducers(appState.settings),
-      selectedTabReducer,
+      localStateReducer,
       notificationsReducer
     ]
   });

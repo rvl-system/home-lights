@@ -37,7 +37,7 @@ export const ZoneScenesContainer = createContainer(
   (getSlice, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => {
     const state = getItem(
       ownProps.zone.id,
-      getSlice(SliceName.State).zoneStates,
+      getSlice(SliceName.SystemState).zoneStates,
       'zoneId'
     );
     return {
