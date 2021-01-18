@@ -36,8 +36,8 @@ export enum SliceName {
   Patterns = 'Patterns',
   Lights = 'Lights',
   Colors = 'Colors',
-  State = 'State',
-  SelectedTab = 'SelectedTab',
+  SystemState = 'State',
+  LocalState = 'LocalState',
   Notification = 'Notification',
   Settings = 'Settings'
 }
@@ -48,8 +48,8 @@ export interface State {
   [SliceName.Scenes]: { scenes: Scene[]; version: number };
   [SliceName.Lights]: Light[];
   [SliceName.Patterns]: Pattern[];
-  [SliceName.State]: SystemState;
-  [SliceName.SelectedTab]: SelectedTab;
+  [SliceName.SystemState]: SystemState;
+  [SliceName.LocalState]: { selectedTab: SelectedTab; connected: boolean };
   [SliceName.Notification]: Notification | null;
   [SliceName.Settings]: Settings;
 }

@@ -18,16 +18,19 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
-import { SelectedTab } from '../common/types';
+import { Settings } from '../common/types';
 import { createReducer } from '../reduxology';
 import { SliceName } from '../types';
 
-export const selectedTabReducer = createReducer(
-  SliceName.SelectedTab,
-  SelectedTab.Zones
-);
+// Typing this return type explicitly is very hard, but can be inferred easily
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function createConnectionReducers(initialSettings: Settings) {
+  const settingsReducer = createReducer(SliceName.Settings, initialSettings);
 
-selectedTabReducer.handle(
-  ActionType.SelectTab,
-  (state, updatedTab) => updatedTab
-);
+  settingsReducer.handle(
+    ActionType.AppStateUpdated,
+    (state, { settings }) => settings
+  );
+
+  return settingsReducer;
+}

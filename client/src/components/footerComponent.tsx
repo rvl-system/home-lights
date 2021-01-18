@@ -32,7 +32,7 @@ import React, { FunctionComponent } from 'react';
 import { SelectedTab } from '../common/types';
 
 export interface FooterComponentProps {
-  activeTab: SelectedTab;
+  selectedTab: SelectedTab;
 }
 
 export interface FooterComponentDispatch {
@@ -58,7 +58,7 @@ export const FooterComponent: FunctionComponent<
   return (
     <div className={classes.container}>
       <BottomNavigation
-        value={props.activeTab}
+        value={props.selectedTab}
         onChange={(event, newValue) => props.selectTab(newValue)}
         showLabels
       >

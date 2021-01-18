@@ -45,8 +45,10 @@ export function connect(): Promise<AppState> {
     });
     socket.addEventListener('close', async () => {
       console.log('Disconnected from server, retrying...');
+      dispatch(ActionType.ConnectionStateChanged, { connected: false });
       await delay(RETRY_TIMEOUT);
       await connect();
+      dispatch(ActionType.ConnectionStateChanged, { connected: true });
       console.log('Reconnected');
     });
   });

@@ -25,7 +25,7 @@ import { SliceName } from '../types';
 // Typing this return type explicitly is very hard, but can be inferred easily
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createStateReducers(initialSystemState: SystemState) {
-  const stateReducer = createReducer(SliceName.State, initialSystemState);
+  const stateReducer = createReducer(SliceName.SystemState, initialSystemState);
 
   stateReducer.handle(
     ActionType.AppStateUpdated,

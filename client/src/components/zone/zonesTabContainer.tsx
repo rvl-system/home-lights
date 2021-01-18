@@ -25,7 +25,7 @@ import { ZonesTab, ZonesTabProps, ZonesTabDispatch } from './zonesTab';
 export const ZonesTabContainer = createContainer(
   (getSlice): ZonesTabProps => ({
     zones: getSlice(SliceName.Zones),
-    state: getSlice(SliceName.State),
+    state: getSlice(SliceName.SystemState),
     scenes: getSlice(SliceName.Scenes).scenes
   }),
   (dispatch): ZonesTabDispatch => ({

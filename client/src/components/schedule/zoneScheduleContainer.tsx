@@ -64,7 +64,7 @@ export const ZoneScheduleContainer = createContainer(
     );
     const { currentScheduleSceneId } = getItem(
       ownProps.zone.id,
-      getSlice(SliceName.State).zoneStates,
+      getSlice(SliceName.SystemState).zoneStates,
       'zoneId'
     );
     const currentlyActiveScene =
