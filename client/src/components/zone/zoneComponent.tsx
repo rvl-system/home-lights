@@ -26,7 +26,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { BRIGHTNESS_STEP, MAX_BRIGHTNESS } from '../../common/config';
 import { EditMode, Scene, Zone, ZoneState } from '../../common/types';
 import { useContentStyles } from '../lib/pageStyles';
@@ -62,9 +62,19 @@ export const ZoneComponent: FunctionComponent<
 > = (props) => {
   const classes = useStyles();
   const contentClasses = useContentStyles();
+  const [expanded, setExpanded] = useState(false);
+  document.addEventListener('visibilitychange', () => {
+    const state = document.visibilityState;
+    if (state === 'hidden') {
+      setExpanded(false);
+    }
+  });
   return (
     <>
-      <Accordion>
+      <Accordion
+        expanded={expanded}
+        onChange={(e, newExpandedState) => setExpanded(newExpandedState)}
+      >
         <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel1a-header">
           <div className={classes.container}>
             <div className={contentClasses.itemHeading}>
