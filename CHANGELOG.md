@@ -1,3 +1,8 @@
+## 1.4.2 (2021-01-19)
+
+- Fixed a bug with not updated lights properly after connecting to a Philips Hue bridge
+- Fixed a bug with the schema
+
 ## 1.4.1 (2021-01-18)
 
 - Fixed a bug with notifications + app state updates not working properly

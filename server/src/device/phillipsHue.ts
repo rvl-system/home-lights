@@ -90,6 +90,8 @@ export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> = async 
     .createLocal(philipsHueBridgeIp)
     .connect(username);
 
+  await refreshPhilipsHueLights();
+
   return {
     severity: 'success',
     message: 'Philips Hue bridge connected'

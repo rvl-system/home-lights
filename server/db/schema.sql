@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS "lights" (
 );
 CREATE TABLE IF NOT EXISTS "philips_hue_info" (
   username TEXT NOT NULL UNIQUE,
-  key TEXT NOT NULL
+  key TEXT NOT NULL,
+  ip TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS "migrations" (
   migration INTEGER NOT NULL,
