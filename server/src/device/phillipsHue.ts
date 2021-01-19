@@ -59,6 +59,10 @@ export async function init(): Promise<void> {
   authenticatedApi = await philipsHue.api
     .createLocal(philipsHueBridgeIp)
     .connect(info.username);
+  const bridgeLights = await authenticatedApi.lights.getAll();
+  for (const bridgeLight of bridgeLights) {
+    idMap.set(bridgeLight.uniqueid, bridgeLight.id);
+  }
   console.log('Phillips Hue initialized');
 }
 

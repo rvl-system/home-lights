@@ -34,7 +34,7 @@
     "fastify-static": "^3.4.0",
     "luxon": "^1.25.0",
     "node-fetch": "^2.6.1",
-    "node-hue-api": "^4.0.9",
+    "node-hue-api": "^4.0.10",
     "node-lifx-lan": "^0.5.0",
     "rvl-node": "^6.1.1",
     "sqlite3": "^5.0.0",
