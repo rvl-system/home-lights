@@ -48,7 +48,10 @@ export const listeners = [
     [ActionType.SetZonePower]: 'Failed to set the zone power',
 
     [ActionType.SetTheme]: 'Failed to set the theme',
-    [ActionType.ConnectPhilipsHueBridge]: 'Failed to connect to the bridge'
+    [ActionType.ConnectPhilipsHueBridge]: 'Failed to connect to the bridge',
+    [ActionType.RefreshPhilipsHueLights]:
+      'Failed to refresh Philips Hue lights',
+    [ActionType.RefreshLIFXLights]: 'Failed to refresh LIFX lights'
   }),
   ...connectDebouncedActions({
     [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness'

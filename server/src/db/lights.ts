@@ -209,9 +209,6 @@ export const editLight: ActionHandler<ActionType.EditLight> = async (
 export const deleteLight: ActionHandler<ActionType.DeleteLight> = async (
   request
 ) => {
-  await dbRun(`DELETE FROM ${LIGHTS_TABLE_NAME} WHERE id = ? AND type = ?`, [
-    request.id,
-    LightType.RVL
-  ]);
+  await dbRun(`DELETE FROM ${LIGHTS_TABLE_NAME} WHERE id = ?`, [request.id]);
   await updateCache();
 };

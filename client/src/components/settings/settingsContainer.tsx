@@ -41,10 +41,10 @@ export const SettingsContainer = createContainer(
       dispatch(ActionType.ConnectPhilipsHueBridge);
     },
     refreshPhilipsHueLights() {
-      console.log('Refresh Hue');
+      dispatch(ActionType.RefreshPhilipsHueLights);
     },
     refreshLIFXLights() {
-      console.log('Refresh LIFX');
+      dispatch(ActionType.RefreshLIFXLights);
     }
   }),
   settingsComponent

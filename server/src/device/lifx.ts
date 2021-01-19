@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { discover, Device, LifxLanColorHSB } from 'node-lifx-lan';
+import { ActionType } from '../common/actions';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
   ColorType,
@@ -27,17 +28,25 @@ import {
   SolidPattern
 } from '../common/types';
 import { getItem } from '../common/util';
-import { createLight, deleteLight, getLights } from '../db/lights';
+import { createLight, getLights } from '../db/lights';
+import { ActionHandler } from '../types';
 import { SetLightStateOptions } from './types';
 
-const devices: Device[] = [];
+let devices: Device[] = [];
 
 export async function init(): Promise<void> {
   console.log('Searching for LIFX lights...');
-  devices.push(...(await discover()));
+  const dbLights = await getLights();
+  const lifxLights = await discover();
+  devices = lifxLights.filter((device) =>
+    dbLights.some((light) => (light as LIFXLight).lifxId === device.mac)
+  );
+}
 
+export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> = async () => {
   console.log('Reconciling registered LIFX lights vs database');
   const dbLights = await getLights();
+  devices = await discover();
 
   // Add lights from LIFX that are not in the DB
   for (const light of devices) {
@@ -60,19 +69,11 @@ export async function init(): Promise<void> {
     }
   }
 
-  // Delete lights from DB that are no longer in LIFX
-  for (const dbLight of dbLights) {
-    if (dbLight.type !== LightType.LIFX) {
-      continue;
-    }
-    if (!devices.find((light) => light.mac === (dbLight as LIFXLight).lifxId)) {
-      console.log(
-        `LIFX light "${dbLight.name}" is no longer registered with the LIFX service, deleting...`
-      );
-      await deleteLight({ id: dbLight.id });
-    }
-  }
-}
+  return {
+    severity: 'success',
+    message: 'LIFX lights refreshed'
+  };
+};
 
 export async function setLightState({
   zoneState,

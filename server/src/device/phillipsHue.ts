@@ -66,22 +66,33 @@ export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> = async 
   console.log('Looking for Philips Hue bridge...');
   philipsHueBridgeIp = await discoverBridge();
   if (!philipsHueBridgeIp) {
-    return 'Could not connect to bridge';
+    return {
+      severity: 'error',
+      message: 'Could not connect to bridge'
+    };
   }
+
   console.log(`Connecting to Philips Hue bridge at ${philipsHueBridgeIp}...`);
   const username = await createUser(philipsHueBridgeIp);
   if (!username) {
     philipsHueBridgeIp = undefined;
-    // TODO: propogate error
-    return 'Link button not pressed';
+    return {
+      severity: 'error',
+      message: 'Link button not pressed'
+    };
   }
+
   authenticatedApi = await philipsHue.api
     .createLocal(philipsHueBridgeIp)
     .connect(username);
-  return;
+
+  return {
+    severity: 'success',
+    message: 'Philips Hue bridge connected'
+  };
 };
 
-export async function refreshLights(): Promise<void> {
+export const refreshPhilipsHueLights: ActionHandler<ActionType.RefreshPhilipsHueLights> = async () => {
   if (authenticatedApi === undefined) {
     return;
   }
@@ -128,7 +139,12 @@ export async function refreshLights(): Promise<void> {
       await deleteLight({ id: dbLight.id });
     }
   }
-}
+
+  return {
+    severity: 'success',
+    message: 'Philips Hue lights refreshed'
+  };
+};
 
 export async function setLightState({
   zoneState,

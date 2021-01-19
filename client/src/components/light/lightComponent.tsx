@@ -51,22 +51,18 @@ export const LightComponent: FunctionComponent<
 > = (props) => {
   const classes = styles();
   const contentClasses = useContentStyles();
-  const canEdit = props.light.type === LightType.RVL;
+  const canChangeName = props.light.type === LightType.RVL;
   let zone: Zone | undefined;
   if (props.light.zoneId !== undefined) {
     zone = getItem(props.light.zoneId, props.zones);
   }
   return (
     <ListItem className={contentClasses.listItem}>
-      {canEdit ? (
-        <DeleteLightButton
-          light={props.light}
-          className={contentClasses.leftButton}
-          deleteLight={props.deleteLight}
-        />
-      ) : (
-        <div className={contentClasses.leftButton}></div>
-      )}
+      <DeleteLightButton
+        light={props.light}
+        className={contentClasses.leftButton}
+        deleteLight={props.deleteLight}
+      />
       <div>
         <Typography className={contentClasses.itemTitle}>
           {props.light.name}
@@ -78,7 +74,7 @@ export const LightComponent: FunctionComponent<
       <EditLightButtonContainer
         className={contentClasses.rightButton}
         light={props.light}
-        canChangeName={canEdit}
+        canChangeName={canChangeName}
       />
     </ListItem>
   );

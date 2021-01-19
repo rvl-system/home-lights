@@ -38,6 +38,8 @@ export enum ActionType {
   SetTheme = 'SetTheme',
   RefreshLights = 'RefreshLights',
   ConnectPhilipsHueBridge = 'ConnectPhilipsHueBridge',
+  RefreshPhilipsHueLights = 'RefreshPhilipsHueLights',
+  RefreshLIFXLights = 'RefreshLIFXLights',
 
   Hello = 'Hello',
   AppStateUpdated = 'AppStateUpdated',
@@ -69,8 +71,10 @@ export enum ActionType {
 export interface Actions {
   [ActionType.SelectTab]: SelectedTab;
   [ActionType.Notify]: Notification;
-  [ActionType.DismissNotification]: undefined;
+  [ActionType.DismissNotification]: void;
   [ActionType.ConnectionStateChanged]: { connected: boolean };
+  [ActionType.RefreshPhilipsHueLights]: void;
+  [ActionType.RefreshLIFXLights]: void;
 
   [ActionType.SetTheme]: Theme;
   [ActionType.RefreshLights]: void;

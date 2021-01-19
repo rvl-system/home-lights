@@ -119,12 +119,8 @@ export function init(): Promise<void> {
         }
 
         // Run the handler, and check if the operation errored
-        const error = await handlers[action.type].handler(action.data);
-        if (error) {
-          const data: Notification = {
-            severity: 'error',
-            message: error
-          };
+        const data = await handlers[action.type].handler(action.data);
+        if (data) {
           connection.send(
             JSON.stringify({
               type: ActionType.Notify,
