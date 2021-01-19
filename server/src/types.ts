@@ -23,7 +23,7 @@ import { Actions, ActionType } from './common/actions';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionHandler<T extends ActionType> = (
   data: Actions[T]
-) => Promise<void>;
+) => Promise<string | void>;
 
 export interface ActionHandlerEntry<T extends ActionType> {
   handler: ActionHandler<T>;

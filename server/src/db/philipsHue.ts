@@ -24,6 +24,7 @@ const PHILIPS_HUE_TABLE_NAME = 'philips_hue_info';
 export interface PhilipsHueInfo {
   username: string;
   key: string;
+  ip: string;
 }
 
 export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | undefined> {
@@ -42,7 +43,7 @@ export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | undefined> {
 
 export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
   await dbRun(
-    `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key) VALUES (?, ?)`,
-    [info.username, info.key]
+    `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key, ip) VALUES (?, ?, ?)`,
+    [info.username, info.key, info.ip]
   );
 }

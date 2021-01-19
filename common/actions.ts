@@ -31,8 +31,13 @@ import {
 
 export enum ActionType {
   SelectTab = 'SelectTab',
+  ConnectionStateChanged = 'ConnectionStateChanged',
   Notify = 'Notify',
   DismissNotification = 'DismissNotification',
+
+  SetTheme = 'SetTheme',
+  RefreshLights = 'RefreshLights',
+  ConnectPhilipsHueBridge = 'ConnectPhilipsHueBridge',
 
   Hello = 'Hello',
   AppStateUpdated = 'AppStateUpdated',
@@ -58,17 +63,18 @@ export enum ActionType {
 
   CreateRVLLight = 'CreateRVLLight',
   EditLight = 'EditLight',
-  DeleteLight = 'DeleteLight',
-
-  SetTheme = 'SetTheme',
-
-  ConnectionStateChanged = 'ConnectionStateChanged'
+  DeleteLight = 'DeleteLight'
 }
 
 export interface Actions {
   [ActionType.SelectTab]: SelectedTab;
   [ActionType.Notify]: Notification;
   [ActionType.DismissNotification]: undefined;
+  [ActionType.ConnectionStateChanged]: { connected: boolean };
+
+  [ActionType.SetTheme]: Theme;
+  [ActionType.RefreshLights]: void;
+  [ActionType.ConnectPhilipsHueBridge]: void;
 
   [ActionType.Hello]: AppState;
   [ActionType.AppStateUpdated]: AppState;
@@ -103,7 +109,4 @@ export interface Actions {
   };
   [ActionType.EditLight]: Light;
   [ActionType.DeleteLight]: { id: number };
-
-  [ActionType.SetTheme]: Theme;
-  [ActionType.ConnectionStateChanged]: { connected: boolean };
 }

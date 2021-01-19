@@ -17,9 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { makeStyles } from '@material-ui/core';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
 import { Theme } from '../../common/types';
+import { GroupInput } from '../lib/formInputs/groupInput';
 import { SelectInput } from '../lib/formInputs/selectInput';
 import { useContainerStyles } from '../lib/pageStyles';
 
@@ -34,10 +35,14 @@ const useStyles = makeStyles({
 
 export interface SettingsComponentProps {
   theme: Theme;
+  philipsHueBridgeIp: string | undefined;
 }
 
 export interface SettingsComponentDispatch {
   setTheme: (theme: Theme) => void;
+  connectPhilipsHueBridge: () => void;
+  refreshPhilipsHueLights: () => void;
+  refreshLIFXLights: () => void;
 }
 
 export const settingsComponent: FunctionComponent<
@@ -49,26 +54,65 @@ export const settingsComponent: FunctionComponent<
     <div className={classes.container}>
       <div className={contentClasses.innerContainer}>
         <div className={contentClasses.row}>
-          <SelectInput
-            name="Theme"
-            label="Theme"
-            defaultValue={props.theme}
-            options={[
-              {
-                value: Theme.Auto,
-                label: Theme.Auto
-              },
-              {
-                value: Theme.Light,
-                label: Theme.Light
-              },
-              {
-                value: Theme.Dark,
-                label: Theme.Dark
-              }
-            ]}
-            onChange={(value) => props.setTheme(value as Theme)}
-          />
+          <GroupInput label="General">
+            <SelectInput
+              name="Theme"
+              label="Theme"
+              defaultValue={props.theme}
+              options={[
+                {
+                  value: Theme.Auto,
+                  label: Theme.Auto
+                },
+                {
+                  value: Theme.Light,
+                  label: Theme.Light
+                },
+                {
+                  value: Theme.Dark,
+                  label: Theme.Dark
+                }
+              ]}
+              onChange={(value) => props.setTheme(value as Theme)}
+            />
+          </GroupInput>
+        </div>
+        <div className={contentClasses.row}>
+          <GroupInput label="Philips Hue"></GroupInput>
+          <div className={contentClasses.row}>
+            {props.philipsHueBridgeIp ? (
+              <Typography>Bridge IP: {props.philipsHueBridgeIp}</Typography>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={props.connectPhilipsHueBridge}
+              >
+                Connect Bridge
+              </Button>
+            )}
+          </div>
+          <div className={contentClasses.row}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={props.refreshPhilipsHueLights}
+            >
+              Refresh Lights
+            </Button>
+          </div>
+        </div>
+        <div className={contentClasses.row}>
+          <GroupInput label="LIFX"></GroupInput>
+          <div className={contentClasses.row}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={props.refreshLIFXLights}
+            >
+              Refresh Lights
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -47,7 +47,8 @@ export const listeners = [
     [ActionType.SetZoneScene]: 'Failed to set the zone scene',
     [ActionType.SetZonePower]: 'Failed to set the zone power',
 
-    [ActionType.SetTheme]: 'Failed to set the theme'
+    [ActionType.SetTheme]: 'Failed to set the theme',
+    [ActionType.ConnectPhilipsHueBridge]: 'Failed to connect to the bridge'
   }),
   ...connectDebouncedActions({
     [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness'

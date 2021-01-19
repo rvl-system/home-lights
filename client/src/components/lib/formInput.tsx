@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { PropsWithChildren, useState } from 'react';
 import { UIColor } from '../../types';
 import { ColorInput, getDefaultColorValue } from './formInputs/colorInput';
+import { GroupInput } from './formInputs/groupInput';
 import { getDefaultRangeValue, RangeInput } from './formInputs/rangeInput';
 import { FormSchema, FormSchemaType } from './formInputs/schema';
 import { getDefaultSelectValue, SelectInput } from './formInputs/selectInput';
@@ -198,12 +198,9 @@ export function FormInput<T extends Record<string, unknown>, K extends keyof T>(
       }
       key++;
       inputs.push(
-        <div key={key}>
-          <Typography className={classes.label} variant="h5">
-            {entry.label}
-          </Typography>
-          <div className={classes.groupContainer}>{groupInputs}</div>
-        </div>
+        <GroupInput key={key} label={entry.label}>
+          {groupInputs}
+        </GroupInput>
       );
     } else {
       key++;

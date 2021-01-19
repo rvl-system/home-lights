@@ -29,12 +29,22 @@ import {
 export const SettingsContainer = createContainer(
   (getSlice): SettingsComponentProps => {
     return {
-      theme: getSlice(SliceName.Settings).theme
+      theme: getSlice(SliceName.Settings).theme,
+      philipsHueBridgeIp: getSlice(SliceName.SystemState).philipsHueBridgeIp
     };
   },
   (dispatch): SettingsComponentDispatch => ({
     setTheme(theme) {
       dispatch(ActionType.SetTheme, theme);
+    },
+    connectPhilipsHueBridge() {
+      dispatch(ActionType.ConnectPhilipsHueBridge);
+    },
+    refreshPhilipsHueLights() {
+      console.log('Refresh Hue');
+    },
+    refreshLIFXLights() {
+      console.log('Refresh LIFX');
     }
   }),
   settingsComponent

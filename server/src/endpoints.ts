@@ -117,7 +117,22 @@ export function init(): Promise<void> {
           );
           return;
         }
-        await handlers[action.type].handler(action.data);
+
+        // Run the handler, and check if the operation errored
+        const error = await handlers[action.type].handler(action.data);
+        if (error) {
+          const data: Notification = {
+            severity: 'error',
+            message: error
+          };
+          connection.send(
+            JSON.stringify({
+              type: ActionType.Notify,
+              data
+            })
+          );
+          return;
+        }
 
         // Reconcile data after the transaction, and increment the version
         if (handlers[action.type].reconcile) {

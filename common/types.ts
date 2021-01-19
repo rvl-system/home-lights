@@ -188,6 +188,7 @@ export interface ZoneState {
 
 export interface SystemState {
   zoneStates: ZoneState[];
+  philipsHueBridgeIp: string | undefined;
 }
 
 export type SetZoneSceneRequest = {

@@ -40,6 +40,7 @@ import {
   setLightState as setLIFXLightState
 } from './device/lifx';
 import {
+  getPhilipsHueBridgeIp,
   init as initPhilipsHue,
   setLightState as setRVLLightState
 } from './device/phillipsHue';
@@ -51,7 +52,8 @@ import { SetLightStateOptions } from './device/types';
 import { ActionHandler } from './types';
 
 const systemState: SystemState = {
-  zoneStates: []
+  zoneStates: [],
+  philipsHueBridgeIp: undefined
 };
 
 export async function init(): Promise<void> {
@@ -107,7 +109,10 @@ export function reconcile(zones: Zone[]): void {
 }
 
 export function getSystemState(): SystemState {
-  return systemState;
+  return {
+    ...systemState,
+    philipsHueBridgeIp: getPhilipsHueBridgeIp()
+  };
 }
 
 function createDateTime(now: DateTime, scheduleEntry: ScheduleEntry) {
