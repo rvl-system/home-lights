@@ -32,15 +32,20 @@ import { createLight, getLights } from '../db/lights';
 import { ActionHandler } from '../types';
 import { SetLightStateOptions } from './types';
 
+const REFRESH_RATE = 60 * 1000; // 1 minute
 let devices: Device[] = [];
 
 export async function init(): Promise<void> {
   console.log('Searching for LIFX lights...');
   const dbLights = await getLights();
-  const lifxLights = await discover();
-  devices = lifxLights.filter((device) =>
-    dbLights.some((light) => (light as LIFXLight).lifxId === device.mac)
-  );
+  async function update() {
+    const lifxLights = await discover();
+    devices = lifxLights.filter((device) =>
+      dbLights.some((light) => (light as LIFXLight).lifxId === device.mac)
+    );
+  }
+  setInterval(update, REFRESH_RATE);
+  update();
 }
 
 export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> = async () => {
@@ -90,11 +95,18 @@ export async function setLightState({
       continue;
     }
 
-    const device = getItem(
-      (light as LIFXLight).lifxId,
-      devices,
-      (device) => device.mac === (light as LIFXLight).lifxId
-    );
+    // If the device doesn't exist, that means it was offline when we last refreshed the list
+    let device: Device;
+    try {
+      device = getItem(
+        (light as LIFXLight).lifxId,
+        devices,
+        (device) => device.mac === (light as LIFXLight).lifxId
+      );
+    } catch (e) {
+      console.log(`Device ${(light as LIFXLight).lifxId} is offline`);
+      continue;
+    }
 
     // Handle the case of the light being turned off first and short circuit
     if (scene === undefined || !zoneState.power) {
