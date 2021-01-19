@@ -127,7 +127,9 @@ export function init(): Promise<void> {
               data
             })
           );
-          return;
+          if (data.severity === 'error') {
+            return;
+          }
         }
 
         // Reconcile data after the transaction, and increment the version

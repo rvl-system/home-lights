@@ -1,3 +1,7 @@
+## 1.4.1 (2021-01-18)
+
+- Fixed a bug with notifications + app state updates not working properly
+
 ## 1.4.0 (2021-01-18)
 
 - Added ability to tell the app to refresh LIFX/Philips Hue lights
