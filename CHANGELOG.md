@@ -1,3 +1,11 @@
+## 1.4.0 (2021-01-18)
+
+- Added ability to tell the app to refresh LIFX/Philips Hue lights
+- Added the ability to remove all lights
+- Changed the logic so that Philips Hue bridge discovery is manual from the app, instead of on startup
+- Accordions are collapsed when the app is backgrounded
+- Added takeover UI that prevents the app from being used when disconnected from the server
+
 ## 1.3.0 (2021-01-17)
 
 - Added automatic db migrations to make upgrading _way_ easier
