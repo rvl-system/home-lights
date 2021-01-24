@@ -28,7 +28,7 @@ import {
   SolidPattern
 } from '../common/types';
 import { getItem } from '../common/util';
-import { createLight, getLights } from '../db/lights';
+import { createLight, editLight, getLights } from '../db/lights';
 import { ActionHandler } from '../types';
 import { SetLightStateOptions } from './types';
 
@@ -55,13 +55,12 @@ export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> = as
 
   // Add lights from LIFX that are not in the DB
   for (const light of devices) {
-    if (
-      !dbLights.find(
-        (dbLight) =>
-          dbLight.type === LightType.LIFX &&
-          (dbLight as LIFXLight).lifxId === light.mac
-      )
-    ) {
+    const dbLight = dbLights.find(
+      (dbLight) =>
+        dbLight.type === LightType.LIFX &&
+        (dbLight as LIFXLight).lifxId === light.mac
+    );
+    if (!dbLight) {
       console.log(
         `Found LIFX light "${light.deviceInfo.label}" not in database, adding...`
       );
@@ -71,6 +70,14 @@ export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> = as
         name: light.deviceInfo.label
       };
       await createLight(newLight);
+    } else if (dbLight.name !== light.deviceInfo.label) {
+      console.log(
+        `LIFX light name changed from ${dbLight.name} to ${light.deviceInfo.label}, updating...`
+      );
+      await editLight({
+        ...dbLight,
+        name: light.deviceInfo.label
+      });
     }
   }
 

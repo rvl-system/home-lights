@@ -1,3 +1,7 @@
+## 1.4.3 (2021-01-24)
+
+- Fixed bug with refresh lights not handling name changes
+
 ## 1.4.2 (2021-01-19)
 
 - Fixed a bug with not updated lights properly after connecting to a Philips Hue bridge

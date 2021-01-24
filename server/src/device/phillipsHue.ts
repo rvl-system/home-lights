@@ -33,7 +33,7 @@ import {
   SolidPattern
 } from '../common/types';
 import { getItem } from '../common/util';
-import { getLights, createLight, deleteLight } from '../db/lights';
+import { getLights, createLight, deleteLight, editLight } from '../db/lights';
 import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 import { ActionHandler } from '../types';
 import { SetLightStateOptions } from './types';
@@ -106,15 +106,14 @@ export const refreshPhilipsHueLights: ActionHandler<ActionType.RefreshPhilipsHue
   const bridgeLights = await authenticatedApi.lights.getAll();
   const dbLights = await getLights();
 
-  // Add lights from the bridge that are not in the DB
+  // Add lights from the bridge that are not in the DB or update changed lights
   for (const bridgeLight of bridgeLights) {
-    if (
-      !dbLights.find(
-        (dbLight) =>
-          dbLight.type === LightType.PhilipsHue &&
-          (dbLight as PhilipsHueLight).philipsHueID === bridgeLight.uniqueid
-      )
-    ) {
+    const dbLight = dbLights.find(
+      (dbLight) =>
+        dbLight.type === LightType.PhilipsHue &&
+        (dbLight as PhilipsHueLight).philipsHueID === bridgeLight.uniqueid
+    );
+    if (!dbLight) {
       console.log(
         `Found Philips Hue light "${bridgeLight.name}" not in database, adding...`
       );
@@ -124,6 +123,14 @@ export const refreshPhilipsHueLights: ActionHandler<ActionType.RefreshPhilipsHue
         name: bridgeLight.name
       };
       await createLight(newLight);
+    } else if (dbLight.name !== bridgeLight.name) {
+      console.log(
+        `Philips Hue light name changed from ${dbLight.name} to ${bridgeLight.name}, updating...`
+      );
+      await editLight({
+        ...dbLight,
+        name: bridgeLight.name
+      });
     }
     idMap.set(bridgeLight.uniqueid, bridgeLight.id);
   }
