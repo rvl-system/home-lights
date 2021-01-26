@@ -73,7 +73,11 @@ export async function dbAll(
       if (err) {
         reject(err);
       } else {
-        deepMap(results, (value) => (value === null ? undefined : value));
+        results = deepMap(
+          results,
+          (value) => (value === null ? undefined : value)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ) as any[];
         resolve(results);
       }
     });

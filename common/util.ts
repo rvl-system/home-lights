@@ -96,7 +96,7 @@ export function deepMap(
       newValue[i] = deepMap(value[i] as Value, cb);
     }
     return newValue;
-  } else if (typeof value === 'object') {
+  } else if (typeof value === 'object' && value !== null) {
     const newValue: Record<string, unknown> = {};
     for (const prop in value) {
       newValue[prop] = deepMap(value[prop] as Value, cb);

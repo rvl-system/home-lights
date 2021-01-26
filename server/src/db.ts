@@ -23,6 +23,7 @@ import initPatterns from './db/patterns';
 import initScenes from './db/scenes';
 import initSchedules from './db/schedule';
 import initZones from './db/zones';
+import initZoneStates from './db/zoneStates';
 
 export async function init(): Promise<void> {
   await initMigrations();
@@ -31,7 +32,8 @@ export async function init(): Promise<void> {
     initSchedules(),
     initScenes(),
     initPatterns(),
-    initLights()
+    initLights(),
+    initZoneStates()
   ]);
 
   console.log('Database initialized');

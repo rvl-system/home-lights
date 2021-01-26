@@ -18,7 +18,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
-import { setZoneScene, setZonePower, setZoneBrightness } from '../device';
+import {
+  setZoneScene,
+  setZonePower,
+  setZoneBrightness
+} from '../db/zoneStates';
 import { refreshLIFXLights } from '../device/lifx';
 import { connect, refreshPhilipsHueLights } from '../device/phillipsHue';
 import { ActionHandlerEntry } from '../types';
@@ -26,11 +30,11 @@ import { ActionHandlerEntry } from '../types';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createStateHandlers(): Record<string, ActionHandlerEntry<any>> {
   return {
-    [ActionType.SetZoneScene]: { handler: setZoneScene, reconcile: false },
-    [ActionType.SetZonePower]: { handler: setZonePower, reconcile: false },
+    [ActionType.SetZoneScene]: { handler: setZoneScene, reconcile: true },
+    [ActionType.SetZonePower]: { handler: setZonePower, reconcile: true },
     [ActionType.SetZoneBrightness]: {
       handler: setZoneBrightness,
-      reconcile: false
+      reconcile: true
     },
     [ActionType.ConnectPhilipsHueBridge]: { handler: connect, reconcile: true },
     [ActionType.RefreshPhilipsHueLights]: {

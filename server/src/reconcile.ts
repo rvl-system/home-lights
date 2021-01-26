@@ -22,7 +22,11 @@ import { getPatterns } from './db/patterns';
 import { getScenes, reconcile as reconcileScenes } from './db/scenes';
 import { reconcile as reconcileSchedule } from './db/schedule';
 import { getZones } from './db/zones';
-import { reconcile as reconcileDevice } from './device';
+import {
+  getZoneStates,
+  reconcile as reconcileZoneStates
+} from './db/zoneStates';
+import { reconcile as reconcileDevices } from './device';
 
 // Order matters! Switching these will leave us in an inconsistent state
 export async function reconcile(): Promise<void> {
@@ -39,6 +43,10 @@ export async function reconcile(): Promise<void> {
   const scenes = getScenes();
   await reconcileSchedule(zones, scenes);
 
-  // Reconcile device state
-  await reconcileDevice(zones);
+  // Reconcile zone states
+  await reconcileZoneStates(zones);
+
+  // Reconcile devices
+  const zoneStates = getZoneStates();
+  await reconcileDevices(zoneStates);
 }
