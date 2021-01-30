@@ -118,16 +118,19 @@ export function init(): Promise<void> {
           return;
         }
 
-        // Run the handler, and check if the operation errored
-        const data = await handlers[action.type].handler(action.data);
-        if (data) {
+        // Run the handler, and check if the operation has a return action
+        const returnAction = await handlers[action.type].handler(action.data);
+        if (returnAction) {
+          const type = Object.keys(returnAction)[0];
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data = (returnAction as any)[type];
           connection.send(
             JSON.stringify({
-              type: ActionType.Notify,
+              type,
               data
             })
           );
-          if (data.severity === 'error') {
+          if (data[ActionType.Notify]?.severity === 'error') {
             return;
           }
         }

@@ -71,8 +71,10 @@ export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> = async 
   philipsHueBridgeIp = await discoverBridge();
   if (!philipsHueBridgeIp) {
     return {
-      severity: 'error',
-      message: 'Could not connect to bridge'
+      [ActionType.Notify]: {
+        severity: 'error',
+        message: 'Could not connect to bridge'
+      }
     };
   }
 
@@ -81,8 +83,10 @@ export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> = async 
   if (!username) {
     philipsHueBridgeIp = undefined;
     return {
-      severity: 'error',
-      message: 'Link button not pressed'
+      [ActionType.Notify]: {
+        severity: 'error',
+        message: 'Link button not pressed'
+      }
     };
   }
 
@@ -93,8 +97,10 @@ export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> = async 
   await refreshPhilipsHueLights();
 
   return {
-    severity: 'success',
-    message: 'Philips Hue bridge connected'
+    [ActionType.Notify]: {
+      severity: 'success',
+      message: 'Philips Hue bridge connected'
+    }
   };
 };
 
@@ -154,8 +160,10 @@ export const refreshPhilipsHueLights: ActionHandler<ActionType.RefreshPhilipsHue
   }
 
   return {
-    severity: 'success',
-    message: 'Philips Hue lights refreshed'
+    [ActionType.Notify]: {
+      severity: 'success',
+      message: 'Philips Hue lights refreshed'
+    }
   };
 };
 

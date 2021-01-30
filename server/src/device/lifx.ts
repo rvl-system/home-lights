@@ -82,8 +82,10 @@ export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> = as
   }
 
   return {
-    severity: 'success',
-    message: 'LIFX lights refreshed'
+    [ActionType.Notify]: {
+      severity: 'success',
+      message: 'LIFX lights refreshed'
+    }
   };
 };
 

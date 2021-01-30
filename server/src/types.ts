@@ -18,13 +18,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { Actions, ActionType } from './common/actions';
-import { Notification } from './common/types';
 
 // Using unknown doesn't work, sadly
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionHandler<T extends ActionType> = (
   data: Actions[T]
-) => Promise<Notification | void>;
+) => Promise<Partial<Actions> | void>;
 
 export interface ActionHandlerEntry<T extends ActionType> {
   handler: ActionHandler<T>;
