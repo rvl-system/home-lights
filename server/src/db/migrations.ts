@@ -17,7 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { existsSync, mkdirSync, readFileSync, readdirSync } from 'fs';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync
+} from 'fs';
 import { dirname, join } from 'path';
 import { dbAll, dbExec, init as initDB } from '../sqlite';
 import { getEnvironmentVariable } from '../util';
@@ -74,6 +80,15 @@ export default async function init(): Promise<void> {
     const migrationFiles = readdirSync(join(SCHEMA_FOLDER, 'migrations'))
       .filter((file) => parseInt(file) > migrationStart)
       .sort((a, b) => parseInt(a) - parseInt(b));
+
+    // Back up the old database
+    if (migrationFiles.length) {
+      const backupFileName = `${DB_FILE}.${Date.now()}.backup`;
+      console.log(
+        `Backing up database to ${backupFileName} before applying migrations`
+      );
+      copyFileSync(DB_FILE, backupFileName);
+    }
 
     // Apply each migration in order
     for (const migrationFile of migrationFiles) {
