@@ -100,49 +100,19 @@ export function init(): Promise<void> {
       }
     });
 
+    let isProcessing = false;
+    const processingQueue: {
+      message: WebSocket.Data;
+      connection: WebSocket;
+    }[] = [];
     server.on('connection', (connection) => {
       connection.on('message', async (message) => {
-        // Handle the action itself
-        const action = JSON.parse(message.toString());
-        if (!handlers[action.type]) {
-          const data: Notification = {
-            severity: 'error',
-            message: `Invalid message "${action.type}"`
-          };
-          connection.send(
-            JSON.stringify({
-              type: ActionType.Notify,
-              data
-            })
-          );
+        processingQueue.push({ message, connection });
+        if (isProcessing) {
           return;
         }
-
-        // Run the handler, and check if the operation has a return action
-        const returnAction = await handlers[action.type].handler(action.data);
-        if (returnAction) {
-          const type = Object.keys(returnAction)[0];
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const data = (returnAction as any)[type];
-          connection.send(
-            JSON.stringify({
-              type,
-              data
-            })
-          );
-          if (data[ActionType.Notify]?.severity === 'error') {
-            return;
-          }
-        }
-
-        // Reconcile data after the transaction, and increment the version
-        if (handlers[action.type].reconcile) {
-          await reconcile();
-        }
-        version++;
-
-        // Notify all connected clients of the change
-        updateClients();
+        isProcessing = true;
+        processQueue();
       });
       connection.send(
         JSON.stringify({
@@ -151,5 +121,60 @@ export function init(): Promise<void> {
         })
       );
     });
+
+    async function processQueue() {
+      const nextEntry = processingQueue.shift();
+      if (!nextEntry) {
+        isProcessing = false;
+        return;
+      }
+      const { message, connection } = nextEntry;
+
+      // Handle the action itself
+      const action = JSON.parse(message.toString());
+      if (!handlers[action.type]) {
+        const data: Notification = {
+          severity: 'error',
+          message: `Invalid message "${action.type}"`
+        };
+        connection.send(
+          JSON.stringify({
+            type: ActionType.Notify,
+            data
+          })
+        );
+        return;
+      }
+
+      // Run the handler, and check if the operation has a return action
+      const returnNotification = await handlers[action.type].handler(
+        action.data
+      );
+      if (returnNotification) {
+        const type = Object.keys(returnNotification)[0];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = (returnNotification as any)[type];
+        connection.send(
+          JSON.stringify({
+            type,
+            data
+          })
+        );
+        if (data[ActionType.Notify]?.severity === 'error') {
+          return;
+        }
+      }
+
+      // Reconcile data after the transaction, and increment the version
+      if (handlers[action.type].reconcile) {
+        await reconcile();
+      }
+      version++;
+
+      // Notify all connected clients of the change
+      updateClients();
+
+      processQueue();
+    }
   });
 }

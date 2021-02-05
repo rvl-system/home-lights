@@ -114,10 +114,8 @@ export async function reconcile(zones: Zone[]): Promise<void> {
       const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
       enableZoneSchedule(schedule);
     } else if (zoneState.currentSceneId !== undefined) {
-      setZoneScene({
-        zoneId: zoneState.zoneId,
-        sceneId: zoneState.currentSceneId
-      });
+      zoneState.currentSceneId = zoneState.currentSceneId;
+      await setZoneState(zoneState);
     }
   }
 }
