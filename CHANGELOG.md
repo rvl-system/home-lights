@@ -1,3 +1,8 @@
+## 1.5.0 (2021-02-05)
+
+- Database migrations now create a backup copy of the database before applying migrations
+- All server operations are now serialized, with the hope that this fixes a number of intermittent exceptions that I believed were caused by trying to do two things at once.
+
 ## 1.4.3 (2021-01-24)
 
 - Fixed bug with refresh lights not handling name changes
