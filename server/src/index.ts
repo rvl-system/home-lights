@@ -20,6 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { init as initDB } from './db';
 import { init as initDevice } from './device';
 import { init as initEndpoints } from './endpoints';
+import { reconcile } from './reconcile';
 
 process.on('unhandledRejection', (reason) => {
   console.error(reason);
@@ -30,5 +31,6 @@ export async function run(): Promise<void> {
   await initDB();
   await initDevice();
   await initEndpoints();
+  await reconcile(); // Needed to finish any possible migrations
   console.log('\n=== Home Lights Running ===\n');
 }

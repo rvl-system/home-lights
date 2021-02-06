@@ -1,3 +1,7 @@
+## 1.5.1 (2021-02-05)
+
+- Fixed a bug where reconciliation needs to happen after applying migrations
+
 ## 1.5.0 (2021-02-05)
 
 - Database migrations now create a backup copy of the database before applying migrations
