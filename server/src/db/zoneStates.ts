@@ -119,9 +119,12 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
     if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
       const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
       await enableZoneSchedule(schedule);
-    } else if (zoneState.currentSceneId !== undefined) {
+    } else {
       // Check if the scene was deleted
-      if (!hasItem(zoneState.currentSceneId, scenes)) {
+      if (
+        zoneState.currentSceneId !== undefined &&
+        !hasItem(zoneState.currentSceneId, scenes)
+      ) {
         zoneState.currentSceneId = undefined;
       }
       await setZoneState(zoneState);
