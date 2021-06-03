@@ -67,7 +67,7 @@ function getColor(color: Color): { hue: number; saturation: number } {
   const hsv = rgb2hsv(rgb.red, rgb.green, rgb.blue);
   return {
     hue: Math.round((hsv.h * 255) / 360),
-    saturation: Math.round(hsv.s * 255)
+    saturation: Math.round((hsv.s / 100) * 255)
   };
 }
 
