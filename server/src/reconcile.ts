@@ -44,7 +44,7 @@ export async function reconcile(): Promise<void> {
   await reconcileSchedule(zones, scenes);
 
   // Reconcile zone states
-  await reconcileZoneStates(zones);
+  await reconcileZoneStates(zones, scenes);
 
   // Reconcile devices
   const zoneStates = getZoneStates();

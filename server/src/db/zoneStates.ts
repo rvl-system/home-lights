@@ -21,8 +21,14 @@ import { DateTime } from 'luxon';
 import { updateClients } from '../clients';
 import { ActionType } from '../common/actions';
 import { SCHEDULE_SCENE_ID } from '../common/config';
-import { Schedule, ScheduleEntry, Zone, ZoneState } from '../common/types';
-import { getItem } from '../common/util';
+import {
+  Scene,
+  Schedule,
+  ScheduleEntry,
+  Zone,
+  ZoneState
+} from '../common/types';
+import { getItem, hasItem } from '../common/util';
 import { dbAll, dbRun } from '../sqlite';
 import { ActionHandler } from '../types';
 import { setSceneBrightness, getScenes } from './scenes';
@@ -80,7 +86,7 @@ export function getZoneStates(): ZoneState[] {
   return zoneStates;
 }
 
-export async function reconcile(zones: Zone[]): Promise<void> {
+export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
   // Add any new zones to state that were created
   for (const zone of zones) {
     if (!zoneStates.find((zoneState) => zoneState.zoneId === zone.id)) {
@@ -112,9 +118,12 @@ export async function reconcile(zones: Zone[]): Promise<void> {
   for (const zoneState of zoneStates) {
     if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
       const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
-      enableZoneSchedule(schedule);
+      await enableZoneSchedule(schedule);
     } else if (zoneState.currentSceneId !== undefined) {
-      zoneState.currentSceneId = zoneState.currentSceneId;
+      // Check if the scene was deleted
+      if (!hasItem(zoneState.currentSceneId, scenes)) {
+        zoneState.currentSceneId = undefined;
+      }
       await setZoneState(zoneState);
     }
   }
@@ -254,7 +263,7 @@ async function scheduleTick(schedule: Schedule) {
   zoneState.currentScheduleSceneId = currentScheduleEntry.sceneId;
 
   // Force a reconcile to update light state
-  await reconcile(getZones());
+  await reconcile(getZones(), getScenes());
 
   // Notify all connected clients of the change
   updateClients();
