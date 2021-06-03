@@ -1,3 +1,9 @@
+## 1.6.0 (2021-06-03)
+
+- Fixed two reconciliation bugs
+- Fixed a bug with temperature conversion
+- Zones now collapse after setting a scene
+
 ## 1.5.1 (2021-02-05)
 
 - Fixed a bug where reconciliation needs to happen after applying migrations
