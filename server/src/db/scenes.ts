@@ -78,6 +78,7 @@ export async function reconcile(
       ) {
         // If the light no longer exists or was moved to a different zone, delete it
         lightEntries.splice(i, 1);
+        sceneUpdated = true;
       } else if (!hasItem(lightEntry.patternId, patterns)) {
         // If the pattern for the light no longer exists, unassign it
         lightEntry.patternId = undefined;
