@@ -132,7 +132,11 @@ export const ZoneComponent: FunctionComponent<
           </div>
         </AccordionSummary>
         <AccordionDetails className={contentClasses.detailContainer}>
-          <ZoneScenesContainer zone={props.zone} editMode={props.editMode} />
+          <ZoneScenesContainer
+            zone={props.zone}
+            editMode={props.editMode}
+            onSceneSelected={() => setExpanded(false)}
+          />
         </AccordionDetails>
       </Accordion>
     </>

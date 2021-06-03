@@ -31,6 +31,7 @@ import {
 export interface ZoneScenesContainerProps {
   zone: Zone;
   editMode: EditMode;
+  onSceneSelected: () => void;
 }
 
 export const ZoneScenesContainer = createContainer(
@@ -50,13 +51,14 @@ export const ZoneScenesContainer = createContainer(
       state
     };
   },
-  (dispatch): ZoneScenesComponentDispatch => ({
+  (dispatch, ownProps): ZoneScenesComponentDispatch => ({
     deleteScene(id) {
       dispatch(ActionType.DeleteScene, { id });
     },
     setZoneScene(zoneId, sceneId) {
       dispatch(ActionType.SetZoneScene, { zoneId, sceneId });
-    }
+    },
+    onSceneSelected: ownProps.onSceneSelected
   }),
   ZoneScenesComponent
 );

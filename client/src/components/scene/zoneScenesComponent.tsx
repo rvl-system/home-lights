@@ -64,6 +64,7 @@ export const ZoneScenesComponent: FunctionComponent<
               scene={scene}
               editMode={props.editMode}
               setZoneScene={props.setZoneScene}
+              onSceneSelected={props.onSceneSelected}
               deleteScene={props.deleteScene}
               selected={props.state.currentSceneId === scene.id}
             />

@@ -35,6 +35,7 @@ export interface SceneComponentProps {
 
 export type SceneComponentDispatch = DeleteSceneButtonDispatch & {
   setZoneScene: (zoneId: number, sceneId: number) => void;
+  onSceneSelected: () => void;
 };
 
 const EditSceneComponent: FunctionComponent<
@@ -64,7 +65,10 @@ const OperationSceneComponent: FunctionComponent<
       className={classes.listItem}
       button
       selected={props.selected}
-      onClick={() => props.setZoneScene(props.scene.zoneId, props.scene.id)}
+      onClick={() => {
+        props.setZoneScene(props.scene.zoneId, props.scene.id);
+        props.onSceneSelected();
+      }}
     >
       <Typography className={classes.itemTitle}>{props.scene.name}</Typography>
     </ListItem>
