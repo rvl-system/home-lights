@@ -20,31 +20,30 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { dbRun, dbAll } from '../sqlite';
 import { createInternalError } from '../util';
 
-const PHILIPS_HUE_TABLE_NAME = 'philips_hue_info';
+const RVL_TABLE_NAME = 'rvl_info';
 
-export interface PhilipsHueInfo {
-  username: string;
-  key: string;
-  ip: string;
+export interface RVLInfo {
+  networkInterface: string;
 }
 
-export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | undefined> {
-  const rows = await dbAll(`SELECT * FROM ${PHILIPS_HUE_TABLE_NAME}`);
+export async function getRVLInfo(): Promise<RVLInfo | undefined> {
+  const rows = await dbAll(`SELECT * FROM ${RVL_TABLE_NAME}`);
   switch (rows.length) {
     case 0:
       return;
     case 1:
-      return rows[0] as PhilipsHueInfo;
+      return {
+        networkInterface: rows[0].interface
+      };
     default:
       throw createInternalError(
-        `${PHILIPS_HUE_TABLE_NAME} unexpectedly has more than one row`
+        `${RVL_TABLE_NAME} unexpectedly has more than one row`
       );
   }
 }
 
-export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
-  await dbRun(
-    `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key, ip) VALUES (?, ?, ?)`,
-    [info.username, info.key, info.ip]
-  );
+export async function setRVLInfo(info: RVLInfo): Promise<void> {
+  await dbRun(`INSERT INTO ${RVL_TABLE_NAME} (interface) VALUES (?)`, [
+    info.networkInterface
+  ]);
 }

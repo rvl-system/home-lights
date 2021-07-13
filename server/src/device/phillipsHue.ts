@@ -36,6 +36,7 @@ import { getItem } from '../common/util';
 import { getLights, createLight, deleteLight, editLight } from '../db/lights';
 import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 import { ActionHandler } from '../types';
+import { createInternalError } from '../util';
 import { SetLightStateOptions } from './types';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -214,8 +215,8 @@ export async function setLightState({
     let lightState: InstanceType<typeof LightState>;
     const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
     if (pattern.type !== PatternType.Solid) {
-      throw new Error(
-        `Internal Error: pattern type ${pattern.type} cannot be used with Philips Hue`
+      throw createInternalError(
+        `pattern type ${pattern.type} cannot be used with Philips Hue`
       );
     }
     const { color } = pattern.data;

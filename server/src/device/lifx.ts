@@ -30,6 +30,7 @@ import {
 import { getItem } from '../common/util';
 import { createLight, editLight, getLights } from '../db/lights';
 import { ActionHandler } from '../types';
+import { createInternalError } from '../util';
 import { SetLightStateOptions } from './types';
 
 const REFRESH_RATE = 60 * 1000; // 1 minute
@@ -144,7 +145,7 @@ export async function setLightState({
     if (lightEntry.patternId !== undefined) {
       const pattern = getItem(lightEntry.patternId, patterns) as SolidPattern;
       if (pattern.type !== PatternType.Solid) {
-        throw new Error(
+        throw createInternalError(
           `Internal Error: pattern type ${pattern.type} cannot be used with LIFX`
         );
       }

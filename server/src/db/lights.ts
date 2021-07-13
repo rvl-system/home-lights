@@ -30,6 +30,7 @@ import {
 import { hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
+import { createInternalError } from '../util';
 
 const LIGHTS_TABLE_NAME = 'lights';
 
@@ -83,7 +84,9 @@ export default async function updateCache(): Promise<void> {
         return lifxLight;
       }
       default:
-        throw new Error(`Found unknown light type in database "${light.type}"`);
+        throw createInternalError(
+          `found unknown light type in database "${light.type}"`
+        );
     }
   });
 }
