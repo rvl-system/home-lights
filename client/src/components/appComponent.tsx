@@ -20,7 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { useMediaQuery, CssBaseline } from '@material-ui/core';
 import {
   makeStyles,
-  createMuiTheme,
+  createTheme,
   MuiThemeProvider
 } from '@material-ui/core/styles';
 import { reduce } from 'conditional-reduce';
@@ -87,7 +87,7 @@ export const AppComponent: FunctionComponent<AppComponentProps> = (props) => {
   }
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
           type: prefersDarkMode ? 'dark' : 'light'
         }
