@@ -19,6 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { setTheme } from '../db/settings';
+import { setRVLInterface } from '../device/rvl';
 import { ActionHandlerEntry } from '../types';
 
 export function createSettingsHandlers(): Record<
@@ -27,6 +28,10 @@ export function createSettingsHandlers(): Record<
   ActionHandlerEntry<any>
 > {
   return {
-    [ActionType.SetTheme]: { handler: setTheme, reconcile: false }
+    [ActionType.SetTheme]: { handler: setTheme, reconcile: false },
+    [ActionType.SetRVLInterface]: {
+      handler: setRVLInterface,
+      reconcile: true
+    }
   };
 }

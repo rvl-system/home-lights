@@ -51,7 +51,8 @@ export const listeners = [
     [ActionType.ConnectPhilipsHueBridge]: 'Failed to connect to the bridge',
     [ActionType.RefreshPhilipsHueLights]:
       'Failed to refresh Philips Hue lights',
-    [ActionType.RefreshLIFXLights]: 'Failed to refresh LIFX lights'
+    [ActionType.RefreshLIFXLights]: 'Failed to refresh LIFX lights',
+    [ActionType.SetRVLInterface]: 'Failed to set the RVL network interface'
   }),
   ...connectDebouncedActions({
     [ActionType.SetZoneBrightness]: 'Failed to set the zone brightness'

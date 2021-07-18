@@ -18,8 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { Button, makeStyles, Typography } from '@material-ui/core';
-import React, { FunctionComponent } from 'react';
-import { Theme } from '../../common/types';
+import React, { FunctionComponent, useState } from 'react';
+import { RVLInfo, Theme } from '../../common/types';
+import { ConfirmDialog } from '../lib/confirmDialog';
 import { GroupInput } from '../lib/formInputs/groupInput';
 import { SelectInput } from '../lib/formInputs/selectInput';
 import { useContainerStyles } from '../lib/pageStyles';
@@ -36,6 +37,7 @@ const useStyles = makeStyles({
 export interface SettingsComponentProps {
   theme: Theme;
   philipsHueBridgeIp: string | undefined;
+  rvlInfo: RVLInfo;
 }
 
 export interface SettingsComponentDispatch {
@@ -43,6 +45,7 @@ export interface SettingsComponentDispatch {
   connectPhilipsHueBridge: () => void;
   refreshPhilipsHueLights: () => void;
   refreshLIFXLights: () => void;
+  setRVLInterface: (networkInterface: string) => void;
 }
 
 export const settingsComponent: FunctionComponent<
@@ -50,6 +53,12 @@ export const settingsComponent: FunctionComponent<
 > = (props) => {
   const classes = useContainerStyles();
   const contentClasses = useStyles();
+  const [changeInterfaceDialogOpen, setChangeInterfaceDialogOpen] = useState(
+    false
+  );
+  const [selectedNetworkInterface, setSelectedNetworkInterface] = useState(
+    props.rvlInfo.networkInterface
+  );
   return (
     <div className={classes.container}>
       <div className={contentClasses.innerContainer}>
@@ -114,7 +123,39 @@ export const settingsComponent: FunctionComponent<
             </Button>
           </div>
         </div>
+        <div className={contentClasses.row}>
+          <GroupInput label="RVL">
+            <SelectInput
+              name="RVL Network Interface"
+              label="RVL Network Interface"
+              defaultValue={props.rvlInfo.networkInterface || ''}
+              options={props.rvlInfo.availableInterfaces.map(
+                (networkInterface) => ({
+                  value: networkInterface,
+                  label: networkInterface
+                })
+              )}
+              onChange={(value) => {
+                setSelectedNetworkInterface(value);
+                setChangeInterfaceDialogOpen(true);
+              }}
+            />
+          </GroupInput>
+        </div>
       </div>
+      <ConfirmDialog
+        onConfirm={() => {
+          setChangeInterfaceDialogOpen(false);
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          props.setRVLInterface(selectedNetworkInterface!);
+        }}
+        onCancel={() => setChangeInterfaceDialogOpen(false)}
+        open={changeInterfaceDialogOpen}
+        title={`Changing the network interface to "${selectedNetworkInterface}" requires a server reboot, proceed?`}
+        description="The app will briefly disconnect"
+        confirmLabel="Reboot"
+        confirmColor="secondary"
+      />
     </div>
   );
 };

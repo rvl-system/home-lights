@@ -40,6 +40,7 @@ export enum ActionType {
   ConnectPhilipsHueBridge = 'ConnectPhilipsHueBridge',
   RefreshPhilipsHueLights = 'RefreshPhilipsHueLights',
   RefreshLIFXLights = 'RefreshLIFXLights',
+  SetRVLInterface = 'SetRVLInterface',
 
   Hello = 'Hello',
   AppStateUpdated = 'AppStateUpdated',
@@ -75,6 +76,7 @@ export interface Actions {
   [ActionType.ConnectionStateChanged]: { connected: boolean };
   [ActionType.RefreshPhilipsHueLights]: void;
   [ActionType.RefreshLIFXLights]: void;
+  [ActionType.SetRVLInterface]: { networkInterface: string };
 
   [ActionType.SetTheme]: Theme;
   [ActionType.RefreshLights]: void;

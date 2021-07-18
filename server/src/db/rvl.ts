@@ -65,7 +65,7 @@ export function getRVLInfo(): RVLInfo {
 }
 
 export async function setRVLInterface(networkInterface: string): Promise<void> {
-  await dbRun(`INSERT INTO ${RVL_TABLE_NAME} (interface) VALUES (?)`, [
+  await dbRun(`REPLACE INTO ${RVL_TABLE_NAME} (id, interface) VALUES (1, ?)`, [
     networkInterface
   ]);
 }

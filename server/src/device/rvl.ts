@@ -45,7 +45,11 @@ import {
   WavePattern
 } from '../common/types';
 import { getItem } from '../common/util';
-import { getRVLInfo } from '../db/rvl';
+import {
+  getRVLInfo,
+  setRVLInterface as setRVLInterfaceInternal
+} from '../db/rvl';
+import { reboot } from '../reboot';
 import { SetLightStateOptions } from './types';
 
 let manager: RVLManager;
@@ -61,6 +65,17 @@ export async function init(): Promise<void> {
     manager = await createManager();
   }
   console.log('RVL devices initialized');
+}
+
+export async function setRVLInterface({
+  networkInterface
+}: {
+  networkInterface: string;
+}): Promise<void> {
+  if (networkInterface !== manager.networkInterface) {
+    await setRVLInterfaceInternal(networkInterface);
+    reboot();
+  }
 }
 
 function getColor(color: Color): { hue: number; saturation: number } {

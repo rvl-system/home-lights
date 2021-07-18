@@ -30,7 +30,8 @@ export const SettingsContainer = createContainer(
   (getSlice): SettingsComponentProps => {
     return {
       theme: getSlice(SliceName.Settings).theme,
-      philipsHueBridgeIp: getSlice(SliceName.SystemState).philipsHueBridgeIp
+      philipsHueBridgeIp: getSlice(SliceName.SystemState).philipsHueBridgeIp,
+      rvlInfo: getSlice(SliceName.SystemState).rvlInfo
     };
   },
   (dispatch): SettingsComponentDispatch => ({
@@ -45,6 +46,9 @@ export const SettingsContainer = createContainer(
     },
     refreshLIFXLights() {
       dispatch(ActionType.RefreshLIFXLights);
+    },
+    setRVLInterface(networkInterface) {
+      dispatch(ActionType.SetRVLInterface, { networkInterface });
     }
   }),
   settingsComponent
