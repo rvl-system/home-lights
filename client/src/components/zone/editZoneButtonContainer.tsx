@@ -28,7 +28,7 @@ import {
 
 export type EditZoneButtonContainerProps = Omit<
   EditZoneButtonProps,
-  'zoneNames'
+  'zoneNames' | 'unavailableZoneNames'
 >;
 
 export const EditZoneButtonContainer = createContainer(

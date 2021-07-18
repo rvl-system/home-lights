@@ -27,7 +27,10 @@ import {
   EditLightButtonDispatch
 } from './editLightButton';
 
-export type EditLightButtonContainerProps = Omit<EditLightButtonProps, 'zones'>;
+export type EditLightButtonContainerProps = Omit<
+  EditLightButtonProps,
+  'zones' | 'unavailableLightNames' | 'unavailableRVLChannels'
+>;
 
 export const EditLightButtonContainer = createContainer(
   (

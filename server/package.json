@@ -19,25 +19,25 @@
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/luxon": "^1.27.0",
-    "@types/node": "^14.17.4",
+    "@types/luxon": "^1.27.1",
+    "@types/node": "^14.17.5",
     "@types/sqlite3": "^3.1.7",
     "@types/ws": "^7.4.6",
     "typescript": "^4.3.5"
   },
   "dependencies": {
     "@swiftcarrot/color-fns": "^3.2.0",
-    "@types/node-fetch": "^2.5.10",
+    "@types/node-fetch": "^2.5.11",
     "color-temperature": "^0.2.7",
-    "eslint": "^7.30.0",
-    "fastify": "^3.18.1",
+    "eslint": "^7.31.0",
+    "fastify": "^3.19.1",
     "fastify-static": "^3.4.0",
-    "luxon": "^1.27.0",
+    "luxon": "^1.28.0",
     "node-fetch": "^2.6.1",
     "node-hue-api": "^4.0.10",
     "node-lifx-lan": "^0.5.0",
-    "rvl-node": "^6.20",
+    "rvl-node": "^6.2.0",
     "sqlite3": "^5.0.2",
-    "ws": "^7.5.2"
+    "ws": "^7.5.3"
   }
 }
