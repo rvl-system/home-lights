@@ -18,8 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { verbose, Database } from 'sqlite3';
-import { deepMap } from './common/util';
-import { createInternalError } from './util';
+import { deepMap, createInternalError } from './common/util';
 
 let db: Database;
 

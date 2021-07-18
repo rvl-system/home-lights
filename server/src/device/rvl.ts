@@ -29,9 +29,7 @@ import {
   createMovingWave,
   RVLManager,
   RVLController,
-  LogLevel,
-  getAvailableInterfaces,
-  getDefaultInterface
+  LogLevel
 } from 'rvl-node';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
@@ -47,27 +45,14 @@ import {
   WavePattern
 } from '../common/types';
 import { getItem } from '../common/util';
-import { getRVLInfo, setRVLInfo } from '../db/rvl';
+import { getRVLInfo } from '../db/rvl';
 import { SetLightStateOptions } from './types';
 
 let manager: RVLManager;
 const controllers = new Map<number, RVLController>();
 
 export async function init(): Promise<void> {
-  let info = await getRVLInfo();
-  if (!info) {
-    // If we don't have any info, set it to the default. This should always
-    // happen once the very first time the device starts up, but could happen
-    // every time if there is no IPv4 address. This is indicated by
-    // getDefaultInterface returning undefined
-    const networkInterface = getDefaultInterface();
-    if (networkInterface) {
-      await setRVLInfo({
-        networkInterface
-      });
-      info = await getRVLInfo();
-    }
-  }
+  const info = await getRVLInfo();
   if (info) {
     manager = await createManager({
       networkInterface: info.networkInterface

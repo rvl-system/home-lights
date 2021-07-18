@@ -17,24 +17,42 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { getAvailableInterfaces, getDefaultInterface } from 'rvl-node';
+import { RVLInfo } from '../common/types';
+import { createInternalError } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
-import { createInternalError } from '../util';
 
 const RVL_TABLE_NAME = 'rvl_info';
 
-export interface RVLInfo {
-  networkInterface: string;
-}
+let rvlInfo: RVLInfo;
 
-export async function getRVLInfo(): Promise<RVLInfo | undefined> {
+export default async function updateCache(): Promise<void> {
+  const availableInterfaces = await getAvailableInterfaces();
   const rows = await dbAll(`SELECT * FROM ${RVL_TABLE_NAME}`);
   switch (rows.length) {
     case 0:
-      return;
+      if (availableInterfaces.length) {
+        // If we don't have an interface set but do have available interfaces,
+        // set it to the default. This will always happen once the very first
+        // time the device starts up
+        const networkInterface = getDefaultInterface();
+        if (networkInterface) {
+          await setRVLInterface(networkInterface);
+          rvlInfo = {
+            availableInterfaces,
+            networkInterface
+          };
+        }
+      } else {
+        rvlInfo = { availableInterfaces };
+      }
+      break;
     case 1:
-      return {
+      rvlInfo = {
+        availableInterfaces,
         networkInterface: rows[0].interface
       };
+      break;
     default:
       throw createInternalError(
         `${RVL_TABLE_NAME} unexpectedly has more than one row`
@@ -42,8 +60,12 @@ export async function getRVLInfo(): Promise<RVLInfo | undefined> {
   }
 }
 
-export async function setRVLInfo(info: RVLInfo): Promise<void> {
+export function getRVLInfo(): RVLInfo {
+  return rvlInfo;
+}
+
+export async function setRVLInterface(networkInterface: string): Promise<void> {
   await dbRun(`INSERT INTO ${RVL_TABLE_NAME} (interface) VALUES (?)`, [
-    info.networkInterface
+    networkInterface
   ]);
 }

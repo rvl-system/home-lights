@@ -32,11 +32,11 @@ import {
   PhilipsHueLight,
   SolidPattern
 } from '../common/types';
-import { getItem } from '../common/util';
+import { getItem, createInternalError } from '../common/util';
 import { getLights, createLight, deleteLight, editLight } from '../db/lights';
 import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 import { ActionHandler } from '../types';
-import { createInternalError } from '../util';
+
 import { SetLightStateOptions } from './types';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

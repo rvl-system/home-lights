@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { createInternalError } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
-import { createInternalError } from '../util';
 
 const PHILIPS_HUE_TABLE_NAME = 'philips_hue_info';
 

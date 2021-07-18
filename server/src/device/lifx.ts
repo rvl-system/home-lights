@@ -27,10 +27,10 @@ import {
   PatternType,
   SolidPattern
 } from '../common/types';
-import { getItem } from '../common/util';
+import { getItem, createInternalError } from '../common/util';
 import { createLight, editLight, getLights } from '../db/lights';
 import { ActionHandler } from '../types';
-import { createInternalError } from '../util';
+
 import { SetLightStateOptions } from './types';
 
 const REFRESH_RATE = 60 * 1000; // 1 minute

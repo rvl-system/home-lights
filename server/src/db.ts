@@ -20,6 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import initLights from './db/lights';
 import initMigrations from './db/migrations';
 import initPatterns from './db/patterns';
+import initRVL from './db/rvl';
 import initScenes from './db/scenes';
 import initSchedules from './db/schedule';
 import initZones from './db/zones';
@@ -28,6 +29,7 @@ import initZoneStates from './db/zoneStates';
 export async function init(): Promise<void> {
   await initMigrations();
   await Promise.all([
+    initRVL(),
     initZones(),
     initSchedules(),
     initScenes(),

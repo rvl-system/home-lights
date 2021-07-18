@@ -186,24 +186,30 @@ export interface ZoneState {
   currentScheduleSceneId: number | undefined;
 }
 
+export interface RVLInfo {
+  availableInterfaces: string[];
+  networkInterface?: string;
+}
+
 export interface SystemState {
   zoneStates: ZoneState[];
   philipsHueBridgeIp: string | undefined;
+  rvlInfo: RVLInfo;
 }
 
-export type SetZoneSceneRequest = {
+export interface SetZoneSceneRequest {
   sceneId: number;
-};
+}
 
-export type SetZonePowerRequest = {
+export interface SetZonePowerRequest {
   zoneId: number;
   power: boolean;
-};
+}
 
-export type SetZoneBrightnessRequest = {
+export interface SetZoneBrightnessRequest {
   zoneId: number;
   brightness: number;
-};
+}
 
 // ---- Miscellaneous ----
 

@@ -19,8 +19,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { rgb2hsv } from '@swiftcarrot/color-fns';
 import { colorTemperature2rgb } from 'color-temperature';
-import { createInternalError } from '../util';
 import { Color, ColorType, HSVColor } from './types';
+
+export function createInternalError(message: string): Error {
+  return new Error(`Internal Error: ${message}`);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function lookupItem<K, T extends Record<string, any>>(

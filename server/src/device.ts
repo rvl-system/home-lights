@@ -22,6 +22,7 @@ import { Scene, SystemState, ZoneState } from './common/types';
 import { getItem } from './common/util';
 import { getLights } from './db/lights';
 import { getPatterns } from './db/patterns';
+import { getRVLInfo } from './db/rvl';
 import { getScenes } from './db/scenes';
 import { getZoneStates } from './db/zoneStates';
 import {
@@ -48,7 +49,8 @@ export async function init(): Promise<void> {
 export function getSystemState(): SystemState {
   return {
     zoneStates: getZoneStates(),
-    philipsHueBridgeIp: getPhilipsHueBridgeIp()
+    philipsHueBridgeIp: getPhilipsHueBridgeIp(),
+    rvlInfo: getRVLInfo()
   };
 }
 

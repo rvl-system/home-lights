@@ -27,10 +27,9 @@ import {
   LIFXLight,
   Zone
 } from '../common/types';
-import { hasItem } from '../common/util';
+import { hasItem, createInternalError } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
-import { createInternalError } from '../util';
 
 const LIGHTS_TABLE_NAME = 'lights';
 
