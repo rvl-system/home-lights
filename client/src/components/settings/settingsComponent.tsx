@@ -20,6 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import React, { FunctionComponent, useState } from 'react';
 import { RVLInfo, Theme } from '../../common/types';
+import { createInternalError } from '../../common/util';
 import { ConfirmDialog } from '../lib/confirmDialog';
 import { GroupInput } from '../lib/formInputs/groupInput';
 import { SelectInput } from '../lib/formInputs/selectInput';
@@ -146,10 +147,13 @@ export const settingsComponent: FunctionComponent<
       <ConfirmDialog
         onConfirm={() => {
           setChangeInterfaceDialogOpen(false);
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          props.setRVLInterface(selectedNetworkInterface!);
+          if (!selectedNetworkInterface) {
+            throw createInternalError(
+              'Selected network interfaces is unexpectedly null'
+            );
+          }
+          props.setRVLInterface(selectedNetworkInterface);
         }}
-        onCancel={() => setChangeInterfaceDialogOpen(false)}
         open={changeInterfaceDialogOpen}
         title={`Changing the network interface to "${selectedNetworkInterface}" requires a server reboot, proceed?`}
         description="The app will briefly disconnect"

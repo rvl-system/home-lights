@@ -85,9 +85,11 @@ export const ConfirmDialog: FunctionComponent<ConfirmDialogProps> = ({
           {description && <DialogContentText>{description}</DialogContentText>}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleOnCancel} color={cancelColor}>
-            {cancelLabel}
-          </Button>
+          {onCancel && (
+            <Button onClick={handleOnCancel} color={cancelColor}>
+              {cancelLabel}
+            </Button>
+          )}
           <Button
             onClick={handleOnConfirm}
             color={confirmColor}
