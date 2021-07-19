@@ -29,3 +29,9 @@ export interface ActionHandlerEntry<T extends ActionType> {
   handler: ActionHandler<T>;
   reconcile: boolean;
 }
+
+export type ProcessMessage = RebootMessage;
+
+export interface RebootMessage {
+  type: 'reboot';
+}

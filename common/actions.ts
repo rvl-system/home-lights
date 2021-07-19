@@ -35,6 +35,7 @@ export enum ActionType {
   Notify = 'Notify',
   DismissNotification = 'DismissNotification',
 
+  Reboot = 'reboot',
   SetTheme = 'SetTheme',
   RefreshLights = 'RefreshLights',
   ConnectPhilipsHueBridge = 'ConnectPhilipsHueBridge',
@@ -78,6 +79,7 @@ export interface Actions {
   [ActionType.RefreshLIFXLights]: void;
   [ActionType.SetRVLInterface]: { networkInterface: string };
 
+  [ActionType.Reboot]: void;
   [ActionType.SetTheme]: Theme;
   [ActionType.RefreshLights]: void;
   [ActionType.ConnectPhilipsHueBridge]: void;

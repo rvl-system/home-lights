@@ -42,6 +42,7 @@ export interface SettingsComponentProps {
 }
 
 export interface SettingsComponentDispatch {
+  reboot: () => void;
   setTheme: (theme: Theme) => void;
   connectPhilipsHueBridge: () => void;
   refreshPhilipsHueLights: () => void;
@@ -54,6 +55,7 @@ export const settingsComponent: FunctionComponent<
 > = (props) => {
   const classes = useContainerStyles();
   const contentClasses = useStyles();
+  const [rebootDialogOpen, setRebootDialogOpen] = useState(false);
   const [changeInterfaceDialogOpen, setChangeInterfaceDialogOpen] = useState(
     false
   );
@@ -86,6 +88,15 @@ export const settingsComponent: FunctionComponent<
               onChange={(value) => props.setTheme(value as Theme)}
             />
           </GroupInput>
+        </div>
+        <div className={contentClasses.row}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setRebootDialogOpen(true)}
+          >
+            Reboot server
+          </Button>
         </div>
         <div className={contentClasses.row}>
           <GroupInput label="Philips Hue"></GroupInput>
@@ -156,6 +167,18 @@ export const settingsComponent: FunctionComponent<
         }}
         open={changeInterfaceDialogOpen}
         title={`Changing the network interface to "${selectedNetworkInterface}" requires a server reboot, proceed?`}
+        description="The app will briefly disconnect"
+        confirmLabel="Reboot"
+        confirmColor="secondary"
+      />
+      <ConfirmDialog
+        onConfirm={() => {
+          setRebootDialogOpen(false);
+          props.reboot();
+        }}
+        onCancel={() => setRebootDialogOpen(false)}
+        open={rebootDialogOpen}
+        title={'Reboot the server?'}
         description="The app will briefly disconnect"
         confirmLabel="Reboot"
         confirmColor="secondary"

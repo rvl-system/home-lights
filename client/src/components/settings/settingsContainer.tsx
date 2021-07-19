@@ -35,6 +35,9 @@ export const SettingsContainer = createContainer(
     };
   },
   (dispatch): SettingsComponentDispatch => ({
+    reboot() {
+      dispatch(ActionType.Reboot);
+    },
     setTheme(theme) {
       dispatch(ActionType.SetTheme, theme);
     },

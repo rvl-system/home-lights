@@ -20,6 +20,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { ActionType } from '../common/actions';
 import { setTheme } from '../db/settings';
 import { setRVLInterface } from '../device/rvl';
+import { reboot } from '../reboot';
 import { ActionHandlerEntry } from '../types';
 
 export function createSettingsHandlers(): Record<
@@ -32,6 +33,8 @@ export function createSettingsHandlers(): Record<
     [ActionType.SetRVLInterface]: {
       handler: setRVLInterface,
       reconcile: true
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [ActionType.Reboot]: { handler: reboot as any, reconcile: false }
   };
 }

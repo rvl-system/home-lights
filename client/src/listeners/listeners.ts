@@ -47,6 +47,7 @@ export const listeners = [
     [ActionType.SetZoneScene]: 'Failed to set the zone scene',
     [ActionType.SetZonePower]: 'Failed to set the zone power',
 
+    [ActionType.Reboot]: 'Failed to reboot',
     [ActionType.SetTheme]: 'Failed to set the theme',
     [ActionType.ConnectPhilipsHueBridge]: 'Failed to connect to the bridge',
     [ActionType.RefreshPhilipsHueLights]:

@@ -27,10 +27,11 @@ process.on('unhandledRejection', (reason) => {
   process.exit(-1);
 });
 
-export async function run(): Promise<void> {
+async function run(): Promise<void> {
   await initDB();
   await initDevice();
   await initEndpoints();
   await reconcile(); // Needed to finish any possible migrations
   console.log('\n=== Home Lights Running ===\n');
 }
+run();
