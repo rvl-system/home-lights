@@ -26,13 +26,7 @@ import {
 } from 'fs';
 import { dirname, join } from 'path';
 import { dbAll, dbExec, init as initDB } from '../sqlite';
-import { getEnvironmentVariable } from '../util';
-
-const DB_FILE = join(
-  getEnvironmentVariable('HOME'),
-  '.homelights',
-  'db.sqlite3'
-);
+import { DB_FILE } from '../util';
 
 const SCHEMA_FOLDER = join(__dirname, '..', '..', 'db');
 

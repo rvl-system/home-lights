@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS "zones" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE
 );
+CREATE TABLE sqlite_sequence(name,seq);
 CREATE TABLE IF NOT EXISTS "schedule" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   zone_id INTEGER NOT NULL,
@@ -23,6 +24,11 @@ CREATE TABLE IF NOT EXISTS "patterns" (
   type TEXT NOT NULL,
   data TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS "colors" (
+  hue INTEGER NOT NULL,
+  saturation INTEGER NOT NULL,
+  PRIMARY KEY (hue, saturation)
+);
 CREATE TABLE IF NOT EXISTS "lights" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,
@@ -33,11 +39,6 @@ CREATE TABLE IF NOT EXISTS "lights" (
   zone_id INTEGER,
   FOREIGN KEY (zone_id) REFERENCES zones(id)
 );
-CREATE TABLE IF NOT EXISTS "philips_hue_info" (
-  username TEXT NOT NULL UNIQUE,
-  key TEXT NOT NULL,
-  ip TEXT NOT NULL
-);
 CREATE TABLE IF NOT EXISTS "migrations" (
   migration INTEGER NOT NULL,
   date TEXT DEFAULT CURRENT_TIMESTAMP
@@ -45,10 +46,19 @@ CREATE TABLE IF NOT EXISTS "migrations" (
 CREATE TABLE IF NOT EXISTS "settings" (
   theme TEXT NOT NULL
 );
-CREATE TABLE "system_state" (
+CREATE TABLE IF NOT EXISTS "philips_hue_info" (
+  username TEXT NOT NULL UNIQUE,
+  key TEXT NOT NULL,
+  ip TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "system_state" (
   zone_id INTEGER NOT NULL UNIQUE,
   power INTEGER DEFAULT 0,
   current_scene_id INTEGER,
   FOREIGN KEY (zone_id) REFERENCES zones(id)
   FOREIGN KEY (current_scene_id) REFERENCES scenes(id)
+);
+CREATE TABLE IF NOT EXISTS "rvl_info" (
+  id INT NOT NULL UNIQUE,
+  interface TEXT NOT NULL
 );

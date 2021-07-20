@@ -13,8 +13,8 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "start": "node ./bin/server.js",
-    "reset-db": "node ./bin/resetdb.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-schema": "node ./bin/generateSchema.js"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",

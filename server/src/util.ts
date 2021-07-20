@@ -17,6 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { join } from 'path';
+
+export const DB_FILE = join(
+  getEnvironmentVariable('HOME'),
+  '.homelights',
+  'db.sqlite3'
+);
+
 export function getEnvironmentVariable(
   varName: string,
   defaultValue?: string

@@ -18,4 +18,18 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require('../dist/db.js').reset();
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const { exec } = require('child_process');
+const { writeFileSync } = require('fs');
+const { join } = require('path');
+const { DB_FILE } = require('../dist/util');
+
+exec(`sqlite3 ${DB_FILE} .schema`, (err, stdout, stderr) => {
+  if (err || stderr) {
+    console.error(err || stderr);
+    process.exit(1);
+  }
+  writeFileSync(join(__dirname, '..', 'db', 'schema.sql'), stdout);
+});
