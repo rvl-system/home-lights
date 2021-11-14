@@ -4,6 +4,9 @@
   "description": "Client for Home Lights",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src",
+    "prebuild": "npm run lint",
     "build": "webpack",
     "watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +17,6 @@
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
     "ts-loader": "^9.2.3",
-    "typescript": "^4.3.5",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2"
   },

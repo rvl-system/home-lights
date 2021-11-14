@@ -1,20 +1,18 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   entry: './src/index.tsx',
   mode: 'development',
   devtool: 'inline-source-map',
+  plugins: [
+    new ESLintPlugin({
+      context: './src'
+    })
+  ],
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.tsx?$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/,
-        options: {
-          emitError: true
-        }
-      },
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
