@@ -30,7 +30,7 @@ export default async function updateCache(): Promise<void> {
   const results = await dbAll(`SELECT * FROM ${PATTERNS_TABLE_NAME}`);
   patterns = results.map((result) => ({
     ...result,
-    data: JSON.parse((result.data as unknown) as string)
+    data: JSON.parse(result.data as unknown as string)
   })) as Pattern[];
 }
 

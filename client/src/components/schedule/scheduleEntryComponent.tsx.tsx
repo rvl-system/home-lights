@@ -43,8 +43,8 @@ export interface CreateScheduleEntryButtonProps {
   scheduleEntry: ScheduleEntry;
 }
 
-export type CreateScheduleEntryButtonDispatch = DeleteScheduleEntryButtonDispatch &
-  EditScheduleEntryButtonDispatch;
+export type CreateScheduleEntryButtonDispatch =
+  DeleteScheduleEntryButtonDispatch & EditScheduleEntryButtonDispatch;
 
 export const ScheduleEntryComponent: FunctionComponent<
   CreateScheduleEntryButtonProps & CreateScheduleEntryButtonDispatch

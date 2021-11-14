@@ -32,32 +32,31 @@ export interface LightsTabProps {
 
 export type LightsTabDispatch = DeleteLightButtonDispatch;
 
-export const LightsTab: FunctionComponent<
-  LightsTabProps & LightsTabDispatch
-> = (props) => {
-  const classes = useContainerStyles();
-  return (
-    <div className={classes.container}>
-      <div className={classes.altHeader}>
-        <CreateLightButtonContainer />
-      </div>
-      <div className={classes.content}>
-        <div className={classes.innerContent}>
-          <List>
-            {props.lights.map((light) => (
-              <Fragment key={light.id}>
-                <Divider />
-                <LightComponent
-                  light={light}
-                  deleteLight={props.deleteLight}
-                  zones={props.zones}
-                />
-              </Fragment>
-            ))}
-            <Divider />
-          </List>
+export const LightsTab: FunctionComponent<LightsTabProps & LightsTabDispatch> =
+  (props) => {
+    const classes = useContainerStyles();
+    return (
+      <div className={classes.container}>
+        <div className={classes.altHeader}>
+          <CreateLightButtonContainer />
+        </div>
+        <div className={classes.content}>
+          <div className={classes.innerContent}>
+            <List>
+              {props.lights.map((light) => (
+                <Fragment key={light.id}>
+                  <Divider />
+                  <LightComponent
+                    light={light}
+                    deleteLight={props.deleteLight}
+                    zones={props.zones}
+                  />
+                </Fragment>
+              ))}
+              <Divider />
+            </List>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };

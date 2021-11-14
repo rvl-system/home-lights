@@ -49,46 +49,47 @@ export async function init(): Promise<void> {
   update();
 }
 
-export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> = async () => {
-  console.log('Reconciling registered LIFX lights vs database');
-  const dbLights = await getLights();
-  devices = await discover();
+export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> =
+  async () => {
+    console.log('Reconciling registered LIFX lights vs database');
+    const dbLights = await getLights();
+    devices = await discover();
 
-  // Add lights from LIFX that are not in the DB
-  for (const light of devices) {
-    const dbLight = dbLights.find(
-      (dbLight) =>
-        dbLight.type === LightType.LIFX &&
-        (dbLight as LIFXLight).lifxId === light.mac
-    );
-    if (!dbLight) {
-      console.log(
-        `Found LIFX light "${light.deviceInfo.label}" not in database, adding...`
+    // Add lights from LIFX that are not in the DB
+    for (const light of devices) {
+      const dbLight = dbLights.find(
+        (dbLight) =>
+          dbLight.type === LightType.LIFX &&
+          (dbLight as LIFXLight).lifxId === light.mac
       );
-      const newLight: Omit<LIFXLight, 'id'> = {
-        lifxId: light.mac,
-        type: LightType.LIFX,
-        name: light.deviceInfo.label
-      };
-      await createLight(newLight);
-    } else if (dbLight.name !== light.deviceInfo.label) {
-      console.log(
-        `LIFX light name changed from ${dbLight.name} to ${light.deviceInfo.label}, updating...`
-      );
-      await editLight({
-        ...dbLight,
-        name: light.deviceInfo.label
-      });
+      if (!dbLight) {
+        console.log(
+          `Found LIFX light "${light.deviceInfo.label}" not in database, adding...`
+        );
+        const newLight: Omit<LIFXLight, 'id'> = {
+          lifxId: light.mac,
+          type: LightType.LIFX,
+          name: light.deviceInfo.label
+        };
+        await createLight(newLight);
+      } else if (dbLight.name !== light.deviceInfo.label) {
+        console.log(
+          `LIFX light name changed from ${dbLight.name} to ${light.deviceInfo.label}, updating...`
+        );
+        await editLight({
+          ...dbLight,
+          name: light.deviceInfo.label
+        });
+      }
     }
-  }
 
-  return {
-    [ActionType.Notify]: {
-      severity: 'success',
-      message: 'LIFX lights refreshed'
-    }
+    return {
+      [ActionType.Notify]: {
+        severity: 'success',
+        message: 'LIFX lights refreshed'
+      }
+    };
   };
-};
 
 export async function setLightState({
   zoneState,

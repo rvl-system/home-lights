@@ -67,106 +67,108 @@ export async function init(): Promise<void> {
   console.log('Phillips Hue initialized');
 }
 
-export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> = async () => {
-  console.log('Looking for Philips Hue bridge...');
-  philipsHueBridgeIp = await discoverBridge();
-  if (!philipsHueBridgeIp) {
-    return {
-      [ActionType.Notify]: {
-        severity: 'error',
-        message: 'Could not connect to bridge'
-      }
-    };
-  }
-
-  console.log(`Connecting to Philips Hue bridge at ${philipsHueBridgeIp}...`);
-  const username = await createUser(philipsHueBridgeIp);
-  if (!username) {
-    philipsHueBridgeIp = undefined;
-    return {
-      [ActionType.Notify]: {
-        severity: 'error',
-        message: 'Link button not pressed'
-      }
-    };
-  }
-
-  authenticatedApi = await philipsHue.api
-    .createLocal(philipsHueBridgeIp)
-    .connect(username);
-
-  await refreshPhilipsHueLights();
-
-  return {
-    [ActionType.Notify]: {
-      severity: 'success',
-      message: 'Philips Hue bridge connected'
-    }
-  };
-};
-
-export const refreshPhilipsHueLights: ActionHandler<ActionType.RefreshPhilipsHueLights> = async () => {
-  if (authenticatedApi === undefined) {
-    return;
-  }
-  console.log('Reconciling Phillips Hue lights in bridge vs database');
-  const bridgeLights = await authenticatedApi.lights.getAll();
-  const dbLights = await getLights();
-
-  // Add lights from the bridge that are not in the DB or update changed lights
-  for (const bridgeLight of bridgeLights) {
-    const dbLight = dbLights.find(
-      (dbLight) =>
-        dbLight.type === LightType.PhilipsHue &&
-        (dbLight as PhilipsHueLight).philipsHueID === bridgeLight.uniqueid
-    );
-    if (!dbLight) {
-      console.log(
-        `Found Philips Hue light "${bridgeLight.name}" not in database, adding...`
-      );
-      const newLight: Omit<PhilipsHueLight, 'id'> = {
-        philipsHueID: bridgeLight.uniqueid,
-        type: LightType.PhilipsHue,
-        name: bridgeLight.name
+export const connect: ActionHandler<ActionType.ConnectPhilipsHueBridge> =
+  async () => {
+    console.log('Looking for Philips Hue bridge...');
+    philipsHueBridgeIp = await discoverBridge();
+    if (!philipsHueBridgeIp) {
+      return {
+        [ActionType.Notify]: {
+          severity: 'error',
+          message: 'Could not connect to bridge'
+        }
       };
-      await createLight(newLight);
-    } else if (dbLight.name !== bridgeLight.name) {
-      console.log(
-        `Philips Hue light name changed from ${dbLight.name} to ${bridgeLight.name}, updating...`
-      );
-      await editLight({
-        ...dbLight,
-        name: bridgeLight.name
-      });
     }
-    idMap.set(bridgeLight.uniqueid, bridgeLight.id);
-  }
 
-  // Delete lights from DB that are no longer on the bridge
-  for (const dbLight of dbLights) {
-    if (dbLight.type !== LightType.PhilipsHue) {
-      continue;
+    console.log(`Connecting to Philips Hue bridge at ${philipsHueBridgeIp}...`);
+    const username = await createUser(philipsHueBridgeIp);
+    if (!username) {
+      philipsHueBridgeIp = undefined;
+      return {
+        [ActionType.Notify]: {
+          severity: 'error',
+          message: 'Link button not pressed'
+        }
+      };
     }
-    if (
-      !bridgeLights.find(
-        (bridgeLight) =>
-          bridgeLight.uniqueid === (dbLight as PhilipsHueLight).philipsHueID
-      )
-    ) {
-      console.log(
-        `Philips Hue light "${dbLight.name}" is no longer registered with the bridge, deleting...`
-      );
-      await deleteLight({ id: dbLight.id });
-    }
-  }
 
-  return {
-    [ActionType.Notify]: {
-      severity: 'success',
-      message: 'Philips Hue lights refreshed'
-    }
+    authenticatedApi = await philipsHue.api
+      .createLocal(philipsHueBridgeIp)
+      .connect(username);
+
+    await refreshPhilipsHueLights();
+
+    return {
+      [ActionType.Notify]: {
+        severity: 'success',
+        message: 'Philips Hue bridge connected'
+      }
+    };
   };
-};
+
+export const refreshPhilipsHueLights: ActionHandler<ActionType.RefreshPhilipsHueLights> =
+  async () => {
+    if (authenticatedApi === undefined) {
+      return;
+    }
+    console.log('Reconciling Phillips Hue lights in bridge vs database');
+    const bridgeLights = await authenticatedApi.lights.getAll();
+    const dbLights = await getLights();
+
+    // Add lights from the bridge that are not in the DB or update changed lights
+    for (const bridgeLight of bridgeLights) {
+      const dbLight = dbLights.find(
+        (dbLight) =>
+          dbLight.type === LightType.PhilipsHue &&
+          (dbLight as PhilipsHueLight).philipsHueID === bridgeLight.uniqueid
+      );
+      if (!dbLight) {
+        console.log(
+          `Found Philips Hue light "${bridgeLight.name}" not in database, adding...`
+        );
+        const newLight: Omit<PhilipsHueLight, 'id'> = {
+          philipsHueID: bridgeLight.uniqueid,
+          type: LightType.PhilipsHue,
+          name: bridgeLight.name
+        };
+        await createLight(newLight);
+      } else if (dbLight.name !== bridgeLight.name) {
+        console.log(
+          `Philips Hue light name changed from ${dbLight.name} to ${bridgeLight.name}, updating...`
+        );
+        await editLight({
+          ...dbLight,
+          name: bridgeLight.name
+        });
+      }
+      idMap.set(bridgeLight.uniqueid, bridgeLight.id);
+    }
+
+    // Delete lights from DB that are no longer on the bridge
+    for (const dbLight of dbLights) {
+      if (dbLight.type !== LightType.PhilipsHue) {
+        continue;
+      }
+      if (
+        !bridgeLights.find(
+          (bridgeLight) =>
+            bridgeLight.uniqueid === (dbLight as PhilipsHueLight).philipsHueID
+        )
+      ) {
+        console.log(
+          `Philips Hue light "${dbLight.name}" is no longer registered with the bridge, deleting...`
+        );
+        await deleteLight({ id: dbLight.id });
+      }
+    }
+
+    return {
+      [ActionType.Notify]: {
+        severity: 'success',
+        message: 'Philips Hue lights refreshed'
+      }
+    };
+  };
 
 export async function setLightState({
   zoneState,
@@ -297,13 +299,11 @@ async function createUser(bridgeIP: string): Promise<string | undefined> {
 
   // Create the user and store it to the database for future use
   try {
-    const {
-      username,
-      clientkey: key
-    } = await unauthenticatedApi.users.createUser(
-      PHILIPS_HUE_APP_NAME,
-      PHILIPS_HUE_DEVICE_NAME
-    );
+    const { username, clientkey: key } =
+      await unauthenticatedApi.users.createUser(
+        PHILIPS_HUE_APP_NAME,
+        PHILIPS_HUE_DEVICE_NAME
+      );
     setPhilipsHueInfo({
       username,
       key,

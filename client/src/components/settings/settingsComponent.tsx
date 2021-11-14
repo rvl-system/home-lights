@@ -56,9 +56,8 @@ export const settingsComponent: FunctionComponent<
   const classes = useContainerStyles();
   const contentClasses = useStyles();
   const [rebootDialogOpen, setRebootDialogOpen] = useState(false);
-  const [changeInterfaceDialogOpen, setChangeInterfaceDialogOpen] = useState(
-    false
-  );
+  const [changeInterfaceDialogOpen, setChangeInterfaceDialogOpen] =
+    useState(false);
   const [selectedNetworkInterface, setSelectedNetworkInterface] = useState(
     props.rvlInfo.networkInterface
   );

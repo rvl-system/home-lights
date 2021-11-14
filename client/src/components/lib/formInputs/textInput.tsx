@@ -37,58 +37,57 @@ export function getDefaultTextValue(props: TextInputProps): string {
   return props.defaultValue || '';
 }
 
-export const TextInput: FunctionComponent<
-  TextInputProps & TextInputDispatch
-> = (props) => {
-  const [textErrorState, setTextErrorState] = useState<ErrorState>({
-    error: !props.defaultValue,
-    showError: false,
-    errorReason: 'A value is required'
-  });
+export const TextInput: FunctionComponent<TextInputProps & TextInputDispatch> =
+  (props) => {
+    const [textErrorState, setTextErrorState] = useState<ErrorState>({
+      error: !props.defaultValue,
+      showError: false,
+      errorReason: 'A value is required'
+    });
 
-  function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    const newValue = e.currentTarget.value;
-    let error = false;
-    if (!newValue) {
-      error = true;
-      setTextErrorState({
-        error,
-        showError: true,
-        errorReason: 'A value is required'
-      });
-    } else if (
-      props.unavailableValues &&
-      props.unavailableValues.includes(newValue)
-    ) {
-      error = true;
-      setTextErrorState({
-        error,
-        showError: true,
-        errorReason: `"${newValue}" has already been taken`
-      });
-    } else {
-      setTextErrorState({
-        error,
-        showError: false
-      });
+    function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+      const newValue = e.currentTarget.value;
+      let error = false;
+      if (!newValue) {
+        error = true;
+        setTextErrorState({
+          error,
+          showError: true,
+          errorReason: 'A value is required'
+        });
+      } else if (
+        props.unavailableValues &&
+        props.unavailableValues.includes(newValue)
+      ) {
+        error = true;
+        setTextErrorState({
+          error,
+          showError: true,
+          errorReason: `"${newValue}" has already been taken`
+        });
+      } else {
+        setTextErrorState({
+          error,
+          showError: false
+        });
+      }
+      props.onChange(newValue, error);
     }
-    props.onChange(newValue, error);
-  }
 
-  const { error, showError, errorReason } = textErrorState;
-  return (
-    <>
-      {props.label && <InputLabel>{props.label}</InputLabel>}
-      <TextField
-        margin="dense"
-        type="text"
-        placeholder={props.inputPlaceholder}
-        fullWidth
-        defaultValue={props.defaultValue}
-        error={showError}
-        onChange={onChange}
-      />
-      {showError && <InputLabel error={error}>{errorReason}</InputLabel>}
-    </>
-  );
-};
+    const { error, showError, errorReason } = textErrorState;
+    return (
+      <>
+        {props.label && <InputLabel>{props.label}</InputLabel>}
+        <TextField
+          margin="dense"
+          type="text"
+          placeholder={props.inputPlaceholder}
+          fullWidth
+          defaultValue={props.defaultValue}
+          error={showError}
+          onChange={onChange}
+        />
+        {showError && <InputLabel error={error}>{errorReason}</InputLabel>}
+      </>
+    );
+  };

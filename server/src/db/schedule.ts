@@ -32,7 +32,7 @@ export default async function updateCache(): Promise<void> {
   schedules = results.map((result) => ({
     id: result.id,
     zoneId: result.zone_id,
-    entries: JSON.parse((result.entries as unknown) as string)
+    entries: JSON.parse(result.entries as unknown as string)
   })) as Schedule[];
 }
 

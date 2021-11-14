@@ -66,9 +66,8 @@ export default async function updateCache(): Promise<void> {
     // Set the current schedule scene ID
     if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
       const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
-      zoneState.currentScheduleSceneId = getCurrentScheduleState(
-        schedule
-      ).currentScheduleEntry.sceneId;
+      zoneState.currentScheduleSceneId =
+        getCurrentScheduleState(schedule).currentScheduleEntry.sceneId;
     } else {
       zoneState.currentScheduleSceneId = undefined;
     }
@@ -142,29 +141,27 @@ export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
   await setZoneState(zoneState);
 };
 
-export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> = async (
-  request
-) => {
-  // Bail early if the schedule is already running or there is no schedule set
-  if (zoneTimeouts.has(request.zoneId) || request.entries.length === 0) {
-    return;
-  }
-  const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
-  zoneState.currentSceneId = SCHEDULE_SCENE_ID;
-  zoneState.power = true;
-  await setZoneState(zoneState);
-  await scheduleTick(request);
-};
+export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> =
+  async (request) => {
+    // Bail early if the schedule is already running or there is no schedule set
+    if (zoneTimeouts.has(request.zoneId) || request.entries.length === 0) {
+      return;
+    }
+    const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
+    zoneState.currentSceneId = SCHEDULE_SCENE_ID;
+    zoneState.power = true;
+    await setZoneState(zoneState);
+    await scheduleTick(request);
+  };
 
-export const setZoneBrightness: ActionHandler<ActionType.SetZoneBrightness> = async (
-  request
-) => {
-  const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
-  if (zoneState.currentSceneId === undefined) {
-    return;
-  }
-  await setSceneBrightness(zoneState.currentSceneId, request.brightness);
-};
+export const setZoneBrightness: ActionHandler<ActionType.SetZoneBrightness> =
+  async (request) => {
+    const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
+    if (zoneState.currentSceneId === undefined) {
+      return;
+    }
+    await setSceneBrightness(zoneState.currentSceneId, request.brightness);
+  };
 
 export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
   request
@@ -245,10 +242,8 @@ function getCurrentScheduleState(schedule: Schedule) {
 
 async function scheduleTick(schedule: Schedule) {
   const now = DateTime.local();
-  const {
-    currentScheduleEntry,
-    nextScheduleEntryStart
-  } = getCurrentScheduleState(schedule);
+  const { currentScheduleEntry, nextScheduleEntryStart } =
+    getCurrentScheduleState(schedule);
 
   // Schedule the next transition
   console.log(

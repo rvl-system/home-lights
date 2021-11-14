@@ -48,7 +48,7 @@ export const RangeInput: FunctionComponent<
         min={min}
         max={max}
         onChange={(e, newValue) =>
-          props.onChange((newValue as unknown) as number)
+          props.onChange(newValue as unknown as number)
         }
       />
     </>
