@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { discover, Device, LifxLanColorHSB } from 'node-lifx-lan';
+import lifx, { Device, LifxLanColorHSB } from 'node-lifx-lan';
 import { ActionType } from '../common/actions';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
@@ -40,7 +40,8 @@ export async function init(): Promise<void> {
   console.log('Searching for LIFX lights...');
   const dbLights = await getLights();
   async function update() {
-    const lifxLights = await discover();
+    // this is wrong, need to bind. How in the hell did this work before? Ohhh...probably how it was built
+    const lifxLights = await lifx.discover();
     devices = lifxLights.filter((device) =>
       dbLights.some((light) => (light as LIFXLight).lifxId === device.mac)
     );
@@ -53,7 +54,7 @@ export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> =
   async () => {
     console.log('Reconciling registered LIFX lights vs database');
     const dbLights = await getLights();
-    devices = await discover();
+    devices = await lifx.discover();
 
     // Add lights from LIFX that are not in the DB
     for (const light of devices) {

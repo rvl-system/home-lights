@@ -63,11 +63,22 @@ export default async function init(): Promise<void> {
     let migrationStart = -1;
     if (tableExists) {
       // If the table exists, let's find whatever the most recent migration was
-      migrationStart = (
-        await dbAll(
-          `SELECT migration FROM ${MIGRATIONS_TABLE_NAME} ORDER BY migration DESC LIMIT 1`
-        )
-      )[0].migration;
+      const migrations = await dbAll(
+        `SELECT migration FROM ${MIGRATIONS_TABLE_NAME} ORDER BY migration DESC LIMIT 1`
+      );
+      // If there are no migrations, that means this was a recent install and we should initialize it to the latest migration
+      if (!migrations.length) {
+        const migrations = readdirSync(join(SCHEMA_FOLDER, 'migrations'))
+          .map((f) => parseInt(f))
+          .sort();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        migrationStart = migrations.pop()!;
+        await dbExec(
+          `INSERT INTO migrations(migration) VALUES (${migrationStart});`
+        );
+      } else {
+        migrationStart = migrations[0].migration;
+      }
     }
 
     // Read the list of all migrations, filter out any that have already been run, and sort them
