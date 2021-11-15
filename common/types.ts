@@ -138,6 +138,7 @@ export type CreatePulsePatternRequest = Omit<PulsePattern, 'id'>;
 export interface RainbowPattern extends Pattern {
   type: PatternType.Rainbow;
   data: {
+    distancePeriod: number;
     rate: number;
   };
 }
@@ -154,6 +155,7 @@ export type CreateColorCyclePatternRequest = Omit<ColorCyclePattern, 'id'>;
 export interface WavePattern extends Pattern {
   type: PatternType.Wave;
   data: {
+    distancePeriod: number;
     rate: number;
     waveColor: Color;
     foregroundColor: Color;

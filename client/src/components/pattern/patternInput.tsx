@@ -82,7 +82,8 @@ export const PatternInput: FunctionComponent<
           rate: values.rate as number,
           waveColor: values.waveColor as Color,
           foregroundColor: values.foregroundColor as Color,
-          backgroundColor: values.backgroundColor as Color
+          backgroundColor: values.backgroundColor as Color,
+          distancePeriod: values.distancePeriod as number
         };
         data = patternData;
         break;
@@ -104,7 +105,8 @@ export const PatternInput: FunctionComponent<
       }
       case PatternType.Rainbow: {
         const patternData: RainbowPattern['data'] = {
-          rate: values.rate as number
+          rate: values.rate as number,
+          distancePeriod: values.distancePeriod as number
         };
         data = patternData;
         break;
@@ -163,6 +165,15 @@ export const PatternInput: FunctionComponent<
         min: 0,
         max: 32,
         step: 1
+      });
+      schema.push({
+        type: FormSchemaType.Range,
+        name: 'distancePeriod',
+        label: 'Spacing',
+        defaultValue: wavePattern.data.distancePeriod,
+        min: 8,
+        max: 128,
+        step: 8
       });
       schema.push({
         type: FormSchemaType.Color,
@@ -230,6 +241,15 @@ export const PatternInput: FunctionComponent<
         max: 32,
         step: 1
       });
+      schema.push({
+        type: FormSchemaType.Range,
+        name: 'distancePeriod',
+        label: 'Spacing',
+        defaultValue: rainbowPattern.data.distancePeriod,
+        min: 8,
+        max: 128,
+        step: 8
+      });
       break;
     }
   }
@@ -279,7 +299,8 @@ export const PatternInput: FunctionComponent<
                       type: ColorType.HSV,
                       hue: 240,
                       saturation: 1
-                    }
+                    },
+                    distancePeriod: 32
                   }
                 };
                 setPattern(updatedPattern);
@@ -314,7 +335,8 @@ export const PatternInput: FunctionComponent<
                 const updatedPattern: Omit<RainbowPattern, 'id' | 'name'> = {
                   type: PatternType.Rainbow,
                   data: {
-                    rate: 4
+                    rate: 4,
+                    distancePeriod: 32
                   }
                 };
                 setPattern(updatedPattern);

@@ -152,9 +152,10 @@ export async function setLightState({
       }
       case PatternType.Rainbow: {
         const { data } = pattern as RainbowPattern;
-        controller.setWaveParameters(
-          createWaveParameters(createRainbowWave(255, data.rate))
-        );
+        controller.setWaveParameters({
+          ...createWaveParameters(createRainbowWave(255, data.rate)),
+          distancePeriod: data.distancePeriod
+        });
         break;
       }
       case PatternType.Solid: {
@@ -176,8 +177,8 @@ export async function setLightState({
         const waveColor = getColor(data.waveColor);
         const foregroundColor = getColor(data.foregroundColor);
         const backgroundColor = getColor(data.backgroundColor);
-        controller.setWaveParameters(
-          createWaveParameters(
+        controller.setWaveParameters({
+          ...createWaveParameters(
             createMovingWave(waveColor.hue, waveColor.saturation, data.rate, 2),
             createPulsingWave(
               foregroundColor.hue,
@@ -189,8 +190,9 @@ export async function setLightState({
               backgroundColor.saturation,
               255
             )
-          )
-        );
+          ),
+          distancePeriod: data.distancePeriod
+        });
         break;
       }
     }

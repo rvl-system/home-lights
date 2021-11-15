@@ -1,3 +1,8 @@
+## 1.7.0 (2021-11-)
+
+- Added spacing control for wave and rainbow patterns
+- Upgraded build infrastructure and dependencies
+
 ## 1.6.0 (2021-06-03)
 
 - Fixed two reconciliation bugs
