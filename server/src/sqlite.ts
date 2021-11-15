@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { verbose, Database } from 'sqlite3';
+import sqlite3, { Database } from 'sqlite3';
 import { deepMap, createInternalError } from './common/util';
 
 let db: Database;
 
 export function init(dbPath: string): Promise<void> {
-  const sqlite3 = verbose();
+  const sql = sqlite3.verbose();
   return new Promise((resolve, reject) => {
-    db = new sqlite3.Database(dbPath, (err) => {
+    db = new sql.Database(dbPath, (err) => {
       if (err) {
         reject(err);
       } else {

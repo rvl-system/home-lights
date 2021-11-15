@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { v3 as philipsHue } from 'node-hue-api';
-import Api = require('node-hue-api/lib/api/Api');
+import * as Api from 'node-hue-api/lib/api/Api';
 import { ActionType } from '../common/actions';
 import {
   MAX_BRIGHTNESS,
@@ -311,7 +311,8 @@ async function createUser(bridgeIP: string): Promise<string | undefined> {
     });
     return username;
   } catch (e) {
-    if (e.getHueErrorType() === 101) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((e as any).getHueErrorType() === 101) {
       console.warn('The Link button on the bridge was not pressed.');
       return;
     } else {
