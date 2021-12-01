@@ -1,4 +1,9 @@
-## 1.7.0 (2021-11-)
+## 1.7.1 (2021-11-30)
+
+- Fixed a bug where settings couldn't be scrolled
+- Show the current scene in the zone summary
+
+## 1.7.0 (2021-11-14)
 
 - Added spacing control for wave and rainbow patterns
 - Upgraded build infrastructure and dependencies
