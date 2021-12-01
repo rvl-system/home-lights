@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { Button, makeStyles, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import React, { FunctionComponent, useState } from 'react';
 import { RVLInfo, Theme } from '../../common/types';
 import { createInternalError } from '../../common/util';
@@ -61,97 +62,103 @@ export const settingsComponent: FunctionComponent<
   const [selectedNetworkInterface, setSelectedNetworkInterface] = useState(
     props.rvlInfo.networkInterface
   );
+  const innerContentClass = clsx(
+    classes.innerContent,
+    contentClasses.innerContainer
+  );
   return (
     <div className={classes.container}>
-      <div className={contentClasses.innerContainer}>
-        <div className={contentClasses.row}>
-          <GroupInput label="General">
-            <SelectInput
-              name="Theme"
-              label="Theme"
-              defaultValue={props.theme}
-              options={[
-                {
-                  value: Theme.Auto,
-                  label: Theme.Auto
-                },
-                {
-                  value: Theme.Light,
-                  label: Theme.Light
-                },
-                {
-                  value: Theme.Dark,
-                  label: Theme.Dark
-                }
-              ]}
-              onChange={(value) => props.setTheme(value as Theme)}
-            />
-          </GroupInput>
-        </div>
-        <div className={contentClasses.row}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setRebootDialogOpen(true)}
-          >
-            Reboot server
-          </Button>
-        </div>
-        <div className={contentClasses.row}>
-          <GroupInput label="Philips Hue"></GroupInput>
+      <div className={classes.content}>
+        <div className={innerContentClass}>
           <div className={contentClasses.row}>
-            {props.philipsHueBridgeIp ? (
-              <Typography>Bridge IP: {props.philipsHueBridgeIp}</Typography>
-            ) : (
+            <GroupInput label="General">
+              <SelectInput
+                name="Theme"
+                label="Theme"
+                defaultValue={props.theme}
+                options={[
+                  {
+                    value: Theme.Auto,
+                    label: Theme.Auto
+                  },
+                  {
+                    value: Theme.Light,
+                    label: Theme.Light
+                  },
+                  {
+                    value: Theme.Dark,
+                    label: Theme.Dark
+                  }
+                ]}
+                onChange={(value) => props.setTheme(value as Theme)}
+              />
+            </GroupInput>
+          </div>
+          <div className={contentClasses.row}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setRebootDialogOpen(true)}
+            >
+              Reboot server
+            </Button>
+          </div>
+          <div className={contentClasses.row}>
+            <GroupInput label="Philips Hue"></GroupInput>
+            <div className={contentClasses.row}>
+              {props.philipsHueBridgeIp ? (
+                <Typography>Bridge IP: {props.philipsHueBridgeIp}</Typography>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={props.connectPhilipsHueBridge}
+                >
+                  Connect Bridge
+                </Button>
+              )}
+            </div>
+            <div className={contentClasses.row}>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={props.connectPhilipsHueBridge}
+                onClick={props.refreshPhilipsHueLights}
               >
-                Connect Bridge
+                Refresh Lights
               </Button>
-            )}
+            </div>
           </div>
           <div className={contentClasses.row}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={props.refreshPhilipsHueLights}
-            >
-              Refresh Lights
-            </Button>
+            <GroupInput label="LIFX"></GroupInput>
+            <div className={contentClasses.row}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={props.refreshLIFXLights}
+              >
+                Refresh Lights
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className={contentClasses.row}>
-          <GroupInput label="LIFX"></GroupInput>
           <div className={contentClasses.row}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={props.refreshLIFXLights}
-            >
-              Refresh Lights
-            </Button>
+            <GroupInput label="RVL">
+              <SelectInput
+                name="RVL Network Interface"
+                label="RVL Network Interface"
+                defaultValue={props.rvlInfo.networkInterface || ''}
+                options={props.rvlInfo.availableInterfaces.map(
+                  (networkInterface) => ({
+                    value: networkInterface,
+                    label: networkInterface
+                  })
+                )}
+                onChange={(value) => {
+                  setSelectedNetworkInterface(value);
+                  setChangeInterfaceDialogOpen(true);
+                }}
+              />
+            </GroupInput>
           </div>
-        </div>
-        <div className={contentClasses.row}>
-          <GroupInput label="RVL">
-            <SelectInput
-              name="RVL Network Interface"
-              label="RVL Network Interface"
-              defaultValue={props.rvlInfo.networkInterface || ''}
-              options={props.rvlInfo.availableInterfaces.map(
-                (networkInterface) => ({
-                  value: networkInterface,
-                  label: networkInterface
-                })
-              )}
-              onChange={(value) => {
-                setSelectedNetworkInterface(value);
-                setChangeInterfaceDialogOpen(true);
-              }}
-            />
-          </GroupInput>
         </div>
       </div>
       <ConfirmDialog
