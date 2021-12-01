@@ -35,11 +35,15 @@ import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
 import { EditZoneButtonContainer } from './editZoneButtonContainer';
 import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%'
+  },
+  sceneLabel: {
+    color: theme.palette.text.secondary,
+    fontStyle: 'italic'
   }
-});
+}));
 
 export interface ZoneComponentProps {
   zone: Zone;
@@ -92,7 +96,12 @@ export const ZoneComponent: FunctionComponent<
                 checked={props.state.power}
               />
               <Typography className={contentClasses.itemTitle}>
-                {props.zone.name}
+                {props.zone.name}{' '}
+                {props.currentScene && (
+                  <span className={classes.sceneLabel}>
+                    ({props.currentScene.name})
+                  </span>
+                )}
               </Typography>
               <EditZoneButtonContainer
                 className={contentClasses.rightAccordionButton}
