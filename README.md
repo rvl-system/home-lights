@@ -11,8 +11,9 @@ A Raspberry Pi makes an ideal system for running Home Lights, and all instructio
 
 ## Installation
 
-```
+```bash
 sudo mkdir /app
+# If you set up a custom username, replace pi:pi with name:name
 sudo chown -R pi:pi /app
 npm config set prefix /app
 npm install -g home-lights
