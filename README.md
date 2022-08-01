@@ -14,7 +14,7 @@ A Raspberry Pi makes an ideal system for running Home Lights, and all instructio
 ```
 sudo mkdir /app
 sudo chown -R pi:pi /app
-sudo npm config set prefix /app
+npm config set prefix /app
 npm install -g home-lights
 sudo ln -s /app/bin/home-lights /usr/bin/home-lights
 ```
