@@ -106,7 +106,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
   for (let i = zoneStates.length - 1; i >= 0; i--) {
     const zoneState = zoneStates[i];
     if (!zones.find((zone) => zone.id === zoneState.zoneId)) {
-      await dbRun(`DELETE FROM ${ZONE_STATES_TABLE} WHERE id = ?`, [
+      await dbRun(`DELETE FROM ${ZONE_STATES_TABLE} WHERE zone_id = ?`, [
         zoneState.zoneId
       ]);
       zoneStates.splice(i, 1);

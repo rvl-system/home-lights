@@ -1,3 +1,7 @@
+## 1.7.2 (2022-10-6)
+
+- Fixed a bug with deleting zones
+
 ## 1.7.1 (2021-11-30)
 
 - Fixed a bug where settings couldn't be scrolled
