@@ -1,6 +1,7 @@
-## 1.7.2 (2022-10-6)
+## 1.7.2 (2023-9-29)
 
 - Fixed a bug with deleting zones
+- Forked the now abandonware node-lifx-lan to add support for newer bulbs
 
 ## 1.7.1 (2021-11-30)
 
