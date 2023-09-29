@@ -77,7 +77,8 @@ export async function dbAll(
           (value) => (value === null ? undefined : value)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ) as any[];
-        resolve(results);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        resolve(results as any[]);
       }
     });
   });
