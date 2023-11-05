@@ -26,13 +26,16 @@ import { ActionType } from '../common/actions';
 import { createContainer } from '../reduxology';
 import { SliceName } from '../types';
 
-export const FooterContainer = createContainer(
-  (getSlice): FooterComponentProps => {
+export const FooterContainer = createContainer<
+  FooterComponentProps,
+  FooterComponentDispatch
+>(
+  (getSlice) => {
     return {
       selectedTab: getSlice(SliceName.LocalState).selectedTab
     };
   },
-  (dispatch): FooterComponentDispatch => {
+  (dispatch) => {
     return {
       selectTab(newTab) {
         dispatch(ActionType.SelectTab, newTab);

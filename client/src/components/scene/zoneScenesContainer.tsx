@@ -34,8 +34,12 @@ export interface ZoneScenesContainerProps {
   onSceneSelected: () => void;
 }
 
-export const ZoneScenesContainer = createContainer(
-  (getSlice, ownProps: ZoneScenesContainerProps): ZoneScenesComponentProps => {
+export const ZoneScenesContainer = createContainer<
+  ZoneScenesComponentProps,
+  ZoneScenesComponentDispatch,
+  ZoneScenesContainerProps
+>(
+  (getSlice, ownProps) => {
     const state = getItem(
       ownProps.zone.id,
       getSlice(SliceName.SystemState).zoneStates,
@@ -51,7 +55,7 @@ export const ZoneScenesContainer = createContainer(
       state
     };
   },
-  (dispatch, ownProps): ZoneScenesComponentDispatch => ({
+  (dispatch, ownProps) => ({
     deleteScene(id) {
       dispatch(ActionType.DeleteScene, { id });
     },

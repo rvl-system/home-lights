@@ -22,13 +22,16 @@ import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 
-export const ZonesTabContainer = createContainer(
-  (getSlice): ZonesTabProps => ({
+export const ZonesTabContainer = createContainer<
+  ZonesTabProps,
+  ZonesTabDispatch
+>(
+  (getSlice) => ({
     zones: getSlice(SliceName.Zones),
     state: getSlice(SliceName.SystemState),
     scenes: getSlice(SliceName.Scenes).scenes
   }),
-  (dispatch): ZonesTabDispatch => ({
+  (dispatch) => ({
     deleteZone(id) {
       dispatch(ActionType.DeleteZone, { id });
     },

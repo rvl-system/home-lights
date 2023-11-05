@@ -32,11 +32,12 @@ export type EditLightButtonContainerProps = Omit<
   'zones' | 'unavailableLightNames' | 'unavailableRVLChannels'
 >;
 
-export const EditLightButtonContainer = createContainer(
-  (
-    getSlice,
-    ownProps: EditLightButtonContainerProps
-  ): EditLightButtonProps => ({
+export const EditLightButtonContainer = createContainer<
+  EditLightButtonProps,
+  EditLightButtonDispatch,
+  EditLightButtonContainerProps
+>(
+  (getSlice, ownProps) => ({
     ...ownProps,
     zones: getSlice(SliceName.Zones),
     unavailableLightNames: getSlice(SliceName.Lights)
@@ -49,7 +50,7 @@ export const EditLightButtonContainer = createContainer(
       )
       .map((light) => (light as RVLLight).channel)
   }),
-  (dispatch): EditLightButtonDispatch => ({
+  (dispatch) => ({
     editLight(light) {
       dispatch(ActionType.EditLight, light);
     }

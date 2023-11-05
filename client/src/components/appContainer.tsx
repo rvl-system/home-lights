@@ -21,8 +21,8 @@ import { AppComponent, AppComponentProps } from './appComponent';
 import { createContainer } from '../reduxology';
 import { SliceName } from '../types';
 
-export const AppContainer = createContainer(
-  (getSlice): AppComponentProps => {
+export const AppContainer = createContainer<AppComponentProps, object>(
+  (getSlice) => {
     return {
       selectedTab: getSlice(SliceName.LocalState).selectedTab,
       connected: getSlice(SliceName.LocalState).connected,

@@ -26,11 +26,14 @@ import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 
-export const PatternsTabContainer = createContainer(
-  (getSlice): PatternsTabProps => ({
+export const PatternsTabContainer = createContainer<
+  PatternsTabProps,
+  PatternsTabDispatch
+>(
+  (getSlice) => ({
     patterns: getSlice(SliceName.Patterns)
   }),
-  (dispatch): PatternsTabDispatch => ({
+  (dispatch) => ({
     deletePattern(id: number) {
       dispatch(ActionType.DeletePattern, { id });
     }

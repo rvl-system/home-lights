@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from './components/appContainer';
 import { connect } from './connection';
@@ -35,7 +36,7 @@ import { createApp } from './reduxology';
 async function run() {
   const appState = await connect();
 
-  const app = createApp({
+  const App = createApp({
     container: AppContainer,
     listeners,
     reducers: [
@@ -51,6 +52,6 @@ async function run() {
     ]
   });
 
-  render(app, document.getElementById('app'));
+  render(<App />, document.getElementById('app'));
 }
 run();

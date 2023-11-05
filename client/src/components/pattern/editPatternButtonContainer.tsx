@@ -31,17 +31,18 @@ export type EditPatternButtonContainerProps = Omit<
   'unavailablePatternNames'
 >;
 
-export const EditPatternButtonContainer = createContainer(
-  (
-    getSlice,
-    ownProps: EditPatternButtonContainerProps
-  ): EditPatternButtonProps => ({
+export const EditPatternButtonContainer = createContainer<
+  EditPatternButtonProps,
+  EditPatternButtonDispatch,
+  EditPatternButtonContainerProps
+>(
+  (getSlice, ownProps) => ({
     ...ownProps,
     unavailablePatternNames: getSlice(SliceName.Patterns)
       .map((pattern) => pattern.name)
       .filter((patternName) => patternName !== ownProps.pattern.name)
   }),
-  (dispatch): EditPatternButtonDispatch => ({
+  (dispatch) => ({
     editPattern(pattern) {
       dispatch(ActionType.EditPattern, pattern);
     }

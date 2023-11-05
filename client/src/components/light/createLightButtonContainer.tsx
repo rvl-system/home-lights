@@ -27,8 +27,11 @@ import { LightType, RVLLight } from '../../common/types';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 
-export const CreateLightButtonContainer = createContainer(
-  (getSlice): CreateLightButtonProps => ({
+export const CreateLightButtonContainer = createContainer<
+  CreateLightButtonProps,
+  CreateLightButtonDispatch
+>(
+  (getSlice) => ({
     zones: getSlice(SliceName.Zones),
     unavailableLightNames: getSlice(SliceName.Lights).map(
       (light) => light.name
@@ -37,7 +40,7 @@ export const CreateLightButtonContainer = createContainer(
       .filter((light) => light.type === LightType.RVL)
       .map((light) => (light as RVLLight).channel)
   }),
-  (dispatch): CreateLightButtonDispatch => ({
+  (dispatch) => ({
     createRVLLight(name, channel, zoneId) {
       dispatch(ActionType.CreateRVLLight, { name, channel, zoneId });
     }

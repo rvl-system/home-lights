@@ -26,11 +26,14 @@ import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 
-export const CreateZoneButtonContainer = createContainer(
-  (getSlice): CreateZoneButtonProps => ({
+export const CreateZoneButtonContainer = createContainer<
+  CreateZoneButtonProps,
+  CreateZoneButtonDispatch
+>(
+  (getSlice) => ({
     unavailableZoneNames: getSlice(SliceName.Zones).map((zone) => zone.name)
   }),
-  (dispatch): CreateZoneButtonDispatch => ({
+  (dispatch) => ({
     createZone(name) {
       dispatch(ActionType.CreateZone, { name });
     }

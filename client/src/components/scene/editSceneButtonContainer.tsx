@@ -31,11 +31,12 @@ export interface EditSceneButtonContainerProps {
   scene: Scene;
 }
 
-export const EditSceneButtonContainer = createContainer(
-  (
-    getSlice,
-    ownProps: EditSceneButtonContainerProps
-  ): EditSceneButtonProps => ({
+export const EditSceneButtonContainer = createContainer<
+  EditSceneButtonProps,
+  EditSceneButtonDispatch,
+  EditSceneButtonContainerProps
+>(
+  (getSlice, ownProps) => ({
     scene: ownProps.scene,
     patterns: getSlice(SliceName.Patterns),
     lights: getSlice(SliceName.Lights),
@@ -47,7 +48,7 @@ export const EditSceneButtonContainer = createContainer(
       )
       .map((scene) => scene.name)
   }),
-  (dispatch): EditSceneButtonDispatch => ({
+  (dispatch) => ({
     editScene(scene) {
       dispatch(ActionType.EditScene, scene);
     }

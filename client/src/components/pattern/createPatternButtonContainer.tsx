@@ -26,13 +26,16 @@ import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 
-export const CreatePatternButtonContainer = createContainer(
-  (getSlice): CreatePatternButtonProps => ({
+export const CreatePatternButtonContainer = createContainer<
+  CreatePatternButtonProps,
+  CreatePatternButtonDispatch
+>(
+  (getSlice) => ({
     unavailablePatternNames: getSlice(SliceName.Patterns).map(
       (pattern) => pattern.name
     )
   }),
-  (dispatch): CreatePatternButtonDispatch => ({
+  (dispatch) => ({
     createPattern(name, type, data) {
       dispatch(ActionType.CreatePattern, { name, type, data });
     }

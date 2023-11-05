@@ -95,7 +95,6 @@ export const useContentStyles = makeStyles((theme) => ({
   },
   itemTitle: {
     fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
     paddingLeft: '1em',
     gridColumnStart: 'title-start',
     gridColumnEnd: 'right-icon-start',

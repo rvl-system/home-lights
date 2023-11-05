@@ -31,14 +31,18 @@ export type EditZoneButtonContainerProps = Omit<
   'zoneNames' | 'unavailableZoneNames'
 >;
 
-export const EditZoneButtonContainer = createContainer(
-  (getSlice, ownProps: EditZoneButtonContainerProps): EditZoneButtonProps => ({
+export const EditZoneButtonContainer = createContainer<
+  EditZoneButtonProps,
+  EditZoneButtonDispatch,
+  EditZoneButtonContainerProps
+>(
+  (getSlice, ownProps) => ({
     ...ownProps,
     unavailableZoneNames: getSlice(SliceName.Zones)
       .map((zone) => zone.name)
       .filter((zoneName) => zoneName !== ownProps.zone.name)
   }),
-  (dispatch): EditZoneButtonDispatch => ({
+  (dispatch) => ({
     editZone(zone) {
       dispatch(ActionType.EditZone, zone);
     }

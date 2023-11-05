@@ -26,13 +26,16 @@ import { ActionType } from '../common/actions';
 import { createContainer } from '../reduxology';
 import { SliceName } from '../types';
 
-export const NotificationContainer = createContainer(
-  (getSlice): NotificationComponentProps => {
+export const NotificationContainer = createContainer<
+  NotificationComponentProps,
+  NotificationComponentDispatch
+>(
+  (getSlice) => {
     return {
       notification: getSlice(SliceName.Notification)
     };
   },
-  (dispatch): NotificationComponentDispatch => ({
+  (dispatch) => ({
     dismiss: () => dispatch(ActionType.DismissNotification)
   }),
   NotificationComponent

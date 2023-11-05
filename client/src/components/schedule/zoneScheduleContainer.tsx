@@ -52,11 +52,12 @@ export interface ZoneScheduleContainerProps {
   selected: boolean;
 }
 
-export const ZoneScheduleContainer = createContainer(
-  (
-    getSlice,
-    ownProps: ZoneScheduleContainerProps
-  ): ZoneScheduleComponentProps => {
+export const ZoneScheduleContainer = createContainer<
+  ZoneScheduleComponentProps,
+  ZoneScheduleComponentDispatch,
+  ZoneScheduleContainerProps
+>(
+  (getSlice, ownProps) => {
     const schedule = getItem(
       ownProps.zone.id,
       getSlice(SliceName.Schedules),
@@ -78,7 +79,7 @@ export const ZoneScheduleContainer = createContainer(
       schedule
     };
   },
-  (dispatch): ZoneScheduleComponentDispatch => ({
+  (dispatch) => ({
     enableSchedule(schedule) {
       dispatch(ActionType.EnableSchedule, schedule);
     }

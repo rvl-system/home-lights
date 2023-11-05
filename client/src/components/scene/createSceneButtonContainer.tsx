@@ -30,11 +30,12 @@ export interface CreateSceneButtonContainerProps {
   zoneId: number;
 }
 
-export const CreateSceneButtonContainer = createContainer(
-  (
-    getSlice,
-    ownProps: CreateSceneButtonContainerProps
-  ): CreateSceneButtonProps => ({
+export const CreateSceneButtonContainer = createContainer<
+  CreateSceneButtonProps,
+  CreateSceneButtonDispatch,
+  CreateSceneButtonContainerProps
+>(
+  (getSlice, ownProps) => ({
     zoneId: ownProps.zoneId,
     lights: getSlice(SliceName.Lights).filter(
       (light) => light.zoneId === ownProps.zoneId
@@ -44,10 +45,7 @@ export const CreateSceneButtonContainer = createContainer(
       .scenes.filter((scene) => scene.zoneId === ownProps.zoneId)
       .map((scene) => scene.name)
   }),
-  (
-    dispatch,
-    ownProps: CreateSceneButtonContainerProps
-  ): CreateSceneButtonDispatch => ({
+  (dispatch, ownProps) => ({
     createScene(name, lights) {
       dispatch(ActionType.CreateScene, {
         zoneId: ownProps.zoneId,

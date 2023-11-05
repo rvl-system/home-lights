@@ -26,15 +26,18 @@ import { ActionType } from '../../common/actions';
 import { createContainer } from '../../reduxology';
 import { SliceName } from '../../types';
 
-export const SettingsContainer = createContainer(
-  (getSlice): SettingsComponentProps => {
+export const SettingsContainer = createContainer<
+  SettingsComponentProps,
+  SettingsComponentDispatch
+>(
+  (getSlice) => {
     return {
       theme: getSlice(SliceName.Settings).theme,
       philipsHueBridgeIp: getSlice(SliceName.SystemState).philipsHueBridgeIp,
       rvlInfo: getSlice(SliceName.SystemState).rvlInfo
     };
   },
-  (dispatch): SettingsComponentDispatch => ({
+  (dispatch) => ({
     reboot() {
       dispatch(ActionType.Reboot);
     },

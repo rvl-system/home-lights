@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ActionType } from '../common/actions';
 import { sendMessage } from '../connection';
-import { createListener, dispatch } from '../reduxology';
+import { handle, dispatch } from '../reduxology';
 
 const DEBOUNCE_INTERVAL = 33;
 
@@ -65,7 +65,7 @@ function connectActions(spec: Record<string, string>) {
   for (const action in spec) {
     listeners.push(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      createListener(action as any, async (data) => {
+      handle(action as any, async (getSlice, data) => {
         try {
           sendMessage({
             type: action as ActionType,
@@ -90,7 +90,7 @@ function connectDebouncedActions(spec: Record<string, string>) {
     let isSending = false;
     listeners.push(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      createListener(action as any, async (data) => {
+      handle(action as any, async (getSlice, data) => {
         function sendAction() {
           try {
             sendMessage({
