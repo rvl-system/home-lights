@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Server",
       "program": "${workspaceFolder}/server/bin/server.js",
-      "args": [ "Wi-Fi" ],
+      "args": [ "Ethernet" ],
       "outFiles": [
         "${workspaceFolder}/server/dist/**/*.js"
       ],
