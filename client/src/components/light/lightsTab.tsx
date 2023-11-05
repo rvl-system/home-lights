@@ -19,11 +19,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Divider, List } from '@material-ui/core';
 import React, { Fragment, FunctionComponent } from 'react';
-import { Light, Zone } from '../../common/types';
-import { useContainerStyles } from '../lib/pageStyles';
 import { CreateLightButtonContainer } from './createLightButtonContainer';
 import { DeleteLightButtonDispatch } from './deleteLightButton';
 import { LightComponent } from './lightComponent';
+import { Light, Zone } from '../../common/types';
+import { useContainerStyles } from '../lib/pageStyles';
 
 export interface LightsTabProps {
   lights: Light[];
@@ -32,31 +32,32 @@ export interface LightsTabProps {
 
 export type LightsTabDispatch = DeleteLightButtonDispatch;
 
-export const LightsTab: FunctionComponent<LightsTabProps & LightsTabDispatch> =
-  (props) => {
-    const classes = useContainerStyles();
-    return (
-      <div className={classes.container}>
-        <div className={classes.altHeader}>
-          <CreateLightButtonContainer />
-        </div>
-        <div className={classes.content}>
-          <div className={classes.innerContent}>
-            <List>
-              {props.lights.map((light) => (
-                <Fragment key={light.id}>
-                  <Divider />
-                  <LightComponent
-                    light={light}
-                    deleteLight={props.deleteLight}
-                    zones={props.zones}
-                  />
-                </Fragment>
-              ))}
-              <Divider />
-            </List>
-          </div>
+export const LightsTab: FunctionComponent<
+  LightsTabProps & LightsTabDispatch
+> = (props) => {
+  const classes = useContainerStyles();
+  return (
+    <div className={classes.container}>
+      <div className={classes.altHeader}>
+        <CreateLightButtonContainer />
+      </div>
+      <div className={classes.content}>
+        <div className={classes.innerContent}>
+          <List>
+            {props.lights.map((light) => (
+              <Fragment key={light.id}>
+                <Divider />
+                <LightComponent
+                  light={light}
+                  deleteLight={props.deleteLight}
+                  zones={props.zones}
+                />
+              </Fragment>
+            ))}
+            <Divider />
+          </List>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};

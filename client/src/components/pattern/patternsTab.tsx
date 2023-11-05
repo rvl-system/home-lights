@@ -19,10 +19,10 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Divider, List } from '@material-ui/core';
 import React, { Fragment, FunctionComponent } from 'react';
-import { Pattern } from '../../common/types';
-import { useContainerStyles } from '../lib/pageStyles';
 import { CreatePatternButtonContainer } from './createPatternButtonContainer';
 import { PatternComponent, PatternComponentDispatch } from './patternComponent';
+import { Pattern } from '../../common/types';
+import { useContainerStyles } from '../lib/pageStyles';
 
 export interface PatternsTabProps {
   patterns: Pattern[];

@@ -20,11 +20,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Divider, List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { Fragment, FunctionComponent } from 'react';
+import { CreateSceneButtonContainer } from './createSceneButtonContainer';
+import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 import { SCHEDULE_SCENE_ID } from '../../common/config';
 import { EditMode, Light, Scene, Zone, ZoneState } from '../../common/types';
 import { ZoneScheduleContainer } from '../schedule/zoneScheduleContainer';
-import { CreateSceneButtonContainer } from './createSceneButtonContainer';
-import { SceneComponent, SceneComponentDispatch } from './sceneComponent';
 
 export interface ZoneScenesComponentProps {
   zone: Zone;

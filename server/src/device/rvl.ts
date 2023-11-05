@@ -31,6 +31,7 @@ import {
   RVLController,
   LogLevel
 } from 'rvl-node';
+import { SetLightStateOptions } from './types';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
   Color,
@@ -50,7 +51,6 @@ import {
   setRVLInterface as setRVLInterfaceInternal
 } from '../db/rvl';
 import { reboot } from '../reboot';
-import { SetLightStateOptions } from './types';
 
 let manager: RVLManager;
 const controllers = new Map<number, RVLController>();

@@ -20,8 +20,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { Pattern } from '../../common/types';
 import { PatternInput } from './patternInput';
+import { Pattern } from '../../common/types';
 
 export interface EditPatternButtonProps {
   pattern: Pattern;

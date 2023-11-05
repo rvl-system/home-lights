@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../../common/actions';
-import { Scene } from '../../common/types';
-import { createContainer } from '../../reduxology';
-import { SliceName } from '../../types';
 import {
   EditSceneButton,
   EditSceneButtonProps,
   EditSceneButtonDispatch
 } from './editSceneButton';
+import { ActionType } from '../../common/actions';
+import { Scene } from '../../common/types';
+import { createContainer } from '../../reduxology';
+import { SliceName } from '../../types';
 
 export interface EditSceneButtonContainerProps {
   scene: Scene;

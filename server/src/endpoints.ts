@@ -18,8 +18,8 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { join } from 'path';
+import fastifyStatic from '@fastify/static';
 import fastify from 'fastify';
-import fastifyStatic from 'fastify-static';
 import WebSocket, { Server } from 'ws';
 import { setUpdateListener, updateClients } from './clients';
 import { ActionType } from './common/actions';

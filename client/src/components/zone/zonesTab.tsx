@@ -20,11 +20,11 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Fade } from '@material-ui/core';
 import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
+import { CreateZoneButtonContainer } from './createZoneButtonContainer';
+import { ZoneComponent, ZoneComponentDispatch } from './zoneComponent';
 import { EditMode, Scene, SystemState, Zone } from '../../common/types';
 import { getItem } from '../../common/util';
 import { useContainerStyles } from '../lib/pageStyles';
-import { CreateZoneButtonContainer } from './createZoneButtonContainer';
-import { ZoneComponent, ZoneComponentDispatch } from './zoneComponent';
 
 export interface ZonesTabProps {
   zones: Zone[];

@@ -35,6 +35,7 @@ import React, {
   useState
 } from 'react';
 import { throttle } from 'throttle-debounce';
+import { ColorSchema } from './schema';
 import {
   Color,
   ColorType,
@@ -42,7 +43,6 @@ import {
   TemperatureColor
 } from '../../../common/types';
 import { getHSVColor } from '../../../common/util';
-import { ColorSchema } from './schema';
 
 const WHEEL_DIAMETER = 300;
 

@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../../common/actions';
-import { LightType, RVLLight } from '../../common/types';
-import { createContainer } from '../../reduxology';
-import { SliceName } from '../../types';
 import {
   CreateLightButton,
   CreateLightButtonProps,
   CreateLightButtonDispatch
 } from './createLightButton';
+import { ActionType } from '../../common/actions';
+import { LightType, RVLLight } from '../../common/types';
+import { createContainer } from '../../reduxology';
+import { SliceName } from '../../types';
 
 export const CreateLightButtonContainer = createContainer(
   (getSlice): CreateLightButtonProps => ({

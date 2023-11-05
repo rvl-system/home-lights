@@ -21,17 +21,17 @@ import { ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
 import {
+  DeleteLightButton,
+  DeleteLightButtonDispatch
+} from './deleteLightButton';
+import { EditLightButtonContainer } from './editLightButtonContainer';
+import {
   Light as LightInterfaceType,
   LightType,
   Zone
 } from '../../common/types';
 import { getItem } from '../../common/util';
 import { useContentStyles } from '../lib/pageStyles';
-import {
-  DeleteLightButton,
-  DeleteLightButtonDispatch
-} from './deleteLightButton';
-import { EditLightButtonContainer } from './editLightButtonContainer';
 
 const styles = makeStyles({
   caption: {

@@ -19,9 +19,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ListItem, makeStyles, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
+import { EditScheduleButtonContainer } from './editScheduleButtonContainer';
 import { EditMode, Scene, Schedule } from '../../common/types';
 import { useContentStyles } from '../lib/pageStyles';
-import { EditScheduleButtonContainer } from './editScheduleButtonContainer';
 
 const useStyles = makeStyles({
   caption: {

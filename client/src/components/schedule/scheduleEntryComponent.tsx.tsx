@@ -19,9 +19,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { ListItem, makeStyles, Typography } from '@material-ui/core';
 import React, { FunctionComponent } from 'react';
-import { Scene, ScheduleEntry } from '../../common/types';
-import { formatTime, getItem } from '../../common/util';
-import { useContentStyles } from '../lib/pageStyles';
 import {
   DeleteScheduleEntryButton,
   DeleteScheduleEntryButtonDispatch
@@ -30,6 +27,9 @@ import {
   EditScheduleEntryButton,
   EditScheduleEntryButtonDispatch
 } from './editScheduleEntryButton';
+import { Scene, ScheduleEntry } from '../../common/types';
+import { formatTime, getItem } from '../../common/util';
+import { useContentStyles } from '../lib/pageStyles';
 
 const useStyles = makeStyles({
   time: {

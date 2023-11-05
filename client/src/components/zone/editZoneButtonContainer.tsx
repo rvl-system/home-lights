@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../../common/actions';
-import { createContainer } from '../../reduxology';
-import { SliceName } from '../../types';
 import {
   EditZoneButton,
   EditZoneButtonProps,
   EditZoneButtonDispatch
 } from './editZoneButton';
+import { ActionType } from '../../common/actions';
+import { createContainer } from '../../reduxology';
+import { SliceName } from '../../types';
 
 export type EditZoneButtonContainerProps = Omit<
   EditZoneButtonProps,

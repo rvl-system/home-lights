@@ -20,12 +20,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { Button, Fade, List } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
+import { CreateScheduleEntryButton } from './createScheduleEntryButton';
+import { ScheduleEntryComponent } from './scheduleEntryComponent.tsx';
 import { Scene, Schedule, ScheduleEntry, Zone } from '../../common/types';
 import { scheduleEntriesSorter } from '../../utils';
 import { Modal } from '../lib/modal';
 import { useContentStyles } from '../lib/pageStyles';
-import { CreateScheduleEntryButton } from './createScheduleEntryButton';
-import { ScheduleEntryComponent } from './scheduleEntryComponent.tsx';
 
 export interface EditScheduleButtonProps {
   schedule: Schedule;

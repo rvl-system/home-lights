@@ -20,13 +20,13 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 import { ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { FunctionComponent } from 'react';
-import { Pattern } from '../../common/types';
-import { useContentStyles } from '../lib/pageStyles';
 import {
   DeletePatternButton,
   DeletePatternButtonDispatch
 } from './deletePatternButton';
 import { EditPatternButtonContainer } from './editPatternButtonContainer';
+import { Pattern } from '../../common/types';
+import { useContentStyles } from '../lib/pageStyles';
 
 const useStyles = makeStyles({
   caption: {

@@ -25,13 +25,13 @@ import {
 } from '@material-ui/core/styles';
 import { reduce } from 'conditional-reduce';
 import React, { FunctionComponent, useMemo } from 'react';
-import { SelectedTab, Theme } from '../common/types';
 import { FooterContainer } from './footerContainer';
 import { LightsTabContainer } from './light/lightsTabContainer';
 import { NotificationContainer } from './notificationContainer';
 import { PatternsTabContainer } from './pattern/patternsTabContainer';
 import { SettingsContainer } from './settings/settingsContainer';
 import { ZonesTabContainer } from './zone/zonesTabContainer';
+import { SelectedTab, Theme } from '../common/types';
 
 export interface AppComponentProps {
   selectedTab: SelectedTab;

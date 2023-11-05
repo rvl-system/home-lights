@@ -19,7 +19,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { makeStyles } from '@material-ui/core/styles';
 import React, { PropsWithChildren, useState } from 'react';
-import { UIColor } from '../../types';
 import { ColorInput, getDefaultColorValue } from './formInputs/colorInput';
 import { GroupInput } from './formInputs/groupInput';
 import { getDefaultRangeValue, RangeInput } from './formInputs/rangeInput';
@@ -27,6 +26,7 @@ import { FormSchema, FormSchemaType } from './formInputs/schema';
 import { getDefaultSelectValue, SelectInput } from './formInputs/selectInput';
 import { TextInput, getDefaultTextValue } from './formInputs/textInput';
 import { Modal } from './modal';
+import { UIColor } from '../../types';
 
 export { FormSchemaType, FormSchema } from './formInputs/schema';
 

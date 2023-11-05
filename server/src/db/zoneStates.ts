@@ -18,6 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { DateTime } from 'luxon';
+import { setSceneBrightness, getScenes } from './scenes';
+import { getSchedules } from './schedule';
+import { getZones } from './zones';
 import { updateClients } from '../clients';
 import { ActionType } from '../common/actions';
 import { SCHEDULE_SCENE_ID } from '../common/config';
@@ -31,9 +34,6 @@ import {
 import { getItem, hasItem } from '../common/util';
 import { dbAll, dbRun } from '../sqlite';
 import { ActionHandler } from '../types';
-import { setSceneBrightness, getScenes } from './scenes';
-import { getSchedules } from './schedule';
-import { getZones } from './zones';
 
 const ZONE_STATES_TABLE = 'system_state';
 
@@ -141,27 +141,29 @@ export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
   await setZoneState(zoneState);
 };
 
-export const enableZoneSchedule: ActionHandler<ActionType.EnableSchedule> =
-  async (request) => {
-    // Bail early if the schedule is already running or there is no schedule set
-    if (zoneTimeouts.has(request.zoneId) || request.entries.length === 0) {
-      return;
-    }
-    const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
-    zoneState.currentSceneId = SCHEDULE_SCENE_ID;
-    zoneState.power = true;
-    await setZoneState(zoneState);
-    await scheduleTick(request);
-  };
+export const enableZoneSchedule: ActionHandler<
+  ActionType.EnableSchedule
+> = async (request) => {
+  // Bail early if the schedule is already running or there is no schedule set
+  if (zoneTimeouts.has(request.zoneId) || request.entries.length === 0) {
+    return;
+  }
+  const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
+  zoneState.currentSceneId = SCHEDULE_SCENE_ID;
+  zoneState.power = true;
+  await setZoneState(zoneState);
+  await scheduleTick(request);
+};
 
-export const setZoneBrightness: ActionHandler<ActionType.SetZoneBrightness> =
-  async (request) => {
-    const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
-    if (zoneState.currentSceneId === undefined) {
-      return;
-    }
-    await setSceneBrightness(zoneState.currentSceneId, request.brightness);
-  };
+export const setZoneBrightness: ActionHandler<
+  ActionType.SetZoneBrightness
+> = async (request) => {
+  const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
+  if (zoneState.currentSceneId === undefined) {
+    return;
+  }
+  await setSceneBrightness(zoneState.currentSceneId, request.brightness);
+};
 
 export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
   request

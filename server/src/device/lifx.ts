@@ -18,6 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import lifx, { Device, LifxLanColorHSB } from 'node-lifx-lan';
+import { SetLightStateOptions } from './types';
 import { ActionType } from '../common/actions';
 import { MAX_BRIGHTNESS } from '../common/config';
 import {
@@ -30,8 +31,6 @@ import {
 import { getItem, createInternalError } from '../common/util';
 import { createLight, editLight, getLights } from '../db/lights';
 import { ActionHandler } from '../types';
-
-import { SetLightStateOptions } from './types';
 
 const REFRESH_RATE = 60 * 1000; // 1 minute
 let devices: Device[] = [];
@@ -50,47 +49,48 @@ export async function init(): Promise<void> {
   update();
 }
 
-export const refreshLIFXLights: ActionHandler<ActionType.RefreshLIFXLights> =
-  async () => {
-    console.log('Reconciling registered LIFX lights vs database');
-    const dbLights = await getLights();
-    devices = await lifx.discover();
+export const refreshLIFXLights: ActionHandler<
+  ActionType.RefreshLIFXLights
+> = async () => {
+  console.log('Reconciling registered LIFX lights vs database');
+  const dbLights = await getLights();
+  devices = await lifx.discover();
 
-    // Add lights from LIFX that are not in the DB
-    for (const light of devices) {
-      const dbLight = dbLights.find(
-        (dbLight) =>
-          dbLight.type === LightType.LIFX &&
-          (dbLight as LIFXLight).lifxId === light.mac
+  // Add lights from LIFX that are not in the DB
+  for (const light of devices) {
+    const dbLight = dbLights.find(
+      (dbLight) =>
+        dbLight.type === LightType.LIFX &&
+        (dbLight as LIFXLight).lifxId === light.mac
+    );
+    if (!dbLight) {
+      console.log(
+        `Found LIFX light "${light.deviceInfo.label}" not in database, adding...`
       );
-      if (!dbLight) {
-        console.log(
-          `Found LIFX light "${light.deviceInfo.label}" not in database, adding...`
-        );
-        const newLight: Omit<LIFXLight, 'id'> = {
-          lifxId: light.mac,
-          type: LightType.LIFX,
-          name: light.deviceInfo.label
-        };
-        await createLight(newLight);
-      } else if (dbLight.name !== light.deviceInfo.label) {
-        console.log(
-          `LIFX light name changed from ${dbLight.name} to ${light.deviceInfo.label}, updating...`
-        );
-        await editLight({
-          ...dbLight,
-          name: light.deviceInfo.label
-        });
-      }
+      const newLight: Omit<LIFXLight, 'id'> = {
+        lifxId: light.mac,
+        type: LightType.LIFX,
+        name: light.deviceInfo.label
+      };
+      await createLight(newLight);
+    } else if (dbLight.name !== light.deviceInfo.label) {
+      console.log(
+        `LIFX light name changed from ${dbLight.name} to ${light.deviceInfo.label}, updating...`
+      );
+      await editLight({
+        ...dbLight,
+        name: light.deviceInfo.label
+      });
     }
+  }
 
-    return {
-      [ActionType.Notify]: {
-        severity: 'success',
-        message: 'LIFX lights refreshed'
-      }
-    };
+  return {
+    [ActionType.Notify]: {
+      severity: 'success',
+      message: 'LIFX lights refreshed'
+    }
   };
+};
 
 export async function setLightState({
   zoneState,

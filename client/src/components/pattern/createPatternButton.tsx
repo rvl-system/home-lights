@@ -21,8 +21,8 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Add as AddIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
-import { ColorType, PatternType } from '../../common/types';
 import { PatternInput } from './patternInput';
+import { ColorType, PatternType } from '../../common/types';
 
 const useStyles = makeStyles({
   container: {

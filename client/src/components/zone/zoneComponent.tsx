@@ -27,13 +27,13 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import React, { FunctionComponent, useState } from 'react';
+import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
+import { EditZoneButtonContainer } from './editZoneButtonContainer';
+import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 import { BRIGHTNESS_STEP, MAX_BRIGHTNESS } from '../../common/config';
 import { EditMode, Scene, Zone, ZoneState } from '../../common/types';
 import { useContentStyles } from '../lib/pageStyles';
 import { ZoneScenesContainer } from '../scene/zoneScenesContainer';
-import { DeleteZoneButton, DeleteZoneButtonDispatch } from './deleteZoneButton';
-import { EditZoneButtonContainer } from './editZoneButtonContainer';
-import { ZonePowerSwitch, ZonePowerSwitchDispatch } from './zonePowerSwitch';
 
 const useStyles = makeStyles((theme) => ({
   container: {
