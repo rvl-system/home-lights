@@ -1,3 +1,8 @@
+## 1.7.3 (2023-11-5)
+
+- Updated RVL Node to bring in emscripten fixes. See https://github.com/nodejs/undici/issues/1857#issuecomment-1793572098 for the bug this fixes
+- Updated a lot of other dependencies to their newest versions.
+
 ## 1.7.2 (2023-9-29)
 
 - Fixed a bug with deleting zones
