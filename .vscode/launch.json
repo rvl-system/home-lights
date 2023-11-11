@@ -11,7 +11,8 @@
       "program": "${workspaceFolder}/server/bin/server.js",
       "args": [ "Ethernet" ],
       "outFiles": [
-        "${workspaceFolder}/server/dist/**/*.js"
+        "${workspaceFolder}/server/dist/**/*.js",
+        "${workspaceRoot}/server/node_modules/rvl-node/dist/**/*"
       ],
       "console": "internalConsole",
       "outputCapture": "std"

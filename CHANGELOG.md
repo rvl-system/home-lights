@@ -1,3 +1,7 @@
+## 1.7.4 (2023-11-10)
+
+- Updated RVL Node to bring in more emscripten fixes
+
 ## 1.7.3 (2023-11-5)
 
 - Updated RVL Node to bring in emscripten fixes. See https://github.com/nodejs/undici/issues/1857#issuecomment-1793572098 for the bug this fixes
