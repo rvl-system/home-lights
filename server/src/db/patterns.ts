@@ -26,12 +26,12 @@ const PATTERNS_TABLE_NAME = 'patterns';
 
 let patterns: Pattern[] = [];
 
-export default async function updateCache(): Promise<void> {
-  const results = await dbAll(`SELECT * FROM ${PATTERNS_TABLE_NAME}`);
+export default function updateCache() {
+  const results = dbAll<Pattern>(`SELECT * FROM ${PATTERNS_TABLE_NAME}`);
   patterns = results.map((result) => ({
     ...result,
     data: JSON.parse(result.data as unknown as string)
-  })) as Pattern[];
+  }));
 }
 
 export function getPatterns(): Pattern[] {
@@ -41,26 +41,26 @@ export function getPatterns(): Pattern[] {
 export const createPattern: ActionHandler<ActionType.CreatePattern> = async (
   request
 ) => {
-  await dbRun(
+  dbRun(
     `INSERT INTO ${PATTERNS_TABLE_NAME} (name, type, data) VALUES (?, ?, ?)`,
     [request.name, request.type, JSON.stringify(request.data)]
   );
-  await updateCache();
+  updateCache();
 };
 
 export const editPattern: ActionHandler<ActionType.EditPattern> = async (
   request
 ) => {
-  await dbRun(
+  dbRun(
     `UPDATE ${PATTERNS_TABLE_NAME} SET name = ?, type = ?, data = ? WHERE id = ?`,
     [request.name, request.type, JSON.stringify(request.data), request.id]
   );
-  await updateCache();
+  updateCache();
 };
 
 export const deletePattern: ActionHandler<ActionType.DeletePattern> = async (
   request
 ) => {
-  await dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [request.id]);
-  await updateCache();
+  dbRun(`DELETE FROM ${PATTERNS_TABLE_NAME} WHERE id = ?`, [request.id]);
+  updateCache();
 };

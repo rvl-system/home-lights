@@ -21,13 +21,14 @@ import { ActionType } from '../common/actions';
 import { NUM_RVL_CHANNELS } from '../common/config';
 import {
   LightType,
-  Light,
   RVLLight,
   PhilipsHueLight,
   LIFXLight,
-  Zone
+  Zone,
+  RawLight,
+  Light
 } from '../common/types';
-import { hasItem, createInternalError } from '../common/util';
+import { hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
 import { ActionHandler } from '../types';
 
@@ -35,12 +36,11 @@ const LIGHTS_TABLE_NAME = 'lights';
 
 let lights: Light[] = [];
 
-export default async function updateCache(): Promise<void> {
-  const rawResults = await dbAll(`SELECT * FROM ${LIGHTS_TABLE_NAME}`);
+export default function updateCache() {
+  const rawResults = dbAll<RawLight>(`SELECT * FROM ${LIGHTS_TABLE_NAME}`);
   lights = rawResults.map((light) => {
     switch (light.type) {
       case LightType.RVL: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         const { id, name, type, channel, zone_id: zoneId } = light;
         const rvlLight: RVLLight = {
           id,
@@ -56,9 +56,7 @@ export default async function updateCache(): Promise<void> {
           id,
           name,
           type,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           philips_hue_id: philipsHueID,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           zone_id: zoneId
         } = light;
         const hueLight: PhilipsHueLight = {
@@ -71,7 +69,6 @@ export default async function updateCache(): Promise<void> {
         return hueLight;
       }
       case LightType.LIFX: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         const { id, name, type, lifx_id: lifxId, zone_id: zoneId } = light;
         const lifxLight: LIFXLight = {
           id,
@@ -82,27 +79,22 @@ export default async function updateCache(): Promise<void> {
         };
         return lifxLight;
       }
-      default:
-        throw createInternalError(
-          `found unknown light type in database "${light.type}"`
-        );
     }
   });
 }
 
-export async function reconcile(zones: Zone[]): Promise<void> {
+export function reconcile(zones: Zone[]) {
   let changesMade = false;
   for (const light of getLights()) {
     if (!hasItem(light.zoneId, zones)) {
-      await dbRun(
-        `UPDATE ${LIGHTS_TABLE_NAME} SET zone_id = null WHERE id = ?`,
-        [light.id]
-      );
+      dbRun(`UPDATE ${LIGHTS_TABLE_NAME} SET zone_id = null WHERE id = ?`, [
+        light.id
+      ]);
       changesMade = true;
     }
   }
   if (changesMade) {
-    await updateCache();
+    updateCache();
   }
 }
 
@@ -113,15 +105,13 @@ export function getLights(): Light[] {
 export const createRVLLight: ActionHandler<ActionType.CreateRVLLight> = async (
   request
 ) => {
-  await createLight({
+  createLight({
     ...request,
     type: LightType.RVL
   });
 };
 
-export async function createLight(
-  createLightRequest: Omit<Light, 'id'>
-): Promise<void> {
+export function createLight(createLightRequest: Omit<Light, 'id'>) {
   switch (createLightRequest.type) {
     case LightType.RVL: {
       const rvlLightRequest = createLightRequest as Omit<RVLLight, 'id'>;
@@ -132,7 +122,7 @@ export async function createLight(
       ) {
         throw new Error(`Invalid RVL channel ${rvlLightRequest.channel}`);
       }
-      await dbRun(
+      dbRun(
         `INSERT INTO ${LIGHTS_TABLE_NAME} (name, type, channel, zone_id) VALUES (?, ?, ?, ?)`,
         [
           rvlLightRequest.name,
@@ -148,7 +138,7 @@ export async function createLight(
         PhilipsHueLight,
         'id'
       >;
-      await dbRun(
+      dbRun(
         `INSERT INTO ${LIGHTS_TABLE_NAME} (name, type, philips_hue_id, zone_id) VALUES (?, ?, ?, ?)`,
         [
           philipsHueLightRequest.name,
@@ -161,7 +151,7 @@ export async function createLight(
     }
     case LightType.LIFX: {
       const lifxLightRequest = createLightRequest as Omit<LIFXLight, 'id'>;
-      await dbRun(
+      dbRun(
         `INSERT INTO ${LIGHTS_TABLE_NAME} (name, type, lifx_id, zone_id) VALUES (?, ?, ?, ?)`,
         [
           lifxLightRequest.name,
@@ -173,7 +163,7 @@ export async function createLight(
       break;
     }
   }
-  await updateCache();
+  updateCache();
 }
 
 export const editLight: ActionHandler<ActionType.EditLight> = async (
@@ -182,7 +172,7 @@ export const editLight: ActionHandler<ActionType.EditLight> = async (
   switch (request.type) {
     case LightType.RVL: {
       const rvlLight: RVLLight = request as RVLLight;
-      await dbRun(
+      dbRun(
         `UPDATE ${LIGHTS_TABLE_NAME} SET name = ?, channel = ?, zone_id = ? WHERE id = ?`,
         [rvlLight.name, rvlLight.channel, rvlLight.zoneId, rvlLight.id]
       );
@@ -190,7 +180,7 @@ export const editLight: ActionHandler<ActionType.EditLight> = async (
     }
     case LightType.PhilipsHue: {
       const hueLight: PhilipsHueLight = request as PhilipsHueLight;
-      await dbRun(
+      dbRun(
         `UPDATE ${LIGHTS_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
         [hueLight.name, hueLight.zoneId, hueLight.id]
       );
@@ -198,19 +188,19 @@ export const editLight: ActionHandler<ActionType.EditLight> = async (
     }
     case LightType.LIFX: {
       const lifxLight: LIFXLight = request as LIFXLight;
-      await dbRun(
+      dbRun(
         `UPDATE ${LIGHTS_TABLE_NAME} SET name = ?, zone_id = ? WHERE id = ?`,
         [lifxLight.name, lifxLight.zoneId, lifxLight.id]
       );
       break;
     }
   }
-  await updateCache();
+  updateCache();
 };
 
 export const deleteLight: ActionHandler<ActionType.DeleteLight> = async (
   request
 ) => {
-  await dbRun(`DELETE FROM ${LIGHTS_TABLE_NAME} WHERE id = ?`, [request.id]);
-  await updateCache();
+  dbRun(`DELETE FROM ${LIGHTS_TABLE_NAME} WHERE id = ?`, [request.id]);
+  updateCache();
 };

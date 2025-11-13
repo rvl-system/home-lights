@@ -26,17 +26,16 @@ let settings: Settings = {
   theme: Theme.Auto
 };
 
-export default async function updateCache(): Promise<void> {
-  settings = (
-    await dbAll(`SELECT * FROM ${SETTINGS_TABLE_NAME}`)
-  )[0] as Settings;
+export default function updateCache() {
+  settings = dbAll<Settings>(`SELECT * FROM ${SETTINGS_TABLE_NAME}`)[0];
 }
 
 export function getSettings(): Settings {
   return settings;
 }
 
-export async function setTheme(theme: Theme): Promise<void> {
-  await dbRun(`UPDATE ${SETTINGS_TABLE_NAME} SET theme=?`, [theme]);
-  await updateCache();
+// Used by an event handler, and so needs to be async
+export async function setTheme(theme: Theme) {
+  dbRun(`UPDATE ${SETTINGS_TABLE_NAME} SET theme=?`, [theme]);
+  updateCache();
 }

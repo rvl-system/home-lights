@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { ActionType } from '../common/actions';
-import { Scene, Schedule, Zone } from '../common/types';
+import { Scene, Schedule, Zone, RawSchedule } from '../common/types';
 import { hasItem } from '../common/util';
 import { dbAll, dbRun } from '../sqlite';
 import { ActionHandler } from '../types';
@@ -27,23 +27,23 @@ const SCHEDULE_TABLE_NAME = 'schedule';
 
 let schedules: Schedule[] = [];
 
-export default async function updateCache(): Promise<void> {
-  const results = await dbAll(`SELECT * FROM ${SCHEDULE_TABLE_NAME}`);
+export default function updateCache() {
+  const results = dbAll<RawSchedule>(`SELECT * FROM ${SCHEDULE_TABLE_NAME}`);
   schedules = results.map((result) => ({
     id: result.id,
     zoneId: result.zone_id,
     entries: JSON.parse(result.entries as unknown as string)
-  })) as Schedule[];
+  }));
 }
 
-export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
+export function reconcile(zones: Zone[], scenes: Scene[]) {
   let changesMade = false;
   const schedules = getSchedules();
 
   // Check if a zone was added, and create the schedule for it
   for (const zone of zones) {
     if (!hasItem(zone.id, schedules, 'zoneId')) {
-      await dbRun(
+      dbRun(
         `INSERT INTO ${SCHEDULE_TABLE_NAME} (zone_id, entries) VALUES (?, ?)`,
         [zone.id, JSON.stringify([])]
       );
@@ -55,9 +55,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
   for (let i = schedules.length - 1; i >= 0; i--) {
     const schedule = schedules[i];
     if (!hasItem(schedule.zoneId, zones)) {
-      await dbRun(`DELETE FROM ${SCHEDULE_TABLE_NAME} WHERE id = ?`, [
-        schedule.id
-      ]);
+      dbRun(`DELETE FROM ${SCHEDULE_TABLE_NAME} WHERE id = ?`, [schedule.id]);
       schedules.splice(i, 1);
       changesMade = true;
     }
@@ -77,7 +75,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
       }
     }
     if (scheduleUpdated) {
-      await dbRun(
+      dbRun(
         `UPDATE ${SCHEDULE_TABLE_NAME} SET zone_id = ?, entries = ? WHERE id = ?`,
         [schedule.zoneId, JSON.stringify(schedule.entries), schedule.id]
       );
@@ -86,7 +84,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
 
   // Update the cache if changes were made
   if (changesMade) {
-    await updateCache();
+    updateCache();
   }
 }
 
@@ -97,9 +95,9 @@ export function getSchedules(): Schedule[] {
 export const editSchedule: ActionHandler<ActionType.EditSchedule> = async (
   request
 ) => {
-  await dbRun(
+  dbRun(
     `UPDATE ${SCHEDULE_TABLE_NAME} SET zone_id = ?, entries = ? WHERE id = ?`,
     [request.zoneId, JSON.stringify(request.entries), request.id]
   );
-  await updateCache();
+  updateCache();
 };

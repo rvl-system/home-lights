@@ -45,27 +45,54 @@ export enum LightType {
   LIFX = 'lifx'
 }
 
-export interface Light {
+// Raw variants represent what's in the database
+interface RawBaseLight {
+  id: number;
+  type: LightType;
+  name: string;
+  zone_id?: number;
+}
+
+interface RawRVLLight extends RawBaseLight {
+  type: LightType.RVL;
+  channel: number;
+}
+
+interface RawPhilipsHueLight extends RawBaseLight {
+  type: LightType.PhilipsHue;
+  philips_hue_id: string;
+}
+
+interface RawLIFXLight extends RawBaseLight {
+  type: LightType.LIFX;
+  lifx_id: string;
+}
+
+export type RawLight = RawRVLLight | RawPhilipsHueLight | RawLIFXLight;
+
+interface BaseLight {
   id: number;
   type: LightType;
   name: string;
   zoneId?: number;
 }
 
-export interface RVLLight extends Light {
+export interface RVLLight extends BaseLight {
   type: LightType.RVL;
   channel: number;
 }
 
-export interface PhilipsHueLight extends Light {
+export interface PhilipsHueLight extends BaseLight {
   type: LightType.PhilipsHue;
   philipsHueID: string;
 }
 
-export interface LIFXLight extends Light {
+export interface LIFXLight extends BaseLight {
   type: LightType.LIFX;
   lifxId: string;
 }
+
+export type Light = RVLLight | PhilipsHueLight | LIFXLight;
 
 // ---- Scene Types ----
 
@@ -81,6 +108,14 @@ export interface Scene {
   name: string;
   brightness: number;
   lights: SceneLightEntry[];
+}
+
+export interface RawScene {
+  id: number;
+  zone_id: number;
+  name: string;
+  brightness: number;
+  lights: string;
 }
 
 // ---- Pattern Types ----
@@ -166,6 +201,19 @@ export type CreateWavePatternRequest = Omit<WavePattern, 'id'>;
 
 // ---- Schedule Types ----
 
+interface RawScheduleEntry {
+  id: number;
+  scene_id: number | undefined;
+  hour: number;
+  minute: number;
+}
+
+export interface RawSchedule {
+  id: number;
+  zone_id: number;
+  entries: RawScheduleEntry[];
+}
+
 export interface ScheduleEntry {
   id: number;
   sceneId: number | undefined;
@@ -180,6 +228,12 @@ export interface Schedule {
 }
 
 // ---- System State ----
+
+export interface RawZoneState {
+  zone_id: number;
+  power: number;
+  current_scene_id: number | undefined;
+}
 
 export interface ZoneState {
   zoneId: number;
@@ -242,4 +296,9 @@ export interface Notification {
 export enum EditMode {
   Operation = 'Operation',
   Edit = 'Edit'
+}
+
+export interface Migration {
+  migration: number;
+  date: string;
 }

@@ -17,87 +17,48 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import sqlite3, { Database } from 'sqlite3';
-import { deepMap, createInternalError } from './common/util';
+import sqlite3, { type Database } from 'better-sqlite3';
+import { createInternalError, deepMap } from './common/util';
 
 let db: Database;
 
-export function init(dbPath: string): Promise<void> {
-  const sql = sqlite3.verbose();
-  return new Promise((resolve, reject) => {
-    db = new sql.Database(dbPath, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+export function init(dbPath: string) {
+  db = sqlite3(dbPath);
 }
 
 /**
  * Runs all sqlite queries queries other than SELECT
  */
-export async function dbRun(
+export function dbRun(
   query: string,
   parameters?: Array<string | number | undefined>
-): Promise<number> {
+) {
   if (!db) {
     throw createInternalError('dbRun called before database initialized');
   }
-  return new Promise((resolve, reject) => {
-    db.run(query, parameters || [], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
-      }
-    });
-  });
+  const stmt = db.prepare(query);
+  const result = stmt.run(parameters || []);
+  return result.lastInsertRowid;
 }
 
 /**
  * SELECT all rows from the database
  */
-export async function dbAll(
-  query: string,
-  parameters: string[] = []
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<Array<Record<string, any>>> {
+export function dbAll<T>(query: string, parameters: string[] = []): T[] {
   if (!db) {
     throw createInternalError('dbAll called before database initialized');
   }
-  return new Promise((resolve, reject) => {
-    db.all(query, parameters, (err, results) => {
-      if (err) {
-        reject(err);
-      } else {
-        results = deepMap(
-          results,
-          (value) => (value === null ? undefined : value)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ) as any[];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        resolve(results as any[]);
-      }
-    });
-  });
+  return deepMap(db.prepare(query).all(parameters), (value) =>
+    value === null ? undefined : value
+  ) as T[];
 }
 
 /**
  * Runs all queries, and can include multiple statements
  */
-export async function dbExec(queries: string): Promise<void> {
+export function dbExec(queries: string) {
   if (!db) {
     throw createInternalError('dbExec called before database initialized');
   }
-  return new Promise((resolve, reject) => {
-    db.exec(queries, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+  db.exec(queries);
 }

@@ -25,6 +25,7 @@ import { updateClients } from '../clients';
 import { ActionType } from '../common/actions';
 import { SCHEDULE_SCENE_ID } from '../common/config';
 import {
+  RawZoneState,
   Scene,
   Schedule,
   ScheduleEntry,
@@ -39,8 +40,8 @@ const ZONE_STATES_TABLE = 'system_state';
 
 const zoneStates: ZoneState[] = [];
 
-export default async function updateCache(): Promise<void> {
-  const results = await dbAll(`SELECT * FROM ${ZONE_STATES_TABLE}`);
+export default function updateCache() {
+  const results = dbAll<RawZoneState>(`SELECT * FROM ${ZONE_STATES_TABLE}`);
 
   // Add any entries that are missing, and update ones that exist
   for (const zone of results) {
@@ -85,11 +86,11 @@ export function getZoneStates(): ZoneState[] {
   return zoneStates;
 }
 
-export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
+export function reconcile(zones: Zone[], scenes: Scene[]) {
   // Add any new zones to state that were created
   for (const zone of zones) {
     if (!zoneStates.find((zoneState) => zoneState.zoneId === zone.id)) {
-      await dbRun(
+      dbRun(
         `INSERT INTO ${ZONE_STATES_TABLE} (zone_id, power, current_scene_id) VALUES (?, ?, ?)`,
         [zone.id, 0, undefined]
       );
@@ -106,7 +107,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
   for (let i = zoneStates.length - 1; i >= 0; i--) {
     const zoneState = zoneStates[i];
     if (!zones.find((zone) => zone.id === zoneState.zoneId)) {
-      await dbRun(`DELETE FROM ${ZONE_STATES_TABLE} WHERE zone_id = ?`, [
+      dbRun(`DELETE FROM ${ZONE_STATES_TABLE} WHERE zone_id = ?`, [
         zoneState.zoneId
       ]);
       zoneStates.splice(i, 1);
@@ -117,7 +118,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
   for (const zoneState of zoneStates) {
     if (zoneState.currentSceneId === SCHEDULE_SCENE_ID) {
       const schedule = getItem(zoneState.zoneId, getSchedules(), 'zoneId');
-      await enableZoneSchedule(schedule);
+      enableZoneSchedule(schedule);
     } else {
       // Check if the scene was deleted
       if (
@@ -126,7 +127,7 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
       ) {
         zoneState.currentSceneId = undefined;
       }
-      await setZoneState(zoneState);
+      setZoneState(zoneState);
     }
   }
 }
@@ -134,11 +135,11 @@ export async function reconcile(zones: Zone[], scenes: Scene[]): Promise<void> {
 export const setZoneScene: ActionHandler<ActionType.SetZoneScene> = async (
   request
 ) => {
-  const scene = getItem(request.sceneId, await getScenes());
+  const scene = getItem(request.sceneId, getScenes());
   const zoneState = getItem(scene.zoneId, getZoneStates(), 'zoneId');
   zoneState.currentSceneId = request.sceneId;
   zoneState.power = true;
-  await setZoneState(zoneState);
+  setZoneState(zoneState);
 };
 
 export const enableZoneSchedule: ActionHandler<
@@ -151,8 +152,8 @@ export const enableZoneSchedule: ActionHandler<
   const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
   zoneState.currentSceneId = SCHEDULE_SCENE_ID;
   zoneState.power = true;
-  await setZoneState(zoneState);
-  await scheduleTick(request);
+  setZoneState(zoneState);
+  scheduleTick(request);
 };
 
 export const setZoneBrightness: ActionHandler<
@@ -162,7 +163,7 @@ export const setZoneBrightness: ActionHandler<
   if (zoneState.currentSceneId === undefined) {
     return;
   }
-  await setSceneBrightness(zoneState.currentSceneId, request.brightness);
+  setSceneBrightness(zoneState.currentSceneId, request.brightness);
 };
 
 export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
@@ -170,15 +171,15 @@ export const setZonePower: ActionHandler<ActionType.SetZonePower> = async (
 ) => {
   const zoneState = getItem(request.zoneId, getZoneStates(), 'zoneId');
   zoneState.power = request.power;
-  await setZoneState(zoneState);
+  setZoneState(zoneState);
 };
 
-async function setZoneState(zoneState: ZoneState): Promise<void> {
-  await dbRun(
+function setZoneState(zoneState: ZoneState) {
+  dbRun(
     `REPLACE INTO ${ZONE_STATES_TABLE} (zone_id, power, current_scene_id) VALUES (?, ?, ?)`,
     [zoneState.zoneId, zoneState.power ? 1 : 0, zoneState.currentSceneId]
   );
-  await updateCache();
+  updateCache();
 }
 
 function createDateTime(now: DateTime, scheduleEntry: ScheduleEntry) {
@@ -242,7 +243,7 @@ function getCurrentScheduleState(schedule: Schedule) {
   };
 }
 
-async function scheduleTick(schedule: Schedule) {
+function scheduleTick(schedule: Schedule) {
   const now = DateTime.local();
   const { currentScheduleEntry, nextScheduleEntryStart } =
     getCurrentScheduleState(schedule);
@@ -263,7 +264,7 @@ async function scheduleTick(schedule: Schedule) {
   zoneState.currentScheduleSceneId = currentScheduleEntry.sceneId;
 
   // Force a reconcile to update light state
-  await reconcile(getZones(), getScenes());
+  reconcile(getZones(), getScenes());
 
   // Notify all connected clients of the change
   updateClients();

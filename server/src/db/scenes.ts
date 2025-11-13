@@ -25,7 +25,8 @@ import {
   Pattern,
   PatternType,
   Scene,
-  Zone
+  Zone,
+  RawScene
 } from '../common/types';
 import { getItem, hasItem } from '../common/util';
 import { dbRun, dbAll } from '../sqlite';
@@ -35,8 +36,8 @@ const SCENES_TABLE_NAME = 'scenes';
 
 let scenes: Scene[] = [];
 
-export default async function updateCache(): Promise<void> {
-  const rows = await dbAll(`SELECT * FROM ${SCENES_TABLE_NAME}`);
+export default function updateCache(): void {
+  const rows = dbAll<RawScene>(`SELECT * FROM ${SCENES_TABLE_NAME}`);
   scenes = rows.map(
     (row): Scene => ({
       id: row.id,
@@ -48,11 +49,7 @@ export default async function updateCache(): Promise<void> {
   );
 }
 
-export async function reconcile(
-  zones: Zone[],
-  patterns: Pattern[],
-  lights: Light[]
-): Promise<void> {
+export function reconcile(zones: Zone[], patterns: Pattern[], lights: Light[]) {
   let changesMade = false;
   const scenes = getScenes();
 
@@ -60,7 +57,7 @@ export async function reconcile(
   for (let i = scenes.length - 1; i >= 0; i--) {
     const scene = scenes[i];
     if (!hasItem(scene.zoneId, zones)) {
-      await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [scene.id]);
+      dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [scene.id]);
       scenes.splice(i, 1);
       changesMade = true;
     }
@@ -118,7 +115,7 @@ export async function reconcile(
 
     // If the lights were updated, save the changes to the database
     if (sceneUpdated) {
-      await dbRun(`UPDATE ${SCENES_TABLE_NAME} SET lights = ? WHERE id = ?`, [
+      dbRun(`UPDATE ${SCENES_TABLE_NAME} SET lights = ? WHERE id = ?`, [
         JSON.stringify(scene.lights),
         scene.id
       ]);
@@ -128,7 +125,7 @@ export async function reconcile(
 
   // Update the cache if changes were made
   if (changesMade) {
-    await updateCache();
+    updateCache();
   }
 }
 
@@ -139,37 +136,35 @@ export function getScenes(): Scene[] {
 export const createScene: ActionHandler<ActionType.CreateScene> = async (
   request
 ) => {
-  await dbRun(
+  dbRun(
     `INSERT INTO ${SCENES_TABLE_NAME} (zone_id, name, lights) VALUES (?, ?, ?)`,
     [request.zoneId, request.name, JSON.stringify(request.lights)]
   );
-  await updateCache();
+  updateCache();
 };
 
 export const editScene: ActionHandler<ActionType.EditScene> = async (
   request
 ) => {
-  await dbRun(
-    `UPDATE ${SCENES_TABLE_NAME} SET name = ?, lights = ? WHERE id = ?`,
-    [request.name, JSON.stringify(request.lights), request.id]
-  );
-  await updateCache();
+  dbRun(`UPDATE ${SCENES_TABLE_NAME} SET name = ?, lights = ? WHERE id = ?`, [
+    request.name,
+    JSON.stringify(request.lights),
+    request.id
+  ]);
+  updateCache();
 };
 
 export const deleteScene: ActionHandler<ActionType.DeleteScene> = async (
   request
 ) => {
-  await dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [request.id]);
-  await updateCache();
+  dbRun(`DELETE FROM ${SCENES_TABLE_NAME} WHERE id = ?`, [request.id]);
+  updateCache();
 };
 
-export async function setSceneBrightness(
-  id: number,
-  brightness: number
-): Promise<void> {
-  await dbRun(`UPDATE ${SCENES_TABLE_NAME} SET brightness = ? WHERE id = ?`, [
+export function setSceneBrightness(id: number, brightness: number) {
+  dbRun(`UPDATE ${SCENES_TABLE_NAME} SET brightness = ? WHERE id = ?`, [
     brightness,
     id
   ]);
-  await updateCache();
+  updateCache();
 }

@@ -19,48 +19,6 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/explicit-member-accessibility': 'error',
-    '@typescript-eslint/naming-convention': [
-      'error',
-      {
-        format: ['camelCase'],
-        leadingUnderscore: 'forbid',
-        selector: 'default'
-      },
-      {
-        format: ['camelCase', 'UPPER_CASE'],
-        leadingUnderscore: 'forbid',
-        selector: 'variable'
-      },
-      {
-        format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
-        leadingUnderscore: 'forbid',
-        selector: 'variable',
-        modifiers: ['const']
-      },
-      {
-        format: ['PascalCase'],
-        leadingUnderscore: 'forbid',
-        selector: 'typeLike'
-      },
-      {
-        format: ['PascalCase'],
-        leadingUnderscore: 'forbid',
-        selector: 'enumMember'
-      },
-      {
-        format: null,
-        leadingUnderscore: 'forbid',
-        modifiers: [
-          'protected',
-          'public',
-          'static',
-          'readonly',
-          'abstract',
-          'private'
-        ],
-        selector: 'memberLike'
-      }
-    ],
     '@typescript-eslint/prefer-function-type': 'error',
     'import/order': [
       'error',

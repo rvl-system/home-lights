@@ -37,7 +37,7 @@ let devices: Device[] = [];
 
 export async function init(): Promise<void> {
   console.log('Searching for LIFX lights...');
-  const dbLights = await getLights();
+  const dbLights = getLights();
   async function update() {
     // this is wrong, need to bind. How in the hell did this work before? Ohhh...probably how it was built
     const lifxLights = await lifx.discover();
@@ -53,7 +53,7 @@ export const refreshLIFXLights: ActionHandler<
   ActionType.RefreshLIFXLights
 > = async () => {
   console.log('Reconciling registered LIFX lights vs database');
-  const dbLights = await getLights();
+  const dbLights = getLights();
   devices = await lifx.discover();
 
   // Add lights from LIFX that are not in the DB

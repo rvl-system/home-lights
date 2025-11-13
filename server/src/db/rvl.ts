@@ -26,9 +26,11 @@ const RVL_TABLE_NAME = 'rvl_info';
 
 let rvlInfo: RVLInfo;
 
-export default async function updateCache(): Promise<void> {
-  const availableInterfaces = await getAvailableInterfaces();
-  const rows = await dbAll(`SELECT * FROM ${RVL_TABLE_NAME}`);
+export default function updateCache() {
+  const availableInterfaces = getAvailableInterfaces();
+  const rows = dbAll<{ id: number; interface: string }>(
+    `SELECT * FROM ${RVL_TABLE_NAME}`
+  );
   switch (rows.length) {
     case 0:
       if (availableInterfaces.length) {
@@ -37,7 +39,7 @@ export default async function updateCache(): Promise<void> {
         // time the device starts up
         const networkInterface = getDefaultInterface();
         if (networkInterface) {
-          await setRVLInterface(networkInterface);
+          setRVLInterface(networkInterface);
           rvlInfo = {
             availableInterfaces,
             networkInterface
@@ -64,8 +66,8 @@ export function getRVLInfo(): RVLInfo {
   return rvlInfo;
 }
 
-export async function setRVLInterface(networkInterface: string): Promise<void> {
-  await dbRun(`REPLACE INTO ${RVL_TABLE_NAME} (id, interface) VALUES (1, ?)`, [
+export function setRVLInterface(networkInterface: string) {
+  dbRun(`REPLACE INTO ${RVL_TABLE_NAME} (id, interface) VALUES (1, ?)`, [
     networkInterface
   ]);
 }

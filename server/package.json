@@ -9,7 +9,7 @@
     "home-lights": "./bin/server.js"
   },
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint --report-unused-disable-directives src",
     "lint-fix": "eslint --fix src",
     "prebuild": "npm run lint",
     "build": "tsc",
@@ -21,16 +21,17 @@
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/luxon": "^1.26.5",
-    "@types/node": "^14.17.2",
+    "@types/node": "^24.10.1",
     "@types/node-fetch": "^2.5.10",
-    "@types/sqlite3": "^3.1.7",
     "@types/ws": "^7.4.6",
-    "typescript": "^4.4.4"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@fastify/static": "^5.0.0",
     "@swiftcarrot/color-fns": "^3.2.0",
+    "better-sqlite3": "^12.4.1",
     "color-temperature": "^0.2.7",
     "fastify": "^3.19.1",
     "luxon": "^2.1.1",
@@ -38,7 +39,6 @@
     "node-hue-api": "^4.0.10",
     "node-lifx-lan": "rvl-system/node-lifx-lan#d0449a2a87c8a1c17cc464ed133a0d7ff6d71a76",
     "rvl-node": "^6.3.1",
-    "sqlite3": "^5.1.6",
     "ws": "^8.2.3"
   }
 }
