@@ -26,17 +26,15 @@ import initSchedules from './db/schedule';
 import initZones from './db/zones';
 import initZoneStates from './db/zoneStates';
 
-export async function init(): Promise<void> {
-  await initMigrations();
-  await Promise.all([
-    initRVL(),
-    initZones(),
-    initSchedules(),
-    initScenes(),
-    initPatterns(),
-    initLights(),
-    initZoneStates()
-  ]);
+export function init() {
+  initMigrations();
+  initRVL();
+  initZones();
+  initSchedules();
+  initScenes();
+  initPatterns();
+  initLights();
+  initZoneStates();
 
   console.log('Database initialized');
 }
