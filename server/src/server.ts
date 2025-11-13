@@ -28,7 +28,7 @@ process.on('unhandledRejection', (reason) => {
 });
 
 async function run(): Promise<void> {
-  await initDB();
+  initDB();
   await initDevice();
   await initEndpoints();
   await reconcile(); // Needed to finish any possible migrations
