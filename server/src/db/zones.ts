@@ -26,8 +26,8 @@ const ZONES_TABLE_NAME = 'zones';
 
 let zones: Zone[] = [];
 
-export default async function updateCache(): Promise<void> {
-  zones = (await dbAll(`SELECT * FROM ${ZONES_TABLE_NAME}`)) as Zone[];
+export default function updateCache() {
+  zones = dbAll<Zone>(`SELECT * FROM ${ZONES_TABLE_NAME}`);
 }
 
 export function getZones(): Zone[] {
@@ -37,23 +37,21 @@ export function getZones(): Zone[] {
 export const createZone: ActionHandler<ActionType.CreateZone> = async (
   request
 ) => {
-  await dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) VALUES (?)`, [
-    request.name
-  ]);
-  await updateCache();
+  dbRun(`INSERT INTO ${ZONES_TABLE_NAME} (name) VALUES (?)`, [request.name]);
+  updateCache();
 };
 
 export const editZone: ActionHandler<ActionType.EditZone> = async (request) => {
-  await dbRun(`UPDATE ${ZONES_TABLE_NAME} SET name = ? WHERE id = ?`, [
+  dbRun(`UPDATE ${ZONES_TABLE_NAME} SET name = ? WHERE id = ?`, [
     request.name,
     request.id
   ]);
-  await updateCache();
+  updateCache();
 };
 
 export const deleteZone: ActionHandler<ActionType.DeleteZone> = async (
   request
 ) => {
-  await dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [request.id]);
-  await updateCache();
+  dbRun(`DELETE FROM ${ZONES_TABLE_NAME} WHERE id = ?`, [request.id]);
+  updateCache();
 };

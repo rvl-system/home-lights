@@ -19,8 +19,6 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Actions, ActionType } from './common/actions';
 
-// Using unknown doesn't work, sadly
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionHandler<T extends ActionType> = (
   data: Actions[T]
 ) => Promise<Partial<Actions> | void>;

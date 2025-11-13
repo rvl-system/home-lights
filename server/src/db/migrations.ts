@@ -25,6 +25,7 @@ import {
   readdirSync
 } from 'fs';
 import { dirname, join } from 'path';
+import { Migration } from '../common/types';
 import { dbAll, dbExec, init as initDB } from '../sqlite';
 import { DB_FILE } from '../util';
 
@@ -36,7 +37,7 @@ export interface Migrations {
   version: number;
 }
 
-export default async function init(): Promise<void> {
+export default function init() {
   const isNewDB = !existsSync(DB_FILE);
   if (isNewDB) {
     mkdirSync(dirname(DB_FILE), {
@@ -47,23 +48,21 @@ export default async function init(): Promise<void> {
     console.log(`Loading database from ${DB_FILE}`);
   }
 
-  await initDB(DB_FILE);
+  initDB(DB_FILE);
 
   if (isNewDB) {
     console.log('Creating database tables...');
-    await dbExec(readFileSync(join(SCHEMA_FOLDER, 'schema.sql')).toString());
+    dbExec(readFileSync(join(SCHEMA_FOLDER, 'schema.sql')).toString());
   } else {
     // Figure out which migrations to apply. If the migrations table is missing,
     // assume all migrations are needed
-    const tableExists = !!(
-      await dbAll(
-        `SELECT count(*) AS count FROM sqlite_master WHERE type='table' AND name='${MIGRATIONS_TABLE_NAME}'`
-      )
+    const tableExists = !!dbAll<{ count: number }>(
+      `SELECT count(*) AS count FROM sqlite_master WHERE type='table' AND name='${MIGRATIONS_TABLE_NAME}'`
     )[0].count;
     let migrationStart = -1;
     if (tableExists) {
       // If the table exists, let's find whatever the most recent migration was
-      const migrations = await dbAll(
+      const migrations = dbAll<Migration>(
         `SELECT migration FROM ${MIGRATIONS_TABLE_NAME} ORDER BY migration DESC LIMIT 1`
       );
       // If there are no migrations, that means this was a recent install and we should initialize it to the latest migration
@@ -73,9 +72,7 @@ export default async function init(): Promise<void> {
           .sort();
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         migrationStart = migrations.pop()!;
-        await dbExec(
-          `INSERT INTO migrations(migration) VALUES (${migrationStart});`
-        );
+        dbExec(`INSERT INTO migrations(migration) VALUES (${migrationStart});`);
       } else {
         migrationStart = migrations[0].migration;
       }
@@ -101,7 +98,7 @@ export default async function init(): Promise<void> {
       const migration = readFileSync(
         join(SCHEMA_FOLDER, 'migrations', migrationFile)
       ).toString();
-      await dbExec(`
+      dbExec(`
 BEGIN TRANSACTION;
 ${migration}
 INSERT INTO migrations(migration) VALUES (${parseInt(migrationFile)});

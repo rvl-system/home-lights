@@ -38,7 +38,6 @@ import { getLights, createLight, deleteLight, editLight } from '../db/lights';
 import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
 import { ActionHandler } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const { LightState } = philipsHue.lightStates;
 let authenticatedApi: Api | undefined;
 let philipsHueBridgeIp: string | undefined;

@@ -28,8 +28,8 @@ export interface PhilipsHueInfo {
   ip: string;
 }
 
-export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | undefined> {
-  const rows = await dbAll(`SELECT * FROM ${PHILIPS_HUE_TABLE_NAME}`);
+export function getPhilipsHueInfo() {
+  const rows = dbAll<PhilipsHueInfo>(`SELECT * FROM ${PHILIPS_HUE_TABLE_NAME}`);
   switch (rows.length) {
     case 0:
       return;
@@ -42,8 +42,8 @@ export async function getPhilipsHueInfo(): Promise<PhilipsHueInfo | undefined> {
   }
 }
 
-export async function setPhilipsHueInfo(info: PhilipsHueInfo): Promise<void> {
-  await dbRun(
+export function setPhilipsHueInfo(info: PhilipsHueInfo) {
+  dbRun(
     `INSERT INTO ${PHILIPS_HUE_TABLE_NAME} (username, key, ip) VALUES (?, ?, ?)`,
     [info.username, info.key, info.ip]
   );
