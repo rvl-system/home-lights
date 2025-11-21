@@ -8,8 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Server",
-      "program": "${workspaceFolder}/server/bin/server.js",
-      "args": [ "Ethernet" ],
+      "program": "${workspaceFolder}/server/dist/index.js",
       "outFiles": [
         "${workspaceFolder}/server/dist/**/*.js",
         "${workspaceRoot}/server/node_modules/rvl-node/dist/**/*"
