@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import initLights from './db/lights';
-import initMigrations from './db/migrations';
-import initPatterns from './db/patterns';
-import initRVL from './db/rvl';
-import initScenes from './db/scenes';
-import initSchedules from './db/schedule';
-import initZones from './db/zones';
-import initZoneStates from './db/zoneStates';
+import initLights from './db/lights.js';
+import initMigrations from './db/migrations.js';
+import initPatterns from './db/patterns.js';
+import initRVL from './db/rvl.js';
+import initScenes from './db/scenes.js';
+import initSchedules from './db/schedule.js';
+import initZones from './db/zones.js';
+import initZoneStates from './db/zoneStates.js';
 
 export function init() {
   initMigrations();

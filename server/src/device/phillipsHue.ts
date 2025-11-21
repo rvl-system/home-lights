@@ -18,28 +18,33 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { v3 as philipsHue } from 'node-hue-api';
-import * as Api from 'node-hue-api/lib/api/Api';
-import { SetLightStateOptions } from './types';
-import { ActionType } from '../common/actions';
+import { SetLightStateOptions } from './types.js';
+import { ActionType } from '../common/actions.js';
 import {
   MAX_BRIGHTNESS,
   PHILIPS_HUE_APP_NAME,
   PHILIPS_HUE_DEVICE_NAME
-} from '../common/config';
+} from '../common/config.js';
 import {
   ColorType,
   LightType,
   PatternType,
   PhilipsHueLight,
   SolidPattern
-} from '../common/types';
-import { getItem, createInternalError } from '../common/util';
-import { getLights, createLight, deleteLight, editLight } from '../db/lights';
-import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue';
-import { ActionHandler } from '../types';
+} from '../common/types.js';
+import { getItem, createInternalError } from '../common/util.js';
+import {
+  getLights,
+  createLight,
+  deleteLight,
+  editLight
+} from '../db/lights.js';
+import { getPhilipsHueInfo, setPhilipsHueInfo } from '../db/philipsHue.js';
+import { ActionHandler } from '../types.js';
 
 const { LightState } = philipsHue.lightStates;
-let authenticatedApi: Api | undefined;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let authenticatedApi: any | undefined;
 let philipsHueBridgeIp: string | undefined;
 const idMap = new Map<string, number>();
 
@@ -151,7 +156,8 @@ export const refreshPhilipsHueLights: ActionHandler<
     }
     if (
       !bridgeLights.find(
-        (bridgeLight) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (bridgeLight: any) =>
           bridgeLight.uniqueid === (dbLight as PhilipsHueLight).philipsHueID
       )
     ) {

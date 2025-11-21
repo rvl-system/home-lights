@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { createRVLLight, editLight, deleteLight } from '../db/lights';
-import { ActionHandlerEntry } from '../types';
+import { ActionType } from '../common/actions.js';
+import { createRVLLight, editLight, deleteLight } from '../db/lights.js';
+import { ActionHandlerEntry } from '../types.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createLightHandlers(): Record<string, ActionHandlerEntry<any>> {

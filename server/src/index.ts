@@ -18,36 +18,38 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { fork } from 'child_process';
-import { join } from 'path';
-import { createInternalError } from './common/util';
-import { ProcessMessage } from './types';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { createInternalError } from './common/util.js';
+import { ProcessMessage } from './types.js';
 
-export function run(): void {
-  let child = fork(join(__dirname, 'server'));
-  let exiting = false;
-  child.on('message', (msg: ProcessMessage) => {
-    switch (msg.type) {
-      case 'reboot': {
-        console.log('Rebooting server');
-        exiting = true;
-        if (!child.kill()) {
-          throw createInternalError('Failed to kill child process');
-        }
-        // Give the exit handler plenty of time to run
-        setTimeout(() => {
-          exiting = false;
-          child = fork(join(__dirname, 'server'));
-        }, 100);
-        break;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+let child = fork(join(__dirname, 'server'));
+let exiting = false;
+child.on('message', (msg: ProcessMessage) => {
+  switch (msg.type) {
+    case 'reboot': {
+      console.log('Rebooting server');
+      exiting = true;
+      if (!child.kill()) {
+        throw createInternalError('Failed to kill child process');
       }
-      default: {
-        throw createInternalError(`Unknown message type: "${msg.type}"`);
-      }
+      // Give the exit handler plenty of time to run
+      setTimeout(() => {
+        exiting = false;
+        child = fork(join(__dirname, 'server'));
+      }, 100);
+      break;
     }
-  });
-  child.on('exit', (code) => {
-    if (!exiting) {
-      process.exit(code || 0);
+    default: {
+      throw createInternalError(`Unknown message type: "${msg.type}"`);
     }
-  });
-}
+  }
+});
+
+child.on('exit', (code) => {
+  if (!exiting) {
+    process.exit(code || 0);
+  }
+});

@@ -17,28 +17,28 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { SCHEDULE_SCENE_ID } from './common/config';
-import { Scene, SystemState, ZoneState } from './common/types';
-import { getItem } from './common/util';
-import { getLights } from './db/lights';
-import { getPatterns } from './db/patterns';
-import { getRVLInfo } from './db/rvl';
-import { getScenes } from './db/scenes';
-import { getZoneStates } from './db/zoneStates';
+import { SCHEDULE_SCENE_ID } from './common/config.js';
+import { Scene, SystemState, ZoneState } from './common/types.js';
+import { getItem } from './common/util.js';
+import { getLights } from './db/lights.js';
+import { getPatterns } from './db/patterns.js';
+import { getRVLInfo } from './db/rvl.js';
+import { getScenes } from './db/scenes.js';
+import { getZoneStates } from './db/zoneStates.js';
 import {
   init as initLIFX,
   setLightState as setLIFXLightState
-} from './device/lifx';
+} from './device/lifx.js';
 import {
   getPhilipsHueBridgeIp,
   init as initPhilipsHue,
   setLightState as setRVLLightState
-} from './device/phillipsHue';
+} from './device/phillipsHue.js';
 import {
   init as initRVL,
   setLightState as setPhilipsHueLightState
-} from './device/rvl';
-import { SetLightStateOptions } from './device/types';
+} from './device/rvl.js';
+import { SetLightStateOptions } from './device/types.js';
 
 export async function init(): Promise<void> {
   await initRVL();

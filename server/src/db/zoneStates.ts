@@ -18,12 +18,12 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { DateTime } from 'luxon';
-import { setSceneBrightness, getScenes } from './scenes';
-import { getSchedules } from './schedule';
-import { getZones } from './zones';
-import { updateClients } from '../clients';
-import { ActionType } from '../common/actions';
-import { SCHEDULE_SCENE_ID } from '../common/config';
+import { setSceneBrightness, getScenes } from './scenes.js';
+import { getSchedules } from './schedule.js';
+import { getZones } from './zones.js';
+import { updateClients } from '../clients.js';
+import { ActionType } from '../common/actions.js';
+import { SCHEDULE_SCENE_ID } from '../common/config.js';
 import {
   RawZoneState,
   Scene,
@@ -31,10 +31,10 @@ import {
   ScheduleEntry,
   Zone,
   ZoneState
-} from '../common/types';
-import { getItem, hasItem } from '../common/util';
-import { dbAll, dbRun } from '../sqlite';
-import { ActionHandler } from '../types';
+} from '../common/types.js';
+import { getItem, hasItem } from '../common/util.js';
+import { dbAll, dbRun } from '../sqlite.js';
+import { ActionHandler } from '../types.js';
 
 const ZONE_STATES_TABLE = 'system_state';
 

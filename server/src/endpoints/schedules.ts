@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { editSchedule } from '../db/schedule';
-import { enableZoneSchedule } from '../db/zoneStates';
-import { ActionHandlerEntry } from '../types';
+import { ActionType } from '../common/actions.js';
+import { editSchedule } from '../db/schedule.js';
+import { enableZoneSchedule } from '../db/zoneStates.js';
+import { ActionHandlerEntry } from '../types.js';
 
 export function createScheduleHandlers(): Record<
   string,

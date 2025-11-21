@@ -18,9 +18,9 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { getAvailableInterfaces, getDefaultInterface } from 'rvl-node';
-import { RVLInfo } from '../common/types';
-import { createInternalError } from '../common/util';
-import { dbRun, dbAll } from '../sqlite';
+import { RVLInfo } from '../common/types.js';
+import { createInternalError } from '../common/util.js';
+import { dbRun, dbAll } from '../sqlite.js';
 
 const RVL_TABLE_NAME = 'rvl_info';
 

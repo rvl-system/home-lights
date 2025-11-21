@@ -18,19 +18,19 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import lifx, { Device, LifxLanColorHSB } from 'node-lifx-lan';
-import { SetLightStateOptions } from './types';
-import { ActionType } from '../common/actions';
-import { MAX_BRIGHTNESS } from '../common/config';
+import { SetLightStateOptions } from './types.js';
+import { ActionType } from '../common/actions.js';
+import { MAX_BRIGHTNESS } from '../common/config.js';
 import {
   ColorType,
   LIFXLight,
   LightType,
   PatternType,
   SolidPattern
-} from '../common/types';
-import { getItem, createInternalError } from '../common/util';
-import { createLight, editLight, getLights } from '../db/lights';
-import { ActionHandler } from '../types';
+} from '../common/types.js';
+import { getItem, createInternalError } from '../common/util.js';
+import { createLight, editLight, getLights } from '../db/lights.js';
+import { ActionHandler } from '../types.js';
 
 const REFRESH_RATE = 60 * 1000; // 1 minute
 let devices: Device[] = [];

@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { createScene, editScene, deleteScene } from '../db/scenes';
-import { ActionHandlerEntry } from '../types';
+import { ActionType } from '../common/actions.js';
+import { createScene, editScene, deleteScene } from '../db/scenes.js';
+import { ActionHandlerEntry } from '../types.js';
 
 export function createScenesHandlers(): Record<
   string,

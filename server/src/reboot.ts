@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { RebootMessage } from './types';
+import { RebootMessage } from './types.js';
 
 export function reboot(): void {
   const msg: RebootMessage = {

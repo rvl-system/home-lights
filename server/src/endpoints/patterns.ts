@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Home Patterns.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { createPattern, editPattern, deletePattern } from '../db/patterns';
-import { ActionHandlerEntry } from '../types';
+import { ActionType } from '../common/actions.js';
+import { createPattern, editPattern, deletePattern } from '../db/patterns.js';
+import { ActionHandlerEntry } from '../types.js';
 
 export function createPatternHandlers(): Record<
   string,

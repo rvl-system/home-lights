@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { setTheme } from '../db/settings';
-import { setRVLInterface } from '../device/rvl';
-import { reboot } from '../reboot';
-import { ActionHandlerEntry } from '../types';
+import { ActionType } from '../common/actions.js';
+import { setTheme } from '../db/settings.js';
+import { setRVLInterface } from '../device/rvl.js';
+import { reboot } from '../reboot.js';
+import { ActionHandlerEntry } from '../types.js';
 
 export function createSettingsHandlers(): Record<
   string,

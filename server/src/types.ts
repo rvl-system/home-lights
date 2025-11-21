@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Actions, ActionType } from './common/actions';
+import { Actions, ActionType } from './common/actions.js';
 
 export type ActionHandler<T extends ActionType> = (
   data: Actions[T]

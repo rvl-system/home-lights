@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Light, Pattern, Scene, ZoneState } from '../common/types';
+import { Light, Pattern, Scene, ZoneState } from '../common/types.js';
 
 export interface SetLightStateOptions {
   zoneState: ZoneState;

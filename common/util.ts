@@ -19,7 +19,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 
 import { rgb2hsv } from '@swiftcarrot/color-fns';
 import { colorTemperature2rgb } from 'color-temperature';
-import { Color, ColorType, HSVColor } from './types';
+import { Color, ColorType, HSVColor } from './types.js';
 
 export function createInternalError(message: string): Error {
   return new Error(`Internal Error: ${message}`);

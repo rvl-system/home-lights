@@ -18,7 +18,7 @@ along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import sqlite3, { type Database } from 'better-sqlite3';
-import { createInternalError, deepMap } from './common/util';
+import { createInternalError, deepMap } from './common/util.js';
 
 let db: Database;
 

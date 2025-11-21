@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { Scene, Schedule, Zone, RawSchedule } from '../common/types';
-import { hasItem } from '../common/util';
-import { dbAll, dbRun } from '../sqlite';
-import { ActionHandler } from '../types';
+import { ActionType } from '../common/actions.js';
+import { Scene, Schedule, Zone, RawSchedule } from '../common/types.js';
+import { hasItem } from '../common/util.js';
+import { dbAll, dbRun } from '../sqlite.js';
+import { ActionHandler } from '../types.js';
 
 const SCHEDULE_TABLE_NAME = 'schedule';
 

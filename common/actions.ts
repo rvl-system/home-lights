@@ -27,7 +27,7 @@ import {
   SelectedTab,
   Theme,
   Zone
-} from './types';
+} from './types.js';
 
 export enum ActionType {
   SelectTab = 'SelectTab',

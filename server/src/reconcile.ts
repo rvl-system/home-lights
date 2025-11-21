@@ -17,16 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { getLights, reconcile as reconcileLights } from './db/lights';
-import { getPatterns } from './db/patterns';
-import { getScenes, reconcile as reconcileScenes } from './db/scenes';
-import { reconcile as reconcileSchedule } from './db/schedule';
-import { getZones } from './db/zones';
+import { getLights, reconcile as reconcileLights } from './db/lights.js';
+import { getPatterns } from './db/patterns.js';
+import { getScenes, reconcile as reconcileScenes } from './db/scenes.js';
+import { reconcile as reconcileSchedule } from './db/schedule.js';
+import { getZones } from './db/zones.js';
 import {
   getZoneStates,
   reconcile as reconcileZoneStates
-} from './db/zoneStates';
-import { reconcile as reconcileDevices } from './device';
+} from './db/zoneStates.js';
+import { reconcile as reconcileDevices } from './device.js';
 
 // Order matters! Switching these will leave us in an inconsistent state
 export async function reconcile(): Promise<void> {

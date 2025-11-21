@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { MAX_BRIGHTNESS } from '../common/config';
+import { ActionType } from '../common/actions.js';
+import { MAX_BRIGHTNESS } from '../common/config.js';
 import {
   Light,
   LightType,
@@ -27,10 +27,10 @@ import {
   Scene,
   Zone,
   RawScene
-} from '../common/types';
-import { getItem, hasItem } from '../common/util';
-import { dbRun, dbAll } from '../sqlite';
-import { ActionHandler } from '../types';
+} from '../common/types.js';
+import { getItem, hasItem } from '../common/util.js';
+import { dbRun, dbAll } from '../sqlite.js';
+import { ActionHandler } from '../types.js';
 
 const SCENES_TABLE_NAME = 'scenes';
 

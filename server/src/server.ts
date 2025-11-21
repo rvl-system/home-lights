@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { init as initDB } from './db';
-import { init as initDevice } from './device';
-import { init as initEndpoints } from './endpoints';
-import { reconcile } from './reconcile';
+import { init as initDB } from './db.js';
+import { init as initDevice } from './device.js';
+import { init as initEndpoints } from './endpoints.js';
+import { reconcile } from './reconcile.js';
 
 process.on('unhandledRejection', (reason) => {
   console.error(reason);

@@ -21,18 +21,16 @@ import { rgb2hsv } from '@swiftcarrot/color-fns';
 import { colorTemperature2rgb } from 'color-temperature';
 import {
   createManager,
-  createWaveParameters,
-  createSolidColorWave,
-  createRainbowWave,
-  createPulsingWave,
-  createColorCycleWave,
-  createMovingWave,
+  createAnimationParameters,
   RVLManager,
-  RVLController,
-  LogLevel
+  createColorCycleAnimation,
+  createPulsingAnimation,
+  createRainbowAnimation,
+  createSolidColorAnimation,
+  createMovingAnimation
 } from 'rvl-node';
-import { SetLightStateOptions } from './types';
-import { MAX_BRIGHTNESS } from '../common/config';
+import { SetLightStateOptions } from './types.js';
+import { MAX_BRIGHTNESS } from '../common/config.js';
 import {
   Color,
   ColorCyclePattern,
@@ -44,16 +42,15 @@ import {
   RVLLight,
   SolidPattern,
   WavePattern
-} from '../common/types';
-import { getItem } from '../common/util';
+} from '../common/types.js';
+import { getItem } from '../common/util.js';
 import {
   getRVLInfo,
   setRVLInterface as setRVLInterfaceInternal
-} from '../db/rvl';
-import { reboot } from '../reboot';
+} from '../db/rvl.js';
+import { reboot } from '../reboot.js';
 
 let manager: RVLManager;
-const controllers = new Map<number, RVLController>();
 
 export async function init(): Promise<void> {
   const info = await getRVLInfo();
@@ -108,52 +105,48 @@ export async function setLightState({
     }
 
     const light = rawLight as RVLLight;
-    let controller = controllers.get(light.channel);
-    if (!controller) {
-      controller = await manager.createController({
-        channel: light.channel,
-        logLevel: LogLevel.Info
-      });
-      controllers.set(light.channel, controller);
-    }
 
     if (scene === undefined || !zoneState.power) {
-      controller.setPowerState(false);
+      manager.setPowerState(light.channel, false);
       continue;
     }
 
     const lightEntry = getItem(light.id, scene.lights, 'lightId');
     if (lightEntry.patternId === undefined) {
-      controller.setPowerState(false);
+      manager.setPowerState(light.channel, false);
       continue;
     }
 
-    controller.setPowerState(true);
-    controller.setBrightness(scene.brightness);
+    manager.setPowerState(light.channel, true);
     const pattern = getItem(lightEntry.patternId, patterns);
     switch (pattern.type) {
       case PatternType.ColorCycle: {
         const { data } = pattern as ColorCyclePattern;
-        controller.setWaveParameters(
-          createWaveParameters(createColorCycleWave(data.rate, 255))
+        manager.setAnimationParameters(
+          light.channel,
+          createAnimationParameters(createColorCycleAnimation(data.rate, 255))
         );
         break;
       }
       case PatternType.Pulse: {
         const { data } = pattern as PulsePattern;
         const color = getColor(data.color);
-        controller.setWaveParameters(createWaveParameters());
-        controller.setWaveParameters(
-          createWaveParameters(
-            createPulsingWave(color.hue, color.saturation, data.rate)
+        manager.setAnimationParameters(
+          light.channel,
+          createAnimationParameters()
+        );
+        manager.setAnimationParameters(
+          light.channel,
+          createAnimationParameters(
+            createPulsingAnimation(color.hue, color.saturation, data.rate)
           )
         );
         break;
       }
       case PatternType.Rainbow: {
         const { data } = pattern as RainbowPattern;
-        controller.setWaveParameters({
-          ...createWaveParameters(createRainbowWave(255, data.rate)),
+        manager.setAnimationParameters(light.channel, {
+          ...createAnimationParameters(createRainbowAnimation(255, data.rate)),
           distancePeriod: data.distancePeriod
         });
         break;
@@ -161,9 +154,10 @@ export async function setLightState({
       case PatternType.Solid: {
         const { data } = pattern as SolidPattern;
         const color = getColor(data.color);
-        controller.setWaveParameters(
-          createWaveParameters(
-            createSolidColorWave(
+        manager.setAnimationParameters(
+          light.channel,
+          createAnimationParameters(
+            createSolidColorAnimation(
               color.hue,
               color.saturation,
               Math.round((lightEntry.brightness / MAX_BRIGHTNESS) * 255)
@@ -177,15 +171,20 @@ export async function setLightState({
         const waveColor = getColor(data.waveColor);
         const foregroundColor = getColor(data.foregroundColor);
         const backgroundColor = getColor(data.backgroundColor);
-        controller.setWaveParameters({
-          ...createWaveParameters(
-            createMovingWave(waveColor.hue, waveColor.saturation, data.rate, 2),
-            createPulsingWave(
+        manager.setAnimationParameters(light.channel, {
+          ...createAnimationParameters(
+            createMovingAnimation(
+              waveColor.hue,
+              waveColor.saturation,
+              data.rate,
+              2
+            ),
+            createPulsingAnimation(
               foregroundColor.hue,
               foregroundColor.saturation,
               data.rate
             ),
-            createSolidColorWave(
+            createSolidColorAnimation(
               backgroundColor.hue,
               backgroundColor.saturation,
               255

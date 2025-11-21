@@ -17,15 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
+import { ActionType } from '../common/actions.js';
 import {
   setZoneScene,
   setZonePower,
   setZoneBrightness
-} from '../db/zoneStates';
-import { refreshLIFXLights } from '../device/lifx';
-import { connect, refreshPhilipsHueLights } from '../device/phillipsHue';
-import { ActionHandlerEntry } from '../types';
+} from '../db/zoneStates.js';
+import { refreshLIFXLights } from '../device/lifx.js';
+import { connect, refreshPhilipsHueLights } from '../device/phillipsHue.js';
+import { ActionHandlerEntry } from '../types.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createStateHandlers(): Record<string, ActionHandlerEntry<any>> {

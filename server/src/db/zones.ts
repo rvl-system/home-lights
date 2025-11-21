@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { Zone } from '../common/types';
-import { dbRun, dbAll } from '../sqlite';
-import { ActionHandler } from '../types';
+import { ActionType } from '../common/actions.js';
+import { Zone } from '../common/types.js';
+import { dbRun, dbAll } from '../sqlite.js';
+import { ActionHandler } from '../types.js';
 
 const ZONES_TABLE_NAME = 'zones';
 

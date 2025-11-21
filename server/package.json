@@ -3,20 +3,20 @@
   "version": "1.0.0",
   "description": "Server for Home Lights",
   "engines": {
-    "node": ">= 16.13.0"
+    "node": ">= 22.0.0"
   },
   "bin": {
-    "home-lights": "./bin/server.js"
+    "home-lights": "./dist/index.js"
   },
+  "type": "module",
   "scripts": {
     "lint": "eslint --report-unused-disable-directives src",
     "lint-fix": "eslint --fix src",
     "prebuild": "npm run lint",
     "build": "tsc",
     "watch": "tsc --watch",
-    "start": "node ./bin/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "generate-schema": "node ./bin/generateSchema.js"
+    "start": "node ./dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bryan Hughes <bryan@nebri.us>",
   "license": "GPL-3.0",
@@ -25,20 +25,20 @@
     "@types/luxon": "^1.26.5",
     "@types/node": "^24.10.1",
     "@types/node-fetch": "^2.5.10",
-    "@types/ws": "^7.4.6",
+    "@types/ws": "^8.18.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@fastify/static": "^5.0.0",
+    "@fastify/static": "^8.3.0",
     "@swiftcarrot/color-fns": "^3.2.0",
     "better-sqlite3": "^12.4.1",
     "color-temperature": "^0.2.7",
-    "fastify": "^3.19.1",
+    "fastify": "^5.6.2",
     "luxon": "^2.1.1",
     "node-fetch": "^3.1.0",
     "node-hue-api": "^4.0.10",
     "node-lifx-lan": "rvl-system/node-lifx-lan#d0449a2a87c8a1c17cc464ed133a0d7ff6d71a76",
     "rvl-node": "^6.3.1",
-    "ws": "^8.2.3"
+    "ws": "^8.18.3"
   }
 }

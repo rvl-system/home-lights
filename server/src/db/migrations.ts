@@ -25,10 +25,12 @@ import {
   readdirSync
 } from 'fs';
 import { dirname, join } from 'path';
-import { Migration } from '../common/types';
-import { dbAll, dbExec, init as initDB } from '../sqlite';
-import { DB_FILE } from '../util';
+import { fileURLToPath } from 'url';
+import { Migration } from '../common/types.js';
+import { dbAll, dbExec, init as initDB } from '../sqlite.js';
+import { DB_FILE } from '../util.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCHEMA_FOLDER = join(__dirname, '..', '..', 'db');
 
 export const MIGRATIONS_TABLE_NAME = 'migrations';

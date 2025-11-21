@@ -30,6 +30,8 @@ module.exports = {
         groups: ['builtin', 'external', ['sibling', 'parent'], 'index']
       }
     ],
+    // Checked by TypeScript
+    'import/no-unresolved': 'off',
     quotes: ['error', 'single'],
     'react/display-name': 'off',
     'react/prop-types': 'off'

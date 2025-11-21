@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { ActionType } from '../common/actions';
-import { NUM_RVL_CHANNELS } from '../common/config';
+import { ActionType } from '../common/actions.js';
+import { NUM_RVL_CHANNELS } from '../common/config.js';
 import {
   LightType,
   RVLLight,
@@ -27,10 +27,10 @@ import {
   Zone,
   RawLight,
   Light
-} from '../common/types';
-import { hasItem } from '../common/util';
-import { dbRun, dbAll } from '../sqlite';
-import { ActionHandler } from '../types';
+} from '../common/types.js';
+import { hasItem } from '../common/util.js';
+import { dbRun, dbAll } from '../sqlite.js';
+import { ActionHandler } from '../types.js';
 
 const LIGHTS_TABLE_NAME = 'lights';
 

@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Home Lights.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { Settings, Theme } from '../common/types';
-import { dbAll, dbRun } from '../sqlite';
+import { Settings, Theme } from '../common/types.js';
+import { dbAll, dbRun } from '../sqlite.js';
 
 const SETTINGS_TABLE_NAME = 'settings';
 
